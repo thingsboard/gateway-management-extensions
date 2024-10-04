@@ -1,3 +1,7 @@
+///
+/// Copyright © 2024 ThingsBoard, Inc.
+///
+
 export * from './gateway-logs/public-api';
 export * from './gateway-statistics/public-api';
 export * from './gateway-service-rpc/public-api';

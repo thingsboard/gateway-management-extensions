@@ -1,5 +1,5 @@
 /*
- * Copyright © 2023 ThingsBoard, Inc.
+ * Copyright © 2024 ThingsBoard, Inc.
  */
 const STATIC_SERVE_CONFIG = {
   '/static/gateway/thingsboard-gateway-extension.js': {

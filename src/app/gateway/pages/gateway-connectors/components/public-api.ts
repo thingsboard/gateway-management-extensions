@@ -1,3 +1,7 @@
+///
+/// Copyright © 2024 ThingsBoard, Inc.
+///
+
 export * from './add-connector-dialog/add-connector-dialog.component';
 export * from './mapping-dialog/mapping-dialog.component';
 export * from './mapping-data-keys-panel/mapping-data-keys-panel.component';

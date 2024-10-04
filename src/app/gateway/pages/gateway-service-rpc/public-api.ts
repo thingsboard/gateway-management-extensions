@@ -1,2 +1,6 @@
+///
+/// Copyright © 2024 ThingsBoard, Inc.
+///
+
 export * from './components/public-api';
-export { GatewayServiceRPCComponent } from './gateway-service-rpc.component';
+export * from './gateway-service-rpc.component';

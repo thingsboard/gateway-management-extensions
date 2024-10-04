@@ -1,4 +1,4 @@
-Extension ThingsBoard Platform
+ThingsBoard Gateway Extension
 =====================
 ## ThingsBoard Dependencies
 To add some of ThingsBoard dependencies imports to your "extension" Angular component,
@@ -39,7 +39,7 @@ If it's not the npm/yarn registry, and you want to add it in another way, please
 
 ## Run project in development mode
 ```
-cd ${TB_EXTENSION_WORK_DIR}
+cd ${TB_GATEWAY_EXTENSION_DIR}
 yarn install
 yarn start
 ```
@@ -53,17 +53,11 @@ You must also check "Is module"
 ## Build project
 
 ```
-cd ${TB_EXTENSION_WORK_DIR}
+cd ${TB_GATEWAY_EXTENSION_DIR}
 yarn build
 ```
 
 You can find the compiled file at the following path:
 ```
-${TB_EXTENSION_WORK_DIR}/target/generated-resources/thingsboard-gateway-extension.js
+${TB_GATEWAY_EXTENSION_DIR}/target/generated-resources/thingsboard-gateway-extension.js
 ```
-
-## Deploy project to customer server
-
-You have two options for deploying extensions:
-1) Deploying using our UI. You can find all information about it in our [documentation](https://thingsboard.io/docs/user-guide/contribution/widgets-development/#thingsboard-extensions)
-2) Manual deploying. In this case you should use this [branch](https://github.com/thingsboard/thingsboard-extensions/tree/release-3.6-server) of **Thingsboard extensions**
