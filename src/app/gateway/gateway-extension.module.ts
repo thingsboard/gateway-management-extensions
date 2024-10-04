@@ -79,25 +79,27 @@ import { EllipsisChipListDirective } from './shared/directives/ellipsis-chip-lis
 import { RpcTemplateArrayViewPipe } from './shared/pipes/rpc-template-array-view.pipe';
 import { TruncateWithTooltipDirective } from './shared/directives/truncate-with-tooltip.directive';
 
+const DECLARATIONS = [
+  GatewayLogsComponent,
+  GatewayStatisticsComponent,
+  GatewayServiceRPCConnectorTemplatesComponent,
+  GatewayServiceRPCComponent,
+  GatewayServiceRPCConnectorComponent,
+  GatewayServiceRPCConnectorTemplateDialogComponent,
+  GatewayRemoteConfigurationDialogComponent,
+  GatewayFormComponent,
+  GatewayConnectorComponent,
+  MappingDialogComponent,
+  MappingDataKeysPanelComponent,
+  DeviceInfoTableComponent,
+  DeviceGatewayCommandComponent,
+  AddConnectorDialogComponent,
+  GatewayConfigurationComponent,
+  TypeValuePanelComponent,
+];
+
 @NgModule({
-  declarations: [
-    GatewayLogsComponent,
-    GatewayStatisticsComponent,
-    GatewayServiceRPCConnectorTemplatesComponent,
-    GatewayServiceRPCComponent,
-    GatewayServiceRPCConnectorComponent,
-    GatewayServiceRPCConnectorTemplateDialogComponent,
-    GatewayRemoteConfigurationDialogComponent,
-    GatewayFormComponent,
-    GatewayConnectorComponent,
-    MappingDialogComponent,
-    MappingDataKeysPanelComponent,
-    DeviceInfoTableComponent,
-    DeviceGatewayCommandComponent,
-    AddConnectorDialogComponent,
-    GatewayConfigurationComponent,
-    TypeValuePanelComponent,
-  ],
+  declarations: DECLARATIONS,
   imports: [
     CommonModule,
     SharedModule,
@@ -121,24 +123,7 @@ import { TruncateWithTooltipDirective } from './shared/directives/truncate-with-
     RpcTemplateArrayViewPipe,
     TruncateWithTooltipDirective,
   ],
-  exports: [
-    GatewayLogsComponent,
-    GatewayStatisticsComponent,
-    GatewayServiceRPCConnectorTemplatesComponent,
-    GatewayServiceRPCComponent,
-    GatewayServiceRPCConnectorComponent,
-    GatewayServiceRPCConnectorTemplateDialogComponent,
-    GatewayRemoteConfigurationDialogComponent,
-    GatewayFormComponent,
-    GatewayConnectorComponent,
-    MappingDialogComponent,
-    MappingDataKeysPanelComponent,
-    DeviceInfoTableComponent,
-    DeviceGatewayCommandComponent,
-    AddConnectorDialogComponent,
-    GatewayConfigurationComponent,
-    TypeValuePanelComponent,
-  ],
+  exports: DECLARATIONS,
   providers: [
     LatestVersionConfigPipe,
   ]

@@ -16,7 +16,6 @@ import { fromEvent, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Directive({
-  // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[tb-ellipsis-chip-list]',
   standalone: true,
 })

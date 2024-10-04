@@ -3,7 +3,8 @@
 ///
 
 import {
-  GatewayConnector, LegacyServerConfig,
+  GatewayConnector,
+  LegacyServerConfig,
   OPCBasicConfig,
   OPCBasicConfig_v3_5_2,
   OPCLegacyBasicConfig,
