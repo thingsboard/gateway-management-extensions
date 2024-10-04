@@ -2,11 +2,11 @@
  * Copyright © 2023 ThingsBoard, Inc.
  */
 const STATIC_SERVE_CONFIG = {
-  '/static/widgets/thingsboard-extension-widgets.js': {
-    'target': 'dist/widget-extension/system/thingsboard-extension-widgets.js'
+  '/static/gateway/thingsboard-gateway-extension.js': {
+    'target': 'dist/gateway-extension/system/thingsboard-gateway-extension.js'
   },
-  '/static/widgets/thingsboard-extension-widgets.js.map': {
-    'target': `dist/widget-extension/system/thingsboard-extension-widgets.js.map`
+  '/static/gateway/thingsboard-gateway-extension.js.map': {
+    'target': `dist/gateway-extension/system/thingsboard-gateway-extension.js.map`
   }
 }
 

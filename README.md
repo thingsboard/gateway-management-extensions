@@ -46,7 +46,7 @@ yarn start
 In widgets library create a new widget and in the resources tab of the widget editor add this file path:
 
 ```
-http://localhost:5000/static/widgets/thingsboard-extension-widgets.js
+http://localhost:4201/static/gateway/thingsboard-gateway-extension.js
 ```
 You must also check "Is module"
 
@@ -59,7 +59,7 @@ yarn build
 
 You can find the compiled file at the following path:
 ```
-${TB_EXTENSION_WORK_DIR}/target/generated-resources/thingsboard-extension-widgets.js
+${TB_EXTENSION_WORK_DIR}/target/generated-resources/thingsboard-gateway-extension.js
 ```
 
 ## Deploy project to customer server

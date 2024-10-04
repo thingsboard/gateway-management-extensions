@@ -1,11 +1,11 @@
 {
-  "name": "thingsboard-extension-widgets",
+  "name": "thingsboard-gateway-extension",
   "private": true,
-  "version": "3.7.0",
-  "description": "ThingsBoard Extension Widgets",
+  "version": "0",
+  "description": "ThingsBoard Gateway Extension",
   "scripts": {
     "ng": "ng",
-    "start": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng serve",
+    "start": "node ./node_modules/@angular/cli/bin/ng serve",
     "build": "ng build && node install.js",
     "e2e": "ng e2e",
     "prepare": "patch-package",
@@ -16,10 +16,6 @@
     "node": ">=16.10.0",
     "yarn": ">=1.22.4 <2",
     "npm": "Please use yarn instead of NPM to install dependencies"
-  },
-  "dependencies": {
-    "primeicons": "~6.0.1",
-    "primeng": "~15.4.21-lts"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "15.2.11",

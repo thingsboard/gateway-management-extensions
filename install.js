@@ -20,9 +20,9 @@ function projectRoot() {
 }
 
 function sourcePackage() {
-  return path.join(projectRoot(), 'dist', 'widget-extension', 'system', 'thingsboard-extension-widgets.js');
+  return path.join(projectRoot(), 'dist', 'gateway-extension', 'system', 'thingsboard-gateway-extension.js');
 }
 
 function targetPackage() {
-  return path.join(projectRoot(), 'target', 'generated-resources', 'thingsboard-extension-widgets.js');
+  return path.join(projectRoot(), 'target', 'generated-resources', 'thingsboard-gateway-extension.js');
 }
