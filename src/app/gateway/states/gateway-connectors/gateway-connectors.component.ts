@@ -16,7 +16,6 @@ import { Store } from '@ngrx/store';
 import { FormBuilder, FormControl, FormGroup, UntypedFormControl, ValidatorFn, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { forkJoin, Observable, of, Subject, Subscription } from 'rxjs';
-import { AttributeDatasource } from '@home/models/datasource/attribute-datasource';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { WidgetContext } from '@home/models/widget-component.models';
@@ -66,7 +65,8 @@ import {
   EntityId
 } from '@shared/public-api';
 import {
-  GatewayConnectorVersionMappingUtil
+  GatewayConnectorVersionMappingUtil,
+  AttributeDatasource,
 } from '../../shared/public-api';
 import { LatestVersionConfigPipe } from '../../shared/public-api';
 
