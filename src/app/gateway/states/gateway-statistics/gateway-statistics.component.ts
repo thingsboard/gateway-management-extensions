@@ -21,7 +21,9 @@ import {
   NULL_UUID,
 } from '@shared/public-api';
 import { WidgetContext } from '@home/models/widget-component.models';
-import { TbFlot } from '@home/components/widget/lib/flot-widget';
+
+// TODO: gateway-statistics rework for release 3.9
+// import { TbFlot } from '@home/components/widget/lib/flot-widget';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { deepClone, UtilsService, IWidgetSubscription, SubscriptionInfo, WidgetSubscriptionOptions, AttributeService } from '@core/public-api';
@@ -45,7 +47,7 @@ export class GatewayStatisticsComponent implements AfterViewInit {
   public isNumericData = false;
   public dataTypeDefined: boolean = false;
   public chartInited: boolean;
-  private flot: TbFlot;
+  // private flot: TbFlot;
   private flotCtx: WidgetContext;
   public statisticForm: FormGroup;
   public statisticsKeys = [];
@@ -193,15 +195,15 @@ export class GatewayStatisticsComponent implements AfterViewInit {
   };
 
   private updateChart = () => {
-    if (this.flot && this.ctx.defaultSubscription.data.length) {
-      this.flot.update();
-    }
+    // if (this.flot && this.ctx.defaultSubscription.data.length) {
+    //   this.flot.update();
+    // }
   };
 
   private resize = () => {
-    if (this.flot) {
-      this.flot.resize();
-    }
+    // if (this.flot) {
+    //   this.flot.resize();
+    // }
   };
 
   private reset() {
@@ -211,9 +213,9 @@ export class GatewayStatisticsComponent implements AfterViewInit {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
-    if (this.flot) {
-      this.flot.destroy();
-    }
+    // if (this.flot) {
+    //   this.flot.destroy();
+    // }
   }
 
   private onDataUpdateError(e: any) {
@@ -229,9 +231,9 @@ export class GatewayStatisticsComponent implements AfterViewInit {
     this.isDataOnlyNumbers();
     if (this.isNumericData) {
       if (this.chartInited) {
-        if (this.flot) {
-          this.flot.update();
-        }
+        // if (this.flot) {
+        //   this.flot.update();
+        // }
       } else {
         this.initChart();
       }
@@ -242,8 +244,8 @@ export class GatewayStatisticsComponent implements AfterViewInit {
     this.chartInited = true;
     this.flotCtx.$container = $(this.statisticChart.nativeElement);
     this.resize$.observe(this.statisticChart.nativeElement);
-    this.flot = new TbFlot(this.flotCtx as WidgetContext, 'line');
-    this.flot.update();
+    // this.flot = new TbFlot(this.flotCtx as WidgetContext, 'line');
+    // this.flot.update();
   }
 
   private isDataOnlyNumbers() {
