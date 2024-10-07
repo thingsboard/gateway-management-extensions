@@ -1,64 +1,41 @@
 ThingsBoard Gateway Extension
 =====================
 The project is an extension of the ThingsBoard platform, designed to facilitate gateway configurations and connector management with a modular and component-based approach.
-## ThingsBoard Dependencies
-To add some of ThingsBoard dependencies imports to your "extension" Angular component,
-please use this import structure:
+# Steps to Run the ThingsBoard Gateway Extension
 
-```
-import { <dependency> } from '<TB-module>/public-api';
-```
-"TB-module" - any of the following modules:
-```
-@app/*
-@core/*
-@shared/*
-@modules/*
-@home/*
-```
-"dependency" - name of dependency/type located in "TB-module".
-Refer to [modules-map](https://github.com/thingsboard/thingsboard-pe-ui-types/blob/master/src/app/modules/common/modules-map.ts)
-to see what you can use.
+## 1. Access Files
+- Navigate to the `dist` branch of the [Gateway Extension Repository](https://github.com/thingsboard/thingsboard-gateway-extension).
 
-Example:
+## 2. Upload the Resource
+- In ThingsBoard, upload the `thingsboard-gateway-extension.js` file as a resource with the following details:
+  - **Type**: JS Module
+  - **Title**: Gateway
+  - **Resource File**: Upload the downloaded `thingsboard-gateway-extension.js` file.
 
-```
-import { WidgetConfig } from '@shared/public-api';
-```
-## External Dependencies
-In case you want to use your own dependencies package from the npm registry (unless you have specified another one in your package.json), you can easily add them to yarn packet manager running the next command:
-```
-yarn add <package-name>
-```
+## 3. Add/Update Selected Widgets
+- Update the following files in the `application/src/main/data/json/system/widget_types` folder:
+  - Gateway Configuration (`gateway_configuration.json`)
+  - Gateway Configuration for Single Device (`gateway_configuration__single_device_.json`)
+  - Gateway Connectors (`gateway_connectors.json`)
+  - Gateway Custom Statistics (`gateway_custom_statistics.json`)
+  - Gateway General Chart Statistics (`gateway_general_chart_statistics.json`)
+  - Gateway General Configuration (`gateway_general_configuration.json`)
+  - Gateway Logs (`gateway_logs.json`)
+  - Service RPC (`service_rpc.json`)
 
-Example:
+## 4. Update the Gateways Dashboard
+- Update the Gateways Dashboard (`gateways.json` - dashboard file) in the `application/src/main/data/json/tenant/dashboards` folder.
 
+## 5. Update the Resource ID in All Added/Updated Widgets
+- Replace `"${GATEWAY_RESOURCE_ID}"` with the actual resource ID:
+```json
+{ 
+  "url": { 
+    "entityType": "TB_RESOURCE", 
+    "id": "${GATEWAY_RESOURCE_ID}", 
+    "isModule": true 
+  } 
+}
 ```
-yarn add lodash
-```
-If it's not the npm/yarn registry, and you want to add it in another way, please refer to [yarn docs](https://classic.yarnpkg.com/en/docs/cli/add).
-
-## Run project in development mode
-```
-cd ${TB_GATEWAY_EXTENSION_DIR}
-yarn install
-yarn start
-```
-In widgets library create a new widget and in the resources tab of the widget editor add this file path:
-
-```
-http://localhost:4201/static/gateway/thingsboard-gateway-extension.js
-```
-You must also check "Is module"
-
-## Build project
-
-```
-cd ${TB_GATEWAY_EXTENSION_DIR}
-yarn build
-```
-
-You can find the compiled file at the following path:
-```
-${TB_GATEWAY_EXTENSION_DIR}/target/generated-resources/thingsboard-gateway-extension.js
-```
+## 6. Add to Custom Resources
+- Update the Gateways Dashboard (`gateways.json` - dashboard file) for the launch command at line `1922` to update the resource ID in the `"customResources"`.
