@@ -1,5 +1,6 @@
 ThingsBoard Gateway Extension
 =====================
+The project is an extension of the ThingsBoard platform, designed to facilitate gateway configurations and connector management with a modular and component-based approach.
 ## ThingsBoard Dependencies
 To add some of ThingsBoard dependencies imports to your "extension" Angular component,
 please use this import structure:
