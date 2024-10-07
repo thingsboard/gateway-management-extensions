@@ -1,0 +1,25 @@
+///
+/// Copyright © 2024 ThingsBoard, Inc.
+///
+
+:host{
+  .gateway-form {
+    height: 100%;
+    padding: 5px;
+    background-color: transparent;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    .form-action-buttons{
+      padding-top: 8px;
+    }
+
+    .gateway-config {
+      .no-data-found {
+        position: relative;
+        display: flex;
+        height: 40px;
+      }
+    }
+  }
+}

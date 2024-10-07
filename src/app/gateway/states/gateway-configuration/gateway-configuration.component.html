@@ -1,0 +1,52 @@
+<!--
+
+Copyright © 2024 ThingsBoard, Inc.
+
+-->
+<div [formGroup]="gatewayConfigGroup" class="gateway-config-container">
+  <div class="content-wrapper">
+    <mat-toolbar color="primary" [class.page-header]="!dialogRef">
+      <div class="tb-flex space-between align-center">
+        <h2 translate>gateway.gateway-configuration</h2>
+        <div class="toolbar-actions">
+          <tb-toggle-select [class.dialog-toggle]="!!dialogRef" formControlName="mode" appearance="{{dialogRef ? 'stroked' : 'fill'}}">
+            <tb-toggle-option [value]="ConfigurationModes.BASIC">
+              {{ 'gateway.basic' | translate }}
+            </tb-toggle-option>
+            <tb-toggle-option [value]="ConfigurationModes.ADVANCED">
+              {{ 'gateway.advanced' | translate }}
+            </tb-toggle-option>
+          </tb-toggle-select>
+          <button *ngIf="dialogRef" mat-icon-button (click)="cancel()" type="button">
+            <mat-icon class="material-icons">close</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-toolbar>
+    <tb-gateway-basic-configuration
+      *ngIf="gatewayConfigGroup.get('mode').value === ConfigurationModes.BASIC"
+      formControlName="basicConfig"
+      [device]="device"
+      [dialogMode]="!!dialogRef"
+      (initialCredentialsUpdated)="initialCredentials = $event"
+    />
+    <tb-gateway-advanced-configuration
+      *ngIf="gatewayConfigGroup.get('mode').value === ConfigurationModes.ADVANCED"
+      formControlName="advancedConfig"
+    />
+  </div>
+  <div class="actions">
+    <button mat-button color="primary"
+            type="button"
+            *ngIf="dialogRef"
+            (click)="cancel()">
+      {{ 'action.cancel' | translate }}
+    </button>
+    <button mat-raised-button color="primary"
+            type="button"
+            [disabled]="gatewayConfigGroup.invalid || !gatewayConfigGroup.dirty"
+            (click)="saveConfig()">
+      {{ 'action.save' | translate }}
+    </button>
+  </div>
+</div>

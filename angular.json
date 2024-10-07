@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "widget-extension": {
+    "gateway-extension": {
       "projectType": "library",
       "root": "src",
       "sourceRoot": "src/app",
@@ -33,7 +33,7 @@
         "serve": {
           "builder": "@tb/custom-builder:static-serve",
           "options": {
-            "port": 5000,
+            "port": 4201,
             "tsConfig": "src/tsconfig.lib.json",
             "project": "src/ng-package.json",
             "staticServeConfig": "static.serve.conf.js"

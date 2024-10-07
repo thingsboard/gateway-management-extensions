@@ -1,0 +1,145 @@
+///
+/// Copyright © 2024 ThingsBoard, Inc.
+///
+
+@import '../../styles/constants';
+
+:host {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow-x: auto;
+  padding: 0;
+
+  .version-placeholder {
+    color: gray;
+    font-size: 12px
+  }
+
+  .connector-container {
+    height: 100%;
+    width: 100%;
+    flex-direction: row;
+    @media #{$mat-lt-lg} {
+      flex-direction: column;
+    }
+
+    & > section:not(.table-section) {
+      max-width: unset;
+      @media #{$mat-gt-md} {
+        max-width: 50%;
+      }
+    }
+
+    .table-section {
+      min-height: 35vh;
+      overflow: hidden;
+
+      .table-container {
+        overflow: auto;
+      }
+    }
+
+    .flex {
+      flex: 1;
+    }
+
+    .input-container {
+      height: auto;
+    }
+
+    .section-container {
+      background-color: #fff;
+    }
+  }
+
+  .mat-toolbar {
+    background: transparent;
+    color: rgba(0, 0, 0, .87) !important;
+  }
+
+  .mat-mdc-slide-toggle {
+    margin: 0 8px;
+  }
+
+  .status {
+    text-align: center;
+    border-radius: 16px;
+    font-weight: 500;
+    width: fit-content;
+    padding: 5px 15px;
+    &-sync {
+      background: rgba(25, 128, 56, .06);
+      color: rgb(25, 128, 56);
+    }
+    &-unsync {
+      background: rgba(203, 37, 48, .06);
+      color: rgb(203, 37, 48);
+    }
+  }
+
+  mat-row {
+    cursor: pointer;
+  }
+
+  .dot {
+    height: 12px;
+    width: 12px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .hasErrors {
+    background-color: rgb(203, 37, 48);
+  }
+
+  .noErrors {
+    background-color: rgb(25, 128, 56);
+  }
+}
+
+:host ::ng-deep {
+  .connector-container {
+
+    .mat-mdc-tab-group, .mat-mdc-tab-body-wrapper {
+      height: 100%;
+    }
+
+    .mat-mdc-tab-body.mat-mdc-tab-body-active {
+      position: absolute;
+    }
+
+    .tb-form-row {
+      .fixed-title-width {
+        min-width: 120px;
+        width: 30%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .tb-add-new {
+      display: flex;
+      z-index: 999;
+      pointer-events: none;
+      background-color: #fff;
+
+      button.connector {
+        height: auto;
+        padding-right: 12px;
+        font-size: 20px;
+        border-style: dashed;
+        border-width: 2px;
+        border-radius: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        color: rgba(0, 0, 0, 0.38);
+      }
+    }
+  }
+}
+

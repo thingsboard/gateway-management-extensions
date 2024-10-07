@@ -1,0 +1,13 @@
+///
+/// Copyright © 2024 ThingsBoard, Inc.
+///
+
+:host {
+  display: flex;
+  flex-direction: column;
+
+  .mat-mdc-slide-toggle.margin {
+    margin-bottom: 10px;
+    margin-left: 10px;
+  }
+}

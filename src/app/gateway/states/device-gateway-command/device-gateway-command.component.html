@@ -1,0 +1,41 @@
+<!--
+
+Copyright © 2024 ThingsBoard, Inc.
+
+-->
+<div mat-dialog-content style="padding: 16px 16px 8px" class="tb-form-panel no-border">
+  <div class="tb-no-data-text">{{ 'gateway.docker-label' | translate }}</div>
+  <div class="tb-form-panel stroked">
+    <div class="tb-form-panel-title" translate>device.connectivity.install-necessary-client-tools</div>
+    <div class="tb-form-row no-border no-padding space-between">
+      <div class="tb-no-data-text tb-commands-hint" translate>gateway.install-docker-compose</div>
+      <a mat-stroked-button color="primary" href="https://docs.docker.com/compose/install/" target="_blank">
+        <mat-icon>description</mat-icon>
+        {{ 'common.documentation' | translate }}
+      </a>
+    </div>
+  </div>
+
+  <div class="tb-form-panel stroked">
+    <div class="tb-form-panel-title" translate>gateway.download-configuration-file</div>
+    <div class="tb-form-row no-border no-padding space-between">
+      <div class="tb-no-data-text tb-commands-hint" translate>gateway.download-docker-compose</div>
+      <button mat-stroked-button color="primary" (click)="download($event)">
+        <mat-icon>download</mat-icon>
+        {{ 'action.download' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div class="tb-form-panel stroked">
+    <div class="tb-form-panel-title" translate>gateway.launch-gateway</div>
+    <div class="tb-no-data-text tb-commands-hint" translate>gateway.launch-docker-compose</div>
+    <tb-markdown usePlainMarkdown containerClass="start-code"
+                 data="
+          ```bash
+          docker compose up
+          {:copy-code}
+          ```
+      "></tb-markdown>
+  </div>
+</div>

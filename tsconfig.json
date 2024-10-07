@@ -27,11 +27,11 @@
       "@angular/*": [
         "./node_modules/@angular/*"
       ],
-      "widget-extension-config": [
-        "dist/widget-extension"
+      "gateway-extension-config": [
+        "dist/gateway-extension"
       ],
-      "widget-extension-config/*": [
-        "dist/widget-extension/*"
+      "gateway-extension-config/*": [
+        "dist/gateway-extension/*"
       ],
       "@env/*": [
         "node_modules/thingsboard/src/environments/*"

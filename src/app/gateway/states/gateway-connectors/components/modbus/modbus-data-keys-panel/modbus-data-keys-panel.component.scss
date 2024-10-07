@@ -1,0 +1,33 @@
+///
+/// Copyright © 2024 ThingsBoard, Inc.
+///
+
+:host {
+  .tb-modbus-keys-panel {
+    width: 77vw;
+    max-width: 700px;
+
+    .title-container {
+      width: 180px;
+    }
+
+    .key-label {
+      font-weight: 400;
+    }
+
+    .key-panel {
+      height: 500px;
+      overflow: auto;
+    }
+
+    .tb-form-panel {
+      .mat-mdc-icon-button {
+        width: 56px;
+        height: 56px;
+        padding: 16px;
+        color: rgba(0, 0, 0, 0.54);
+      }
+    }
+  }
+}
+
