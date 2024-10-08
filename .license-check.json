@@ -1,0 +1,51 @@
+{
+  "license": "LICENSE.txt",
+  "trailingWhitespace": "TRIM",
+  "licenseFormats": {
+    "ts|js": {
+      "prepend": "///",
+      "append": "///",
+      "eachLine": {
+        "prepend": "/// "
+      }
+    },
+    "html": {
+      "prepend": "<!--",
+      "append": "-->",
+      "eachLine": {
+        "prepend": "  "
+      }
+    },
+    "scss": {
+      "prepend": "/*",
+      "append": " */",
+      "eachLine": {
+        "prepend": " * "
+      }
+    }
+  },
+  "ignore": [
+    "**/*.json",
+    "**/*.md",
+    "**/*.lock",
+    "**/.**",
+    ".**/**",
+    "node_modules/**",
+    "target/**",
+    "patches/**",
+    "builders/**"
+  ],
+  "defaultFormat": {
+    "prepend": "/*",
+    "append": " */",
+    "eachLine": {
+      "prepend": " * "
+    }
+  },
+  "includePatterns": [
+    "src/app/**/*.ts",
+    "src/app/**/*.js",
+    "src/app/**/*.html",
+    "src/app/**/*.scss"
+  ]
+}

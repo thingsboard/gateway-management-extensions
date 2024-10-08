@@ -6,11 +6,14 @@
   "scripts": {
     "ng": "ng",
     "start": "node ./node_modules/@angular/cli/bin/ng serve",
-    "build": "ng build && node install.js",
+    "build": "yarn license-check && ng build && node install.js",
     "e2e": "ng e2e",
     "prepare": "patch-package",
     "postinstall": "ngcc",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "license-check": "license-check-and-add check -f .license-check.json",
+    "license-add": "license-check-and-add add -f .license-check.json",
+    "license-remove": "license-check-and-add remove -f .license-check.json"
   },
   "engines": {
     "node": ">=16.10.0",
@@ -49,6 +52,7 @@
     "eslint-plugin-import": "latest",
     "eslint-plugin-jsdoc": "latest",
     "eslint-plugin-prefer-arrow": "latest",
+    "license-check-and-add": "^4.0.5",
     "ng-packagr": "15.2.2",
     "ngrx-store-freeze": "^0.2.4",
     "patch-package": "^6.5.1",

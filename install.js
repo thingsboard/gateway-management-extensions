@@ -1,3 +1,6 @@
+///
+/// Copyright © 2024 ThingsBoard, Inc.
+///
 /*
  * Copyright © 2024 ThingsBoard, Inc.
  */

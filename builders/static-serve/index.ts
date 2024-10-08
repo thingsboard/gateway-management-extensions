@@ -1,6 +1,3 @@
-///
-/// Copyright © 2024 ThingsBoard, Inc.
-///
 
 import { BuilderContext, BuilderOutput, createBuilder } from '@angular-devkit/architect';
 import * as express from 'express';
