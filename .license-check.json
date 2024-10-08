@@ -32,8 +32,7 @@
     ".**/**",
     "node_modules/**",
     "target/**",
-    "patches/**",
-    "builders/**"
+    "patches/**"
   ],
   "defaultFormat": {
     "prepend": "/*",
