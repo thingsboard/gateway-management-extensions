@@ -2,11 +2,12 @@
 /// Copyright © 2024 ThingsBoard, Inc.
 ///
 
+import addGatewayLocale from './locale/gateway-locale.constant';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
 import { GatewayLogsComponent } from './states/gateway-logs/gateway-logs.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { GatewayStatisticsComponent } from './states/gateway-statistics/gateway-statistics.component';
 import {
   GatewayServiceRPCConnectorComponent,
@@ -129,4 +130,7 @@ const DECLARATIONS = [
   ]
 })
 export class GatewayExtensionModule {
+  constructor(private translate: TranslateService) {
+    addGatewayLocale(translate)
+  }
 }
