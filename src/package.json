@@ -1,6 +1,6 @@
 {
   "name": "gateway-management-extension",
-  "version": "0",
+  "version": "1.0.0",
   "peerDependencies": {
     "@angular/common": "^15.2.10",
     "@angular/core": "^15.2.10",
