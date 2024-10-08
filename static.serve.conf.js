@@ -2,11 +2,11 @@
  * Copyright © 2024 ThingsBoard, Inc.
  */
 const STATIC_SERVE_CONFIG = {
-  '/static/gateway/thingsboard-gateway-extension.js': {
-    'target': 'dist/gateway-extension/system/thingsboard-gateway-extension.js'
+  '/static/gateway/gateway-management-extension.js': {
+    'target': 'dist/gateway-extension/system/gateway-management-extension.js'
   },
-  '/static/gateway/thingsboard-gateway-extension.js.map': {
-    'target': `dist/gateway-extension/system/thingsboard-gateway-extension.js.map`
+  '/static/gateway/gateway-management-extension.js.map': {
+    'target': `dist/gateway-extension/system/gateway-management-extension.js.map`
   }
 }
 

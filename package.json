@@ -1,8 +1,8 @@
 {
-  "name": "thingsboard-gateway-extension",
+  "name": "gateway-management-extension",
   "private": true,
   "version": "0",
-  "description": "ThingsBoard Gateway Extension",
+  "description": "ThingsBoard Gateway Management Extension",
   "scripts": {
     "ng": "ng",
     "start": "node ./node_modules/@angular/cli/bin/ng serve",

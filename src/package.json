@@ -1,5 +1,5 @@
 {
-  "name": "thingsboard-gateway-extension",
+  "name": "gateway-management-extension",
   "version": "0",
   "peerDependencies": {
     "@angular/common": "^15.2.10",
