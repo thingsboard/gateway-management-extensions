@@ -13,9 +13,7 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-/*
- * Copyright © 2024 ThingsBoard, Inc.
- */
+
 const fse = require('fs-extra');
 const path = require('path');
 
