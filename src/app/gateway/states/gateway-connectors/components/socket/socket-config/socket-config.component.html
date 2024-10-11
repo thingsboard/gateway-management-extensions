@@ -18,13 +18,9 @@
     <div class="fixed-title-width">
       <div tbTruncateWithTooltip>{{ 'gateway.connection-type' | translate }}</div>
     </div>
-    <div class="tb-flex no-gap">
-      <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
-        <mat-select formControlName="type">
-          <mat-option *ngFor="let type of socketTypes" [value]="type">{{ type }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+    <tb-toggle-select formControlName="type" appearance="fill">
+      <tb-toggle-option *ngFor="let type of socketTypes" [value]="type">{{ (type) }}</tb-toggle-option>
+    </tb-toggle-select>
   </div>
   <div class="tb-form-row column-xs" fxLayoutAlign="space-between center">
     <div class="fixed-title-width tb-required" translate>gateway.address</div>
