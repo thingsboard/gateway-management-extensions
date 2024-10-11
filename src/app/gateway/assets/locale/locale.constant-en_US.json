@@ -674,7 +674,6 @@
       "poll-period": "Period in milliseconds to read data from nodes.",
       "socket": {
         "attribute-requests-type": "The type of requested attribute can be “shared” or “client.",
-        "address-filter": "Used to filter allowed IP addresses for connecting to the connector.",
         "with-response": "Boolean flag that specifies whether to send a response back to ThingsBoard.",
         "key": "Name for telemetry on platform."
       },

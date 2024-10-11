@@ -75,6 +75,7 @@ export class DeviceDialogComponent extends DialogComponent<DeviceDialogComponent
               private viewContainerRef: ViewContainerRef
   ) {
     super(store, router, dialogRef);
+
     this.deviceFormGroup = this.fb.group({
       address: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
       deviceName: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
@@ -119,7 +120,7 @@ export class DeviceDialogComponent extends DialogComponent<DeviceDialogComponent
     }
 
     const keysControl = this.deviceFormGroup.get(keysType);
-    const ctx: { [key: string]: any } = {
+    const ctx = {
       keys: keysControl.value,
       keysType,
       panelTitle: SocketKeysPanelTitleTranslationsMap.get(keysType),

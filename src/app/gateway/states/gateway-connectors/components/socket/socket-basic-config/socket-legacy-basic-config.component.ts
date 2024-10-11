@@ -38,7 +38,7 @@ import { DevicesConfigTableComponent } from '../devices-config-table/devices-con
 import {
   GatewayConnectorBasicConfigDirective
 } from '../../../../../shared/abstract/public-api';
-import { SocketVersionMappingUtil } from '../../../../../shared/utils/socket-version-mapping.util';
+import { SocketVersionMappingUtil } from '../../../../../shared/utils/public-api';
 
 @Component({
   selector: 'tb-socket-legacy-basic-config',

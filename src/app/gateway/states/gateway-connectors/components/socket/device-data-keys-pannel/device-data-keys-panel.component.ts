@@ -14,32 +14,21 @@
 /// limitations under the License.
 ///
 
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output
-} from '@angular/core';
-import {
-  AbstractControl,
-  FormGroup,
-  UntypedFormArray,
-  UntypedFormBuilder,
-  Validators
-} from '@angular/forms';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AbstractControl, FormGroup, UntypedFormArray, UntypedFormBuilder, Validators } from '@angular/forms';
 import { PageComponent, SharedModule } from '@shared/public-api';
 import { TbPopoverComponent } from '@shared/components/popover.component';
 import { Store } from '@ngrx/store';
 import { AppState } from '@core/public-api';
 import {
   DeviceAttributesRequests,
-  DeviceDataKey, DeviceRpcMethod,
+  DeviceDataKey,
+  DeviceRpcMethod,
   ExpressionType,
   noLeadTrailSpacesRegex,
   RequestsType,
-  SocketAttributeUpdates, SocketDeviceKeys,
+  SocketAttributeUpdates,
+  SocketDeviceKeys,
   SocketEncoding,
   SocketValueKey,
 } from '../../../../../shared/models/public-api';
@@ -63,34 +52,21 @@ import { GatewayHelpLinkPipe } from '../../../../../shared/pipes/gateway-help-li
 })
 export class DeviceDataKeysPanelComponent extends PageComponent implements OnInit {
 
-  @Input()
-  panelTitle: string;
+  @Input() panelTitle: string;
+  @Input() addKeyTitle: string;
+  @Input() deleteKeyTitle: string;
+  @Input() noKeysText: string;
+  @Input() keys: Array<SocketDeviceKeys>;
+  @Input() keysType: SocketValueKey;
+  @Input() popover: TbPopoverComponent<DeviceDataKeysPanelComponent>;
 
-  @Input()
-  addKeyTitle: string;
+  @Output() keysDataApplied = new EventEmitter<Array<SocketDeviceKeys>>();
 
-  @Input()
-  deleteKeyTitle: string;
-
-  @Input()
-  noKeysText: string;
-
-  @Input()
-  keys: Array<SocketDeviceKeys>;
-
-  @Input()
-  keysType: SocketValueKey;
-
-  @Input()
-  popover: TbPopoverComponent<DeviceDataKeysPanelComponent>;
-
-  @Output()
-  keysDataApplied = new EventEmitter<Array<DeviceDataKey> | { [key: string]: unknown }>();
-
-  SocketValueKey = SocketValueKey;
-  socketEncoding = Object.values(SocketEncoding);
-  requestsType = Object.values(RequestsType);
-  expressionType = Object.values(ExpressionType);
+  readonly SocketValueKey = SocketValueKey;
+  readonly socketEncoding = Object.values(SocketEncoding);
+  readonly requestsType = Object.values(RequestsType);
+  readonly expressionType = Object.values(ExpressionType);
+  readonly ExpressionType = ExpressionType;
 
   keysListFormArray: UntypedFormArray;
 
@@ -131,8 +107,8 @@ export class DeviceDataKeysPanelComponent extends PageComponent implements OnIni
     } else {
       dataKeyFormGroup = this.fb.group({
         key: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-        byteFrom: [0],
-        byteTo: [0],
+        byteFrom: [0, [Validators.required]],
+        byteTo: [0, [Validators.required]],
       });
     }
     this.keysListFormArray.push(dataKeyFormGroup);
@@ -151,49 +127,44 @@ export class DeviceDataKeysPanelComponent extends PageComponent implements OnIni
   }
 
   applyKeysData(): void {
-    const keys = this.keysListFormArray.value;
-    this.keysDataApplied.emit(keys);
+    this.keysDataApplied.emit(this.keysListFormArray.value);
   }
 
   private prepareKeysFormArray(keys: Array<SocketDeviceKeys>): UntypedFormArray {
     const keysControlGroups: Array<AbstractControl> = [];
-    if (keys) {
-      keys.forEach(keyData => {
-        let dataKeyFormGroup: FormGroup;
-        if (this.keysType === SocketValueKey.RPC_METHODS) {
-          const rpcKeyData = keyData as DeviceRpcMethod;
-          dataKeyFormGroup = this.fb.group({
-            methodRPC: [rpcKeyData.methodRPC, [Validators.required]],
-            encoding: [rpcKeyData.encoding, [Validators.required]],
-            withResponse: [true]
-          });
-        } else if (this.keysType === SocketValueKey.ATTRIBUTES_REQUESTS) {
-          const attributeRequestsKeyData = keyData as DeviceAttributesRequests;
-          dataKeyFormGroup = this.fb.group({
-            type: [attributeRequestsKeyData.type ?? RequestsType.Shared],
-            requestExpressionSource: [attributeRequestsKeyData.requestExpressionSource ?? ExpressionType.Constant],
-            attributeNameExpressionSource: [attributeRequestsKeyData.attributeNameExpressionSource ?? ExpressionType.Constant],
-            requestExpression: [attributeRequestsKeyData.requestExpression, [Validators.required]],
-            attributeNameExpression: [attributeRequestsKeyData.attributeNameExpression, [Validators.required]]
-          });
-        } else if (this.keysType === SocketValueKey.ATTRIBUTES_UPDATES) {
-          dataKeyFormGroup = this.fb.group({
-            encoding: [(keyData as SocketAttributeUpdates).encoding, [Validators.required]],
-            attributeOnThingsBoard: [(keyData as SocketAttributeUpdates).attributeOnThingsBoard, [Validators.required]],
-          });
-        } else {
-          const {key, byteFrom, byteTo} = keyData as DeviceDataKey;
-          dataKeyFormGroup = this.fb.group({
-            key: [key, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-            byteFrom: [byteFrom],
-            byteTo: [byteTo]
-          });
-        }
-        keysControlGroups.push(dataKeyFormGroup);
-      });
-    }
+    keys?.forEach(keyData => {
+      let dataKeyFormGroup: FormGroup;
+      if (this.keysType === SocketValueKey.RPC_METHODS) {
+        const rpcKeyData = keyData as DeviceRpcMethod;
+        dataKeyFormGroup = this.fb.group({
+          methodRPC: [rpcKeyData.methodRPC, [Validators.required]],
+          encoding: [rpcKeyData.encoding, [Validators.required]],
+          withResponse: [true]
+        });
+      } else if (this.keysType === SocketValueKey.ATTRIBUTES_REQUESTS) {
+        const attributeRequestsKeyData = keyData as DeviceAttributesRequests;
+        dataKeyFormGroup = this.fb.group({
+          type: [attributeRequestsKeyData.type ?? RequestsType.Shared],
+          requestExpressionSource: [attributeRequestsKeyData.requestExpressionSource ?? ExpressionType.Constant],
+          attributeNameExpressionSource: [attributeRequestsKeyData.attributeNameExpressionSource ?? ExpressionType.Constant],
+          requestExpression: [attributeRequestsKeyData.requestExpression, [Validators.required]],
+          attributeNameExpression: [attributeRequestsKeyData.attributeNameExpression, [Validators.required]]
+        });
+      } else if (this.keysType === SocketValueKey.ATTRIBUTES_UPDATES) {
+        dataKeyFormGroup = this.fb.group({
+          encoding: [(keyData as SocketAttributeUpdates).encoding ?? SocketEncoding.UTF16],
+          attributeOnThingsBoard: [(keyData as SocketAttributeUpdates).attributeOnThingsBoard, [Validators.required]],
+        });
+      } else {
+        const {key, byteFrom, byteTo} = keyData as DeviceDataKey;
+        dataKeyFormGroup = this.fb.group({
+          key: [key, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
+          byteFrom: [byteFrom ?? 0, [Validators.required]],
+          byteTo: [byteTo ?? 0, [Validators.required]]
+        });
+      }
+      keysControlGroups.push(dataKeyFormGroup);
+    });
     return this.fb.array(keysControlGroups);
   }
-
-  protected readonly ExpressionType = ExpressionType;
 }

@@ -22,7 +22,7 @@
     width: 77vw;
     max-width: 800px;
   }
-  .key-mapping {
+  .dialog-mapping {
     max-width: 900px;
     display: flex;
     flex-direction: column;
@@ -46,7 +46,7 @@
 }
 
 :host ::ng-deep {
-  .key-mapping {
+  .dialog-mapping {
     .mat-mdc-chip-listbox {
       .mdc-evolution-chip-set__chips {
         justify-content: flex-end;

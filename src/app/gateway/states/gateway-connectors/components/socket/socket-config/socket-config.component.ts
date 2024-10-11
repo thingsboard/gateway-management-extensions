@@ -65,7 +65,7 @@ export class SocketConfigComponent implements ControlValueAccessor, Validator, O
 
   socketConfigFormGroup: UntypedFormGroup;
 
-  portLimits = PortLimits;
+  readonly portLimits = PortLimits;
   readonly socketTypes = Object.values(SocketType);
 
   private onChange: (value: SocketConfig) => void;

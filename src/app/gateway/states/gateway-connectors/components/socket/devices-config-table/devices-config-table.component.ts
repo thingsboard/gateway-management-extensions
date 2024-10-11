@@ -70,7 +70,6 @@ export class DevicesConfigTableComponent implements ControlValueAccessor, AfterV
   textSearch = this.fb.control('', {nonNullable: true});
 
   private onChange: (value: DevicesConfigMapping[]) => void = () => {};
-  private onTouched: () => void  = () => {};
 
   private destroy$ = new Subject<void>();
 
@@ -91,7 +90,6 @@ export class DevicesConfigTableComponent implements ControlValueAccessor, AfterV
     ).subscribe(value => {
       this.updateTableData(value);
       this.onChange(value);
-      this.onTouched();
     });
   }
 
@@ -112,8 +110,7 @@ export class DevicesConfigTableComponent implements ControlValueAccessor, AfterV
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
+  registerOnTouched(_: () => void): void {
   }
 
   writeValue(devices: DevicesConfigMapping[]): void {
