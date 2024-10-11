@@ -41,18 +41,18 @@ export class SocketVersionMappingUtil {
   static mapDevicesToUpgradedVersion(config: SocketLegacyBasicConfig): DevicesConfigMapping[] {
     return config.devices?.map(device => ({
       ...device,
-      attributeRequests: device.attributeRequests.map(request => ({
+      attributeRequests: device.attributeRequests?.map(request => ({
         ...request,
         requestExpressionSource: this.getExpressionSource(request.requestExpression),
         attributeNameExpressionSource: this.getExpressionSource(request.attributeNameExpression),
-      }))
+      })) ?? []
     })) ?? [] as DevicesConfigMapping[];
   }
 
   static mapDevicesToDowngradedVersion(devices: DevicesConfigMapping[]): LegacyDevicesConfigMapping[] {
     return devices.map(device => ({
       ...device,
-      attributeRequests: device.attributeRequests.map(({requestExpressionSource, attributeNameExpressionSource, ...request}) => request)
+      attributeRequests: device.attributeRequests?.map(({requestExpressionSource, attributeNameExpressionSource, ...request}) => request) ?? []
     })) as DevicesConfigMapping[];
   }
 

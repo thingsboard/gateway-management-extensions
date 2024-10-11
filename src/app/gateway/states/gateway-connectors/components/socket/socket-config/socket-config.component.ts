@@ -105,7 +105,7 @@ export class SocketConfigComponent implements ControlValueAccessor, Validator, O
       type = SocketType.TCP,
       port = 50000,
       bufferSize = 1024,
-    } = socketConfig;
+    } = socketConfig ?? {};
 
     this.socketConfigFormGroup.reset({
       address,
