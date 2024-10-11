@@ -1361,12 +1361,6 @@ export enum SocketType {
   UDP = 'UDP',
 }
 
-export interface DeviceConfigValue {
-  address: string;
-  deviceName: string;
-  deviceType: string;
-}
-
 export interface SocketAttributeUpdates {
   encoding: SocketEncoding;
   attributeOnThingsBoard: string;
@@ -1439,7 +1433,7 @@ export interface DeviceDataKey {
 
 export interface DeviceRpcMethod {
   methodRPC: string;
-  withResponse: true;
+  withResponse: boolean;
   encoding: SocketEncoding;
 }
 
