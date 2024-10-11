@@ -21,7 +21,6 @@ import {
   Component,
   ElementRef,
   forwardRef,
-  Input,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -35,59 +34,42 @@ import {
   FormArray,
   FormBuilder,
   NG_VALUE_ACCESSOR,
-  UntypedFormGroup,
 } from '@angular/forms';
-import {
-  LegacySlaveConfig,
-  ModbusMasterConfig,
-  ModbusProtocolLabelsMap,
-  ModbusSlaveInfo,
-  ModbusValues,
-  SlaveConfig, TruncateWithTooltipDirective
-} from '../../../../../shared/public-api';
+import { DeviceConfigInfo, DevicesConfigMapping, TruncateWithTooltipDirective } from '../../../../../shared/public-api';
 import { isDefinedAndNotNull, DialogService } from '@core/public-api';
 import { CommonModule } from '@angular/common';
-import { ModbusSlaveDialogComponent } from '../modbus-slave-dialog/modbus-slave-dialog.component';
 import {
   // @ts-ignore
   TbTableDatasource,
   SharedModule
 } from '@shared/public-api';
-import { coerceBoolean } from '@shared/decorators/coercion';
-import {
-  ModbusLegacySlaveDialogComponent
-} from '../modbus-slave-dialog/modbus-legacy-slave-dialog.component';
+import { DeviceDialogComponent } from '../device-dialog/device-dialog.component';
 
 @Component({
-  selector: 'tb-modbus-master-table',
-  templateUrl: './modbus-master-table.component.html',
-  styleUrls: ['./modbus-master-table.component.scss'],
+  selector: 'tb-devices-config-table',
+  templateUrl: './devices-config-table.component.html',
+  styleUrls: ['./devices-config-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ModbusMasterTableComponent),
+      useExisting: forwardRef(() => DevicesConfigTableComponent),
       multi: true
     },
   ],
   standalone: true,
   imports: [CommonModule, SharedModule, TruncateWithTooltipDirective]
 })
-export class ModbusMasterTableComponent implements ControlValueAccessor, AfterViewInit, OnInit, OnDestroy {
+export class DevicesConfigTableComponent implements ControlValueAccessor, AfterViewInit, OnInit, OnDestroy {
 
   @ViewChild('searchInput') searchInputField: ElementRef;
 
-  @coerceBoolean()
-  @Input() isLegacy = false;
-
   textSearchMode = false;
-  dataSource: SlavesDatasource & any;
-  masterFormGroup: UntypedFormGroup;
+  dataSource: DevicesDatasource & any;
+  devicesFormGroup: FormArray;
   textSearch = this.fb.control('', {nonNullable: true});
 
-  readonly ModbusProtocolLabelsMap = ModbusProtocolLabelsMap;
-
-  private onChange: (value: ModbusMasterConfig) => void = () => {};
+  private onChange: (value: DevicesConfigMapping[]) => void = () => {};
   private onTouched: () => void  = () => {};
 
   private destroy$ = new Subject<void>();
@@ -99,19 +81,15 @@ export class ModbusMasterTableComponent implements ControlValueAccessor, AfterVi
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef,
   ) {
-    this.masterFormGroup = this.fb.group({ slaves: this.fb.array([]) });
-    this.dataSource = new SlavesDatasource();
-  }
-
-  get slaves(): FormArray {
-    return this.masterFormGroup.get('slaves') as FormArray;
+    this.devicesFormGroup = this.fb.array([]);
+    this.dataSource = new DevicesDatasource();
   }
 
   ngOnInit(): void {
-    this.masterFormGroup.valueChanges.pipe(
+    this.devicesFormGroup.valueChanges.pipe(
       takeUntil(this.destroy$)
-    ).subscribe((value) => {
-      this.updateTableData(value.slaves);
+    ).subscribe(value => {
+      this.updateTableData(value);
       this.onChange(value);
       this.onTouched();
     });
@@ -127,10 +105,10 @@ export class ModbusMasterTableComponent implements ControlValueAccessor, AfterVi
       debounceTime(150),
       distinctUntilChanged((prev, current) => (prev ?? '') === current.trim()),
       takeUntil(this.destroy$)
-    ).subscribe(text => this.updateTableData(this.slaves.value, text.trim()));
+    ).subscribe(text => this.updateTableData(this.devicesFormGroup.value, text.trim()));
   }
 
-  registerOnChange(fn: (value: ModbusMasterConfig) => void): void {
+  registerOnChange(fn: (value: DevicesConfigMapping[]) => void): void {
     this.onChange = fn;
   }
 
@@ -138,9 +116,9 @@ export class ModbusMasterTableComponent implements ControlValueAccessor, AfterVi
     this.onTouched = fn;
   }
 
-  writeValue(master: ModbusMasterConfig): void {
-    this.slaves.clear();
-    this.pushDataAsFormArrays(master.slaves);
+  writeValue(devices: DevicesConfigMapping[]): void {
+    this.devicesFormGroup.clear();
+    this.pushDataAsFormArrays(devices);
   }
 
   enterFilterMode(): void {
@@ -152,77 +130,64 @@ export class ModbusMasterTableComponent implements ControlValueAccessor, AfterVi
   }
 
   exitFilterMode(): void {
-    this.updateTableData(this.slaves.value);
+    this.updateTableData(this.devicesFormGroup.value);
     this.textSearchMode = false;
     this.textSearch.reset();
   }
 
-  manageSlave($event: Event, index?: number): void {
+  manageDevices($event: Event, index?: number): void {
     if ($event) {
       $event.stopPropagation();
     }
     const withIndex = isDefinedAndNotNull(index);
-    const value = withIndex ? this.slaves.at(index).value : {};
-    this.getSlaveDialog(value, withIndex ? 'action.apply' : 'action.add').afterClosed()
+    const value = withIndex ? this.devicesFormGroup.at(index).value : {};
+    this.getDeviceDialog(value, withIndex ? 'action.apply' : 'action.add').afterClosed()
       .pipe(take(1), takeUntil(this.destroy$))
       .subscribe(res => {
         if (res) {
           if (withIndex) {
-            this.slaves.at(index).patchValue(res);
+            this.devicesFormGroup.at(index).patchValue(res);
           } else {
-            this.slaves.push(this.fb.control(res));
+            this.devicesFormGroup.push(this.fb.control(res));
           }
-          this.masterFormGroup.markAsDirty();
+          this.devicesFormGroup.markAsDirty();
         }
     });
   }
 
-  private getSlaveDialog(
-    value: LegacySlaveConfig | SlaveConfig,
+  private getDeviceDialog(
+    value: DevicesConfigMapping,
     buttonTitle: string
-  ): MatDialogRef<ModbusLegacySlaveDialogComponent | ModbusSlaveDialogComponent> {
-    if (this.isLegacy) {
-      return this.dialog.open<ModbusLegacySlaveDialogComponent, ModbusSlaveInfo<LegacySlaveConfig>, ModbusValues>
-      (ModbusLegacySlaveDialogComponent, {
-        disableClose: true,
-        panelClass: ['tb-dialog', 'tb-fullscreen-dialog'],
-        data: {
-          value: value as LegacySlaveConfig,
-          hideNewFields: true,
-          buttonTitle
-        }
-      });
-    }
-    return this.dialog.open<ModbusSlaveDialogComponent, ModbusSlaveInfo, ModbusValues>(ModbusSlaveDialogComponent, {
+  ): MatDialogRef<DeviceDialogComponent> {
+    return this.dialog.open<DeviceDialogComponent, DeviceConfigInfo, DevicesConfigMapping>(DeviceDialogComponent, {
       disableClose: true,
       panelClass: ['tb-dialog', 'tb-fullscreen-dialog'],
       data: {
-        value: value as SlaveConfig,
+        value,
         buttonTitle,
-        hideNewFields: false,
       }
     });
   }
 
-  deleteSlave($event: Event, index: number): void {
+  deleteDevice($event: Event, index: number): void {
     if ($event) {
       $event.stopPropagation();
     }
     this.dialogService.confirm(
-      this.translate.instant('gateway.delete-slave-title'),
+      this.translate.instant('gateway.delete-device-title'),
       '',
       this.translate.instant('action.no'),
       this.translate.instant('action.yes'),
       true
     ).pipe(take(1), takeUntil(this.destroy$)).subscribe((result) => {
       if (result) {
-        this.slaves.removeAt(index);
-        this.masterFormGroup.markAsDirty();
+        this.devicesFormGroup.removeAt(index);
+        this.devicesFormGroup.markAsDirty();
       }
     });
   }
 
-  private updateTableData(data: SlaveConfig[], textSearch?: string): void {
+  private updateTableData(data: DevicesConfigMapping[], textSearch?: string): void {
     if (textSearch) {
       data = data.filter(item =>
         Object.values(item).some(value =>
@@ -233,14 +198,14 @@ export class ModbusMasterTableComponent implements ControlValueAccessor, AfterVi
     this.dataSource.loadData(data);
   }
 
-  private pushDataAsFormArrays(slaves: SlaveConfig[]): void {
-    if (slaves?.length) {
-      slaves.forEach((slave: SlaveConfig) => this.slaves.push(this.fb.control(slave)));
+  private pushDataAsFormArrays(devices: DevicesConfigMapping[]): void {
+    if (devices?.length) {
+      devices.forEach((slave: any) => this.devicesFormGroup.push(this.fb.control(slave)));
     }
   }
 }
 
-export class SlavesDatasource extends TbTableDatasource<SlaveConfig> {
+export class DevicesDatasource extends TbTableDatasource<DevicesConfigMapping> {
   constructor() {
     super();
   }

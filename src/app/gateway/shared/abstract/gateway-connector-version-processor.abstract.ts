@@ -14,7 +14,7 @@
 /// limitations under the License.
 ///
 
-import { GatewayConnector, GatewayVersion } from '../models/public-api';
+import { GatewayConnector, GatewayConnectorConfigVersionMap } from '../models/public-api';
 import {
   GatewayConnectorVersionMappingUtil
 } from '../utils/public-api';
@@ -55,12 +55,12 @@ export abstract class GatewayConnectorVersionProcessor<BasicConfig> {
   }
 
   private isVersionUpgradeNeeded(): boolean {
-    return this.gatewayVersion >= GatewayConnectorVersionMappingUtil.parseVersion(GatewayVersion.Current)
+    return this.gatewayVersion >= GatewayConnectorVersionMappingUtil.parseVersion(GatewayConnectorConfigVersionMap.get(this.connector.type))
       && (!this.configVersion || this.configVersion < this.gatewayVersion);
   }
 
   private isVersionDowngradeNeeded(): boolean {
-    return this.configVersion && this.configVersion >= GatewayConnectorVersionMappingUtil.parseVersion(GatewayVersion.Current)
+    return this.configVersion && this.configVersion >= GatewayConnectorVersionMappingUtil.parseVersion(GatewayConnectorConfigVersionMap.get(this.connector.type))
       && (this.configVersion > this.gatewayVersion);
   }
 

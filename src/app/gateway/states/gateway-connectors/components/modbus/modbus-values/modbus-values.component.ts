@@ -90,7 +90,7 @@ export class ModbusValuesComponent implements ControlValueAccessor, Validator, O
   @Input() hideNewFields = false;
 
   disabled = false;
-  modbusRegisterTypes: ModbusRegisterType[] = Object.values(ModbusRegisterType);
+  modbusRegisterTypes: ModbusRegisterType[] = Object.values(ModbusRegisterType) as ModbusRegisterType[];
   modbusValueKeys = Object.values(ModbusValueKey);
   ModbusValuesTranslationsMap = ModbusRegisterTranslationsMap;
   ModbusValueKey = ModbusValueKey;

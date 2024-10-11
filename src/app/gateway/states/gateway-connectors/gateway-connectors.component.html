@@ -176,7 +176,7 @@
         <ng-container [ngSwitch]="initialConnector.type">
           <ng-container *ngSwitchCase="ConnectorType.MQTT">
             <tb-mqtt-basic-config
-              *ngIf="connectorForm.get('configVersion').value | isLatestVersionConfig else legacy"
+              *ngIf="connectorForm.get('configVersion').value | isLatestVersionConfig : ConnectorType.MQTT else legacy"
               formControlName="basicConfig"
               [generalTabContent]="generalTabContent"
               (initialized)="basicConfigInitSubject.next()"
@@ -191,7 +191,7 @@
           </ng-container>
           <ng-container *ngSwitchCase="ConnectorType.OPCUA">
             <tb-opc-ua-basic-config
-              *ngIf="connectorForm.get('configVersion').value | isLatestVersionConfig else legacy"
+              *ngIf="connectorForm.get('configVersion').value | isLatestVersionConfig : ConnectorType.OPCUA else legacy"
               formControlName="basicConfig"
               [generalTabContent]="generalTabContent"
               (initialized)="basicConfigInitSubject.next()"
@@ -206,13 +206,28 @@
           </ng-container>
           <ng-container *ngSwitchCase="ConnectorType.MODBUS">
             <tb-modbus-basic-config
-              *ngIf="connectorForm.get('configVersion').value | isLatestVersionConfig else legacy"
+              *ngIf="connectorForm.get('configVersion').value | isLatestVersionConfig : ConnectorType.MODBUS else legacy"
               formControlName="basicConfig"
               [generalTabContent]="generalTabContent"
               (initialized)="basicConfigInitSubject.next()"
             />
             <ng-template #legacy>
               <tb-modbus-legacy-basic-config
+                formControlName="basicConfig"
+                (initialized)="basicConfigInitSubject.next()"
+                [generalTabContent]="generalTabContent"
+              />
+            </ng-template>
+          </ng-container>
+          <ng-container *ngSwitchCase="ConnectorType.SOCKET">
+            <tb-socket-basic-config
+              *ngIf="connectorForm.get('configVersion').value | isLatestVersionConfig : ConnectorType.SOCKET else legacy"
+              formControlName="basicConfig"
+              [generalTabContent]="generalTabContent"
+              (initialized)="basicConfigInitSubject.next()"
+            />
+            <ng-template #legacy>
+              <tb-socket-legacy-basic-config
                 formControlName="basicConfig"
                 (initialized)="basicConfigInitSubject.next()"
                 [generalTabContent]="generalTabContent"
@@ -314,7 +329,7 @@
     </div>
     <tb-report-strategy
       [defaultValue]="ReportStrategyDefaultValue.Connector"
-      *ngIf="connectorForm.get('type').value === ConnectorType.MODBUS && (connectorForm.get('configVersion').value | isLatestVersionConfig)"
+      *ngIf="connectorForm.get('type').value === ConnectorType.MODBUS && (connectorForm.get('configVersion').value | isLatestVersionConfig : ConnectorType.MODBUS)"
       formControlName="reportStrategy"
     />
   </section>

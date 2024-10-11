@@ -18,7 +18,6 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
-  ElementRef,
   Input,
   NgZone,
   OnDestroy,
@@ -101,7 +100,6 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
   @Input()
   device: EntityId;
 
-  @ViewChild('nameInput') nameInput: ElementRef;
   @ViewChild(MatSort, {static: false}) sort: MatSort;
 
   readonly ConnectorType = ConnectorType;
@@ -109,6 +107,7 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
     ConnectorType.MQTT,
     ConnectorType.OPCUA,
     ConnectorType.MODBUS,
+    ConnectorType.SOCKET,
   ]);
   readonly gatewayLogLevel = Object.values(GatewayLogLevel);
   readonly displayedColumns = ['enabled', 'key', 'type', 'syncStatus', 'errors', 'actions'];
@@ -120,7 +119,6 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
   dataSource: MatTableDataSource<GatewayAttributeData>;
   connectorForm: FormGroup;
   activeConnectors: Array<string>;
-  mode: ConfigurationModes = this.ConnectorConfigurationModes.BASIC;
   initialConnector: GatewayConnector;
   basicConfigInitSubject = new Subject<void>();
 
@@ -265,7 +263,7 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
       delete value.class;
     }
 
-    if (value.type === ConnectorType.MODBUS && this.isLatestVersionConfig.transform(value.configVersion)) {
+    if (value.type === ConnectorType.MODBUS && this.isLatestVersionConfig.transform(value.configVersion, ConnectorType.MODBUS)) {
       if (!value.reportStrategy) {
         value.reportStrategy = {
           type: ReportStrategyType.OnReportPeriod,
@@ -637,7 +635,7 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
       this.attributeService.getEntityAttributes(this.device, AttributeScope.SHARED_SCOPE, ['active_connectors']),
       this.attributeService.getEntityAttributes(this.device, AttributeScope.SERVER_SCOPE, ['inactive_connectors']),
       this.attributeService.getEntityAttributes(this.device, AttributeScope.CLIENT_SCOPE, ['Version'])
-    ]).pipe(takeUntil(this.destroy$)).subscribe(attributes => {
+    ]).pipe(takeUntil(this.destroy$)).subscribe((attributes: GatewayAttributeData[][]) => {
       this.activeConnectors = this.parseConnectors(attributes[0]);
       this.inactiveConnectors = this.parseConnectors(attributes[1]);
       this.gatewayVersion = attributes[2][0]?.value;
@@ -850,16 +848,12 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
 
   private updateConnector(connector: GatewayConnector): void {
     this.jsonConfigSub?.unsubscribe();
-    switch (connector.type) {
-      case ConnectorType.MQTT:
-      case ConnectorType.OPCUA:
-      case ConnectorType.MODBUS:
-        this.updateBasicConfigConnector(connector);
-        break;
-      default:
-        this.connectorForm.patchValue({...connector, mode: null});
-        this.connectorForm.markAsPristine();
-        this.createJsonConfigWatcher();
+    if (this.allowBasicConfig.has(connector.type)) {
+      this.updateBasicConfigConnector(connector);
+    } else {
+      this.connectorForm.patchValue({...connector, mode: null});
+      this.connectorForm.markAsPristine();
+      this.createJsonConfigWatcher();
     }
   }
 

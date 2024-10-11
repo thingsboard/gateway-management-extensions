@@ -21,7 +21,7 @@ import {
   MQTTBasicConfig,
   OPCBasicConfig,
 } from '../../shared/public-api';
-import { MqttVersionProcessor, OpcVersionProcessor, ModbusVersionProcessor } from '../abstract/public-api';
+import { MqttVersionProcessor, OpcVersionProcessor, ModbusVersionProcessor, SocketVersionProcessor } from '../abstract/public-api';
 import { isNumber, isString } from '@core/public-api';
 
 export abstract class GatewayConnectorVersionMappingUtil {
@@ -34,6 +34,8 @@ export abstract class GatewayConnectorVersionMappingUtil {
         return new OpcVersionProcessor(gatewayVersion, connector as GatewayConnector<OPCBasicConfig>).getProcessedByVersion();
       case ConnectorType.MODBUS:
         return new ModbusVersionProcessor(gatewayVersion, connector as GatewayConnector<ModbusBasicConfig>).getProcessedByVersion();
+      case ConnectorType.SOCKET:
+        return new SocketVersionProcessor(gatewayVersion, connector as any).getProcessedByVersion();
       default:
         return connector;
     }

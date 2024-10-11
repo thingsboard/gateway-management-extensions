@@ -15,3 +15,5 @@
 ///
 
 export * from './gateway.models';
+export * from './gateway-locale.constant';
+export * from './connectors-default-config.constant';

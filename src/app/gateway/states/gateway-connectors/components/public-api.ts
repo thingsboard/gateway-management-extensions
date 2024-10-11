@@ -35,3 +35,8 @@ export * from './modbus/modbus-slave-dialog/modbus-slave-dialog.abstract';
 export * from './mapping-table/mapping-table.component';
 export * from './security-config/security-config.component';
 export * from './report-strategy/report-strategy.component';
+export * from './socket/device-data-keys-pannel/device-data-keys-panel.component';
+export * from './socket/socket-config/socket-config.component';
+export * from './socket/socket-basic-config/socket-basic-config.component';
+export * from './socket/device-dialog/device-dialog.component';
+export * from './socket/devices-config-table/devices-config-table.component';
