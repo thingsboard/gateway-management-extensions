@@ -138,7 +138,7 @@ export interface GatewayConnector<BaseConfig = ConnectorBaseConfig> extends Gate
 export interface GatewayVersionedDefaultConfig {
   legacy: GatewayConnector<ConnectorLegacyConfig>;
   '3.5.2'?: GatewayConnector<ConnectorBaseConfig_v3_5_2>;
-  '3.5.3'?: GatewayConnector<ConnectorBaseConfig_v3_5_3>;
+  '3.5.4'?: GatewayConnector<ConnectorBaseConfig_v3_5_3>;
 }
 
 export interface DataMapping {
@@ -196,7 +196,7 @@ export interface ConnectorSecurity {
 }
 
 export enum GatewayVersion {
-  Current = '3.5.3',
+  Current = '3.5.4',
   ["3.5.2"] = '3.5.2',
   Legacy = 'legacy'
 }
