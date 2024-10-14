@@ -37,7 +37,7 @@ import {
   ReportStrategyDefaultValue,
   ReportStrategyType,
   ReportStrategyTypeTranslationsMap, TruncateWithTooltipDirective
-} from '../../../../shared/public-api';
+} from '../../public-api';
 import { filter, takeUntil } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { coerceBoolean, coerceNumber, SharedModule } from '@shared/public-api';
@@ -161,7 +161,7 @@ export class ReportStrategyComponent implements ControlValueAccessor, OnDestroy 
   private onTypeChange(type: ReportStrategyType): void {
     const reportPeriodControl = this.reportStrategyFormGroup.get('reportPeriod');
 
-    if (type === ReportStrategyType.OnChange) {
+    if (type === ReportStrategyType.OnChange || type === ReportStrategyType.OnReceived) {
       reportPeriodControl.disable({emitEvent: false});
     } else if (!this.isExpansionMode || this.showStrategyControl.value) {
       reportPeriodControl.enable({emitEvent: false});

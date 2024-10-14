@@ -27,7 +27,9 @@ import {
   SecurityTypes,
   ConfigurationModes,
   LocalLogsConfigs,
-  LogSavingPeriod, Attribute
+  LogSavingPeriod,
+  Attribute,
+  GatewayVersion,
 } from '../../shared/public-api';
 import { deepTrim, isEqual, DeviceService, AttributeService } from '@core/public-api';
 import {
@@ -57,6 +59,7 @@ export class GatewayConfigurationComponent implements AfterViewInit, OnDestroy {
   initialCredentials: DeviceCredentials;
   gatewayConfigGroup: FormGroup;
   ConfigurationModes = ConfigurationModes;
+  gatewayVersion: GatewayVersion;
 
   private destroy$ = new Subject<void>();
   private readonly gatewayConfigAttributeKeys =
@@ -309,6 +312,7 @@ export class GatewayConfigurationComponent implements AfterViewInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(attributes => {
+        this.gatewayVersion = attributes.find(attribute => attribute.key === 'Version')?.value;
         this.updateConfigs(attributes);
         this.cd.detectChanges();
       });

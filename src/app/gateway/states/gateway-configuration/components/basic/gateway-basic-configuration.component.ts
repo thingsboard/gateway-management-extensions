@@ -19,9 +19,10 @@ import {
   Component,
   EventEmitter,
   forwardRef,
-  Input,
+  Input, OnChanges,
   OnDestroy,
-  Output
+  Output,
+  SimpleChanges
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -55,6 +56,7 @@ import {
   SecurityTypes,
   StorageTypes,
   StorageTypesTranslationMap,
+  ReportStrategyComponent, ReportStrategyDefaultValue, ReportStrategyType,
 } from '../../../../shared/public-api';
 import { CommonModule } from '@angular/common';
 import {
@@ -72,6 +74,7 @@ import {
   imports: [
     CommonModule,
     SharedModule,
+    ReportStrategyComponent,
   ],
   providers: [
     {
@@ -86,26 +89,23 @@ import {
     }
   ],
 })
-export class GatewayBasicConfigurationComponent implements OnDestroy, ControlValueAccessor, Validators {
+export class GatewayBasicConfigurationComponent implements OnChanges, OnDestroy, ControlValueAccessor, Validators {
 
-  @Input()
-  device: EntityId;
+  @Input() device: EntityId;
+  @Input() @coerceBoolean() dialogMode = false;
+  @Input() @coerceBoolean() withReportStrategy = false;
 
-  @coerceBoolean()
-  @Input()
-  dialogMode = false;
+  @Output() initialCredentialsUpdated = new EventEmitter<DeviceCredentials>();
 
-  @Output()
-  initialCredentialsUpdated = new EventEmitter<DeviceCredentials>();
-
-  StorageTypes = StorageTypes;
-  storageTypes = Object.values(StorageTypes);
-  storageTypesTranslationMap = StorageTypesTranslationMap;
-  logSavingPeriods = LogSavingPeriodTranslations;
-  localLogsConfigs = Object.keys(LocalLogsConfigs) as LocalLogsConfigs[];
-  localLogsConfigTranslateMap = LocalLogsConfigTranslateMap;
-  securityTypes = GecurityTypesTranslationsMap;
-  gatewayLogLevel = Object.values(GatewayLogLevel);
+  readonly StorageTypes = StorageTypes;
+  readonly storageTypes = Object.values(StorageTypes);
+  readonly storageTypesTranslationMap = StorageTypesTranslationMap;
+  readonly logSavingPeriods = LogSavingPeriodTranslations;
+  readonly localLogsConfigs = Object.keys(LocalLogsConfigs) as LocalLogsConfigs[];
+  readonly localLogsConfigTranslateMap = LocalLogsConfigTranslateMap;
+  readonly securityTypes = GecurityTypesTranslationsMap;
+  readonly gatewayLogLevel = Object.values(GatewayLogLevel);
+  readonly ReportStrategyDefaultValue = ReportStrategyDefaultValue;
 
   logSelector: FormControl;
   basicFormGroup: FormGroup;
@@ -127,6 +127,12 @@ export class GatewayBasicConfigurationComponent implements OnDestroy, ControlVal
         this.onChange(value);
         this.onTouched();
       });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.withReportStrategy && !changes.withReportStrategy.firstChange && this.withReportStrategy) {
+      this.basicFormGroup.get('thingsboard.reportStrategy').enable({emitEvent: false})
+    }
   }
 
   ngOnDestroy(): void {
@@ -301,7 +307,11 @@ export class GatewayBasicConfigurationComponent implements OnDestroy, ControlVal
       handleDeviceRenaming: [true],
       checkingDeviceActivity: this.initCheckingDeviceActivityFormGroup(),
       security: this.initSecurityFormGroup(),
-      qos: [1, [Validators.required, Validators.min(0), Validators.max(1), Validators.pattern(/^[^.\s]+$/)]]
+      qos: [1, [Validators.required, Validators.min(0), Validators.max(1), Validators.pattern(/^[^.\s]+$/)]],
+      reportStrategy: [{
+        value: { type: ReportStrategyType.OnReportPeriod, reportPeriod: ReportStrategyDefaultValue.Gateway },
+        disabled: true
+      }],
     });
   }
 

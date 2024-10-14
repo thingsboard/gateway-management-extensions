@@ -39,6 +39,7 @@
       formControlName="basicConfig"
       [device]="device"
       [dialogMode]="!!dialogRef"
+      [withReportStrategy]="gatewayVersion | withReportStrategy"
       (initialCredentialsUpdated)="initialCredentials = $event"
     />
     <tb-gateway-advanced-configuration

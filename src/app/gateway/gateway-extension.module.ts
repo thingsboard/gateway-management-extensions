@@ -72,7 +72,7 @@ import {
 } from './states/gateway-connectors/components/mqtt/basic-config/mqtt-basic-config.component';
 import {
   ReportStrategyComponent
-} from './states/gateway-connectors/components/report-strategy/report-strategy.component';
+} from './shared/components/report-strategy/report-strategy.component';
 import { DeviceGatewayCommandComponent } from './states/device-gateway-command/device-gateway-command.component';
 import { GatewayHelpLinkPipe } from './shared/pipes/gateway-help-link.pipe';
 import {
@@ -100,6 +100,7 @@ import {
 import {
   SocketLegacyBasicConfigComponent
 } from './states/gateway-connectors/components/socket/socket-basic-config/socket-legacy-basic-config.component';
+import { ReportStrategyVersionPipe } from './shared/pipes/report-strategy-version.pipe';
 
 const DECLARATIONS = [
   GatewayLogsComponent,
@@ -147,10 +148,12 @@ const DECLARATIONS = [
     SocketConfigComponent,
     SocketBasicConfigComponent,
     SocketLegacyBasicConfigComponent,
+    ReportStrategyVersionPipe,
   ],
   exports: DECLARATIONS,
   providers: [
     LatestVersionConfigPipe,
+    ReportStrategyVersionPipe,
   ]
 })
 export class GatewayExtensionModule {

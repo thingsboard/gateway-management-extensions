@@ -29,7 +29,7 @@ import {
   UntypedFormBuilder,
   Validators
 } from '@angular/forms';
-import { coerceBoolean, DataKeyType } from '@shared/public-api';
+import { coerceBoolean } from '@shared/public-api';
 import { TbPopoverComponent } from '@shared/components/popover.component';
 import { Store } from '@ngrx/store';
 import { PageComponent } from '@shared/public-api';
@@ -41,6 +41,7 @@ import {
   mappingValueTypesMap,
   noLeadTrailSpacesRegex,
   OPCUaSourceType,
+  ReportStrategyDefaultValue,
   RpcMethodsMapping,
 } from '../../../../shared/public-api';
 
@@ -52,46 +53,23 @@ import {
 })
 export class MappingDataKeysPanelComponent extends PageComponent implements OnInit {
 
-  @Input()
-  panelTitle: string;
+  @Input() panelTitle: string;
+  @Input() addKeyTitle: string;
+  @Input() deleteKeyTitle: string;
+  @Input() noKeysText: string;
+  @Input() keys: Array<MappingDataKey> | {[key: string]: any};
+  @Input() keysType: MappingKeysType;
+  @Input() valueTypeKeys: Array<MappingValueType | OPCUaSourceType> = Object.values(MappingValueType) as Array<MappingValueType | OPCUaSourceType>;
+  @Input() valueTypeEnum = MappingValueType;
+  @Input() valueTypes = mappingValueTypesMap;
+  @Input() @coerceBoolean() rawData = false;
+  @Input() @coerceBoolean() withReportStrategy = true;
+  @Input() popover: TbPopoverComponent<MappingDataKeysPanelComponent>;
 
-  @Input()
-  addKeyTitle: string;
+  @Output() keysDataApplied = new EventEmitter<Array<MappingDataKey> | {[key: string]: unknown}>();
 
-  @Input()
-  deleteKeyTitle: string;
-
-  @Input()
-  noKeysText: string;
-
-  @Input()
-  keys: Array<MappingDataKey> | {[key: string]: any};
-
-  @Input()
-  keysType: MappingKeysType;
-
-  @Input()
-  valueTypeKeys: Array<MappingValueType | OPCUaSourceType> = Object.values(MappingValueType);
-
-  @Input()
-  valueTypeEnum = MappingValueType;
-
-  @Input()
-  valueTypes: Map<string, any> = mappingValueTypesMap;
-
-  @Input()
-  @coerceBoolean()
-  rawData = false;
-
-  @Input()
-  popover: TbPopoverComponent<MappingDataKeysPanelComponent>;
-
-  @Output()
-  keysDataApplied = new EventEmitter<Array<MappingDataKey> | {[key: string]: unknown}>();
-
-  MappingKeysType = MappingKeysType;
-
-  dataKeyType: DataKeyType;
+  readonly MappingKeysType = MappingKeysType;
+  readonly ReportStrategyDefaultValue = ReportStrategyDefaultValue;
 
   keysListFormArray: UntypedFormArray;
 
@@ -120,7 +98,8 @@ export class MappingDataKeysPanelComponent extends PageComponent implements OnIn
     } else {
       dataKeyFormGroup = this.fb.group({
         key: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-        value: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]]
+        value: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
+        reportStrategy: [{value: null, disabled: this.isReportStrategyDisabled()}]
       });
     }
     if (this.keysType !== MappingKeysType.CUSTOM && this.keysType !== MappingKeysType.RPC_METHODS) {
@@ -165,15 +144,16 @@ export class MappingDataKeysPanelComponent extends PageComponent implements OnIn
         let dataKeyFormGroup: FormGroup;
         if (this.keysType === MappingKeysType.RPC_METHODS) {
           dataKeyFormGroup = this.fb.group({
-            method: [keyData.method, [Validators.required]],
-            arguments: [[...keyData.arguments], []]
+            method: [(keyData as RpcMethodsMapping).method, [Validators.required]],
+            arguments: [[...(keyData as RpcMethodsMapping).arguments], []]
           });
         } else {
-          const { key, value, type } = keyData;
+          const { key, value, type, reportStrategy } = keyData;
           dataKeyFormGroup = this.fb.group({
             key: [key, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
             value: [value, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-            type: [type, []]
+            type: [type, []],
+            reportStrategy: [{ value: reportStrategy, disabled: this.isReportStrategyDisabled()}]
           });
         }
         keysControlGroups.push(dataKeyFormGroup);
@@ -191,5 +171,9 @@ export class MappingDataKeysPanelComponent extends PageComponent implements OnIn
       return value;
     }
     return '';
+  }
+
+  private isReportStrategyDisabled(): boolean {
+    return !(this.withReportStrategy && (this.keysType === MappingKeysType.ATTRIBUTES || this.keysType === MappingKeysType.TIMESERIES));
   }
 }

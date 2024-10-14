@@ -547,7 +547,8 @@
       "on-change": "On value change",
       "on-report-period": "On report period",
       "on-change-or-report-period": "On value change or report period",
-      "report-period": "Report period"
+      "report-period": "Report period",
+      "on-received": "On received"
     },
     "source-type": {
       "msg": "Extract from message",

@@ -73,38 +73,27 @@ export class MappingDialogComponent extends DialogComponent<MappingDialogCompone
 
   mappingForm: UntypedFormGroup;
 
-  MappingType = MappingType;
-
-  qualityTypes = QualityTypes;
-  QualityTranslationsMap = QualityTypeTranslationsMap;
-
-  convertorTypes: ConvertorType[] = Object.values(ConvertorType);
-  ConvertorTypeEnum = ConvertorType;
-  ConvertorTypeTranslationsMap = ConvertorTypeTranslationsMap;
-
-  sourceTypes: SourceType[] = Object.values(SourceType);
-  OPCUaSourceTypes = Object.values(OPCUaSourceType) as Array<OPCUaSourceType>;
-  OPCUaSourceTypesEnum = OPCUaSourceType;
-  sourceTypesEnum = SourceType;
-  SourceTypeTranslationsMap = SourceTypeTranslationsMap;
-
-  requestTypes: RequestType[] = Object.values(RequestType);
-  RequestTypeEnum = RequestType;
-  RequestTypesTranslationsMap = RequestTypesTranslationsMap;
-
-  DeviceInfoType = DeviceInfoType;
-
-  ServerSideRPCType = ServerSideRPCType;
-
-  MappingKeysType = MappingKeysType;
-
-  MappingHintTranslationsMap = MappingHintTranslationsMap;
-
-  MappingTypeTranslationsMap = MappingTypeTranslationsMap;
-
-  DataConversionTranslationsMap = DataConversionTranslationsMap;
-
-  HelpLinkByMappingTypeMap = HelpLinkByMappingTypeMap;
+  readonly MappingType = MappingType;
+  readonly qualityTypes = QualityTypes;
+  readonly QualityTranslationsMap = QualityTypeTranslationsMap;
+  readonly convertorTypes: ConvertorType[] = Object.values(ConvertorType) as ConvertorType[];
+  readonly ConvertorTypeEnum = ConvertorType;
+  readonly ConvertorTypeTranslationsMap = ConvertorTypeTranslationsMap;
+  readonly sourceTypes: SourceType[] = Object.values(SourceType) as SourceType[];
+  readonly OPCUaSourceTypes = Object.values(OPCUaSourceType) as Array<OPCUaSourceType>;
+  readonly OPCUaSourceTypesEnum = OPCUaSourceType;
+  readonly sourceTypesEnum = SourceType;
+  readonly SourceTypeTranslationsMap = SourceTypeTranslationsMap;
+  readonly requestTypes: RequestType[] = Object.values(RequestType) as RequestType[];
+  readonly RequestTypeEnum = RequestType;
+  readonly RequestTypesTranslationsMap = RequestTypesTranslationsMap;
+  readonly DeviceInfoType = DeviceInfoType;
+  readonly ServerSideRPCType = ServerSideRPCType;
+  readonly MappingKeysType = MappingKeysType;
+  readonly MappingHintTranslationsMap = MappingHintTranslationsMap;
+  readonly MappingTypeTranslationsMap = MappingTypeTranslationsMap;
+  readonly DataConversionTranslationsMap = DataConversionTranslationsMap;
+  readonly HelpLinkByMappingTypeMap = HelpLinkByMappingTypeMap;
 
   keysPopupClosed = true;
 
@@ -227,7 +216,8 @@ export class MappingDialogComponent extends DialogComponent<MappingDialogCompone
         panelTitle: MappingKeysPanelTitleTranslationsMap.get(keysType),
         addKeyTitle: MappingKeysAddKeyTranslationsMap.get(keysType),
         deleteKeyTitle: MappingKeysDeleteKeyTranslationsMap.get(keysType),
-        noKeysText: MappingKeysNoKeysTextTranslationsMap.get(keysType)
+        noKeysText: MappingKeysNoKeysTextTranslationsMap.get(keysType),
+        withReportStrategy: this.data.withReportStrategy,
       };
       if (this.data.mappingType === MappingType.OPCUA) {
         ctx.valueTypeKeys = Object.values(OPCUaSourceType);

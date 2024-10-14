@@ -34,7 +34,7 @@ import { Router } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
   ReportStrategyComponent
-} from '../../report-strategy/report-strategy.component';
+} from '../../../../../shared/components/public-api';
 import {
   ModbusSlaveDialogAbstract
 } from './modbus-slave-dialog.abstract';

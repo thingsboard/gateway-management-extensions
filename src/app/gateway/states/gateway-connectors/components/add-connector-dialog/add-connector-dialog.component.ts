@@ -33,7 +33,7 @@ import {
   getDefaultConfig
 } from '../../../../shared/public-api';
 import { Subject } from 'rxjs';
-import { ResourcesService, AppState } from '@core/public-api';
+import { AppState } from '@core/public-api';
 import { takeUntil, tap } from 'rxjs/operators';
 
 @Component({
@@ -61,8 +61,8 @@ export class AddConnectorDialogComponent
               @Inject(MAT_DIALOG_DATA) public data: AddConnectorConfigData,
               public dialogRef: MatDialogRef<AddConnectorDialogComponent, CreatedConnectorConfigData>,
               private fb: FormBuilder,
-              private isLatestVersionConfig: LatestVersionConfigPipe,
-              private resourcesService: ResourcesService) {
+              private isLatestVersionConfig: LatestVersionConfigPipe
+  ) {
     super(store, router, dialogRef);
     this.connectorForm = this.fb.group({
       type: [ConnectorType.MQTT, []],

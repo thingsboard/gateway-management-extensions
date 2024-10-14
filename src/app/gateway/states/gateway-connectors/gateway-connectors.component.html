@@ -179,6 +179,7 @@
               *ngIf="connectorForm.get('configVersion').value | isLatestVersionConfig : ConnectorType.MQTT else legacy"
               formControlName="basicConfig"
               [generalTabContent]="generalTabContent"
+              [withReportStrategy]="connectorForm.get('configVersion').value | withReportStrategy : ConnectorType.OPCUA"
               (initialized)="basicConfigInitSubject.next()"
             />
             <ng-template #legacy>
@@ -194,6 +195,7 @@
               *ngIf="connectorForm.get('configVersion').value | isLatestVersionConfig : ConnectorType.OPCUA else legacy"
               formControlName="basicConfig"
               [generalTabContent]="generalTabContent"
+              [withReportStrategy]="connectorForm.get('configVersion').value | withReportStrategy : ConnectorType.OPCUA"
               (initialized)="basicConfigInitSubject.next()"
             />
             <ng-template #legacy>
@@ -320,7 +322,7 @@
         </div>
       </div>
     </div>
-    <div *ngIf="connectorForm.get('type').value === ConnectorType.MQTT" class="tb-form-row column-xs" fxLayoutAlign="space-between center">
+    <div *ngIf="connectorForm.get('type').value === ConnectorType.MQTT && !(connectorForm.get('configVersion').value | withReportStrategy : ConnectorType.MQTT)" class="tb-form-row column-xs" fxLayoutAlign="space-between center">
       <mat-slide-toggle class="mat-slide" formControlName="sendDataOnlyOnChange">
         <mat-label tb-hint-tooltip-icon="{{ 'gateway.send-change-data-hint' | translate }}">
           {{ 'gateway.send-change-data' | translate }}
@@ -328,8 +330,10 @@
       </mat-slide-toggle>
     </div>
     <tb-report-strategy
+      *ngIf="connectorForm.get('configVersion').value | withReportStrategy: connectorForm.get('type').value"
+      class="stroked tb-form-panel"
+      [isExpansionMode]="true"
       [defaultValue]="ReportStrategyDefaultValue.Connector"
-      *ngIf="connectorForm.get('type').value === ConnectorType.MODBUS && (connectorForm.get('configVersion').value | isLatestVersionConfig : ConnectorType.MODBUS)"
       formControlName="reportStrategy"
     />
   </section>
