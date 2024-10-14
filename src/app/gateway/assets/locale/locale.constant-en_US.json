@@ -446,7 +446,7 @@
     "scan-period-error": "Scan period should be at least {{min}} (ms).",
     "sub-check-period": "Subscription check period (ms)",
     "sub-check-period-error": "Subscription check period should be at least {{min}} (ms).",
-    "security-label": "Security",
+    "security": "Security",
     "security-policy": "Security policy",
     "security-type": "Security type",
     "security-types": {
@@ -674,6 +674,7 @@
       "max-payload-size-bytes": "Maximum package size in bytes",
       "poll-period": "Period in milliseconds to read data from nodes.",
       "socket": {
+        "attribute-on-platform-required": "Attribute on platform is required",
         "attribute-requests-type": "The type of requested attribute can be “shared” or “client.",
         "with-response": "Boolean flag that specifies whether to send a response back to ThingsBoard.",
         "key": "Name for telemetry on platform."

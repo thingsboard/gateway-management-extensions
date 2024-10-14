@@ -71,7 +71,7 @@
                     <div class="tb-form-panel-title" translate>gateway.connector-side</div>
                     <div class="tb-form-row column-xs" fxLayoutAlign="space-between center">
                       <div class="fixed-title-width tb-flex align-center">
-                        {{ 'gateway.byte' | translate }}
+                        <span class="tb-required">{{ 'gateway.byte' | translate }}</span>
                         <div  matSuffix
                               class="see-example"
                               [tb-help-popup]="'widget/lib/gateway/byte_fn'"
@@ -112,7 +112,7 @@
                 </div>
                 <div class="tb-form-panel no-border no-padding" *ngIf="keysType === SocketValueKey.RPC_METHODS">
                   <div class="tb-form-row column-xs" fxLayoutAlign="space-between center">
-                    <div class="fixed-title-width">
+                    <div class="fixed-title-width tb-required">
                       {{ 'gateway.method-name' | translate }}
                     </div>
                     <div class="tb-flex no-gap">
@@ -233,7 +233,7 @@
                     </div>
                   </div>
                   <div class="tb-form-row column-xs" fxLayoutAlign="space-between center">
-                    <div class="fixed-title-width">
+                    <div class="fixed-title-width tb-required">
                       {{ 'gateway.attribute-on-platform' | translate }}
                     </div>
                     <div class="tb-flex no-gap">
@@ -243,7 +243,7 @@
                         <mat-icon matSuffix
                                   matTooltipPosition="above"
                                   matTooltipClass="tb-error-tooltip"
-                                  [matTooltip]="('gateway.method-required') | translate"
+                                  [matTooltip]="('gateway.attribute-on-platform-required') | translate"
                                   *ngIf="keyControl.get('attributeOnThingsBoard').hasError('required') && keyControl.get('attributeOnThingsBoard').touched"
                                   class="tb-error">
                           warning

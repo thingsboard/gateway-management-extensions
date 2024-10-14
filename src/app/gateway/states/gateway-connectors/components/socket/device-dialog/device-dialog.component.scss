@@ -61,6 +61,8 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
     }
     .mat-mdc-form-field {
       width: 0;

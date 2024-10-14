@@ -14,7 +14,15 @@
 /// limitations under the License.
 ///
 
-import { ChangeDetectionStrategy, Component, Inject, OnDestroy, Renderer2, ViewContainerRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnDestroy,
+  Renderer2,
+  ViewContainerRef
+} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { AppState } from '@core/public-api';
@@ -72,14 +80,15 @@ export class DeviceDialogComponent extends DialogComponent<DeviceDialogComponent
               private fb: FormBuilder,
               private popoverService: TbPopoverService,
               private renderer: Renderer2,
-              private viewContainerRef: ViewContainerRef
+              private viewContainerRef: ViewContainerRef,
+              private cdr: ChangeDetectorRef,
   ) {
     super(store, router, dialogRef);
 
     this.deviceFormGroup = this.fb.group({
       address: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
       deviceName: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-      deviceType: ['', [Validators.pattern(noLeadTrailSpacesRegex)]],
+      deviceType: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
       encoding: [SocketEncoding.UTF8],
       telemetry: [[]],
       attributes: [[]],
@@ -148,6 +157,7 @@ export class DeviceDialogComponent extends DialogComponent<DeviceDialogComponent
       dataKeysPanelPopover.hide();
       keysControl.patchValue(keysData);
       keysControl.markAsDirty();
+      this.cdr.markForCheck();
     });
     dataKeysPanelPopover.tbHideStart.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.keysPopupClosed = true;
