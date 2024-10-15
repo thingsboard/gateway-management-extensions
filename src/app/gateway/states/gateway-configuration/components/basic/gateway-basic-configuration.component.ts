@@ -15,6 +15,7 @@
 ///
 
 import {
+  AfterViewInit,
   ChangeDetectorRef,
   Component,
   EventEmitter,
@@ -22,7 +23,8 @@ import {
   Input, OnChanges,
   OnDestroy,
   Output,
-  SimpleChanges
+  SimpleChanges,
+  ViewChild
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -56,15 +58,20 @@ import {
   SecurityTypes,
   StorageTypes,
   StorageTypesTranslationMap,
-  ReportStrategyComponent, ReportStrategyDefaultValue, ReportStrategyType,
+  ReportStrategyComponent,
+  ReportStrategyDefaultValue,
+  ReportStrategyType
 } from '../../../../shared/public-api';
 import { CommonModule } from '@angular/common';
 import {
+  GatewayBasicConfigTab,
+  GatewayBasicConfigTabKey,
   GatewayConfigCommand,
   GatewayConfigSecurity,
   GatewayConfigValue,
   LogConfig
 } from '../../models/public-api';
+import { MatTabGroup } from '@angular/material/tabs';
 
 @Component({
   selector: 'tb-gateway-basic-configuration',
@@ -89,13 +96,16 @@ import {
     }
   ],
 })
-export class GatewayBasicConfigurationComponent implements OnChanges, OnDestroy, ControlValueAccessor, Validators {
+export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewInit, OnDestroy, ControlValueAccessor, Validators {
 
   @Input() device: EntityId;
+  @Input() defaultTab: GatewayBasicConfigTabKey;
   @Input() @coerceBoolean() dialogMode = false;
   @Input() @coerceBoolean() withReportStrategy = false;
 
   @Output() initialCredentialsUpdated = new EventEmitter<DeviceCredentials>();
+
+  @ViewChild('configGroup') configGroup: MatTabGroup;
 
   readonly StorageTypes = StorageTypes;
   readonly storageTypes = Object.values(StorageTypes);
@@ -132,6 +142,12 @@ export class GatewayBasicConfigurationComponent implements OnChanges, OnDestroy,
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.withReportStrategy && !changes.withReportStrategy.firstChange && this.withReportStrategy) {
       this.basicFormGroup.get('thingsboard.reportStrategy').enable({emitEvent: false})
+    }
+  }
+
+  ngAfterViewInit(): void {
+    if (this.defaultTab) {
+      this.configGroup.selectedIndex = GatewayBasicConfigTab[this.defaultTab];
     }
   }
 

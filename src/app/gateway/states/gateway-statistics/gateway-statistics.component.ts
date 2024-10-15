@@ -144,7 +144,7 @@ export class GatewayStatisticsComponent implements AfterViewInit {
 
   public navigateToStatistics() {
     const params = deepClone(this.ctx.stateController.getStateParams());
-    this.ctx.stateController.openState('configuration', params);
+    this.ctx.stateController.openState('configuration', { defaultTab: 'statistics', ...params });
   }
 
   public sortData() {

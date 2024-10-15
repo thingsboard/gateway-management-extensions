@@ -170,3 +170,14 @@ export interface LogAttribute {
   ts: number;
 }
 
+export enum GatewayBasicConfigTab {
+  general,
+  logs,
+  storage,
+  grpc,
+  statistics,
+  other
+}
+
+export type GatewayBasicConfigTabKey = keyof typeof GatewayBasicConfigTab;
+

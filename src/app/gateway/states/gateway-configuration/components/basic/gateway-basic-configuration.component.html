@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<mat-tab-group class="tab-group-block" [formGroup]="basicFormGroup" [class.dialog-mode]="dialogMode">
+<mat-tab-group #configGroup class="tab-group-block" [formGroup]="basicFormGroup" [class.dialog-mode]="dialogMode">
   <mat-tab label="{{ 'gateway.general' | translate }}">
     <ng-template matTabContent>
       <div formGroupName="thingsboard" class="mat-content mat-padding configuration-block">
