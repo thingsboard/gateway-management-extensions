@@ -24,16 +24,16 @@ import {
   AddConnectorConfigData,
   ConnectorType,
   CreatedConnectorConfigData,
-  GatewayConnector,
   GatewayConnectorDefaultTypesTranslatesMap,
   GatewayLogLevel,
   GatewayVersion,
-  GatewayVersionedDefaultConfig,
   noLeadTrailSpacesRegex,
-  LatestVersionConfigPipe
+  LatestVersionConfigPipe,
+  GatewayConnectorConfigVersionMap,
+  getDefaultConfig
 } from '../../../../shared/public-api';
-import { Observable, Subject } from 'rxjs';
-import { ResourcesService, AppState } from '@core/public-api';
+import { Subject } from 'rxjs';
+import { AppState } from '@core/public-api';
 import { takeUntil, tap } from 'rxjs/operators';
 
 @Component({
@@ -61,8 +61,8 @@ export class AddConnectorDialogComponent
               @Inject(MAT_DIALOG_DATA) public data: AddConnectorConfigData,
               public dialogRef: MatDialogRef<AddConnectorDialogComponent, CreatedConnectorConfigData>,
               private fb: FormBuilder,
-              private isLatestVersionConfig: LatestVersionConfigPipe,
-              private resourcesService: ResourcesService) {
+              private isLatestVersionConfig: LatestVersionConfigPipe
+  ) {
     super(store, router, dialogRef);
     this.connectorForm = this.fb.group({
       type: [ConnectorType.MQTT, []],
@@ -97,19 +97,18 @@ export class AddConnectorDialogComponent
     this.submitted = true;
     const value = this.connectorForm.getRawValue();
     if (value.useDefaults) {
-      this.getDefaultConfig(value.type).subscribe((defaultConfig: GatewayVersionedDefaultConfig) => {
-        const gatewayVersion = this.data.gatewayVersion;
-        if (gatewayVersion) {
-          value.configVersion = gatewayVersion;
-        }
-        value.configurationJson = (this.isLatestVersionConfig.transform(gatewayVersion)
-          ? defaultConfig[GatewayVersion.Current]
+      const defaultConfig = getDefaultConfig(value.type);
+      const gatewayVersion = this.data.gatewayVersion;
+      if (gatewayVersion) {
+        value.configVersion = gatewayVersion;
+      }
+      value.configurationJson = (this.isLatestVersionConfig.transform(gatewayVersion, value.type)
+          ? defaultConfig[GatewayConnectorConfigVersionMap.get(value.type)]
           : defaultConfig[GatewayVersion.Legacy])
-          ?? defaultConfig;
-        if (this.connectorForm.valid) {
-          this.dialogRef.close(value);
-        }
-      });
+        ?? defaultConfig;
+      if (this.connectorForm.valid) {
+        this.dialogRef.close(value);
+      }
     } else if (this.connectorForm.valid) {
       this.dialogRef.close(value);
     }
@@ -139,8 +138,4 @@ export class AddConnectorDialogComponent
       takeUntil(this.destroy$),
     ).subscribe();
   }
-
-  private getDefaultConfig(type: string): Observable<GatewayVersionedDefaultConfig | GatewayConnector> {
-    return this.resourcesService.loadJsonResource(`/assets/metadata/connector-default-configs/${type}.json`);
-  };
 }

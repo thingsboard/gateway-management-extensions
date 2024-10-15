@@ -29,7 +29,8 @@ import {
   noLeadTrailSpacesRegex,
   SecurityPolicy,
   SecurityPolicyTypes,
-  ServerConfig, TruncateWithTooltipDirective
+  ServerConfig,
+  TruncateWithTooltipDirective
 } from '../../../../../shared/public-api';
 import { SharedModule, HOUR, coerceBoolean } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
@@ -73,7 +74,7 @@ export class OpcServerConfigComponent implements ControlValueAccessor, Validator
   securityPolicyTypes = SecurityPolicyTypes;
   serverConfigFormGroup: UntypedFormGroup;
 
-  onChange!: (value: string) => void;
+  onChange!: (value: ServerConfig) => void;
   onTouched!: () => void;
 
   private destroy$ = new Subject<void>();
@@ -110,7 +111,7 @@ export class OpcServerConfigComponent implements ControlValueAccessor, Validator
     this.destroy$.complete();
   }
 
-  registerOnChange(fn: (value: string) => void): void {
+  registerOnChange(fn: (value: ServerConfig) => void): void {
     this.onChange = fn;
   }
 

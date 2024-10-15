@@ -18,7 +18,6 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
-  ElementRef,
   Input,
   NgZone,
   OnDestroy,
@@ -42,7 +41,8 @@ import {
   DialogService,
   TelemetryWebsocketService,
   AttributeService,
-  AppState
+  AppState,
+  isUndefinedOrNull
 } from '@core/public-api';
 import {
   AddConnectorConfigData,
@@ -56,7 +56,6 @@ import {
   GatewayLogLevel,
   noLeadTrailSpacesRegex,
   ReportStrategyDefaultValue,
-  ReportStrategyType,
 } from '../../shared/models/public-api';
 import { MatDialog } from '@angular/material/dialog';
 import { AddConnectorDialogComponent } from './components/public-api';
@@ -79,8 +78,8 @@ import {
 import {
   GatewayConnectorVersionMappingUtil,
   AttributeDatasource,
+  ReportStrategyVersionPipe,
 } from '../../shared/public-api';
-import { LatestVersionConfigPipe } from '../../shared/public-api';
 
 export class ForceErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null): boolean {
@@ -101,7 +100,6 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
   @Input()
   device: EntityId;
 
-  @ViewChild('nameInput') nameInput: ElementRef;
   @ViewChild(MatSort, {static: false}) sort: MatSort;
 
   readonly ConnectorType = ConnectorType;
@@ -109,6 +107,7 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
     ConnectorType.MQTT,
     ConnectorType.OPCUA,
     ConnectorType.MODBUS,
+    ConnectorType.SOCKET,
   ]);
   readonly gatewayLogLevel = Object.values(GatewayLogLevel);
   readonly displayedColumns = ['enabled', 'key', 'type', 'syncStatus', 'errors', 'actions'];
@@ -120,7 +119,6 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
   dataSource: MatTableDataSource<GatewayAttributeData>;
   connectorForm: FormGroup;
   activeConnectors: Array<string>;
-  mode: ConfigurationModes = this.ConnectorConfigurationModes.BASIC;
   initialConnector: GatewayConnector;
   basicConfigInitSubject = new Subject<void>();
 
@@ -158,7 +156,7 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
               private telemetryWsService: TelemetryWebsocketService,
               private zone: NgZone,
               private utils: UtilsService,
-              private isLatestVersionConfig: LatestVersionConfigPipe,
+              private withReportStrategy: ReportStrategyVersionPipe,
               private cd: ChangeDetectorRef) {
     super(store);
 
@@ -265,13 +263,13 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
       delete value.class;
     }
 
-    if (value.type === ConnectorType.MODBUS && this.isLatestVersionConfig.transform(value.configVersion)) {
-      if (!value.reportStrategy) {
-        value.reportStrategy = {
-          type: ReportStrategyType.OnReportPeriod,
-          reportPeriod: ReportStrategyDefaultValue.Connector
-        };
-        delete value.sendDataOnlyOnChange;
+    if (!this.allowBasicConfig.has(value.type)) {
+      delete value.mode;
+    }
+
+    if (this.withReportStrategy.transform(value.configVersion, value.type)) {
+      if (isUndefinedOrNull(value.reportStrategy)) {
+        delete value.reportStrategy;
       }
     }
 
@@ -543,7 +541,7 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
 
   private setInitialConnectorValues(connector: GatewayConnector): void {
     const {basicConfig, mode, ...initialConnector} = connector;
-    this.toggleReportStrategy(connector.type);
+    this.toggleReportStrategy(connector);
     this.connectorForm.get('mode').setValue(this.allowBasicConfig.has(connector.type)
       ? connector.mode ?? ConfigurationModes.BASIC
       : null, {emitEvent: false}
@@ -637,7 +635,7 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
       this.attributeService.getEntityAttributes(this.device, AttributeScope.SHARED_SCOPE, ['active_connectors']),
       this.attributeService.getEntityAttributes(this.device, AttributeScope.SERVER_SCOPE, ['inactive_connectors']),
       this.attributeService.getEntityAttributes(this.device, AttributeScope.CLIENT_SCOPE, ['Version'])
-    ]).pipe(takeUntil(this.destroy$)).subscribe(attributes => {
+    ]).pipe(takeUntil(this.destroy$)).subscribe((attributes: GatewayAttributeData[][]) => {
       this.activeConnectors = this.parseConnectors(attributes[0]);
       this.inactiveConnectors = this.parseConnectors(attributes[1]);
       this.gatewayVersion = attributes[2][0]?.value;
@@ -850,16 +848,12 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
 
   private updateConnector(connector: GatewayConnector): void {
     this.jsonConfigSub?.unsubscribe();
-    switch (connector.type) {
-      case ConnectorType.MQTT:
-      case ConnectorType.OPCUA:
-      case ConnectorType.MODBUS:
-        this.updateBasicConfigConnector(connector);
-        break;
-      default:
-        this.connectorForm.patchValue({...connector, mode: null});
-        this.connectorForm.markAsPristine();
-        this.createJsonConfigWatcher();
+    if (this.allowBasicConfig.has(connector.type)) {
+      this.updateBasicConfigConnector(connector);
+    } else {
+      this.connectorForm.patchValue({...connector, mode: null});
+      this.connectorForm.markAsPristine();
+      this.createJsonConfigWatcher();
     }
   }
 
@@ -884,12 +878,18 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
     this.createJsonConfigWatcher();
   }
 
-  private toggleReportStrategy(type: ConnectorType): void {
+  private toggleReportStrategy(connector: any): void {
     const reportStrategyControl = this.connectorForm.get('reportStrategy');
-    if (type === ConnectorType.MODBUS) {
+    const sendDataOnlyOnChange = this.connectorForm.get('sendDataOnlyOnChange');
+    this.connectorForm.get('reportStrategy').reset(connector. reportStrategy, {emitEvent:false});
+    if (this.withReportStrategy.transform(connector.configVersion, connector.type)) {
       reportStrategyControl.enable({emitEvent: false});
+      sendDataOnlyOnChange.disable({emitEvent: false});
     } else {
       reportStrategyControl.disable({emitEvent: false});
+      if (connector.type === ConnectorType.MQTT) {
+        sendDataOnlyOnChange.enable({emitEvent: false});
+      }
     }
   }
 

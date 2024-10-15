@@ -15,7 +15,7 @@
 ///
 
 import { Pipe, PipeTransform } from '@angular/core';
-import { GatewayVersion } from '../../shared/public-api';
+import { ConnectorType, GatewayConnectorConfigVersionMap } from '../../shared/public-api';
 import {
   GatewayConnectorVersionMappingUtil
 } from '../utils/public-api';
@@ -25,8 +25,8 @@ import {
   standalone: true,
 })
 export class LatestVersionConfigPipe implements PipeTransform {
-  transform(configVersion: number | string): boolean {
+  transform(configVersion: number | string, type: ConnectorType): boolean {
     return GatewayConnectorVersionMappingUtil.parseVersion(configVersion)
-      >= GatewayConnectorVersionMappingUtil.parseVersion(GatewayVersion.Current);
+      >= GatewayConnectorVersionMappingUtil.parseVersion(GatewayConnectorConfigVersionMap.get(type));
   }
 }

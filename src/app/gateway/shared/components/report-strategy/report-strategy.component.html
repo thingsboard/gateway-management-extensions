@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<div [formGroup]="reportStrategyFormGroup" class="tb-form-panel stroked">
+<ng-container [formGroup]="reportStrategyFormGroup">
   <mat-expansion-panel *ngIf="isExpansionMode else defaultMode" class="tb-settings" [expanded]="showStrategyControl.value">
     <mat-expansion-panel-header fxLayout="row wrap">
       <mat-panel-title>
@@ -39,7 +39,11 @@
         </mat-select>
       </mat-form-field>
     </div>
-    <div *ngIf="reportStrategyFormGroup.get('type').value !== ReportStrategyType.OnChange" class="tb-form-row column-xs" fxLayoutAlign="space-between center">
+    <div
+      *ngIf="reportStrategyFormGroup.get('type').value !== ReportStrategyType.OnChange && reportStrategyFormGroup.get('type').value !== ReportStrategyType.OnReceived"
+      class="tb-form-row column-xs"
+      fxLayoutAlign="space-between center"
+    >
       <div class="fixed-title-width tb-required">
         <span tbTruncateWithTooltip translate>
           gateway.report-strategy.report-period
@@ -52,4 +56,4 @@
       </div>
     </div>
   </ng-template>
-</div>
+</ng-container>

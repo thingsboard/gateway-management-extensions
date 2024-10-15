@@ -14,7 +14,7 @@
 /// limitations under the License.
 ///
 
-import addGatewayLocale from './locale/gateway-locale.constant';
+import addGatewayLocale from './shared/models/gateway-locale.constant';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
@@ -72,7 +72,7 @@ import {
 } from './states/gateway-connectors/components/mqtt/basic-config/mqtt-basic-config.component';
 import {
   ReportStrategyComponent
-} from './states/gateway-connectors/components/report-strategy/report-strategy.component';
+} from './shared/components/report-strategy/report-strategy.component';
 import { DeviceGatewayCommandComponent } from './states/device-gateway-command/device-gateway-command.component';
 import { GatewayHelpLinkPipe } from './shared/pipes/gateway-help-link.pipe';
 import {
@@ -91,6 +91,16 @@ import {
 import { EllipsisChipListDirective } from './shared/directives/ellipsis-chip-list.directive';
 import { RpcTemplateArrayViewPipe } from './shared/pipes/rpc-template-array-view.pipe';
 import { TruncateWithTooltipDirective } from './shared/directives/truncate-with-tooltip.directive';
+import {
+  SocketConfigComponent
+} from './states/gateway-connectors/components/socket/socket-config/socket-config.component';
+import {
+  SocketBasicConfigComponent
+} from './states/gateway-connectors/components/socket/socket-basic-config/socket-basic-config.component';
+import {
+  SocketLegacyBasicConfigComponent
+} from './states/gateway-connectors/components/socket/socket-basic-config/socket-legacy-basic-config.component';
+import { ReportStrategyVersionPipe } from './shared/pipes/report-strategy-version.pipe';
 
 const DECLARATIONS = [
   GatewayLogsComponent,
@@ -135,10 +145,15 @@ const DECLARATIONS = [
     EllipsisChipListDirective,
     RpcTemplateArrayViewPipe,
     TruncateWithTooltipDirective,
+    SocketConfigComponent,
+    SocketBasicConfigComponent,
+    SocketLegacyBasicConfigComponent,
+    ReportStrategyVersionPipe,
   ],
   exports: DECLARATIONS,
   providers: [
     LatestVersionConfigPipe,
+    ReportStrategyVersionPipe,
   ]
 })
 export class GatewayExtensionModule {

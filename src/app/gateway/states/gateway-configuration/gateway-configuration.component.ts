@@ -27,10 +27,13 @@ import {
   SecurityTypes,
   ConfigurationModes,
   LocalLogsConfigs,
-  LogSavingPeriod, Attribute
+  LogSavingPeriod,
+  Attribute,
+  GatewayVersion,
 } from '../../shared/public-api';
 import { deepTrim, isEqual, DeviceService, AttributeService } from '@core/public-api';
 import {
+  GatewayBasicConfigTabKey,
   GatewayConfigSecurity,
   GatewayConfigValue,
   GatewayGeneralConfig,
@@ -51,12 +54,14 @@ import { DeviceId, NULL_UUID, DeviceCredentials, DeviceCredentialsType, EntityId
 export class GatewayConfigurationComponent implements AfterViewInit, OnDestroy {
 
   @Input() device: EntityId;
+  @Input() defaultTab: GatewayBasicConfigTabKey;
 
   @Input() dialogRef: MatDialogRef<GatewayConfigurationComponent>;
 
   initialCredentials: DeviceCredentials;
   gatewayConfigGroup: FormGroup;
   ConfigurationModes = ConfigurationModes;
+  gatewayVersion: GatewayVersion;
 
   private destroy$ = new Subject<void>();
   private readonly gatewayConfigAttributeKeys =
@@ -309,6 +314,7 @@ export class GatewayConfigurationComponent implements AfterViewInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(attributes => {
+        this.gatewayVersion = attributes.find(attribute => attribute.key === 'Version')?.value;
         this.updateConfigs(attributes);
         this.cd.detectChanges();
       });

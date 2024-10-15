@@ -137,7 +137,8 @@ export interface GatewayConnector<BaseConfig = ConnectorBaseConfig> extends Gate
 
 export interface GatewayVersionedDefaultConfig {
   legacy: GatewayConnector<ConnectorLegacyConfig>;
-  '3.5.2': GatewayConnector<ConnectorBaseConfig_v3_5_2>;
+  '3.5.2'?: GatewayConnector<ConnectorBaseConfig_v3_5_2>;
+  '3.5.4'?: GatewayConnector<ConnectorBaseConfig_v3_5_3>;
 }
 
 export interface DataMapping {
@@ -195,7 +196,8 @@ export interface ConnectorSecurity {
 }
 
 export enum GatewayVersion {
-  Current = '3.5.2',
+  Current = '3.5.4',
+  v3_5_2 = '3.5.2',
   Legacy = 'legacy'
 }
 
@@ -203,11 +205,13 @@ export type ConnectorMapping = DeviceConnectorMapping | RequestMappingValue | Co
 
 export type ConnectorMappingFormValue = DeviceConnectorMapping | RequestMappingFormValue | ConverterMappingFormValue;
 
-export type ConnectorBaseConfig = ConnectorBaseConfig_v3_5_2 | ConnectorLegacyConfig;
+export type ConnectorBaseConfig = ConnectorBaseConfig_v3_5_3 | ConnectorBaseConfig_v3_5_2 | ConnectorLegacyConfig;
 
-export type ConnectorLegacyConfig = ConnectorBaseInfo | MQTTLegacyBasicConfig | OPCLegacyBasicConfig | ModbusBasicConfig;
+export type ConnectorLegacyConfig = ConnectorBaseInfo | MQTTLegacyBasicConfig | OPCLegacyBasicConfig | ModbusLegacyBasicConfig | SocketLegacyBasicConfig;
 
-export type ConnectorBaseConfig_v3_5_2 = ConnectorBaseInfo | MQTTBasicConfig_v3_5_2 | OPCBasicConfig_v3_5_2;
+export type ConnectorBaseConfig_v3_5_2 = ConnectorBaseInfo | MQTTBasicConfig_v3_5_2 | OPCBasicConfig_v3_5_2 | ModbusBasicConfig_v3_5_2;
+
+export type ConnectorBaseConfig_v3_5_3 = ConnectorBaseInfo | SocketBasicConfig_v3_5_3;
 
 export interface ConnectorBaseInfo {
   name: string;
@@ -625,6 +629,7 @@ export interface MappingInfo {
   mappingType: MappingType;
   value: {[key: string]: any};
   buttonTitle: string;
+  withReportStrategy: boolean;
 }
 
 export interface ModbusSlaveInfo<Slave = SlaveConfig> {
@@ -647,10 +652,12 @@ export enum SecurityType {
 export enum ReportStrategyType {
   OnChange = 'ON_CHANGE',
   OnReportPeriod = 'ON_REPORT_PERIOD',
-  OnChangeOrReportPeriod = 'ON_CHANGE_OR_REPORT_PERIOD'
+  OnChangeOrReportPeriod = 'ON_CHANGE_OR_REPORT_PERIOD',
+  OnReceived = 'ON_RECEIVED'
 }
 
 export enum ReportStrategyDefaultValue {
+  Gateway = 60000,
   Connector = 60000,
   Device = 30000,
   Key = 15000
@@ -660,7 +667,8 @@ export const ReportStrategyTypeTranslationsMap = new Map<ReportStrategyType, str
   [
     [ReportStrategyType.OnChange, 'gateway.report-strategy.on-change'],
     [ReportStrategyType.OnReportPeriod, 'gateway.report-strategy.on-report-period'],
-    [ReportStrategyType.OnChangeOrReportPeriod, 'gateway.report-strategy.on-change-or-report-period']
+    [ReportStrategyType.OnChangeOrReportPeriod, 'gateway.report-strategy.on-change-or-report-period'],
+    [ReportStrategyType.OnReceived, 'gateway.report-strategy.on-received'],
   ]
 );
 
@@ -1307,3 +1315,158 @@ export interface ReportStrategyConfig {
 }
 
 export const ModbusBaudrates = [4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600];
+
+export type SocketBasicConfig = SocketBasicConfig_v3_5_3 | SocketLegacyBasicConfig;
+
+export interface SocketBasicConfig_v3_5_3 {
+  socket: SocketConfig;
+  devices: DevicesConfigMapping[];
+}
+
+export interface SocketLegacyBasicConfig extends SocketConfig {
+  devices: LegacyDevicesConfigMapping[];
+}
+
+export interface SocketConfig {
+  address: string;
+  type: SocketType;
+  port: number;
+  bufferSize: number;
+}
+
+export interface DeviceAttributesUpdate {
+  encoding: SocketEncoding;
+  attributeOnThingsBoard: string;
+}
+
+export interface DeviceAttributesRequests {
+  type: RequestsType;
+  expressionType: ExpressionType;
+  requestExpression: string;
+  attributeNameExpression: string;
+  requestExpressionSource: ExpressionType;
+  attributeNameExpressionSource: ExpressionType;
+}
+
+export type LegacyDeviceAttributesRequests = Omit<DeviceAttributesRequests, 'requestExpressionSource'> & Omit<DeviceAttributesRequests, 'attributeNameExpressionSource'>;
+
+export enum RequestsType {
+  Shared = 'shared',
+  Client = 'client'
+}
+
+export enum ExpressionType {
+  Constant = 'constant',
+  Expression = 'expression'
+}
+
+export enum SocketType {
+  TCP = 'TCP',
+  UDP = 'UDP',
+}
+
+export interface SocketAttributeUpdates {
+  encoding: SocketEncoding;
+  attributeOnThingsBoard: string;
+}
+
+export enum SocketValueKey {
+  TIMESERIES = 'telemetry',
+  ATTRIBUTES = 'attributes',
+  ATTRIBUTES_REQUESTS = 'attributeRequests',
+  ATTRIBUTES_UPDATES = 'attributeUpdates',
+  RPC_METHODS = 'serverSideRpc',
+}
+
+export enum SocketEncoding {
+  UTF8 = 'utf-8',
+  HEX = 'hex',
+  UTF16 = 'utf-16',
+  UTF32 = 'utf-32',
+  UTF16BE = 'utf-16-be',
+  UTF16LE = 'utf-16-le',
+  UTF32BE = 'utf-32-be',
+  UTF32LE = 'utf-32-le',
+}
+
+export const SocketKeysPanelTitleTranslationsMap = new Map<SocketValueKey, string>(
+  [
+    [SocketValueKey.ATTRIBUTES, 'gateway.attributes'],
+    [SocketValueKey.TIMESERIES, 'gateway.timeseries'],
+    [SocketValueKey.ATTRIBUTES_REQUESTS, 'gateway.attribute-requests'],
+    [SocketValueKey.ATTRIBUTES_UPDATES, 'gateway.attribute-updates'],
+    [SocketValueKey.RPC_METHODS, 'gateway.rpc-methods']
+  ]
+);
+
+export const SocketKeysAddKeyTranslationsMap = new Map<SocketValueKey, string>(
+  [
+    [SocketValueKey.ATTRIBUTES, 'gateway.add-attribute'],
+    [SocketValueKey.TIMESERIES, 'gateway.add-timeseries'],
+    [SocketValueKey.ATTRIBUTES_REQUESTS, 'gateway.add-attribute-request'],
+    [SocketValueKey.ATTRIBUTES_UPDATES, 'gateway.add-attribute-update'],
+    [SocketValueKey.RPC_METHODS, 'gateway.add-rpc-method']
+  ]
+);
+
+export const SocketKeysDeleteKeyTranslationsMap = new Map<SocketValueKey, string>(
+  [
+    [SocketValueKey.ATTRIBUTES, 'gateway.delete-attribute'],
+    [SocketValueKey.TIMESERIES, 'gateway.delete-timeseries'],
+    [SocketValueKey.ATTRIBUTES_REQUESTS, 'gateway.delete-attribute-request'],
+    [SocketValueKey.ATTRIBUTES_UPDATES, 'gateway.delete-attribute-update'],
+    [SocketValueKey.RPC_METHODS, 'gateway.delete-rpc-method']
+  ]
+);
+
+export const SocketKeysNoKeysTextTranslationsMap = new Map<SocketValueKey, string>(
+  [
+    [SocketValueKey.ATTRIBUTES, 'gateway.no-attributes'],
+    [SocketValueKey.TIMESERIES, 'gateway.no-timeseries'],
+    [SocketValueKey.ATTRIBUTES_REQUESTS, 'gateway.no-attribute-requests'],
+    [SocketValueKey.ATTRIBUTES_UPDATES, 'gateway.no-attribute-updates'],
+    [SocketValueKey.RPC_METHODS, 'gateway.no-rpc-methods']
+  ]
+);
+
+export interface DeviceDataKey {
+  key: string;
+  byteFrom: number;
+  byteTo: number;
+}
+
+export interface DeviceRpcMethod {
+  methodRPC: string;
+  withResponse: boolean;
+  encoding: SocketEncoding;
+}
+
+export interface DevicesConfigMapping {
+  address: string;
+  deviceName: string;
+  deviceType: string;
+  encoding: SocketEncoding;
+  telemetry: DeviceDataKey[];
+  attributes: DeviceDataKey[];
+  attributeRequests: DeviceAttributesRequests[];
+  attributeUpdates: DeviceAttributesUpdate[];
+  serverSideRpc: DeviceRpcMethod[];
+}
+
+export interface LegacyDevicesConfigMapping extends Omit<DevicesConfigMapping, 'attributesRequests'> {
+  attributeRequests: LegacyDeviceAttributesRequests[];
+}
+
+export interface DeviceConfigInfo {
+  value: DevicesConfigMapping,
+  buttonTitle: string,
+}
+
+export const GatewayConnectorConfigVersionMap = new Map<ConnectorType, GatewayVersion>([
+  [ConnectorType.SOCKET, GatewayVersion.Current],
+  [ConnectorType.MQTT, GatewayVersion.v3_5_2],
+  [ConnectorType.OPCUA, GatewayVersion.v3_5_2],
+  [ConnectorType.MODBUS, GatewayVersion.v3_5_2],
+]);
+
+export type SocketDeviceKeys = DeviceDataKey | DeviceRpcMethod | SocketAttributeUpdates | DeviceAttributesRequests

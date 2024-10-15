@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<mat-tab-group class="tab-group-block" [formGroup]="basicFormGroup" [class.dialog-mode]="dialogMode">
+<mat-tab-group #configGroup class="tab-group-block" [formGroup]="basicFormGroup" [class.dialog-mode]="dialogMode">
   <mat-tab label="{{ 'gateway.general' | translate }}">
     <ng-template matTabContent>
       <div formGroupName="thingsboard" class="mat-content mat-padding configuration-block">
@@ -90,9 +90,8 @@
                         matTooltip="{{ 'gateway.hints.token' | translate }}">info_outlined
               </mat-icon>
             </mat-form-field>
-            <section>
-              <div class="tb-form-row no-border no-padding tb-standard-fields"
-                   *ngIf="basicFormGroup.get('thingsboard.security.type').value === 'usernamePassword'">
+            <section *ngIf="basicFormGroup.get('thingsboard.security.type').value === 'usernamePassword'">
+              <div class="tb-form-row no-border no-padding tb-standard-fields">
                 <mat-form-field appearance="outline" class="flex">
                   <mat-label translate>security.clientId</mat-label>
                   <input matInput formControlName="clientId"/>
@@ -166,6 +165,7 @@
             </tb-file-input>
           </ng-container>
         </div>
+        <tb-report-strategy *ngIf="withReportStrategy" [defaultValue]="ReportStrategyDefaultValue.Gateway" class="tb-form-panel" formControlName="reportStrategy"/>
       </div>
     </ng-template>
   </mat-tab>

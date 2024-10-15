@@ -38,7 +38,9 @@
       *ngIf="gatewayConfigGroup.get('mode').value === ConfigurationModes.BASIC"
       formControlName="basicConfig"
       [device]="device"
+      [defaultTab]="defaultTab"
       [dialogMode]="!!dialogRef"
+      [withReportStrategy]="gatewayVersion | withReportStrategy"
       (initialCredentialsUpdated)="initialCredentials = $event"
     />
     <tb-gateway-advanced-configuration

@@ -14,7 +14,7 @@
 /// limitations under the License.
 ///
 
-import { Directive } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import {
   BrokerConfig,
@@ -28,10 +28,13 @@ import {
   WorkersConfig
 } from '../../../../../shared/public-api';
 import { isObject } from '@core/public-api';
+import { coerceBoolean } from '@shared/public-api';
 
 @Directive()
 export abstract class MqttBasicConfigDirective<BasicConfig>
   extends GatewayConnectorBasicConfigDirective<MQTTBasicConfig_v3_5_2, BasicConfig> {
+
+  @Input() @coerceBoolean() withReportStrategy = true;
 
   MappingType = MappingType;
 

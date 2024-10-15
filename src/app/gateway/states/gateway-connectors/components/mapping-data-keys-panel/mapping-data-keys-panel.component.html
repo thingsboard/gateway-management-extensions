@@ -191,6 +191,12 @@
                     </mat-expansion-panel>
                   </div>
                 </div>
+                <tb-report-strategy
+                  *ngIf="withReportStrategy && (keysType === MappingKeysType.ATTRIBUTES || keysType === MappingKeysType.TIMESERIES)"
+                  [isExpansionMode]="true"
+                  [defaultValue]="ReportStrategyDefaultValue.Key"
+                  formControlName="reportStrategy"
+                />
               </ng-template>
             </mat-expansion-panel>
           </ng-container>

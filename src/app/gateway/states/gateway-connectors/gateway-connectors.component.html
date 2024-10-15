@@ -176,9 +176,10 @@
         <ng-container [ngSwitch]="initialConnector.type">
           <ng-container *ngSwitchCase="ConnectorType.MQTT">
             <tb-mqtt-basic-config
-              *ngIf="connectorForm.get('configVersion').value | isLatestVersionConfig else legacy"
+              *ngIf="connectorForm.get('configVersion').value | isLatestVersionConfig : ConnectorType.MQTT else legacy"
               formControlName="basicConfig"
               [generalTabContent]="generalTabContent"
+              [withReportStrategy]="connectorForm.get('configVersion').value | withReportStrategy : ConnectorType.OPCUA"
               (initialized)="basicConfigInitSubject.next()"
             />
             <ng-template #legacy>
@@ -191,9 +192,10 @@
           </ng-container>
           <ng-container *ngSwitchCase="ConnectorType.OPCUA">
             <tb-opc-ua-basic-config
-              *ngIf="connectorForm.get('configVersion').value | isLatestVersionConfig else legacy"
+              *ngIf="connectorForm.get('configVersion').value | isLatestVersionConfig : ConnectorType.OPCUA else legacy"
               formControlName="basicConfig"
               [generalTabContent]="generalTabContent"
+              [withReportStrategy]="connectorForm.get('configVersion').value | withReportStrategy : ConnectorType.OPCUA"
               (initialized)="basicConfigInitSubject.next()"
             />
             <ng-template #legacy>
@@ -206,13 +208,28 @@
           </ng-container>
           <ng-container *ngSwitchCase="ConnectorType.MODBUS">
             <tb-modbus-basic-config
-              *ngIf="connectorForm.get('configVersion').value | isLatestVersionConfig else legacy"
+              *ngIf="connectorForm.get('configVersion').value | isLatestVersionConfig : ConnectorType.MODBUS else legacy"
               formControlName="basicConfig"
               [generalTabContent]="generalTabContent"
               (initialized)="basicConfigInitSubject.next()"
             />
             <ng-template #legacy>
               <tb-modbus-legacy-basic-config
+                formControlName="basicConfig"
+                (initialized)="basicConfigInitSubject.next()"
+                [generalTabContent]="generalTabContent"
+              />
+            </ng-template>
+          </ng-container>
+          <ng-container *ngSwitchCase="ConnectorType.SOCKET">
+            <tb-socket-basic-config
+              *ngIf="connectorForm.get('configVersion').value | isLatestVersionConfig : ConnectorType.SOCKET else legacy"
+              formControlName="basicConfig"
+              [generalTabContent]="generalTabContent"
+              (initialized)="basicConfigInitSubject.next()"
+            />
+            <ng-template #legacy>
+              <tb-socket-legacy-basic-config
                 formControlName="basicConfig"
                 (initialized)="basicConfigInitSubject.next()"
                 [generalTabContent]="generalTabContent"
@@ -305,7 +322,7 @@
         </div>
       </div>
     </div>
-    <div *ngIf="connectorForm.get('type').value === ConnectorType.MQTT" class="tb-form-row column-xs" fxLayoutAlign="space-between center">
+    <div *ngIf="connectorForm.get('type').value === ConnectorType.MQTT && !(connectorForm.get('configVersion').value | withReportStrategy : ConnectorType.MQTT)" class="tb-form-row column-xs" fxLayoutAlign="space-between center">
       <mat-slide-toggle class="mat-slide" formControlName="sendDataOnlyOnChange">
         <mat-label tb-hint-tooltip-icon="{{ 'gateway.send-change-data-hint' | translate }}">
           {{ 'gateway.send-change-data' | translate }}
@@ -313,8 +330,10 @@
       </mat-slide-toggle>
     </div>
     <tb-report-strategy
+      *ngIf="connectorForm.get('configVersion').value | withReportStrategy: connectorForm.get('type').value"
+      class="stroked tb-form-panel"
+      [isExpansionMode]="true"
       [defaultValue]="ReportStrategyDefaultValue.Connector"
-      *ngIf="connectorForm.get('type').value === ConnectorType.MODBUS && (connectorForm.get('configVersion').value | isLatestVersionConfig)"
       formControlName="reportStrategy"
     />
   </section>

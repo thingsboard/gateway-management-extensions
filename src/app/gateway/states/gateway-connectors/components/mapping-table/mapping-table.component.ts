@@ -88,6 +88,10 @@ export class MappingTableComponent implements ControlValueAccessor, Validator, A
   required = false;
 
   @Input()
+  @coerceBoolean()
+  withReportStrategy = true;
+
+  @Input()
   set mappingType(value: MappingType) {
     if (this.mappingTypeValue !== value) {
       this.mappingTypeValue = value;
@@ -199,7 +203,8 @@ export class MappingTableComponent implements ControlValueAccessor, Validator, A
       data: {
         mappingType: this.mappingType,
         value,
-        buttonTitle: isUndefinedOrNull(index) ?  'action.add' : 'action.apply'
+        buttonTitle: isUndefinedOrNull(index) ?  'action.add' : 'action.apply',
+        withReportStrategy: this.withReportStrategy,
       }
     }).afterClosed()
       .pipe(take(1), takeUntil(this.destroy$))

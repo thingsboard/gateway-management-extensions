@@ -14,7 +14,7 @@
 /// limitations under the License.
 ///
 
-import { ChangeDetectionStrategy, Component, forwardRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, forwardRef, Input } from '@angular/core';
 import { FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import {
   MappingType,
@@ -23,7 +23,7 @@ import {
   GatewayConnectorBasicConfigDirective
 } from '../../../../../shared/public-api';
 import { CommonModule } from '@angular/common';
-import { SharedModule } from '@shared/public-api';
+import { coerceBoolean, SharedModule } from '@shared/public-api';
 import { MappingTableComponent } from '../../mapping-table/mapping-table.component';
 import {
   SecurityConfigComponent
@@ -59,6 +59,8 @@ import {
   styleUrls: ['./opc-ua-basic-config.component.scss']
 })
 export class OpcUaBasicConfigComponent extends GatewayConnectorBasicConfigDirective<OPCBasicConfig_v3_5_2, OPCBasicConfig_v3_5_2> {
+
+  @Input() @coerceBoolean() withReportStrategy = true;
 
   mappingTypes = MappingType;
   isLegacy = false;

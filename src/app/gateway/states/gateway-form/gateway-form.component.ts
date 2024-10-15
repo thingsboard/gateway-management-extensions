@@ -83,7 +83,6 @@ export class GatewayFormComponent extends PageComponent implements OnInit, OnDes
   }
 
   @ViewChild('formContainer', {static: true}) formContainerRef: ElementRef<HTMLElement>;
-  @ViewChild('gatewayConfigurationForm', {static: true}) multipleInputForm: NgForm;
 
   private successfulSaved: string;
   private gatewayNameExists: string;

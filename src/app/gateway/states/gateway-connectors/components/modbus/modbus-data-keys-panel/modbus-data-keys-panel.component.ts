@@ -47,7 +47,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import {
   ReportStrategyComponent
-} from '../../report-strategy/report-strategy.component';
+} from '../../../../../shared/components/public-api';
 
 @Component({
   selector: 'tb-modbus-data-keys-panel',

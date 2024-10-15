@@ -99,7 +99,7 @@ export class ModbusMasterTableComponent implements ControlValueAccessor, AfterVi
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef,
   ) {
-    this.masterFormGroup =  this.fb.group({ slaves: this.fb.array([]) });
+    this.masterFormGroup = this.fb.group({ slaves: this.fb.array([]) });
     this.dataSource = new SlavesDatasource();
   }
 
@@ -230,7 +230,6 @@ export class ModbusMasterTableComponent implements ControlValueAccessor, AfterVi
         )
       );
     }
-    // @ts-ignore
     this.dataSource.loadData(data);
   }
 

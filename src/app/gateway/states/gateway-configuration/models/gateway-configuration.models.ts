@@ -19,6 +19,7 @@ import {
   GatewayConnector,
   LocalLogsConfigs,
   LogSavingPeriod,
+  ReportStrategyConfig,
   SecurityTypes,
   StorageTypes
 } from '../../../shared/public-api';
@@ -79,6 +80,7 @@ export interface GatewayGeneralConfig {
   };
   security: GatewayConfigSecurity;
   qos: number;
+  reportStrategy: ReportStrategyConfig;
 }
 
 export interface GatewayLogsConfig {
@@ -167,4 +169,15 @@ export interface LogAttribute {
   root: RootConfig;
   ts: number;
 }
+
+export enum GatewayBasicConfigTab {
+  general,
+  logs,
+  storage,
+  grpc,
+  statistics,
+  other
+}
+
+export type GatewayBasicConfigTabKey = keyof typeof GatewayBasicConfigTab;
 
