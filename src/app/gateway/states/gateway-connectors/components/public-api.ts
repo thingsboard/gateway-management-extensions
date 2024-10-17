@@ -39,3 +39,4 @@ export * from './socket/socket-config/socket-config.component';
 export * from './socket/socket-basic-config/socket-basic-config.component';
 export * from './socket/device-dialog/device-dialog.component';
 export * from './socket/devices-config-table/devices-config-table.component';
+export * from './type-value-field/type-value-field.component';

@@ -26,7 +26,7 @@ import {
   LegacyTimeseries,
   OPCBasicConfig_v3_5_2,
   OPCUaSourceType,
-  RpcArgument,
+  ValueType,
   RpcMethod,
   ServerConfig,
   Timeseries
@@ -83,7 +83,7 @@ export class OpcVersionMappingUtil {
         arguments: rpcMethod.arguments.map(arg => ({
           value: arg,
           type: this.getArgumentType(arg),
-        } as RpcArgument))
+        } as ValueType))
       }))
     }));
   }
@@ -107,7 +107,7 @@ export class OpcVersionMappingUtil {
       })),
       rpc_methods: upgradedMapping.rpc_methods.map((rpcMethod: RpcMethod) => ({
         method: rpcMethod.method,
-        arguments: rpcMethod.arguments.map((arg: RpcArgument) => arg.value)
+        arguments: rpcMethod.arguments.map((arg: ValueType) => arg.value)
       }))
     }));
   }

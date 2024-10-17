@@ -304,14 +304,14 @@ export interface LegacyTimeseries {
   path: string;
 }
 
-export interface RpcArgument {
-  type: string;
+export interface ValueType {
+  type: MappingValueType;
   value: number | string | boolean;
 }
 
 export interface RpcMethod {
   method: string;
-  arguments: RpcArgument[];
+  arguments: ValueType[];
 }
 
 export interface LegacyRpcMethod {
@@ -571,7 +571,7 @@ export interface RPCTemplateConfigModbus {
 
 export interface RPCTemplateConfigOPC {
   method: string;
-  arguments: RpcArgument[];
+  arguments: ValueType[];
 }
 
 export interface OPCTypeValue {
