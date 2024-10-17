@@ -18,23 +18,14 @@ import { Component, forwardRef, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
-  FormGroup,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   UntypedFormArray,
   UntypedFormBuilder,
   ValidationErrors,
   Validator,
-  Validators
 } from '@angular/forms';
-import { isDefinedAndNotNull } from '@core/public-api';
-import {
-  integerRegex,
-  MappingDataKey,
-  MappingValueType,
-  mappingValueTypesMap,
-  noLeadTrailSpacesRegex
-} from '../../../../shared/public-api';
+import { MappingDataKey, ValueType } from '../../../../shared/public-api';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
@@ -57,13 +48,10 @@ import { Subject } from 'rxjs';
 })
 export class TypeValuePanelComponent implements ControlValueAccessor, Validator, OnInit, OnDestroy {
 
-  valueTypeKeys: MappingValueType[] = Object.values(MappingValueType);
-  valueTypes = mappingValueTypesMap;
   valueListFormArray: UntypedFormArray;
-  readonly MappingValueType = MappingValueType;
 
   private destroy$ = new Subject<void>();
-  private propagateChange = (v: any) => {};
+  private onChange = (_: { typeValue: ValueType }) => {};
 
   constructor(private fb: UntypedFormBuilder) {}
 
@@ -72,7 +60,7 @@ export class TypeValuePanelComponent implements ControlValueAccessor, Validator,
     this.valueListFormArray.valueChanges.pipe(
       takeUntil(this.destroy$)
     ).subscribe((value) => {
-      this.updateView(value);
+      this.onChange(value.map(({ typeValue }) => ({...typeValue})));
     });
   }
 
@@ -87,24 +75,9 @@ export class TypeValuePanelComponent implements ControlValueAccessor, Validator,
 
   addKey(): void {
     const dataKeyFormGroup = this.fb.group({
-      type: [MappingValueType.STRING],
-      string: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-      integer: [{value: 0, disabled: true}, [Validators.required, Validators.pattern(integerRegex)]],
-      double: [{value: 0, disabled: true}, [Validators.required]],
-      boolean: [{value: false, disabled: true}, [Validators.required]],
+      typeValue: [],
     });
-    this.observeTypeChange(dataKeyFormGroup);
     this.valueListFormArray.push(dataKeyFormGroup);
-  }
-
-  private observeTypeChange(dataKeyFormGroup: FormGroup): void {
-    dataKeyFormGroup.get('type').valueChanges
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(type => {
-        dataKeyFormGroup.disable({emitEvent: false});
-        dataKeyFormGroup.get('type').enable({emitEvent: false});
-        dataKeyFormGroup.get(type).enable({emitEvent: false});
-      });
   }
 
   deleteKey($event: Event, index: number): void {
@@ -115,35 +88,19 @@ export class TypeValuePanelComponent implements ControlValueAccessor, Validator,
     this.valueListFormArray.markAsDirty();
   }
 
-  valueTitle(value: any): string {
-    if (isDefinedAndNotNull(value)) {
-      if (typeof value === 'object') {
-        return JSON.stringify(value);
-      }
-      return value;
-    }
-    return '';
+  registerOnChange(fn: (_: { typeValue: ValueType }) => {}): void {
+    this.onChange = fn;
   }
 
-  registerOnChange(fn: any): void {
-    this.propagateChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {}
+  registerOnTouched(fn: () => {}): void {}
 
   writeValue(deviceInfoArray: Array<MappingDataKey>): void {
     for (const deviceInfo of deviceInfoArray) {
       const config = {
-        type: [deviceInfo.type],
-        string: [{value: '', disabled: true}, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-        integer: [{value: 0, disabled: true}, [Validators.required, Validators.pattern(integerRegex)]],
-        double: [{value: 0, disabled: true}, [Validators.required]],
-        boolean: [{value: false, disabled: true}, [Validators.required]],
+        typeValue: [deviceInfo],
       };
-      config[deviceInfo.type][0] = {value: deviceInfo.value, disabled: false};
 
       const dataKeyFormGroup = this.fb.group(config);
-      this.observeTypeChange(dataKeyFormGroup);
       this.valueListFormArray.push(dataKeyFormGroup);
     }
   }
@@ -152,9 +109,5 @@ export class TypeValuePanelComponent implements ControlValueAccessor, Validator,
     return this.valueListFormArray.valid ? null : {
       valueListForm: { valid: false }
     };
-  }
-
-  private updateView(value: any): void {
-    this.propagateChange(value.map(({type, ...config}) => ({type, value: config[type]})));
   }
 }

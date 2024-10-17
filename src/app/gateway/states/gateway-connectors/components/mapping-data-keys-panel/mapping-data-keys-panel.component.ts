@@ -98,13 +98,9 @@ export class MappingDataKeysPanelComponent extends PageComponent implements OnIn
     } else {
       dataKeyFormGroup = this.fb.group({
         key: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-        value: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
+        typeValue: [],
         reportStrategy: [{value: null, disabled: this.isReportStrategyDisabled()}]
       });
-    }
-    if (this.keysType !== MappingKeysType.CUSTOM && this.keysType !== MappingKeysType.RPC_METHODS) {
-      const controlValue = this.rawData ? 'raw' : this.valueTypeKeys[0];
-      dataKeyFormGroup.addControl('type', this.fb.control(controlValue));
     }
     this.keysListFormArray.push(dataKeyFormGroup);
   }
@@ -122,7 +118,11 @@ export class MappingDataKeysPanelComponent extends PageComponent implements OnIn
   }
 
   applyKeysData(): void {
-    let keys = this.keysListFormArray.value;
+    let keys = this.keysListFormArray.value.map(({ typeValue, reportStrategy, ...key }) => ({
+      ...key,
+      ...reportStrategy && { reportStrategy },
+      ...typeValue && { ...typeValue }
+    }));
     if (this.keysType === MappingKeysType.CUSTOM) {
       keys = {};
       for (let key of this.keysListFormArray.value) {
@@ -151,8 +151,7 @@ export class MappingDataKeysPanelComponent extends PageComponent implements OnIn
           const { key, value, type, reportStrategy } = keyData;
           dataKeyFormGroup = this.fb.group({
             key: [key, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-            value: [value, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-            type: [type, []],
+            typeValue: [{type, value}],
             reportStrategy: [{ value: reportStrategy, disabled: this.isReportStrategyDisabled()}]
           });
         }
@@ -163,7 +162,7 @@ export class MappingDataKeysPanelComponent extends PageComponent implements OnIn
   }
 
   valueTitle(keyControl: FormControl): string {
-    const value = keyControl.get(this.keysType === MappingKeysType.RPC_METHODS ? 'method' : 'value').value;
+    const value = this.keysType === MappingKeysType.RPC_METHODS ? keyControl.get('method').value : keyControl.get('typeValue').value?.value;
     if (isDefinedAndNotNull(value)) {
       if (typeof value === 'object') {
         return JSON.stringify(value);

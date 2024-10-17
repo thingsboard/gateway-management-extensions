@@ -101,6 +101,9 @@ import {
   SocketLegacyBasicConfigComponent
 } from './states/gateway-connectors/components/socket/socket-basic-config/socket-legacy-basic-config.component';
 import { ReportStrategyVersionPipe } from './shared/pipes/report-strategy-version.pipe';
+import {
+  TypeValueFieldComponent
+} from './states/gateway-connectors/components/type-value-field/type-value-field.component';
 
 const DECLARATIONS = [
   GatewayLogsComponent,
@@ -149,6 +152,7 @@ const DECLARATIONS = [
     SocketBasicConfigComponent,
     SocketLegacyBasicConfigComponent,
     ReportStrategyVersionPipe,
+    TypeValueFieldComponent,
   ],
   exports: DECLARATIONS,
   providers: [
