@@ -264,24 +264,19 @@ export class ModbusDataKeysPanelComponent implements OnInit, OnDestroy {
   }
 
   private toggleBitsFields(keyFormGroup: FormGroup): void {
-    const objectsCount = keyFormGroup.get('objectsCount').value;
-    const bitControl = keyFormGroup.get('bit');
-    const bitTargetTypeControl = keyFormGroup.get('bitTargetType');
-    const hasMultipleObjects = objectsCount > 0;
+    const { objectsCount, type, bit, bitTargetType } = keyFormGroup.controls;
+    const isBitsType = type.value === ModbusDataType.BITS;
+    const hasMultipleObjects = objectsCount.value > 1;
 
-    if (keyFormGroup.get('type').value === ModbusDataType.BITS) {
-      if (bitControl.disabled && hasMultipleObjects) {
-        bitControl.enable({ emitEvent: false });
-      }
-      bitTargetTypeControl.enable({ emitEvent: false });
+    if (isBitsType && hasMultipleObjects) {
+      bit.enable({ emitEvent: false });
+      bit.setValidators(Validators.max(objectsCount.value - 1));
     } else {
-      if (bitControl.enabled || !hasMultipleObjects) {
-        keyFormGroup.get('bit').setValidators(Validators.max(objectsCount - 1));
-        bitControl.disable({ emitEvent: false });
-        keyFormGroup.get('bit').updateValueAndValidity({ emitEvent: false })
-      }
-      bitTargetTypeControl.disable({ emitEvent: false });
+      bit.disable({ emitEvent: false });
     }
+
+    bit.updateValueAndValidity({ emitEvent: false });
+    bitTargetType[isBitsType ? 'enable' : 'disable']({ emitEvent: false });
   }
 
   private observeEnableModifier(keyFormGroup: FormGroup): void {
