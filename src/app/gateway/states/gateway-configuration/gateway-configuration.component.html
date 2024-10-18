@@ -41,7 +41,7 @@
       [defaultTab]="defaultTab"
       [dialogMode]="!!dialogRef"
       [withReportStrategy]="gatewayVersion | withReportStrategy"
-      (initialCredentialsUpdated)="initialCredentials = $event"
+      (initialCredentialsUpdated)="onInitialCredentialsUpdate($event)"
     />
     <tb-gateway-advanced-configuration
       *ngIf="gatewayConfigGroup.get('mode').value === ConfigurationModes.ADVANCED"

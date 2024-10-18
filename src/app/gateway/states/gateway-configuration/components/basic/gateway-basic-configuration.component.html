@@ -159,7 +159,7 @@
               *ngIf="basicFormGroup.get('thingsboard.security.type').value.toLowerCase().includes('tls')"
               formControlName="caCert"
               label="{{ 'security.ca-cert' | translate }}"
-              [allowedExtensions]="'pem, cert, key'"
+              [allowedExtensions]="'pem,cert,key'"
               [accept]="'.pem, application/pem,.cert, application/cert, .key,application/key'"
               dropLabel="{{ 'gateway.drop-file' | translate }}">
             </tb-file-input>

@@ -1240,6 +1240,8 @@ export interface ModbusValue {
   reportStrategy?: ReportStrategyConfig;
   multiplier?: number;
   divider?: number;
+  bit?: number;
+  bitTargetType?: ModbusBitTargetType;
 }
 
 export interface ModbusFormValue extends ModbusValue {
@@ -1469,4 +1471,14 @@ export const GatewayConnectorConfigVersionMap = new Map<ConnectorType, GatewayVe
   [ConnectorType.MODBUS, GatewayVersion.v3_5_2],
 ]);
 
-export type SocketDeviceKeys = DeviceDataKey | DeviceRpcMethod | SocketAttributeUpdates | DeviceAttributesRequests
+export type SocketDeviceKeys = DeviceDataKey | DeviceRpcMethod | SocketAttributeUpdates | DeviceAttributesRequests;
+
+export enum ModbusBitTargetType {
+  Boolean = 'bool',
+  Integer = 'int',
+}
+
+export const ModbusBitTargetTypeTranslationMap = new Map<ModbusBitTargetType, string>([
+  [ModbusBitTargetType.Boolean, 'gateway.boolean'],
+  [ModbusBitTargetType.Integer, 'gateway.integer'],
+]);

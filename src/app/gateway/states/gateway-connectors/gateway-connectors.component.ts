@@ -14,15 +14,7 @@
 /// limitations under the License.
 ///
 
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  Input,
-  NgZone,
-  OnDestroy,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, NgZone, OnDestroy, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { FormBuilder, FormControl, FormGroup, UntypedFormControl, ValidatorFn, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
@@ -31,24 +23,24 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { WidgetContext } from '@home/models/widget-component.models';
 import {
-  UtilsService,
-  IWidgetSubscription,
-  WidgetSubscriptionOptions,
+  AppState,
+  AttributeService,
   camelCase,
   deepClone,
+  DialogService,
   isEqual,
   isString,
-  DialogService,
+  isUndefinedOrNull,
+  IWidgetSubscription,
   TelemetryWebsocketService,
-  AttributeService,
-  AppState,
-  isUndefinedOrNull
+  UtilsService,
+  WidgetSubscriptionOptions
 } from '@core/public-api';
 import {
   AddConnectorConfigData,
+  ConfigurationModes,
   ConnectorBaseConfig,
   ConnectorBaseInfo,
-  ConfigurationModes,
   ConnectorType,
   GatewayAttributeData,
   GatewayConnector,
@@ -62,22 +54,22 @@ import { AddConnectorDialogComponent } from './components/public-api';
 import { debounceTime, filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { ErrorStateMatcher } from '@angular/material/core';
 import {
-  PageData,
-  EntityType,
-  DatasourceType,
-  widgetType,
-  NULL_UUID,
-  Direction,
-  SortOrder,
-  PageLink,
-  PageComponent,
   AttributeData,
   AttributeScope,
-  EntityId
+  DatasourceType,
+  Direction,
+  EntityId,
+  EntityType,
+  NULL_UUID,
+  PageComponent,
+  PageData,
+  PageLink,
+  SortOrder,
+  widgetType
 } from '@shared/public-api';
 import {
-  GatewayConnectorVersionMappingUtil,
   AttributeDatasource,
+  GatewayConnectorVersionMappingUtil,
   ReportStrategyVersionPipe,
 } from '../../shared/public-api';
 
@@ -531,10 +523,10 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
     this.saveConnector(this.getUpdatedConnectorData(connector));
 
     if (previousType === connector.type || !this.allowBasicConfig.has(connector.type)) {
-      this.patchBasicConfigConnector(connector);
+      this.patchConnectorBasicConfig(connector.basicConfig);
     } else {
       this.basicConfigInitSubject.pipe(take(1)).subscribe(() => {
-        this.patchBasicConfigConnector(connector);
+        this.patchConnectorBasicConfig(connector.basicConfig);
       });
     }
   }
@@ -665,8 +657,10 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
   private observeModeChange(): void {
     this.connectorForm.get('mode').valueChanges
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.connectorForm.get('mode').markAsPristine();
+      .subscribe(mode => {
+        if (mode === ConfigurationModes.BASIC) {
+          this.patchConnectorBasicConfig(this.connectorForm.get('configurationJson').value);
+        }
       });
   }
 
@@ -862,17 +856,17 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
     const previousType = this.connectorForm.get('type').value;
     this.setInitialConnectorValues(connector);
 
-    if (previousType === connector.type || !this.allowBasicConfig.has(connector.type)) {
-      this.patchBasicConfigConnector(connector);
+    if (previousType === connector.type || !this.allowBasicConfig.has(connector.type) || connector.mode === ConfigurationModes.ADVANCED) {
+      this.patchConnectorBasicConfig(connector.basicConfig);
     } else {
       this.basicConfigInitSubject.asObservable().pipe(take(1)).subscribe(() => {
-        this.patchBasicConfigConnector(connector);
+        this.patchConnectorBasicConfig(connector.basicConfig);
       });
     }
   }
 
-  private patchBasicConfigConnector(connector: GatewayConnector): void {
-    this.connectorForm.patchValue(connector, {emitEvent: false});
+  private patchConnectorBasicConfig(basicConfig: ConnectorBaseConfig): void {
+    this.connectorForm.get('basicConfig').patchValue(basicConfig, {emitEvent: false});
     this.connectorForm.markAsPristine();
     this.createBasicConfigWatcher();
     this.createJsonConfigWatcher();
