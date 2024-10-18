@@ -547,9 +547,10 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
     }
 
     this.deviceService.getDeviceCredentials(this.device.id).pipe(takeUntil(this.destroy$)).subscribe(credentials => {
-      this.initialCredentialsUpdated.emit(credentials);
       this.updateSecurityType(security, credentials);
       this.updateCredentials(credentials, security);
+      this.basicFormGroup.updateValueAndValidity();
+      this.initialCredentialsUpdated.emit(credentials);
     });
   }
 
