@@ -18,6 +18,9 @@
     "buffer-size": "Buffer size",
     "buffer-size-required": "Buffer size is required",
     "bytesize": "Bytesize",
+    "boolean": "Boolean",
+    "bit": "Bit",
+    "bit-target-type": "Bit target type",
     "delete-value": "Delete value",
     "delete-rpc-method": "Delete method",
     "delete-rpc-request": "Delete request",
@@ -90,6 +93,7 @@
     "gateway-configuration": "General Configuration",
     "docker-label": "Use the following instruction to run IoT Gateway in Docker compose with credentials for selected device",
     "install-docker-compose": "Use the instructions to download, install and setup docker compose",
+    "integer": "Integer",
     "device": "Device",
     "devices": "Devices",
     "device-profile": "Device profile",
@@ -680,6 +684,9 @@
         "key": "Name for telemetry on platform."
       },
       "modbus": {
+        "bit-target-type": "The response type can be either an integer (1/0) or a boolean (True/False).",
+        "bit": "Specify the index of the bit to read from the array, or leave it blank to read the entire array.",
+        "max-bit": "The bit value must not exceed the objects count.",
         "framer-type": "Type of a framer (Socket, RTU, or ASCII), if needed.",
         "host": "Hostname or IP address of Modbus server.",
         "port": "Modbus server port for connection.",
