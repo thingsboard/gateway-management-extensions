@@ -53,8 +53,9 @@ import {
   RequestMappingValue,
   RequestType,
   RequestTypesTranslationsMap,
-  ServerSideRpc, TruncateWithTooltipDirective
-} from '../../../../shared/public-api';
+  ServerSideRpc,
+} from '../../models/public-api';
+import { TruncateWithTooltipDirective } from '../../../../shared/directives/public-api';
 import { MappingDialogComponent } from '../mapping-dialog/mapping-dialog.component';
 import { isDefinedAndNotNull, isUndefinedOrNull, DialogService } from '@core/public-api';
 import { CommonModule } from '@angular/common';

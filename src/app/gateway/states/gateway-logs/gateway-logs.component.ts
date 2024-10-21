@@ -14,14 +14,14 @@
 /// limitations under the License.
 ///
 
-import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { DataKeyType, PageLink, Direction, SortOrder } from '@shared/public-api';
 import { WidgetContext } from '@home/models/widget-component.models';
-import { GatewayLogData, LogLink, GatewayStatus } from '../../shared/models/gateway.models';
+import { GatewayLogData, LogLink, GatewayStatus } from './models/public-api';
 
 @Component({
   selector: 'tb-gateway-logs',
@@ -42,11 +42,8 @@ export class GatewayLogsComponent implements OnInit, AfterViewInit {
   @Input()
   dialogRef: MatDialogRef<any>;
 
-  @ViewChild('searchInput') searchInputField: ElementRef;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-
-  textSearchMode: boolean;
 
   logLinks: Array<LogLink>;
 

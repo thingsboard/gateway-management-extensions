@@ -17,13 +17,9 @@
 import {
   ConfigurationModes,
   GatewayConnector,
-  LocalLogsConfigs,
-  LogSavingPeriod,
   ReportStrategyConfig,
-  SecurityTypes,
-  StorageTypes
 } from '../../../shared/public-api';
-import { GatewayLogLevel } from '../../gateway-form/models/gateway-form.models';
+import { GatewayLogLevel } from '../../gateway-form/models/public-api';
 
 export interface GatewayConfigValue {
   mode: ConfigurationModes;
@@ -180,4 +176,67 @@ export enum GatewayBasicConfigTab {
 }
 
 export type GatewayBasicConfigTabKey = keyof typeof GatewayBasicConfigTab;
+
+export enum StorageTypes {
+  MEMORY = 'memory',
+  FILE = 'file',
+  SQLITE = 'sqlite'
+}
+
+export enum LocalLogsConfigs {
+  service = 'service',
+  connector = 'connector',
+  converter = 'converter',
+  tb_connection = 'tb_connection',
+  storage = 'storage',
+  extension = 'extension'
+}
+
+export const LocalLogsConfigTranslateMap = new Map<LocalLogsConfigs, string>([
+  [LocalLogsConfigs.service, 'Service'],
+  [LocalLogsConfigs.connector, 'Connector'],
+  [LocalLogsConfigs.converter, 'Converter'],
+  [LocalLogsConfigs.tb_connection, 'TB Connection'],
+  [LocalLogsConfigs.storage, 'Storage'],
+  [LocalLogsConfigs.extension, 'Extension']
+]);
+
+export const StorageTypesTranslationMap = new Map<StorageTypes, string>(
+  [
+    [StorageTypes.MEMORY, 'gateway.storage-types.memory-storage'],
+    [StorageTypes.FILE, 'gateway.storage-types.file-storage'],
+    [StorageTypes.SQLITE, 'gateway.storage-types.sqlite']
+  ]
+);
+
+export enum LogSavingPeriod {
+  days = 'D',
+  hours = 'H',
+  minutes = 'M',
+  seconds = 'S'
+}
+
+export const LogSavingPeriodTranslations = new Map<LogSavingPeriod, string>(
+  [
+    [LogSavingPeriod.days, 'gateway.logs.days'],
+    [LogSavingPeriod.hours, 'gateway.logs.hours'],
+    [LogSavingPeriod.minutes, 'gateway.logs.minutes'],
+    [LogSavingPeriod.seconds, 'gateway.logs.seconds']
+  ]
+);
+
+export enum SecurityTypes {
+  ACCESS_TOKEN = 'accessToken',
+  USERNAME_PASSWORD = 'usernamePassword',
+  TLS_ACCESS_TOKEN = 'tlsAccessToken',
+  TLS_PRIVATE_KEY = 'tlsPrivateKey'
+}
+
+export const SecurityTypesTranslationsMap = new Map<SecurityTypes, string>(
+  [
+    [SecurityTypes.ACCESS_TOKEN, 'gateway.security-types.access-token'],
+    [SecurityTypes.USERNAME_PASSWORD, 'gateway.security-types.username-password'],
+    [SecurityTypes.TLS_ACCESS_TOKEN, 'gateway.security-types.tls-access-token']
+  ]
+);
 

@@ -22,7 +22,6 @@ import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { DialogComponent } from '@shared/public-api';
 import { Router } from '@angular/router';
 import {
-  Attribute,
   AttributesUpdate,
   ConnectorMapping,
   ConnectorMappingFormValue,
@@ -42,7 +41,6 @@ import {
   MappingKeysType,
   MappingType,
   MappingTypeTranslationsMap,
-  noLeadTrailSpacesRegex,
   OPCUaSourceType,
   QualityTypes,
   QualityTypeTranslationsMap,
@@ -53,8 +51,7 @@ import {
   ServerSideRPCType,
   SourceType,
   SourceTypeTranslationsMap,
-  Timeseries
-} from '../../../../shared/public-api';
+} from '../../models/public-api';
 import { Subject } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
 import { MatButton } from '@angular/material/button';
@@ -63,6 +60,7 @@ import { TranslateService } from '@ngx-translate/core';
 import {
   MappingDataKeysPanelComponent
 } from '../mapping-data-keys-panel/mapping-data-keys-panel.component';
+import { Attribute, noLeadTrailSpacesRegex, Timeseries } from '../../../../shared/models/public-api';
 
 @Component({
   selector: 'tb-mapping-dialog',

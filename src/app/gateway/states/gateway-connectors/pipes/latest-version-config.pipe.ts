@@ -15,28 +15,17 @@
 ///
 
 import { Pipe, PipeTransform } from '@angular/core';
-import { PortLimits } from '../../shared/public-api';
-import { AbstractControl } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
+import { ConnectorType } from '../../../shared/public-api';
+import { GatewayConnectorVersionMappingUtil } from '../utils/public-api';
+import { GatewayConnectorConfigVersionMap } from '../models/public-api';
 
 @Pipe({
-  name: 'getGatewayPortTooltip',
+  name: 'isLatestVersionConfig',
   standalone: true,
 })
-export class GatewayPortTooltipPipe implements PipeTransform {
-
-  constructor(private translate: TranslateService) {}
-
-  transform(portControl: AbstractControl): string {
-    if (portControl.hasError('required')) {
-      return this.translate.instant('gateway.port-required');
-    }
-    if (portControl.hasError('min') || portControl.hasError('max')) {
-      return this.translate.instant('gateway.port-limits-error', {
-        min: PortLimits.MIN,
-        max: PortLimits.MAX,
-      });
-    }
-    return '';
+export class LatestVersionConfigPipe implements PipeTransform {
+  transform(configVersion: number | string, type: ConnectorType): boolean {
+    return GatewayConnectorVersionMappingUtil.parseVersion(configVersion)
+      >= GatewayConnectorVersionMappingUtil.parseVersion(GatewayConnectorConfigVersionMap.get(type));
   }
 }

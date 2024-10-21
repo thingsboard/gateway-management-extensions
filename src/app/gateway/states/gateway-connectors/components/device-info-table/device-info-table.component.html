@@ -49,10 +49,10 @@
                       class="tb-error">
               warning
             </mat-icon>
-            <div *ngIf="'name-field' | getGatewayHelpLink : mappingFormGroup.get('deviceNameExpressionSource').value : sourceTypes"
+            <div *ngIf="'name-field' | getConnectorMappingHelpLink : mappingFormGroup.get('deviceNameExpressionSource').value : sourceTypes"
                  matSuffix
                  class="see-example"
-                 [tb-help-popup]="'name-field' | getGatewayHelpLink : mappingFormGroup.get('deviceNameExpressionSource').value : sourceTypes"
+                 [tb-help-popup]="'name-field' | getConnectorMappingHelpLink : mappingFormGroup.get('deviceNameExpressionSource').value : sourceTypes"
                  tb-help-popup-placement="left"
                  [tb-help-popup-style]="{maxWidth: '970px'}">
             </div>
@@ -83,10 +83,10 @@
                       class="tb-error">
               warning
             </mat-icon>
-            <div *ngIf="'profile-name' | getGatewayHelpLink: mappingFormGroup.get('deviceProfileExpressionSource').value : sourceTypes"
+            <div *ngIf="'profile-name' | getConnectorMappingHelpLink: mappingFormGroup.get('deviceProfileExpressionSource').value : sourceTypes"
                  matSuffix
                  class="see-example"
-                 [tb-help-popup]="'profile-name' | getGatewayHelpLink: mappingFormGroup.get('deviceProfileExpressionSource').value : sourceTypes"
+                 [tb-help-popup]="'profile-name' | getConnectorMappingHelpLink: mappingFormGroup.get('deviceProfileExpressionSource').value : sourceTypes"
                  tb-help-popup-placement="left"
                  [tb-help-popup-style]="{maxWidth: '970px'}">
             </div>

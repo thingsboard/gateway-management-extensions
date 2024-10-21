@@ -16,15 +16,15 @@
 
 import { isEqual } from '@core/public-api';
 import {
-  GatewayConnector,
   MQTTBasicConfig,
   MQTTBasicConfig_v3_5_2,
   MQTTLegacyBasicConfig,
   RequestMappingData,
   RequestType,
 } from '../models/public-api';
-import { MqttVersionMappingUtil } from '../utils/mqtt-version-mapping.util';
+import { MqttVersionMappingUtil } from '../utils/public-api';
 import { GatewayConnectorVersionProcessor } from './gateway-connector-version-processor.abstract';
+import { GatewayConnector } from '../../../shared/models/public-api';
 
 export class MqttVersionProcessor extends GatewayConnectorVersionProcessor<MQTTBasicConfig> {
 

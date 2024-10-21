@@ -38,13 +38,11 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import {
   integerRegex,
-  MappingValueType,
-  mappingValueTypesMap,
   noLeadTrailSpacesRegex,
-  OPCTypeValue,
-  RPCTemplateConfigOPC
 } from '../../../../shared/public-api';
 import { isDefinedAndNotNull, isEqual } from '@core/public-api';
+import { OPCTypeValue, RPCTemplateConfigOPC } from '../../models/rpc.models';
+import { mappingValueTypesMap, MappingValueType } from '../../../../shared/models/public-api';
 
 @Component({
   selector: 'tb-gateway-opc-rpc-parameters',
@@ -73,7 +71,7 @@ export class OpcRpcParametersComponent implements ControlValueAccessor, Validato
 
   rpcParametersFormGroup: UntypedFormGroup;
 
-  readonly valueTypeKeys: MappingValueType[] = Object.values(MappingValueType);
+  readonly valueTypeKeys: MappingValueType[] = Object.values(MappingValueType) as MappingValueType[];
   readonly MappingValueType = MappingValueType;
   readonly valueTypes = mappingValueTypesMap;
 

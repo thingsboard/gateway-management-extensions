@@ -37,12 +37,14 @@ import { isDefinedAndNotNull, AppState } from '@core/public-api';
 import {
   MappingDataKey,
   MappingKeysType,
+  OPCUaSourceType,
+  RpcMethodsMapping,
+} from '../../models/public-api';
+import {
+  noLeadTrailSpacesRegex,
+  ReportStrategyDefaultValue,
   MappingValueType,
   mappingValueTypesMap,
-  noLeadTrailSpacesRegex,
-  OPCUaSourceType,
-  ReportStrategyDefaultValue,
-  RpcMethodsMapping,
 } from '../../../../shared/public-api';
 
 @Component({

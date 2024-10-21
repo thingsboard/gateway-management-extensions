@@ -28,15 +28,15 @@ import {
 import {
   BrokerConfig,
   MqttVersions,
-  noLeadTrailSpacesRegex,
   PortLimits,
-  GatewayPortTooltipPipe
-} from '../../../../../shared/public-api';
+} from '../../../models/public-api';
 import { SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
 import { generateSecret } from '@core/public-api';
 import { Subject } from 'rxjs';
 import { SecurityConfigComponent } from '../../security-config/security-config.component';
+import { GatewayPortTooltipPipe } from '../../../pipes/public-api';
+import { noLeadTrailSpacesRegex } from '../../../../../shared/models/public-api';
 
 @Component({
   selector: 'tb-broker-config-control',

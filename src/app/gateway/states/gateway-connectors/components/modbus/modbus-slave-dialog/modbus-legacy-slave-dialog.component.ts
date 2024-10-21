@@ -22,8 +22,7 @@ import {
   LegacySlaveConfig,
   ModbusProtocolType,
   ModbusSlaveInfo,
-  GatewayPortTooltipPipe
-} from '../../../../../shared/public-api';
+} from '../../../models/public-api';
 import { SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
 import { ModbusValuesComponent } from '../modbus-values/modbus-values.component';
@@ -38,6 +37,7 @@ import {
 import {
   ModbusSlaveDialogAbstract
 } from './modbus-slave-dialog.abstract';
+import { GatewayPortTooltipPipe } from '../../../pipes/public-api';
 
 @Component({
   selector: 'tb-modbus-legacy-slave-dialog',

@@ -18,10 +18,8 @@ import { Directive } from '@angular/core';
 import { FormControl, FormGroup, ValidationErrors } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { isEqual } from '@core/public-api';
-import {
-  GatewayConnectorBasicConfigDirective,
-  ModbusBasicConfig,
-} from '../../../../../shared/public-api';
+import { ModbusBasicConfig } from '../../../models/public-api';
+import { GatewayConnectorBasicConfigDirective } from '../../../abstract/public-api';
 
 @Directive()
 export abstract class ModbusBasicConfigDirective<InputBasicConfig, OutputBasicConfig>

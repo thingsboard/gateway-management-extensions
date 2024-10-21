@@ -16,6 +16,7 @@
 
 import { ChangeDetectionStrategy, Component, forwardRef } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { EllipsisChipListDirective } from '../../../../../shared/directives/public-api';
 import {
   LegacySlaveConfig,
   ModbusBasicConfig,
@@ -23,9 +24,7 @@ import {
   ModbusLegacySlave,
   ModbusMasterConfig,
   ModbusSlave,
-  ModbusVersionMappingUtil,
-  EllipsisChipListDirective,
-} from '../../../../../shared/public-api';
+} from '../../../models/public-api';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/public-api';
 import { ModbusSlaveConfigComponent } from '../modbus-slave-config/modbus-slave-config.component';
@@ -33,6 +32,7 @@ import { ModbusMasterTableComponent } from '../modbus-master-table/modbus-master
 import {
   ModbusBasicConfigDirective
 } from './modbus-basic-config.abstract';
+import { ModbusVersionMappingUtil } from '../../../utils/public-api';
 
 @Component({
   selector: 'tb-modbus-legacy-basic-config',

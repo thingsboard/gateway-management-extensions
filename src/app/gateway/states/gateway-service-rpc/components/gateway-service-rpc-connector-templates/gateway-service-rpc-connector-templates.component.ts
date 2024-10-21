@@ -15,11 +15,11 @@
 ///
 
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ConnectorType } from '../../../../shared/public-api';
 import {
-  ConnectorType,
   RPCTemplate,
   SNMPMethodsTranslations
-} from '../../../../shared/public-api';
+} from '../../models/public-api';
 import { AttributeScope, EntityType } from '@shared/public-api';
 import { AttributeService, isLiteralObject } from '@core/public-api';
 import { WidgetContext } from '@home/models/widget-component.models';

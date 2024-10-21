@@ -26,10 +26,12 @@ import {
   Validators
 } from '@angular/forms';
 import {
-  noLeadTrailSpacesRegex,
   SecurityPolicy,
   SecurityPolicyTypes,
   ServerConfig,
+} from '../../../models/public-api';
+import {
+  noLeadTrailSpacesRegex,
   TruncateWithTooltipDirective
 } from '../../../../../shared/public-api';
 import { SharedModule, HOUR, coerceBoolean } from '@shared/public-api';

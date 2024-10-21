@@ -37,14 +37,15 @@ import {
   NG_VALUE_ACCESSOR,
   UntypedFormGroup,
 } from '@angular/forms';
+import { TruncateWithTooltipDirective } from '../../../../../shared/directives/public-api';
 import {
   LegacySlaveConfig,
   ModbusMasterConfig,
   ModbusProtocolLabelsMap,
   ModbusSlaveInfo,
   ModbusValues,
-  SlaveConfig, TruncateWithTooltipDirective
-} from '../../../../../shared/public-api';
+  SlaveConfig,
+} from '../../../models/public-api';
 import { isDefinedAndNotNull, DialogService } from '@core/public-api';
 import { CommonModule } from '@angular/common';
 import { ModbusSlaveDialogComponent } from '../modbus-slave-dialog/modbus-slave-dialog.component';

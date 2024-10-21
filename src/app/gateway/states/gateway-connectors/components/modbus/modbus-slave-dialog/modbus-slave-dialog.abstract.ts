@@ -33,8 +33,10 @@ import {
   ModbusProtocolType,
   ModbusSerialMethodType,
   ModbusSlaveInfo,
-  noLeadTrailSpacesRegex,
   PortLimits,
+} from '../../../models/public-api';
+import {
+  noLeadTrailSpacesRegex,
   ReportStrategyDefaultValue,
 } from '../../../../../shared/public-api';
 import { Subject } from 'rxjs';

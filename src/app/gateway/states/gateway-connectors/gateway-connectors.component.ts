@@ -37,12 +37,9 @@ import {
   WidgetSubscriptionOptions
 } from '@core/public-api';
 import {
-  AddConnectorConfigData,
   ConfigurationModes,
   ConnectorBaseConfig,
-  ConnectorBaseInfo,
   ConnectorType,
-  GatewayAttributeData,
   GatewayConnector,
   GatewayConnectorDefaultTypesTranslatesMap,
   GatewayLogLevel,
@@ -67,11 +64,10 @@ import {
   SortOrder,
   widgetType
 } from '@shared/public-api';
-import {
-  AttributeDatasource,
-  GatewayConnectorVersionMappingUtil,
-  ReportStrategyVersionPipe,
-} from '../../shared/public-api';
+import { AttributeDatasource, } from '../../shared/datasources/public-api';
+import { GatewayConnectorVersionMappingUtil } from './utils/public-api';
+import { ReportStrategyVersionPipe } from './pipes/public-api';
+import { ConnectorBaseInfo, AddConnectorConfigData, GatewayAttributeData } from './models/public-api';
 
 export class ForceErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null): boolean {

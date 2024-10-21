@@ -27,6 +27,10 @@ import {
   Validators,
 } from '@angular/forms';
 import {
+  noLeadTrailSpacesRegex,
+  TruncateWithTooltipDirective
+} from '../../../../../shared/public-api';
+import {
   ModbusBaudrates,
   ModbusMethodLabelsMap,
   ModbusMethodType,
@@ -36,11 +40,9 @@ import {
   ModbusRegisterValues,
   ModbusSerialMethodType,
   ModbusSlave,
-  noLeadTrailSpacesRegex,
   PortLimits,
   SlaveConfig,
-  GatewayPortTooltipPipe, TruncateWithTooltipDirective
-} from '../../../../../shared/public-api';
+} from '../../../models/public-api';
 import { SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
@@ -48,6 +50,7 @@ import { takeUntil } from 'rxjs/operators';
 import { ModbusSecurityConfigComponent } from '../modbus-security-config/modbus-security-config.component';
 import { ModbusValuesComponent, } from '../modbus-values/modbus-values.component';
 import { isEqual } from '@core/public-api';
+import { GatewayPortTooltipPipe } from '../../../pipes/public-api';
 
 @Component({
   selector: 'tb-modbus-slave-config',

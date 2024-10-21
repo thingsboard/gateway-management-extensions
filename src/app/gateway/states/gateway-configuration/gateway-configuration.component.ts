@@ -24,12 +24,9 @@ import { Observable, of, Subject } from 'rxjs';
 import { mergeMap, switchMap, takeUntil } from 'rxjs/operators';
 import {
   GatewayLogLevel,
-  SecurityTypes,
   ConfigurationModes,
-  LocalLogsConfigs,
-  LogSavingPeriod,
-  Attribute,
   GatewayVersion,
+  Attribute,
 } from '../../shared/public-api';
 import { deepTrim, isEqual, DeviceService, AttributeService } from '@core/public-api';
 import {
@@ -41,8 +38,11 @@ import {
   GatewayLogsConfig,
   GatewayStorageConfig,
   LocalLogs,
+  LocalLogsConfigs,
   LogAttribute,
   LogConfig,
+  SecurityTypes,
+  LogSavingPeriod,
 } from './models/public-api';
 import { DeviceId, NULL_UUID, DeviceCredentials, DeviceCredentialsType, EntityId, AttributeData, AttributeScope } from '@shared/public-api';
 

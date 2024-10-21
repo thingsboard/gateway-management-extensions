@@ -15,18 +15,21 @@
 ///
 
 import { Pipe, PipeTransform } from '@angular/core';
-import { ConnectorType, GatewayConnectorConfigVersionMap } from '../../shared/public-api';
-import {
-  GatewayConnectorVersionMappingUtil
-} from '../utils/public-api';
+import { ConnectorType, GatewayVersion } from '../../../shared/public-api';
+import { GatewayConnectorVersionMappingUtil } from '../utils/public-api';
 
 @Pipe({
-  name: 'isLatestVersionConfig',
+  name: 'withReportStrategy',
   standalone: true,
 })
-export class LatestVersionConfigPipe implements PipeTransform {
-  transform(configVersion: number | string, type: ConnectorType): boolean {
-    return GatewayConnectorVersionMappingUtil.parseVersion(configVersion)
-      >= GatewayConnectorVersionMappingUtil.parseVersion(GatewayConnectorConfigVersionMap.get(type));
+export class ReportStrategyVersionPipe implements PipeTransform {
+  transform(configVersion: number | string, type?: ConnectorType): boolean {
+    const parsedConfigVersion = GatewayConnectorVersionMappingUtil.parseVersion(configVersion);
+    if (type === ConnectorType.MODBUS) {
+      return parsedConfigVersion >= GatewayConnectorVersionMappingUtil.parseVersion(GatewayVersion.v3_5_2);
+    }
+
+    return parsedConfigVersion
+      >= GatewayConnectorVersionMappingUtil.parseVersion(GatewayVersion.Current);
   }
 }

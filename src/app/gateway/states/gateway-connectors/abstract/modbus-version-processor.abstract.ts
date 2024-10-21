@@ -15,7 +15,6 @@
 ///
 
 import {
-  GatewayConnector,
   LegacySlaveConfig,
   ModbusBasicConfig,
   ModbusBasicConfig_v3_5_2,
@@ -23,9 +22,10 @@ import {
   ModbusLegacySlave,
   ModbusMasterConfig,
   ModbusSlave,
-} from '../../shared/public-api';
+} from '../models/public-api';
 import { GatewayConnectorVersionProcessor } from './gateway-connector-version-processor.abstract';
 import { ModbusVersionMappingUtil } from '../utils/public-api';
+import { GatewayConnector } from '../../../shared/models/public-api';
 
 export class ModbusVersionProcessor extends GatewayConnectorVersionProcessor<any> {
 

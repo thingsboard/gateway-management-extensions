@@ -41,7 +41,7 @@ import {
 } from './states/gateway-remote-shell/components/gateway-remote-configuration-dialog/gateway-remote-configuration-dialog';
 import { GatewayFormComponent } from './states/gateway-form/gateway-form.component';
 import { GatewayConnectorComponent } from './states/gateway-connectors/gateway-connectors.component';
-import { LatestVersionConfigPipe } from './shared/pipes/latest-version-config.pipe';
+import { LatestVersionConfigPipe } from './states/gateway-connectors/pipes/latest-version-config.pipe';
 import { MappingDialogComponent } from './states/gateway-connectors/components/mapping-dialog/mapping-dialog.component';
 import {
   MappingDataKeysPanelComponent
@@ -74,7 +74,7 @@ import {
   ReportStrategyComponent
 } from './shared/components/report-strategy/report-strategy.component';
 import { DeviceGatewayCommandComponent } from './states/device-gateway-command/device-gateway-command.component';
-import { GatewayHelpLinkPipe } from './shared/pipes/gateway-help-link.pipe';
+import { ConnectorMappingHelpLinkPipe } from './states/gateway-connectors/pipes/gateway-help-link.pipe';
 import {
   AddConnectorDialogComponent
 } from './states/gateway-connectors/components/add-connector-dialog/add-connector-dialog.component';
@@ -89,7 +89,7 @@ import {
   TypeValuePanelComponent
 } from './states/gateway-connectors/components/type-value-panel/type-value-panel.component';
 import { EllipsisChipListDirective } from './shared/directives/ellipsis-chip-list.directive';
-import { RpcTemplateArrayViewPipe } from './shared/pipes/rpc-template-array-view.pipe';
+import { RpcTemplateArrayViewPipe } from './states/gateway-service-rpc/pipes/rpc-template-array-view.pipe';
 import { TruncateWithTooltipDirective } from './shared/directives/truncate-with-tooltip.directive';
 import {
   SocketConfigComponent
@@ -100,10 +100,11 @@ import {
 import {
   SocketLegacyBasicConfigComponent
 } from './states/gateway-connectors/components/socket/socket-basic-config/socket-legacy-basic-config.component';
-import { ReportStrategyVersionPipe } from './shared/pipes/report-strategy-version.pipe';
+import { ReportStrategyVersionPipe } from './states/gateway-connectors/pipes/report-strategy-version.pipe';
 import {
   TypeValueFieldComponent
 } from './states/gateway-connectors/components/type-value-field/type-value-field.component';
+import { KeyValueIsNotEmptyPipe } from './states/gateway-service-rpc/pipes/key-value-not-empty.pipe';
 
 const DECLARATIONS = [
   GatewayLogsComponent,
@@ -142,7 +143,7 @@ const DECLARATIONS = [
     MqttLegacyBasicConfigComponent,
     MqttBasicConfigComponent,
     ReportStrategyComponent,
-    GatewayHelpLinkPipe,
+    ConnectorMappingHelpLinkPipe,
     GatewayBasicConfigurationComponent,
     GatewayAdvancedConfigurationComponent,
     EllipsisChipListDirective,
@@ -153,6 +154,7 @@ const DECLARATIONS = [
     SocketLegacyBasicConfigComponent,
     ReportStrategyVersionPipe,
     TypeValueFieldComponent,
+    KeyValueIsNotEmptyPipe
   ],
   exports: DECLARATIONS,
   providers: [

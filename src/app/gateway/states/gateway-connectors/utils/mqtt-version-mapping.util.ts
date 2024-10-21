@@ -29,7 +29,7 @@ import {
   ServerSideRpc,
   ServerSideRpcType,
   SourceType
-} from '../../shared/public-api';
+} from '../models/public-api';
 
 export class MqttVersionMappingUtil {
 

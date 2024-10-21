@@ -34,13 +34,14 @@ import {
   Validators
 } from '@angular/forms';
 import {
-  ModbusSecurity,
-  noLeadTrailSpacesRegex, TruncateWithTooltipDirective,
+  noLeadTrailSpacesRegex,
+  TruncateWithTooltipDirective,
 } from '../../../../../shared/public-api';
 import { SharedModule, coerceBoolean } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ModbusSecurity } from '../../../models/public-api';
 
 @Component({
   selector: 'tb-modbus-security-config',

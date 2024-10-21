@@ -26,29 +26,31 @@ import {
 } from '@angular/forms';
 import { TbPopoverComponent } from '@shared/components/popover.component';
 import {
-  GatewayHelpLinkPipe,
-  ModbusBitTargetType,
-  ModbusBitTargetTypeTranslationMap,
+  ModbusFunctionCodeTranslationsMap,
+  noLeadTrailSpacesRegex,
+  nonZeroFloat,
+  ReportStrategyDefaultValue,
+  TruncateWithTooltipDirective,
   ModbusDataType,
   ModbusEditableDataTypes,
+  ModbusObjectCountByDataType
+} from '../../../../../shared/public-api';
+import {
+  ModbusBitTargetType,
+  ModbusBitTargetTypeTranslationMap,
   ModbusFormValue,
-  ModbusFunctionCodeTranslationsMap,
-  ModbusObjectCountByDataType,
   ModbusValue,
   ModbusValueKey,
   ModifierType,
   ModifierTypesMap,
-  noLeadTrailSpacesRegex,
-  nonZeroFloat,
-  ReportStrategyDefaultValue,
-  TruncateWithTooltipDirective
-} from '../../../../../shared/public-api';
+} from '../../../models/public-api';
 import { CommonModule } from '@angular/common';
 import { generateSecret } from '@core/public-api';
 import { coerceBoolean, SharedModule } from '@shared/public-api';
 import { filter, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { ReportStrategyComponent } from '../../../../../shared/components/public-api';
+import { ConnectorMappingHelpLinkPipe } from '../../../pipes/public-api';
 
 @Component({
   selector: 'tb-modbus-data-keys-panel',
@@ -58,7 +60,7 @@ import { ReportStrategyComponent } from '../../../../../shared/components/public
   imports: [
     CommonModule,
     SharedModule,
-    GatewayHelpLinkPipe,
+    ConnectorMappingHelpLinkPipe,
     ReportStrategyComponent,
     TruncateWithTooltipDirective,
   ]

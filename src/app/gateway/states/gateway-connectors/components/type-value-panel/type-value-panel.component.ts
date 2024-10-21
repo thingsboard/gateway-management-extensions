@@ -25,9 +25,10 @@ import {
   ValidationErrors,
   Validator,
 } from '@angular/forms';
-import { MappingDataKey, ValueType } from '../../../../shared/public-api';
+import { MappingDataKey } from '../../models/public-api';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { ValueType } from '../../../../shared/models/public-api';
 
 @Component({
   selector: 'tb-type-value-panel',

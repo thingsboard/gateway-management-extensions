@@ -15,9 +15,6 @@
 ///
 
 export * from './models/public-api';
-export * from './utils/public-api';
-export * from './abstract/public-api';
-export * from './pipes/public-api';
 export * from './directives/public-api';
 export * from './datasources/public-api';
 export * from './components/public-api';

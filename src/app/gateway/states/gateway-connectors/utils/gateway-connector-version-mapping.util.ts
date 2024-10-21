@@ -15,13 +15,15 @@
 ///
 
 import {
-  ConnectorType,
-  GatewayConnector,
   ModbusBasicConfig,
   MQTTBasicConfig,
   OPCBasicConfig,
   SocketBasicConfig,
-} from '../../shared/public-api';
+} from '../models/public-api';
+import {
+  ConnectorType,
+  GatewayConnector,
+} from '../../../shared/models/public-api';
 import { MqttVersionProcessor, OpcVersionProcessor, ModbusVersionProcessor, SocketVersionProcessor } from '../abstract/public-api';
 import { isNumber, isString } from '@core/public-api';
 
