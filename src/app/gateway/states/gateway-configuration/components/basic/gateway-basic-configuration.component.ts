@@ -117,7 +117,7 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
   readonly gatewayLogLevel = Object.values(GatewayLogLevel);
   readonly ReportStrategyDefaultValue = ReportStrategyDefaultValue;
 
-  private numberInputPattern = new RegExp(/^(0|[1-9][0-9]{0,14})$/);
+  private numberInputPattern = new RegExp(/^\d{1,15}$/);
 
   logSelector: FormControl;
   basicFormGroup: FormGroup;
