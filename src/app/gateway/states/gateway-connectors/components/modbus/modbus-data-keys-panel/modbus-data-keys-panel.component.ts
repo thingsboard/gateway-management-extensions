@@ -26,6 +26,9 @@ import {
 } from '@angular/forms';
 import { TbPopoverComponent } from '@shared/components/popover.component';
 import {
+  GatewayHelpLinkPipe,
+  ModbusBitTargetType,
+  ModbusBitTargetTypeTranslationMap,
   ModbusDataType,
   ModbusEditableDataTypes,
   ModbusFormValue,
@@ -38,16 +41,14 @@ import {
   noLeadTrailSpacesRegex,
   nonZeroFloat,
   ReportStrategyDefaultValue,
-  GatewayHelpLinkPipe, TruncateWithTooltipDirective
+  TruncateWithTooltipDirective
 } from '../../../../../shared/public-api';
 import { CommonModule } from '@angular/common';
 import { generateSecret } from '@core/public-api';
 import { coerceBoolean, SharedModule } from '@shared/public-api';
-import { takeUntil } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import {
-  ReportStrategyComponent
-} from '../../../../../shared/components/public-api';
+import { ReportStrategyComponent } from '../../../../../shared/components/public-api';
 
 @Component({
   selector: 'tb-modbus-data-keys-panel',
@@ -79,8 +80,6 @@ export class ModbusDataKeysPanelComponent implements OnInit, OnDestroy {
   @Output() keysDataApplied = new EventEmitter<Array<ModbusValue>>();
 
   keysListFormArray: FormArray<UntypedFormGroup>;
-  modbusDataTypes = Object.values(ModbusDataType);
-  modifierTypes: ModifierType[] = Object.values(ModifierType);
   withFunctionCode = true;
   withReportStrategy = true;
 
@@ -89,10 +88,15 @@ export class ModbusDataKeysPanelComponent implements OnInit, OnDestroy {
   functionCodesMap = new Map();
   defaultFunctionCodes = [];
 
+  readonly modbusDataTypes = Object.values(ModbusDataType);
+  readonly modifierTypes: ModifierType[] = Object.values(ModifierType) as ModifierType[];
+  readonly bitTargetTypes: ModbusBitTargetType[] = Object.values(ModbusBitTargetType) as ModbusBitTargetType[];
+  readonly BitTargetTypeTranslationMap = ModbusBitTargetTypeTranslationMap;
   readonly ModbusEditableDataTypes = ModbusEditableDataTypes;
   readonly ModbusFunctionCodeTranslationsMap = ModbusFunctionCodeTranslationsMap;
   readonly ModifierTypesMap = ModifierTypesMap;
   readonly ReportStrategyDefaultValue = ReportStrategyDefaultValue;
+  readonly ModbusDataType = ModbusDataType;
 
   private destroy$ = new Subject<void>();
 
@@ -133,11 +137,14 @@ export class ModbusDataKeysPanelComponent implements OnInit, OnDestroy {
       reportStrategy: [{ value: null, disabled: !this.withReportStrategy }],
       modifierType: [{ value: ModifierType.MULTIPLIER, disabled: true }],
       modifierValue: [{ value: 1, disabled: true }, [Validators.pattern(nonZeroFloat)]],
+      bit: [{ value: null, disabled: true }],
+      bitTargetType: [{ value: ModbusBitTargetType.Integer, disabled: true }],
       id: [{value: id, disabled: true}],
     });
     this.showModifiersMap.set(id, false);
     this.enableModifiersControlMap.set(id, this.fb.control(false));
     this.observeKeyDataType(dataKeyFormGroup);
+    this.observeObjectsCount(dataKeyFormGroup);
     this.observeEnableModifier(dataKeyFormGroup);
 
     this.keysListFormArray.push(dataKeyFormGroup);
@@ -191,6 +198,7 @@ export class ModbusDataKeysPanelComponent implements OnInit, OnDestroy {
       values.forEach(value => {
         const dataKeyFormGroup = this.createDataKeyFormGroup(value);
         this.observeKeyDataType(dataKeyFormGroup);
+        this.observeObjectsCount(dataKeyFormGroup);
         this.observeEnableModifier(dataKeyFormGroup);
         this.functionCodesMap.set(dataKeyFormGroup.get('id').value, this.getFunctionCodes(value.type));
 
@@ -202,7 +210,7 @@ export class ModbusDataKeysPanelComponent implements OnInit, OnDestroy {
   }
 
   private createDataKeyFormGroup(modbusValue: ModbusValue): FormGroup {
-    const { tag, value, type, address, objectsCount, functionCode, multiplier, divider, reportStrategy } = modbusValue;
+    const { tag, value, type, address, objectsCount, functionCode, multiplier, divider, reportStrategy, bit, bitTargetType } = modbusValue;
     const id = generateSecret(5);
 
     const showModifier = this.shouldShowModifier(type);
@@ -220,6 +228,8 @@ export class ModbusDataKeysPanelComponent implements OnInit, OnDestroy {
         value: divider ? ModifierType.DIVIDER : ModifierType.MULTIPLIER,
         disabled: !this.enableModifiersControlMap.get(id).value
       }],
+      bit: [{ value: bit, disabled: type !== ModbusDataType.BITS || objectsCount < 2 }, [Validators.max(objectsCount - 1)]],
+      bitTargetType: [{ value: bitTargetType ?? ModbusBitTargetType.Integer, disabled: type !== ModbusDataType.BITS || this.hideNewFields }],
       modifierValue: [
         { value: multiplier ?? divider ?? 1, disabled: !this.enableModifiersControlMap.get(id).value },
         [Validators.pattern(nonZeroFloat)]
@@ -240,10 +250,33 @@ export class ModbusDataKeysPanelComponent implements OnInit, OnDestroy {
       if (!this.ModbusEditableDataTypes.includes(dataType)) {
         keyFormGroup.get('objectsCount').patchValue(ModbusObjectCountByDataType[dataType], {emitEvent: false});
       }
+      this.toggleBitsFields(keyFormGroup);
       const withModifier = this.shouldShowModifier(dataType);
       this.showModifiersMap.set(keyFormGroup.get('id').value, withModifier);
       this.updateFunctionCodes(keyFormGroup, dataType);
     });
+  }
+
+  private observeObjectsCount(keyFormGroup: FormGroup): void {
+    keyFormGroup.get('objectsCount').valueChanges
+      .pipe(filter(() => keyFormGroup.get('type').value === ModbusDataType.BITS), takeUntil(this.destroy$))
+      .subscribe(() => this.toggleBitsFields(keyFormGroup));
+  }
+
+  private toggleBitsFields(keyFormGroup: FormGroup): void {
+    const { objectsCount, type, bit, bitTargetType } = keyFormGroup.controls;
+    const isBitsType = type.value === ModbusDataType.BITS;
+    const hasMultipleObjects = objectsCount.value > 1;
+
+    if (isBitsType && hasMultipleObjects) {
+      bit.enable({ emitEvent: false });
+      bit.setValidators(Validators.max(objectsCount.value - 1));
+    } else {
+      bit.disable({ emitEvent: false });
+    }
+
+    bit.updateValueAndValidity({ emitEvent: false });
+    bitTargetType[isBitsType ? 'enable' : 'disable']({ emitEvent: false });
   }
 
   private observeEnableModifier(keyFormGroup: FormGroup): void {

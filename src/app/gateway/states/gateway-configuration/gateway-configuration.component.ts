@@ -110,6 +110,11 @@ export class GatewayConfigurationComponent implements AfterViewInit, OnDestroy {
     });
   }
 
+  onInitialCredentialsUpdate(credentials: DeviceCredentials): void {
+    this.initialCredentials = credentials;
+    this.gatewayConfigGroup.markAsPristine({emitEvent: false});
+  }
+
   private observeAlignConfigs(): void {
     this.gatewayConfigGroup.get('basicConfig').valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => {
       const advancedControl = this.gatewayConfigGroup.get('advancedConfig');

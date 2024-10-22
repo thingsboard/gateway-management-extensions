@@ -129,6 +129,32 @@
                       </mat-form-field>
                     </div>
                   </div>
+                  <ng-container *ngIf="keyControl.get('type').value === ModbusDataType.BITS && !isMaster">
+                    <div *ngIf="keyControl.get('objectsCount').value > 1" class="tb-form-row column-xs">
+                      <div class="fixed-title-width" tb-hint-tooltip-icon="{{ 'gateway.hints.modbus.bit' | translate }}" translate>gateway.bit</div>
+                      <mat-form-field fxFlex appearance="outline" subscriptSizing="dynamic" class="tb-inline-field flex tb-suffix-absolute">
+                        <input matInput formControlName="bit" step="1" type="number" min="0" placeholder="{{ 'gateway.set' | translate }}"/>
+                        <mat-icon matSuffix
+                                  matTooltipPosition="above"
+                                  matTooltipClass="tb-error-tooltip"
+                                  [matTooltip]="('gateway.hints.modbus.max-bit') | translate"
+                                  *ngIf="keyControl.get('bit').hasError('max') && keyControl.get('bit').touched"
+                                  class="tb-error">
+                          warning
+                        </mat-icon>
+                      </mat-form-field>
+                    </div>
+                    <div *ngIf="!hideNewFields" class="tb-form-row column-xs">
+                      <div class="fixed-title-width" tb-hint-tooltip-icon="{{ 'gateway.hints.modbus.bit-target-type' | translate }}" translate>gateway.bit-target-type</div>
+                      <div class="tb-flex no-gap">
+                        <mat-form-field class="tb-flex no-gap fill-width" appearance="outline" subscriptSizing="dynamic">
+                          <mat-select formControlName="bitTargetType">
+                            <mat-option *ngFor="let type of bitTargetTypes" [value]="type">{{ BitTargetTypeTranslationMap.get(type) | translate }}</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </ng-container>
                   <div class="tb-form-row column-xs" fxLayoutAlign="space-between center">
                     <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.modbus.address' | translate }}" translate>gateway.address</div>
                     <div class="tb-flex no-gap">
@@ -163,7 +189,7 @@
                         </mat-panel-title>
                       </mat-expansion-panel-header>
                       <div class="tb-flex no-gap">
-                        <div class="tb-form-row column-xs tb-flex full-width" fxLayoutAlign="space-between center">
+                        <div class="tb-form-row column-xs">
                           <div class="fixed-title-width" translate>gateway.type</div>
                           <div class="tb-flex no-gap">
                             <mat-form-field class="tb-flex no-gap fill-width" appearance="outline" subscriptSizing="dynamic">

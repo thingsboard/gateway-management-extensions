@@ -117,6 +117,8 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
   readonly gatewayLogLevel = Object.values(GatewayLogLevel);
   readonly ReportStrategyDefaultValue = ReportStrategyDefaultValue;
 
+  private numberInputPattern = new RegExp(/^\d{1,15}$/);
+
   logSelector: FormControl;
   basicFormGroup: FormGroup;
 
@@ -289,7 +291,7 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
     const commandFormGroup = this.fb.group({
       attributeOnGateway: [attributeOnGateway, [Validators.required, Validators.pattern(/^[^.\s]+$/)]],
       command: [cmd, [Validators.required, Validators.pattern(/^(?=\S).*\S$/)]],
-      timeout: [timeout, [Validators.required, Validators.min(1), Validators.pattern(/^-?[0-9]+$/), Validators.pattern(/^[^.\s]+$/)]]
+      timeout: [timeout, [Validators.required, Validators.min(1), Validators.pattern(this.numberInputPattern), Validators.pattern(/^[^.\s]+$/)]]
     });
 
     this.commandFormArray().push(commandFormGroup, { emitEvent });
@@ -308,18 +310,18 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
   private initThingsboardFormGroup(): FormGroup {
     return this.fb.group({
       host: [window.location.hostname, [Validators.required, Validators.pattern(/^[^\s]+$/)]],
-      port: [1883, [Validators.required, Validators.min(1), Validators.max(65535), Validators.pattern(/^-?[0-9]+$/)]],
+      port: [1883, [Validators.required, Validators.min(1), Validators.max(65535), Validators.pattern(this.numberInputPattern)]],
       remoteShell: [false],
       remoteConfiguration: [true],
-      checkConnectorsConfigurationInSeconds: [60, [Validators.required, Validators.min(1), Validators.pattern(/^-?[0-9]+$/)]],
+      checkConnectorsConfigurationInSeconds: [60, [Validators.required, Validators.min(1), Validators.pattern(this.numberInputPattern)]],
       statistics: this.fb.group({
         enable: [true],
-        statsSendPeriodInSeconds: [3600, [Validators.required, Validators.min(60), Validators.pattern(/^-?[0-9]+$/)]],
+        statsSendPeriodInSeconds: [3600, [Validators.required, Validators.min(60), Validators.pattern(this.numberInputPattern)]],
         commands: this.fb.array([])
       }),
-      maxPayloadSizeBytes: [8196, [Validators.required, Validators.min(100), Validators.pattern(/^-?[0-9]+$/)]],
-      minPackSendDelayMS: [50, [Validators.required, Validators.min(10), Validators.pattern(/^-?[0-9]+$/)]],
-      minPackSizeToSend: [500, [Validators.required, Validators.min(100), Validators.pattern(/^-?[0-9]+$/)]],
+      maxPayloadSizeBytes: [8196, [Validators.required, Validators.min(100), Validators.pattern(this.numberInputPattern)]],
+      minPackSendDelayMS: [50, [Validators.required, Validators.min(10), Validators.pattern(this.numberInputPattern)]],
+      minPackSizeToSend: [500, [Validators.required, Validators.min(100), Validators.pattern(this.numberInputPattern)]],
       handleDeviceRenaming: [true],
       checkingDeviceActivity: this.initCheckingDeviceActivityFormGroup(),
       security: this.initSecurityFormGroup(),
@@ -334,28 +336,28 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
   private initStorageFormGroup(): FormGroup {
     return this.fb.group({
       type: [StorageTypes.MEMORY, [Validators.required]],
-      read_records_count: [100, [Validators.required, Validators.min(1), Validators.pattern(/^-?[0-9]+$/)]],
-      max_records_count: [100000, [Validators.required, Validators.min(1), Validators.pattern(/^-?[0-9]+$/)]],
+      read_records_count: [100, [Validators.required, Validators.min(1), Validators.pattern(this.numberInputPattern)]],
+      max_records_count: [100000, [Validators.required, Validators.min(1), Validators.pattern(this.numberInputPattern)]],
       data_folder_path: ['./data/', [Validators.required]],
-      max_file_count: [10, [Validators.min(1), Validators.pattern(/^-?[0-9]+$/)]],
-      max_read_records_count: [10, [Validators.min(1), Validators.pattern(/^-?[0-9]+$/)]],
-      max_records_per_file: [10000, [Validators.min(1), Validators.pattern(/^-?[0-9]+$/)]],
+      max_file_count: [10, [Validators.min(1), Validators.pattern(this.numberInputPattern)]],
+      max_read_records_count: [10, [Validators.min(1), Validators.pattern(this.numberInputPattern)]],
+      max_records_per_file: [10000, [Validators.min(1), Validators.pattern(this.numberInputPattern)]],
       data_file_path: ['./data/data.db', [Validators.required]],
-      messages_ttl_check_in_hours: [1, [Validators.min(1), Validators.pattern(/^-?[0-9]+$/)]],
-      messages_ttl_in_days: [7, [Validators.min(1), Validators.pattern(/^-?[0-9]+$/)]]
+      messages_ttl_check_in_hours: [1, [Validators.min(1), Validators.pattern(this.numberInputPattern)]],
+      messages_ttl_in_days: [7, [Validators.min(1), Validators.pattern(this.numberInputPattern)]]
     });
   }
 
   private initGrpcFormGroup(): FormGroup {
     return this.fb.group({
       enabled: [false],
-      serverPort: [9595, [Validators.required, Validators.min(1), Validators.max(65535), Validators.pattern(/^-?[0-9]+$/)]],
-      keepAliveTimeMs: [10000, [Validators.required, Validators.min(1), Validators.pattern(/^-?[0-9]+$/)]],
-      keepAliveTimeoutMs: [5000, [Validators.required, Validators.min(1), Validators.pattern(/^-?[0-9]+$/)]],
+      serverPort: [9595, [Validators.required, Validators.min(1), Validators.max(65535), Validators.pattern(this.numberInputPattern)]],
+      keepAliveTimeMs: [10000, [Validators.required, Validators.min(1), Validators.pattern(this.numberInputPattern)]],
+      keepAliveTimeoutMs: [5000, [Validators.required, Validators.min(1), Validators.pattern(this.numberInputPattern)]],
       keepalivePermitWithoutCalls: [true],
-      maxPingsWithoutData: [0, [Validators.required, Validators.min(0), Validators.pattern(/^-?[0-9]+$/)]],
-      minTimeBetweenPingsMs: [10000, [Validators.required, Validators.min(1), Validators.pattern(/^-?[0-9]+$/)]],
-      minPingIntervalWithoutDataMs: [5000, [Validators.required, Validators.min(1), Validators.pattern(/^-?[0-9]+$/)]]
+      maxPingsWithoutData: [0, [Validators.required, Validators.min(0), Validators.pattern(this.numberInputPattern)]],
+      minTimeBetweenPingsMs: [10000, [Validators.required, Validators.min(1), Validators.pattern(this.numberInputPattern)]],
+      minPingIntervalWithoutDataMs: [5000, [Validators.required, Validators.min(1), Validators.pattern(this.numberInputPattern)]]
     });
   }
 
@@ -378,8 +380,8 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
   private initCheckingDeviceActivityFormGroup(): FormGroup {
     return this.fb.group({
       checkDeviceInactivity: [false],
-      inactivityTimeoutSeconds: [200, [Validators.min(1), Validators.pattern(/^-?[0-9]+$/)]],
-      inactivityCheckPeriodSeconds: [500, [Validators.min(1), Validators.pattern(/^-?[0-9]+$/)]]
+      inactivityTimeoutSeconds: [200, [Validators.min(1), Validators.pattern(this.numberInputPattern)]],
+      inactivityCheckPeriodSeconds: [500, [Validators.min(1), Validators.pattern(this.numberInputPattern)]]
     });
   }
 
@@ -433,7 +435,7 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
     const checkingDeviceActivityGroup = this.basicFormGroup.get('thingsboard.checkingDeviceActivity') as FormGroup;
     checkingDeviceActivityGroup.get('checkDeviceInactivity').valueChanges.pipe(takeUntil(this.destroy$)).subscribe(enabled => {
       checkingDeviceActivityGroup.updateValueAndValidity();
-      const validators = [Validators.min(1), Validators.required, Validators.pattern(/^-?[0-9]+$/)];
+      const validators = [Validators.min(1), Validators.required, Validators.pattern(this.numberInputPattern)];
 
       if (enabled) {
         checkingDeviceActivityGroup.get('inactivityTimeoutSeconds').setValidators(validators);
@@ -519,22 +521,22 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
   }
 
   private addMemoryStorageValidators(group: FormGroup): void {
-    group.get('read_records_count').addValidators([Validators.required, Validators.min(1), Validators.pattern(/^-?[0-9]+$/)]);
-    group.get('max_records_count').addValidators([Validators.required, Validators.min(1), Validators.pattern(/^-?[0-9]+$/)]);
+    group.get('read_records_count').addValidators([Validators.required, Validators.min(1), Validators.pattern(this.numberInputPattern)]);
+    group.get('max_records_count').addValidators([Validators.required, Validators.min(1), Validators.pattern(this.numberInputPattern)]);
     group.get('read_records_count').updateValueAndValidity({ emitEvent: false });
     group.get('max_records_count').updateValueAndValidity({ emitEvent: false });
   }
 
   private addFileStorageValidators(group: FormGroup): void {
     ['max_file_count', 'max_read_records_count', 'max_records_per_file'].forEach(field => {
-      group.get(field).addValidators([Validators.required, Validators.min(1), Validators.pattern(/^-?[0-9]+$/)]);
+      group.get(field).addValidators([Validators.required, Validators.min(1), Validators.pattern(this.numberInputPattern)]);
       group.get(field).updateValueAndValidity({ emitEvent: false });
     });
   }
 
   private addSqliteStorageValidators(group: FormGroup): void {
     ['messages_ttl_check_in_hours', 'messages_ttl_in_days'].forEach(field => {
-      group.get(field).addValidators([Validators.required, Validators.min(1), Validators.pattern(/^-?[0-9]+$/)]);
+      group.get(field).addValidators([Validators.required, Validators.min(1), Validators.pattern(this.numberInputPattern)]);
       group.get(field).updateValueAndValidity({ emitEvent: false });
     });
   }
@@ -545,9 +547,10 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
     }
 
     this.deviceService.getDeviceCredentials(this.device.id).pipe(takeUntil(this.destroy$)).subscribe(credentials => {
-      this.initialCredentialsUpdated.emit(credentials);
       this.updateSecurityType(security, credentials);
       this.updateCredentials(credentials, security);
+      this.basicFormGroup.updateValueAndValidity();
+      this.initialCredentialsUpdated.emit(credentials);
     });
   }
 
