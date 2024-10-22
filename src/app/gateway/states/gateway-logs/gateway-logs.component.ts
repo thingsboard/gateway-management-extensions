@@ -19,14 +19,20 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { DataKeyType, PageLink, Direction, SortOrder } from '@shared/public-api';
+import { DataKeyType, PageLink, Direction, SortOrder, SharedModule } from '@shared/public-api';
 import { WidgetContext } from '@home/models/widget-component.models';
 import { GatewayLogData, LogLink, GatewayStatus } from './models/public-api';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'tb-gateway-logs',
   templateUrl: './gateway-logs.component.html',
-  styleUrls: ['./gateway-logs.component.scss']
+  styleUrls: ['./gateway-logs.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    SharedModule,
+    ]
 })
 export class GatewayLogsComponent implements OnInit, AfterViewInit {
 

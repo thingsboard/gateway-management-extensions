@@ -31,6 +31,7 @@ import {
   Direction,
   SortOrder,
   NULL_UUID,
+  SharedModule,
 } from '@shared/public-api';
 import { WidgetContext } from '@home/models/widget-component.models';
 
@@ -39,11 +40,17 @@ import { WidgetContext } from '@home/models/widget-component.models';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { deepClone, UtilsService, IWidgetSubscription, SubscriptionInfo, WidgetSubscriptionOptions, AttributeService } from '@core/public-api';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'tb-gateway-statistics',
   templateUrl: './gateway-statistics.component.html',
-  styleUrls: ['./gateway-statistics.component.scss']
+  styleUrls: ['./gateway-statistics.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    SharedModule,
+  ]
 })
 export class GatewayStatisticsComponent implements AfterViewInit {
 

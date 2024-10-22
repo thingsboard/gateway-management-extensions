@@ -18,7 +18,7 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { FormBuilder, UntypedFormControl, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { DialogComponent, BaseData, HasId, helpBaseUrl } from '@shared/public-api';
+import { DialogComponent, BaseData, HasId, helpBaseUrl, SharedModule } from '@shared/public-api';
 import { Router } from '@angular/router';
 import {
   ConnectorType,
@@ -37,12 +37,18 @@ import { Subject } from 'rxjs';
 import { AppState } from '@core/public-api';
 import { takeUntil, tap } from 'rxjs/operators';
 import { LatestVersionConfigPipe } from '../../pipes/public-api';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'tb-add-connector-dialog',
   templateUrl: './add-connector-dialog.component.html',
   styleUrls: ['./add-connector-dialog.component.scss'],
   providers: [],
+  standalone: true,
+  imports: [
+    CommonModule,
+    SharedModule
+  ]
 })
 export class AddConnectorDialogComponent
   extends DialogComponent<AddConnectorDialogComponent, BaseData<HasId>> implements OnInit, OnDestroy {

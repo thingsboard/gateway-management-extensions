@@ -53,7 +53,7 @@ export class OpcVersionMappingUtil {
 
   static mapMappingToUpgradedVersion(mapping: LegacyDeviceConnectorMapping[]): DeviceConnectorMapping[] {
     return mapping.map((legacyMapping: LegacyDeviceConnectorMapping) => ({
-      ...legacyMapping,
+      deviceNodePattern: legacyMapping.deviceNodePattern,
       deviceNodeSource: this.getDeviceNodeSourceByValue(legacyMapping.deviceNodePattern),
       deviceInfo: {
         deviceNameExpression: legacyMapping.deviceNamePattern,
@@ -61,34 +61,34 @@ export class OpcVersionMappingUtil {
         deviceProfileExpression: legacyMapping.deviceTypePattern ?? 'default',
         deviceProfileExpressionSource: this.getTypeSourceByValue(legacyMapping.deviceTypePattern ?? 'default'),
       },
-      attributes: legacyMapping.attributes.map((attribute: LegacyAttribute) => ({
+      attributes: legacyMapping.attributes?.map((attribute: LegacyAttribute) => ({
         key: attribute.key,
         type: this.getTypeSourceByValue(attribute.path),
         value: attribute.path,
-      })),
-      attributes_updates: legacyMapping.attributes_updates.map((attributeUpdate: LegacyDeviceAttributeUpdate) => ({
+      })) ?? [],
+      attributes_updates: legacyMapping.attributes_updates?.map((attributeUpdate: LegacyDeviceAttributeUpdate) => ({
         key: attributeUpdate.attributeOnThingsBoard,
         type: this.getTypeSourceByValue(attributeUpdate.attributeOnDevice),
         value: attributeUpdate.attributeOnDevice,
-      })),
-      timeseries: legacyMapping.timeseries.map((timeseries: LegacyTimeseries) => ({
+      })) ?? [],
+      timeseries: legacyMapping.timeseries?.map((timeseries: LegacyTimeseries) => ({
         key: timeseries.key,
         type: this.getTypeSourceByValue(timeseries.path),
         value: timeseries.path,
-      })),
-      rpc_methods: legacyMapping.rpc_methods.map((rpcMethod: LegacyRpcMethod) => ({
+      })) ?? [],
+      rpc_methods: legacyMapping.rpc_methods?.map((rpcMethod: LegacyRpcMethod) => ({
         method: rpcMethod.method,
         arguments: rpcMethod.arguments.map(arg => ({
           value: arg,
           type: this.getArgumentType(arg),
         } as ValueType))
-      }))
+      })) ?? []
     }));
   }
 
   static mapMappingToDowngradedVersion(mapping: DeviceConnectorMapping[]): LegacyDeviceConnectorMapping[] {
     return mapping.map((upgradedMapping: DeviceConnectorMapping) => ({
-      ...upgradedMapping,
+      deviceNodePattern: upgradedMapping.deviceNodePattern,
       deviceNamePattern: upgradedMapping.deviceInfo.deviceNameExpression,
       deviceTypePattern: upgradedMapping.deviceInfo.deviceProfileExpression,
       attributes: upgradedMapping.attributes.map((attribute: Attribute) => ({

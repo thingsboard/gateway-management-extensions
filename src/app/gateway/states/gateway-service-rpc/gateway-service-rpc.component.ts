@@ -32,13 +32,33 @@ import {
 import {
   GatewayServiceRPCConnectorTemplateDialogComponent
 } from './components/gateway-service-rpc-connector-template-dialog/gateway-service-rpc-connector-template-dialog';
-import { DatasourceType, widgetType, EntityType, AttributeScope, ContentType } from '@shared/public-api';
+import { DatasourceType, widgetType, EntityType, AttributeScope, ContentType, SharedModule } from '@shared/public-api';
 import { UtilsService, IWidgetSubscription, WidgetSubscriptionOptions, AttributeService } from '@core/public-api';
+import { CommonModule } from '@angular/common';
+import {
+  GatewayServiceRPCConnectorComponent
+} from './components/gateway-service-rpc-connector/gateway-service-rpc-connector.component';
+import { ModbusRpcParametersComponent } from './components/modbus-rpc-parameters/modbus-rpc-parameters.component';
+import { MqttRpcParametersComponent } from './components/mqtt-rpc-parameters/mqtt-rpc-parameters.component';
+import { OpcRpcParametersComponent } from './components/opc-rpc-parameters/opc-rpc-parameters.component';
+import {
+  GatewayServiceRPCConnectorTemplatesComponent
+} from './components/gateway-service-rpc-connector-templates/gateway-service-rpc-connector-templates.component';
 
 @Component({
   selector: 'tb-gateway-service-rpc',
   templateUrl: './gateway-service-rpc.component.html',
-  styleUrls: ['./gateway-service-rpc.component.scss']
+  styleUrls: ['./gateway-service-rpc.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    SharedModule,
+    GatewayServiceRPCConnectorComponent,
+    ModbusRpcParametersComponent,
+    MqttRpcParametersComponent,
+    OpcRpcParametersComponent,
+    GatewayServiceRPCConnectorTemplatesComponent,
+  ]
 })
 export class GatewayServiceRPCComponent implements OnInit {
 

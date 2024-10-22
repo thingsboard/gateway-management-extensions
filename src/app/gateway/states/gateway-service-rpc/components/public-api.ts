@@ -15,5 +15,6 @@
 ///
 
 export * from './gateway-service-rpc-connector-templates/gateway-service-rpc-connector-templates.component';
-export * from './gateway-service-rpc-connector/gateway-service-rpc-connector.component';
+// export * from './gateway-service-rpc-connector/gateway-service-rpc-connector.component';
 export * from './gateway-service-rpc-connector-template-dialog/gateway-service-rpc-connector-template-dialog';
+export * from './rest-connector-secuirity/rest-connector-security.component';

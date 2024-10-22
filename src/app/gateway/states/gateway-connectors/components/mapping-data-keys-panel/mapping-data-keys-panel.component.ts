@@ -29,7 +29,7 @@ import {
   UntypedFormBuilder,
   Validators
 } from '@angular/forms';
-import { coerceBoolean } from '@shared/public-api';
+import { coerceBoolean, SharedModule } from '@shared/public-api';
 import { TbPopoverComponent } from '@shared/components/popover.component';
 import { Store } from '@ngrx/store';
 import { PageComponent } from '@shared/public-api';
@@ -44,14 +44,24 @@ import {
   noLeadTrailSpacesRegex,
   ReportStrategyDefaultValue,
   MappingValueType,
-  mappingValueTypesMap,
+  mappingValueTypesMap, ReportStrategyComponent,
 } from '../../../../shared/public-api';
+import { CommonModule } from '@angular/common';
+import { TypeValuePanelComponent } from '../type-value-panel/type-value-panel.component';
+import { TypeValueFieldComponent } from '../type-value-field/type-value-field.component';
 
 @Component({
   selector: 'tb-mapping-data-keys-panel',
   templateUrl: './mapping-data-keys-panel.component.html',
   styleUrls: ['./mapping-data-keys-panel.component.scss'],
-  providers: []
+  standalone: true,
+  imports: [
+    CommonModule,
+    SharedModule,
+    ReportStrategyComponent,
+    TypeValuePanelComponent,
+    TypeValueFieldComponent,
+  ],
 })
 export class MappingDataKeysPanelComponent extends PageComponent implements OnInit {
 

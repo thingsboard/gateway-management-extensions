@@ -29,6 +29,8 @@ import { MappingDataKey } from '../../models/public-api';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { ValueType } from '../../../../shared/models/public-api';
+import { CommonModule } from '@angular/common';
+import { SharedModule } from '@shared/public-api';
 
 @Component({
   selector: 'tb-type-value-panel',
@@ -45,6 +47,11 @@ import { ValueType } from '../../../../shared/models/public-api';
       useExisting: forwardRef(() => TypeValuePanelComponent),
       multi: true
     }
+  ],
+  standalone: true,
+  imports: [
+    CommonModule,
+    SharedModule
   ]
 })
 export class TypeValuePanelComponent implements ControlValueAccessor, Validator, OnInit, OnDestroy {

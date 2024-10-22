@@ -20,14 +20,23 @@ import {
   RPCTemplate,
   SNMPMethodsTranslations
 } from '../../models/public-api';
-import { AttributeScope, EntityType } from '@shared/public-api';
+import { AttributeScope, EntityType, SharedModule } from '@shared/public-api';
 import { AttributeService, isLiteralObject } from '@core/public-api';
 import { WidgetContext } from '@home/models/widget-component.models';
+import { CommonModule } from '@angular/common';
+import { KeyValueIsNotEmptyPipe, RpcTemplateArrayViewPipe } from '../../pipes/public-api';
 
 @Component({
   selector: 'tb-gateway-service-rpc-connector-templates',
   templateUrl: './gateway-service-rpc-connector-templates.component.html',
-  styleUrls: ['./gateway-service-rpc-connector-templates.component.scss']
+  styleUrls: ['./gateway-service-rpc-connector-templates.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    SharedModule,
+    RpcTemplateArrayViewPipe,
+    KeyValueIsNotEmptyPipe
+  ]
 })
 export class GatewayServiceRPCConnectorTemplatesComponent implements OnInit {
 

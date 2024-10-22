@@ -47,7 +47,9 @@ import {
   SourceType,
   SourceTypeTranslationsMap
 } from '../../models/public-api';
-import { coerceBoolean, PageComponent } from '@shared/public-api';
+import { coerceBoolean, PageComponent, SharedModule } from '@shared/public-api';
+import { CommonModule } from '@angular/common';
+import { ConnectorMappingHelpLinkPipe } from '../../pipes/public-api';
 
 @Component({
   selector: 'tb-device-info-table',
@@ -65,6 +67,12 @@ import { coerceBoolean, PageComponent } from '@shared/public-api';
       useExisting: forwardRef(() => DeviceInfoTableComponent),
       multi: true
     }
+  ],
+  standalone: true,
+  imports: [
+    CommonModule,
+    SharedModule,
+    ConnectorMappingHelpLinkPipe,
   ]
 })
 export class DeviceInfoTableComponent extends PageComponent implements ControlValueAccessor, Validator, OnInit, OnDestroy {

@@ -18,14 +18,20 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { AppState } from '@core/public-api';
-import { DialogComponent } from '@shared/public-api';
+import { DialogComponent, SharedModule } from '@shared/public-api';
 import { Router } from '@angular/router';
 import { FormBuilder, FormControl, UntypedFormControl, Validators } from '@angular/forms';
 import { RPCTemplate, SaveRPCTemplateData } from '../../models/public-api';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'tb-gateway-service-rpc-connector-template-dialog',
-  templateUrl: './gateway-service-rpc-connector-template-dialog.html'
+  templateUrl: './gateway-service-rpc-connector-template-dialog.html',
+  standalone: true,
+  imports: [
+    CommonModule,
+    SharedModule
+  ]
 })
 
 export class GatewayServiceRPCConnectorTemplateDialogComponent extends DialogComponent<GatewayServiceRPCConnectorTemplateDialogComponent, boolean> {

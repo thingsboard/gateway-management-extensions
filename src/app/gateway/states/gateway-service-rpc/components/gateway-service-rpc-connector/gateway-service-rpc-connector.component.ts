@@ -55,6 +55,9 @@ import {
 import { deepClone } from '@core/public-api';
 import { Subject } from "rxjs";
 import { takeUntil } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
+import { SharedModule } from '@shared/public-api';
+import { RestConnectorSecurityComponent } from '../public-api';
 
 @Component({
   selector: 'tb-gateway-service-rpc-connector',
@@ -66,6 +69,12 @@ import { takeUntil } from 'rxjs/operators';
       useExisting: forwardRef(() => GatewayServiceRPCConnectorComponent),
       multi: true
     }
+  ],
+  standalone: true,
+  imports: [
+    CommonModule,
+    SharedModule,
+    RestConnectorSecurityComponent
   ]
 })
 export class GatewayServiceRPCConnectorComponent implements OnInit, OnDestroy, ControlValueAccessor {

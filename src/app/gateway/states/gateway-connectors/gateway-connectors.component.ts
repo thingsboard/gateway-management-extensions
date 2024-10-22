@@ -47,7 +47,17 @@ import {
   ReportStrategyDefaultValue,
 } from '../../shared/models/public-api';
 import { MatDialog } from '@angular/material/dialog';
-import { AddConnectorDialogComponent } from './components/public-api';
+import {
+  AddConnectorDialogComponent,
+  ModbusBasicConfigComponent,
+  ModbusLegacyBasicConfigComponent,
+  MqttBasicConfigComponent,
+  MqttLegacyBasicConfigComponent,
+  OpcUaBasicConfigComponent,
+  OpcUaLegacyBasicConfigComponent,
+  SocketBasicConfigComponent,
+  SocketLegacyBasicConfigComponent
+} from './components/public-api';
 import { debounceTime, filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { ErrorStateMatcher } from '@angular/material/core';
 import {
@@ -61,13 +71,17 @@ import {
   PageComponent,
   PageData,
   PageLink,
+  SharedModule,
   SortOrder,
   widgetType
 } from '@shared/public-api';
 import { AttributeDatasource, } from '../../shared/datasources/public-api';
 import { GatewayConnectorVersionMappingUtil } from './utils/public-api';
-import { ReportStrategyVersionPipe } from './pipes/public-api';
+import { ReportStrategyVersionPipe } from '../../shared/pipes/public-api';
 import { ConnectorBaseInfo, AddConnectorConfigData, GatewayAttributeData } from './models/public-api';
+import { CommonModule } from '@angular/common';
+import { LatestVersionConfigPipe } from './pipes/public-api';
+import { ReportStrategyComponent } from '../../shared/components/public-api';
 
 export class ForceErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null): boolean {
@@ -78,15 +92,29 @@ export class ForceErrorStateMatcher implements ErrorStateMatcher {
 @Component({
   selector: 'tb-gateway-connector',
   templateUrl: './gateway-connectors.component.html',
-  providers: [{ provide: ErrorStateMatcher, useClass: ForceErrorStateMatcher }],
-  styleUrls: ['./gateway-connectors.component.scss']
+  providers: [{ provide: ErrorStateMatcher, useClass: ForceErrorStateMatcher }, ReportStrategyVersionPipe],
+  styleUrls: ['./gateway-connectors.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    SharedModule,
+    ReportStrategyVersionPipe,
+    LatestVersionConfigPipe,
+    MqttBasicConfigComponent,
+    MqttLegacyBasicConfigComponent,
+    OpcUaBasicConfigComponent,
+    OpcUaLegacyBasicConfigComponent,
+    ModbusBasicConfigComponent,
+    ModbusLegacyBasicConfigComponent,
+    SocketBasicConfigComponent,
+    SocketLegacyBasicConfigComponent,
+    ReportStrategyComponent
+  ]
 })
 export class GatewayConnectorComponent extends PageComponent implements AfterViewInit, OnDestroy {
 
-  @Input()
-  ctx: WidgetContext;
-  @Input()
-  device: EntityId;
+  @Input() ctx: WidgetContext;
+  @Input() device: EntityId;
 
   @ViewChild(MatSort, {static: false}) sort: MatSort;
 

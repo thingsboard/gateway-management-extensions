@@ -34,7 +34,7 @@ import {
 import { takeUntil } from 'rxjs/operators';
 import {
   noLeadTrailSpacesRegex,
-} from '../../../../shared/public-api';
+} from '../../../../shared/models/public-api';
 import { SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
 import { RestSecurityType, RestSecurityTypeTranslationsMap } from '../../models/public-api';
