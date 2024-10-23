@@ -15,13 +15,13 @@
 ///
 
 import {
-  GatewayConnector,
   SocketBasicConfig,
   SocketBasicConfig_v3_5_3,
   SocketLegacyBasicConfig,
 } from '../models/public-api';
 import { GatewayConnectorVersionProcessor } from './gateway-connector-version-processor.abstract';
 import { SocketVersionMappingUtil } from '../utils/public-api';
+import { GatewayConnector } from '../../../shared/models/public-api';
 
 export class SocketVersionProcessor extends GatewayConnectorVersionProcessor<SocketBasicConfig> {
 

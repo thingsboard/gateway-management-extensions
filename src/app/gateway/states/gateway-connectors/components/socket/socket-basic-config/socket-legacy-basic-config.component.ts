@@ -27,18 +27,15 @@ import {
   NG_VALUE_ACCESSOR,
   Validator,
 } from '@angular/forms';
-import {
-  SocketBasicConfig_v3_5_3,
-  SocketLegacyBasicConfig
-} from '../../../../../shared/models/public-api';
 import { SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
 import { SocketConfigComponent } from '../socket-config/socket-config.component';
 import { DevicesConfigTableComponent } from '../devices-config-table/devices-config-table.component';
 import {
   GatewayConnectorBasicConfigDirective
-} from '../../../../../shared/abstract/public-api';
-import { SocketVersionMappingUtil } from '../../../../../shared/utils/public-api';
+} from '../../../abstract/public-api';
+import { SocketVersionMappingUtil } from '../../../utils/public-api';
+import { SocketBasicConfig_v3_5_3, SocketLegacyBasicConfig } from '../../../models/public-api';
 
 @Component({
   selector: 'tb-socket-legacy-basic-config',

@@ -20,21 +20,21 @@ import { PageComponent, SharedModule } from '@shared/public-api';
 import { TbPopoverComponent } from '@shared/components/popover.component';
 import { Store } from '@ngrx/store';
 import { AppState } from '@core/public-api';
+import { noLeadTrailSpacesRegex, } from '../../../../../shared/models/public-api';
 import {
   DeviceAttributesRequests,
   DeviceDataKey,
   DeviceRpcMethod,
   ExpressionType,
-  noLeadTrailSpacesRegex,
   RequestsType,
   SocketAttributeUpdates,
   SocketDeviceKeys,
   SocketEncoding,
   SocketValueKey,
-} from '../../../../../shared/models/public-api';
+} from '../../../models/public-api';
 import { CommonModule } from '@angular/common';
 import { EllipsisChipListDirective } from '../../../../../shared/directives/ellipsis-chip-list.directive';
-import { GatewayHelpLinkPipe } from '../../../../../shared/pipes/gateway-help-link.pipe';
+import { ConnectorMappingHelpLinkPipe } from '../../../pipes/gateway-help-link.pipe';
 
 @Component({
   selector: 'tb-device-data-keys-panel',
@@ -47,7 +47,7 @@ import { GatewayHelpLinkPipe } from '../../../../../shared/pipes/gateway-help-li
     CommonModule,
     SharedModule,
     EllipsisChipListDirective,
-    GatewayHelpLinkPipe,
+    ConnectorMappingHelpLinkPipe,
   ]
 })
 export class DeviceDataKeysPanelComponent extends PageComponent implements OnInit {

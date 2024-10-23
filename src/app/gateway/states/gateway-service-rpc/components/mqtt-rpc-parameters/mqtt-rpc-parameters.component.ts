@@ -37,8 +37,8 @@ import { takeUntil, tap } from 'rxjs/operators';
 import {
   integerRegex,
   noLeadTrailSpacesRegex,
-  RPCTemplateConfigMQTT
-} from '../../../../shared/public-api';
+} from '../../../../shared/models/public-api';
+import { RPCTemplateConfigMQTT } from '../../models/public-api';
 
 @Component({
   selector: 'tb-gateway-mqtt-rpc-parameters',

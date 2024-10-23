@@ -13,9 +13,8 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-
-export * from './latest-version-config.pipe';
-export * from './gateway-port-tooltip.pipe';
-export * from './rpc-template-array-view.pipe';
-export * from './gateway-help-link.pipe';
-export * from './report-strategy-version.pipe';
+export * from './connectors.model';
+export * from './modbus.models';
+export * from './mqtt.models';
+export * from './opc.models';
+export * from './socket.models';

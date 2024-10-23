@@ -20,7 +20,8 @@ import {
   Component,
   EventEmitter,
   forwardRef,
-  Input, OnChanges,
+  Input,
+  OnChanges,
   OnDestroy,
   Output,
   SimpleChanges,
@@ -50,14 +51,6 @@ import { take, takeUntil } from 'rxjs/operators';
 import { DeviceCredentials, DeviceCredentialsType, coerceBoolean, SharedModule } from '@shared/public-api';
 import {
   GatewayLogLevel,
-  GecurityTypesTranslationsMap,
-  LocalLogsConfigTranslateMap,
-  LocalLogsConfigs,
-  LogSavingPeriod,
-  LogSavingPeriodTranslations,
-  SecurityTypes,
-  StorageTypes,
-  StorageTypesTranslationMap,
   ReportStrategyComponent,
   ReportStrategyDefaultValue,
   ReportStrategyType
@@ -69,7 +62,15 @@ import {
   GatewayConfigCommand,
   GatewayConfigSecurity,
   GatewayConfigValue,
-  LogConfig
+  LocalLogsConfigs,
+  LocalLogsConfigTranslateMap,
+  LogConfig,
+  LogSavingPeriodTranslations,
+  SecurityTypesTranslationsMap,
+  StorageTypesTranslationMap,
+  StorageTypes,
+  SecurityTypes,
+  LogSavingPeriod,
 } from '../../models/public-api';
 import { MatTabGroup } from '@angular/material/tabs';
 
@@ -113,7 +114,7 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
   readonly logSavingPeriods = LogSavingPeriodTranslations;
   readonly localLogsConfigs = Object.keys(LocalLogsConfigs) as LocalLogsConfigs[];
   readonly localLogsConfigTranslateMap = LocalLogsConfigTranslateMap;
-  readonly securityTypes = GecurityTypesTranslationsMap;
+  readonly securityTypes = SecurityTypesTranslationsMap;
   readonly gatewayLogLevel = Object.values(GatewayLogLevel);
   readonly ReportStrategyDefaultValue = ReportStrategyDefaultValue;
 

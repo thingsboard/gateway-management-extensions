@@ -15,7 +15,6 @@
 ///
 
 import {
-  GatewayConnector,
   LegacyServerConfig,
   OPCBasicConfig,
   OPCBasicConfig_v3_5_2,
@@ -23,6 +22,7 @@ import {
 } from '../models/public-api';
 import { GatewayConnectorVersionProcessor } from './gateway-connector-version-processor.abstract';
 import { OpcVersionMappingUtil } from '../utils/public-api';
+import { GatewayConnector } from '../../../shared/models/public-api';
 
 export class OpcVersionProcessor extends GatewayConnectorVersionProcessor<OPCBasicConfig> {
 

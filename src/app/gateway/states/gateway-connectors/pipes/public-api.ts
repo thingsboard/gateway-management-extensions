@@ -14,19 +14,7 @@
 /// limitations under the License.
 ///
 
-import { Pipe, PipeTransform } from '@angular/core';
-import { ConnectorType, GatewayConnectorConfigVersionMap } from '../../shared/public-api';
-import {
-  GatewayConnectorVersionMappingUtil
-} from '../utils/public-api';
-
-@Pipe({
-  name: 'isLatestVersionConfig',
-  standalone: true,
-})
-export class LatestVersionConfigPipe implements PipeTransform {
-  transform(configVersion: number | string, type: ConnectorType): boolean {
-    return GatewayConnectorVersionMappingUtil.parseVersion(configVersion)
-      >= GatewayConnectorVersionMappingUtil.parseVersion(GatewayConnectorConfigVersionMap.get(type));
-  }
-}
+export * from './latest-version-config.pipe';
+export * from './gateway-port-tooltip.pipe';
+export * from './gateway-help-link.pipe';
+export * from './report-strategy-version.pipe';

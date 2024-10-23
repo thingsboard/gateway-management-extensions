@@ -16,16 +16,16 @@
 
 import { Pipe, PipeTransform } from '@angular/core';
 import {
-  MappingValueType,
   OPCUaSourceType,
   SourceType
-} from '../../shared/public-api';
+} from '../models/public-api';
+import { MappingValueType } from '../../../shared/models/public-api';
 
 @Pipe({
-  name: 'getGatewayHelpLink',
+  name: 'getConnectorMappingHelpLink',
   standalone: true,
 })
-export class GatewayHelpLinkPipe implements PipeTransform {
+export class ConnectorMappingHelpLinkPipe implements PipeTransform {
   transform(field: string, sourceType: SourceType | OPCUaSourceType, sourceTypes?: Array<SourceType | OPCUaSourceType | MappingValueType> ): string {
     if (!sourceTypes || sourceTypes?.includes(OPCUaSourceType.PATH)) {
       if (sourceType !== OPCUaSourceType.CONST) {

@@ -39,12 +39,14 @@ import {
   Validators
 } from '@angular/forms';
 import {
-  DeviceInfoType,
   noLeadTrailSpacesRegex,
+} from '../../../../shared/public-api';
+import {
+  DeviceInfoType,
   OPCUaSourceType,
   SourceType,
   SourceTypeTranslationsMap
-} from '../../../../shared/public-api';
+} from '../../models/public-api';
 import { coerceBoolean, PageComponent } from '@shared/public-api';
 
 @Component({
@@ -80,7 +82,7 @@ export class DeviceInfoTableComponent extends PageComponent implements ControlVa
   required = false;
 
   @Input()
-  sourceTypes: Array<SourceType | OPCUaSourceType> = Object.values(SourceType);
+  sourceTypes: Array<SourceType | OPCUaSourceType> = Object.values(SourceType) as Array<SourceType | OPCUaSourceType>;
 
   deviceInfoTypeValue: any;
 

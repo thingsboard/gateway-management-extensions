@@ -34,12 +34,14 @@ import {
   Validators
 } from '@angular/forms';
 import {
+  noLeadTrailSpacesRegex,
+} from '../../../../shared/public-api';
+import {
   SecurityType,
   SecurityTypeTranslationsMap,
   ModeType,
-  noLeadTrailSpacesRegex,
   ConnectorSecurity
-} from '../../../../shared/public-api';
+} from '../../models/public-api';
 import { takeUntil } from 'rxjs/operators';
 import { coerceBoolean, SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';

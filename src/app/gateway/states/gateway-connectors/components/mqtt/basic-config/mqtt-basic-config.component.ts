@@ -23,7 +23,7 @@ import {
   RequestMappingValue,
   RequestType,
   WorkersConfig
-} from '../../../../../shared/public-api';
+} from '../../../models/public-api';
 import {
   MqttBasicConfigDirective
 } from './mqtt-basic-config.abstract';

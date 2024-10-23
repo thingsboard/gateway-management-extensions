@@ -19,12 +19,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { WidgetContext } from '@home/models/widget-component.models';
 import {
-  ConnectorType,
-  GatewayConnectorDefaultTypesTranslatesMap,
   RPCCommand,
   RPCTemplate,
   RPCTemplateConfig,
   SaveRPCTemplateData,
+} from './models/public-api';
+import {
+  ConnectorType,
+  GatewayConnectorDefaultTypesTranslatesMap,
   jsonRequired
 } from '../../shared/public-api';
 import {

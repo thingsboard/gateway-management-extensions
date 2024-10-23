@@ -17,3 +17,6 @@
 export * from './gateway.models';
 export * from './gateway-locale.constant';
 export * from './connectors-default-config.constant';
+export * from './modbus.models';
+export * from './mapping.models';
+export * from './report-strategy.models';

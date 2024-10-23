@@ -31,8 +31,7 @@ import trTR from '../../assets/locale/locale.constant-tr_TR.json';
 import zhCN from '../../assets/locale/locale.constant-zh_CN.json';
 import zhTW from '../../assets/locale/locale.constant-zh_TW.json';
 
-export default function addGatewayLocale(translate: TranslateService) {
-
+export default function addGatewayLocale(translate: TranslateService): void {
   translate.setTranslation('en_US', enUS, true);
   translate.setTranslation('ar_AE', arAE, true);
   translate.setTranslation('ca_ES', caES, true);

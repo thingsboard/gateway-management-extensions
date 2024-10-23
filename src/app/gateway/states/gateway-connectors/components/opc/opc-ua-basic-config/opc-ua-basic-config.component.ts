@@ -20,8 +20,7 @@ import {
   MappingType,
   OPCBasicConfig_v3_5_2,
   ServerConfig,
-  GatewayConnectorBasicConfigDirective
-} from '../../../../../shared/public-api';
+} from '../../../models/public-api';
 import { CommonModule } from '@angular/common';
 import { coerceBoolean, SharedModule } from '@shared/public-api';
 import { MappingTableComponent } from '../../mapping-table/mapping-table.component';
@@ -31,6 +30,7 @@ import {
 import {
   OpcServerConfigComponent
 } from '../opc-server-config/opc-server-config.component';
+import { GatewayConnectorBasicConfigDirective } from '../../../abstract/public-api';
 
 @Component({
   selector: 'tb-opc-ua-basic-config',

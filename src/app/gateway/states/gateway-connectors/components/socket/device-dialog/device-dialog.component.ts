@@ -30,17 +30,19 @@ import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { DialogComponent, helpBaseUrl, SharedModule } from '@shared/public-api';
 import { Router } from '@angular/router';
 import {
-    DevicesConfigMapping,
     EllipsisChipListDirective,
-    MappingInfo,
     noLeadTrailSpacesRegex,
-    SocketEncoding,
-    SocketKeysAddKeyTranslationsMap,
-    SocketKeysDeleteKeyTranslationsMap,
-    SocketKeysNoKeysTextTranslationsMap,
-    SocketKeysPanelTitleTranslationsMap,
-    SocketValueKey,
 } from '../../../../../shared/public-api';
+import {
+  DevicesConfigMapping,
+  MappingInfo,
+  SocketEncoding,
+  SocketKeysAddKeyTranslationsMap,
+  SocketKeysDeleteKeyTranslationsMap,
+  SocketKeysNoKeysTextTranslationsMap,
+  SocketKeysPanelTitleTranslationsMap,
+  SocketValueKey,
+} from '../../../models/public-api';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MatButton } from '@angular/material/button';

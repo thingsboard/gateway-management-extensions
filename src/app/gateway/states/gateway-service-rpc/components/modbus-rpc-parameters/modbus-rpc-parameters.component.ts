@@ -35,13 +35,11 @@ import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import {
-  ModbusDataType,
-  ModbusEditableDataTypes,
   ModbusFunctionCodeTranslationsMap,
-  ModbusObjectCountByDataType,
   noLeadTrailSpacesRegex,
-  RPCTemplateConfigModbus,
 } from '../../../../shared/public-api';
+import { ModbusDataType, ModbusObjectCountByDataType, ModbusEditableDataTypes } from '../../../../shared/models/public-api';
+import { RPCTemplateConfigModbus } from '../../models/rpc.models';
 
 @Component({
   selector: 'tb-gateway-modbus-rpc-parameters',

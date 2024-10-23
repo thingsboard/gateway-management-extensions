@@ -21,7 +21,7 @@ import {
   SocketBasicConfig_v3_5_3,
   SocketConfig,
   SocketLegacyBasicConfig,
-} from '../../shared/public-api';
+} from '../models/public-api';
 
 export class SocketVersionMappingUtil {
 

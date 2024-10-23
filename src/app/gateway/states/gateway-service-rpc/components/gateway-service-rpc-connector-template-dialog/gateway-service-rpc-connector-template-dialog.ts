@@ -21,7 +21,7 @@ import { AppState } from '@core/public-api';
 import { DialogComponent } from '@shared/public-api';
 import { Router } from '@angular/router';
 import { FormBuilder, FormControl, UntypedFormControl, Validators } from '@angular/forms';
-import { RPCTemplate, SaveRPCTemplateData } from '../../../../shared/public-api';
+import { RPCTemplate, SaveRPCTemplateData } from '../../models/public-api';
 
 @Component({
   selector: 'tb-gateway-service-rpc-connector-template-dialog',

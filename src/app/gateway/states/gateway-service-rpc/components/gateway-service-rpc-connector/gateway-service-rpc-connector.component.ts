@@ -32,10 +32,7 @@ import {
   BLEMethods,
   BLEMethodsTranslates,
   CANByteOrders,
-  ConnectorType,
-  GatewayConnectorDefaultTypesTranslatesMap,
   HTTPMethods,
-  noLeadTrailSpacesRegex,
   RPCCommand,
   RPCTemplateConfig,
   SNMPMethods,
@@ -43,6 +40,11 @@ import {
   SocketEncodings,
   SocketMethodProcessings,
   SocketMethodProcessingsTranslates,
+} from '../../models/public-api';
+import {
+  ConnectorType,
+  GatewayConnectorDefaultTypesTranslatesMap,
+  noLeadTrailSpacesRegex,
   jsonRequired
 } from '../../../../shared/public-api';
 import { MatDialog } from '@angular/material/dialog';
@@ -52,6 +54,7 @@ import {
 } from '@shared/components/dialog/json-object-edit-dialog.component';
 import { deepClone } from '@core/public-api';
 import { Subject } from "rxjs";
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'tb-gateway-service-rpc-connector',
@@ -108,26 +111,7 @@ export class GatewayServiceRPCConnectorComponent implements OnInit, OnDestroy, C
 
   ngOnInit() {
     this.commandForm = this.connectorParamsFormGroupByType(this.connectorType);
-    this.commandForm.valueChanges.subscribe(value => {
-      const httpHeaders = {};
-      switch (this.connectorType) {
-        case ConnectorType.REST:
-          value.httpHeaders.forEach(data => {
-            httpHeaders[data.headerName] = data.value;
-          })
-          value.httpHeaders = httpHeaders;
-          break;
-        case ConnectorType.REQUEST:
-          value.httpHeaders.forEach(data => {
-            httpHeaders[data.headerName] = data.value;
-          })
-          value.httpHeaders = httpHeaders;
-          break;
-      }
-      if (this.commandForm.valid) {
-        this.propagateChange({...this.commandForm.value, ...value});
-      }
-    });
+    this.observeFormChanges();
   }
 
   ngOnDestroy(): void {
@@ -341,5 +325,19 @@ export class GatewayServiceRPCConnectorComponent implements OnInit, OnDestroy, C
       }
       this.commandForm.patchValue(value, {onlySelf: false});
     }
+  }
+
+  private observeFormChanges(): void {
+    this.commandForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => {
+      if (this.connectorType === ConnectorType.REST || this.connectorType === ConnectorType.REQUEST) {
+        value.httpHeaders = value.httpHeaders.reduce((acc, data) => {
+          acc[data.headerName] = data.value;
+          return acc;
+        }, {});
+      }
+      if (this.commandForm.valid) {
+        this.propagateChange({...this.commandForm.value, ...value});
+      }
+    });
   }
 }

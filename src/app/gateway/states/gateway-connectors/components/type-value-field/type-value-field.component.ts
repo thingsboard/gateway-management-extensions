@@ -27,11 +27,11 @@ import {
 } from '@angular/forms';
 import {
   integerRegex,
-  MappingValueType,
   mappingValueTypesMap,
+  MappingValueType,
   noLeadTrailSpacesRegex,
   ValueType
-} from '../../../../shared/public-api';
+} from '../../../../shared/models/public-api';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { coerceBoolean, SharedModule } from '@shared/public-api';

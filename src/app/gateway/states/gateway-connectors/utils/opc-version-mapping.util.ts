@@ -15,7 +15,6 @@
 ///
 
 import {
-  Attribute,
   AttributesUpdate,
   DeviceConnectorMapping,
   LegacyAttribute,
@@ -26,11 +25,10 @@ import {
   LegacyTimeseries,
   OPCBasicConfig_v3_5_2,
   OPCUaSourceType,
-  ValueType,
   RpcMethod,
   ServerConfig,
-  Timeseries
-} from '../../shared/public-api';
+} from '../models/public-api';
+import { Attribute, Timeseries, ValueType } from '../../../shared/models/public-api';
 
 export class OpcVersionMappingUtil {
 

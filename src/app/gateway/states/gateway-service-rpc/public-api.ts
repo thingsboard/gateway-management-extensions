@@ -15,4 +15,6 @@
 ///
 
 export * from './components/public-api';
+export * from './pipes/public-api';
 export * from './gateway-service-rpc.component';
+export * from './models/public-api';

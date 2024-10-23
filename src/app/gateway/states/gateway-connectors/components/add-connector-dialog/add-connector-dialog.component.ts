@@ -21,20 +21,22 @@ import { FormBuilder, UntypedFormControl, UntypedFormGroup, ValidatorFn, Validat
 import { DialogComponent, BaseData, HasId, helpBaseUrl } from '@shared/public-api';
 import { Router } from '@angular/router';
 import {
-  AddConnectorConfigData,
   ConnectorType,
-  CreatedConnectorConfigData,
   GatewayConnectorDefaultTypesTranslatesMap,
   GatewayLogLevel,
   GatewayVersion,
   noLeadTrailSpacesRegex,
-  LatestVersionConfigPipe,
-  GatewayConnectorConfigVersionMap,
   getDefaultConfig
 } from '../../../../shared/public-api';
+import {
+  AddConnectorConfigData,
+  CreatedConnectorConfigData,
+  GatewayConnectorConfigVersionMap,
+} from '../../models/public-api';
 import { Subject } from 'rxjs';
 import { AppState } from '@core/public-api';
 import { takeUntil, tap } from 'rxjs/operators';
+import { LatestVersionConfigPipe } from '../../pipes/public-api';
 
 @Component({
   selector: 'tb-add-connector-dialog',

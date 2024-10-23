@@ -34,11 +34,10 @@ import {
 import { takeUntil } from 'rxjs/operators';
 import {
   noLeadTrailSpacesRegex,
-  RestSecurityType,
-  RestSecurityTypeTranslationsMap
 } from '../../../../shared/public-api';
 import { SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
+import { RestSecurityType, RestSecurityTypeTranslationsMap } from '../../models/public-api';
 
 @Component({
   selector: 'tb-rest-connector-security',
@@ -65,7 +64,7 @@ import { CommonModule } from '@angular/common';
 })
 export class RestConnectorSecurityComponent implements ControlValueAccessor, Validator, OnDestroy {
   BrokerSecurityType = RestSecurityType;
-  securityTypes: RestSecurityType[] = Object.values(RestSecurityType);
+  securityTypes: RestSecurityType[] = Object.values(RestSecurityType) as RestSecurityType[];
   SecurityTypeTranslationsMap = RestSecurityTypeTranslationsMap;
   securityFormGroup: UntypedFormGroup;
 
