@@ -107,6 +107,11 @@ export class MappingDataKeysPanelComponent extends PageComponent implements OnIn
         method: ['', [Validators.required]],
         arguments: [[], []]
       });
+    } else if (this.keysType === MappingKeysType.CUSTOM) {
+      dataKeyFormGroup = this.fb.group({
+        key: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
+        value: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
+      });
     } else {
       dataKeyFormGroup = this.fb.group({
         key: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
@@ -159,6 +164,12 @@ export class MappingDataKeysPanelComponent extends PageComponent implements OnIn
             method: [(keyData as RpcMethodsMapping).method, [Validators.required]],
             arguments: [[...(keyData as RpcMethodsMapping).arguments], []]
           });
+        } else if (this.keysType === MappingKeysType.CUSTOM) {
+          const { key, value } = keyData;
+          dataKeyFormGroup = this.fb.group({
+            key: [key, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
+            value: [value, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
+          });
         } else {
           const { key, value, type, reportStrategy } = keyData;
           dataKeyFormGroup = this.fb.group({
@@ -174,7 +185,18 @@ export class MappingDataKeysPanelComponent extends PageComponent implements OnIn
   }
 
   valueTitle(keyControl: FormControl): string {
-    const value = this.keysType === MappingKeysType.RPC_METHODS ? keyControl.get('method').value : keyControl.get('typeValue').value?.value;
+    let value;
+    switch (this.keysType) {
+      case MappingKeysType.CUSTOM:
+        value = keyControl.get('value').value;
+        break;
+      case MappingKeysType.RPC_METHODS:
+        value = keyControl.get('method').value;
+        break;
+      default:
+        value = keyControl.get('typeValue').value?.value;
+        break;
+    }
     if (isDefinedAndNotNull(value)) {
       if (typeof value === 'object') {
         return JSON.stringify(value);
