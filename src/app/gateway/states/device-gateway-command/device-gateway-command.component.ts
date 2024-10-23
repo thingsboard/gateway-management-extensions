@@ -16,11 +16,18 @@
 
 import { Component, Input } from '@angular/core';
 import { DeviceService } from '@core/public-api';
+import { CommonModule } from '@angular/common';
+import { SharedModule } from '@shared/public-api';
 
 @Component({
   selector: 'tb-gateway-command',
   templateUrl: './device-gateway-command.component.html',
-  styleUrls: ['./device-gateway-command.component.scss']
+  styleUrls: ['./device-gateway-command.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    SharedModule
+  ]
 })
 
 export class DeviceGatewayCommandComponent {

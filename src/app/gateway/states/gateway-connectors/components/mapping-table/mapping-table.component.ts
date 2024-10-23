@@ -56,7 +56,7 @@ import {
   ServerSideRpc,
 } from '../../models/public-api';
 import { TruncateWithTooltipDirective } from '../../../../shared/directives/public-api';
-import { MappingDialogComponent } from '../mapping-dialog/mapping-dialog.component';
+import { MappingDialogComponent } from '../public-api';
 import { isDefinedAndNotNull, isUndefinedOrNull, DialogService } from '@core/public-api';
 import { CommonModule } from '@angular/common';
 // @ts-ignore
@@ -80,7 +80,7 @@ import { TbTableDatasource, coerceBoolean, SharedModule } from '@shared/public-a
     }
   ],
   standalone: true,
-  imports: [CommonModule, SharedModule, TruncateWithTooltipDirective]
+  imports: [CommonModule, SharedModule, TruncateWithTooltipDirective, MappingDialogComponent]
 })
 export class MappingTableComponent implements ControlValueAccessor, Validator, AfterViewInit, OnInit, OnDestroy {
 

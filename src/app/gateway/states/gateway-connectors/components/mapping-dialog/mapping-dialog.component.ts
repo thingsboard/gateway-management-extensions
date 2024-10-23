@@ -19,7 +19,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { AppState } from '@core/public-api';
 import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { DialogComponent } from '@shared/public-api';
+import { DialogComponent, SharedModule } from '@shared/public-api';
 import { Router } from '@angular/router';
 import {
   AttributesUpdate,
@@ -57,15 +57,26 @@ import { startWith, takeUntil } from 'rxjs/operators';
 import { MatButton } from '@angular/material/button';
 import { TbPopoverService } from '@shared/components/popover.service';
 import { TranslateService } from '@ngx-translate/core';
-import {
-  MappingDataKeysPanelComponent
-} from '../mapping-data-keys-panel/mapping-data-keys-panel.component';
 import { Attribute, noLeadTrailSpacesRegex, Timeseries } from '../../../../shared/models/public-api';
+import { CommonModule } from '@angular/common';
+import { EllipsisChipListDirective } from '../../../../shared/directives/public-api';
+import { ConnectorMappingHelpLinkPipe } from '../../pipes/public-api';
+import { DeviceInfoTableComponent } from '../device-info-table/device-info-table.component';
+import { MappingDataKeysPanelComponent } from '../mapping-data-keys-panel/mapping-data-keys-panel.component';
 
 @Component({
   selector: 'tb-mapping-dialog',
   templateUrl: './mapping-dialog.component.html',
-  styleUrls: ['./mapping-dialog.component.scss']
+  styleUrls: ['./mapping-dialog.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    SharedModule,
+    ConnectorMappingHelpLinkPipe,
+    EllipsisChipListDirective,
+    DeviceInfoTableComponent,
+    MappingDataKeysPanelComponent,
+  ]
 })
 export class MappingDialogComponent extends DialogComponent<MappingDialogComponent, ConnectorMapping> implements OnDestroy {
 

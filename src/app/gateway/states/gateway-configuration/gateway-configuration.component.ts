@@ -27,6 +27,7 @@ import {
   ConfigurationModes,
   GatewayVersion,
   Attribute,
+  ReportStrategyVersionPipe,
 } from '../../shared/public-api';
 import { deepTrim, isEqual, DeviceService, AttributeService } from '@core/public-api';
 import {
@@ -44,12 +45,31 @@ import {
   SecurityTypes,
   LogSavingPeriod,
 } from './models/public-api';
-import { DeviceId, NULL_UUID, DeviceCredentials, DeviceCredentialsType, EntityId, AttributeData, AttributeScope } from '@shared/public-api';
+import {
+  DeviceId,
+  NULL_UUID,
+  DeviceCredentials,
+  DeviceCredentialsType,
+  EntityId,
+  AttributeData,
+  AttributeScope,
+  SharedModule
+} from '@shared/public-api';
+import { CommonModule } from '@angular/common';
+import { GatewayBasicConfigurationComponent, GatewayAdvancedConfigurationComponent } from './components/public-api';
 
 @Component({
   selector: 'tb-gateway-configuration',
   templateUrl: './gateway-configuration.component.html',
-  styleUrls: ['./gateway-configuration.component.scss']
+  styleUrls: ['./gateway-configuration.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    SharedModule,
+    ReportStrategyVersionPipe,
+    GatewayBasicConfigurationComponent,
+    GatewayAdvancedConfigurationComponent,
+  ]
 })
 export class GatewayConfigurationComponent implements AfterViewInit, OnDestroy {
 

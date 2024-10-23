@@ -13,5 +13,9 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
+export * from './basic-config/mqtt-basic-config.abstract';
+export * from './basic-config/mqtt-basic-config.component';
+export * from './basic-config/mqtt-legacy-basic-config.component';
 
-export * from './gateway/public-api';
+export * from './broker-config-control/broker-config-control.component';
+export * from './workers-config-control/workers-config-control.component';

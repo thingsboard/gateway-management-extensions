@@ -18,9 +18,10 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { AppState } from '@core/public-api';
-import { DialogComponent } from '@shared/public-api';
+import { DialogComponent, SharedModule } from '@shared/public-api';
 import { Router } from '@angular/router';
 import { FormBuilder, FormControl } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 export interface GatewayRemoteConfigurationDialogData {
   gatewayName: string;
@@ -28,7 +29,12 @@ export interface GatewayRemoteConfigurationDialogData {
 
 @Component({
   selector: 'tb-gateway-remote-configuration-dialog',
-  templateUrl: './gateway-remote-configuration-dialog.html'
+  templateUrl: './gateway-remote-configuration-dialog.html',
+  standalone: true,
+  imports: [
+    CommonModule,
+    SharedModule
+  ]
 })
 
 export class GatewayRemoteConfigurationDialogComponent extends

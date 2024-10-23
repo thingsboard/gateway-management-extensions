@@ -13,5 +13,6 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-
-export * from './gateway/public-api';
+export * from './opc-ua-basic-config/opc-ua-legacy-basic-config.component';
+export * from './opc-ua-basic-config/opc-ua-basic-config.component';
+export * from './opc-server-config/opc-server-config.component';

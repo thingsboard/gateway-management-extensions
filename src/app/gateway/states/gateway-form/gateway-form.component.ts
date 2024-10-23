@@ -15,7 +15,7 @@
 ///
 
 import { Component, ElementRef, Inject, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { PageComponent, AttributeData, AttributeScope } from '@shared/public-api';
+import { PageComponent, AttributeData, AttributeScope, SharedModule } from '@shared/public-api';
 import { Store } from '@ngrx/store';
 import { AppState, UtilsService, WINDOW, AttributeService, DeviceService } from '@core/public-api';
 import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, NgForm, Validators } from '@angular/forms';
@@ -53,12 +53,18 @@ import { TranslateService } from '@ngx-translate/core';
 import { forkJoin, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { ImportExportService } from '@shared/import-export/import-export.service';
+import { CommonModule } from '@angular/common';
 
 // @dynamic
 @Component({
   selector: 'tb-gateway-form',
   templateUrl: './gateway-form.component.html',
-  styleUrls: ['./gateway-form.component.scss']
+  styleUrls: ['./gateway-form.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    SharedModule,
+  ]
 })
 
 export class GatewayFormComponent extends PageComponent implements OnInit, OnDestroy {

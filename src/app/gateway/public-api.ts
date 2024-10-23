@@ -16,3 +16,4 @@
 
 export * from './states/public-api';
 export * from './shared/public-api';
+export * from './gateway-extension.module';
