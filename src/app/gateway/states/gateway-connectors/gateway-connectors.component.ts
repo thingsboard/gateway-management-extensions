@@ -45,7 +45,10 @@ import {
   GatewayLogLevel,
   noLeadTrailSpacesRegex,
   ReportStrategyDefaultValue,
-} from '../../shared/models';
+  AttributeDatasource,
+  ReportStrategyComponent,
+  ReportStrategyVersionPipe
+} from '../../shared';
 import { MatDialog } from '@angular/material/dialog';
 import {
   AddConnectorDialogComponent,
@@ -75,13 +78,10 @@ import {
   SortOrder,
   widgetType
 } from '@shared/public-api';
-import { AttributeDatasource, } from '../../shared/datasources';
 import { GatewayConnectorVersionMappingUtil } from './utils';
-import { ReportStrategyVersionPipe } from '../../shared/pipes';
 import { ConnectorBaseInfo, AddConnectorConfigData, GatewayAttributeData } from './models';
 import { CommonModule } from '@angular/common';
 import { LatestVersionConfigPipe } from './pipes';
-import { ReportStrategyComponent } from '../../shared/components';
 
 export class ForceErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null): boolean {
@@ -108,8 +108,9 @@ export class ForceErrorStateMatcher implements ErrorStateMatcher {
     ModbusLegacyBasicConfigComponent,
     SocketBasicConfigComponent,
     SocketLegacyBasicConfigComponent,
-    ReportStrategyComponent
-  ]
+    ReportStrategyComponent,
+    AddConnectorDialogComponent
+  ],
 })
 export class GatewayConnectorComponent extends PageComponent implements AfterViewInit, OnDestroy {
 
