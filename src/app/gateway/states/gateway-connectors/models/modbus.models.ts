@@ -13,7 +13,7 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-import { ModbusDataType, ReportStrategyConfig } from '../../../shared/models/public-api';
+import { ModbusDataType, ReportStrategyConfig } from '../../../shared/models';
 import { ValueTypeData } from '@shared/public-api';
 
 export enum ModbusProtocolType {

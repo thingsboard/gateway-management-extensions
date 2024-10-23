@@ -21,7 +21,7 @@ import { AppState } from '@core/public-api';
 import { DialogComponent, SharedModule } from '@shared/public-api';
 import { Router } from '@angular/router';
 import { FormBuilder, FormControl, UntypedFormControl, Validators } from '@angular/forms';
-import { RPCTemplate, SaveRPCTemplateData } from '../../models/public-api';
+import { RPCTemplate, SaveRPCTemplateData } from '../../models';
 import { CommonModule } from '@angular/common';
 
 @Component({

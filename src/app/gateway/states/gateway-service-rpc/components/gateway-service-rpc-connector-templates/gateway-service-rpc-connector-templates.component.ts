@@ -15,16 +15,16 @@
 ///
 
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ConnectorType } from '../../../../shared/public-api';
+import { ConnectorType } from '../../../../shared';
 import {
   RPCTemplate,
   SNMPMethodsTranslations
-} from '../../models/public-api';
+} from '../../models';
 import { AttributeScope, EntityType, SharedModule } from '@shared/public-api';
 import { AttributeService, isLiteralObject } from '@core/public-api';
 import { WidgetContext } from '@home/models/widget-component.models';
 import { CommonModule } from '@angular/common';
-import { KeyValueIsNotEmptyPipe, RpcTemplateArrayViewPipe } from '../../pipes/public-api';
+import { KeyValueIsNotEmptyPipe, RpcTemplateArrayViewPipe } from '../../pipes';
 
 @Component({
   selector: 'tb-gateway-service-rpc-connector-templates',

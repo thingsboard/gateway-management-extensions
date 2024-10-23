@@ -45,7 +45,7 @@ import {
   GatewayLogLevel,
   noLeadTrailSpacesRegex,
   ReportStrategyDefaultValue,
-} from '../../shared/models/public-api';
+} from '../../shared/models';
 import { MatDialog } from '@angular/material/dialog';
 import {
   AddConnectorDialogComponent,
@@ -57,7 +57,7 @@ import {
   OpcUaLegacyBasicConfigComponent,
   SocketBasicConfigComponent,
   SocketLegacyBasicConfigComponent
-} from './components/public-api';
+} from './components';
 import { debounceTime, filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { ErrorStateMatcher } from '@angular/material/core';
 import {
@@ -75,13 +75,13 @@ import {
   SortOrder,
   widgetType
 } from '@shared/public-api';
-import { AttributeDatasource, } from '../../shared/datasources/public-api';
-import { GatewayConnectorVersionMappingUtil } from './utils/public-api';
-import { ReportStrategyVersionPipe } from '../../shared/pipes/public-api';
-import { ConnectorBaseInfo, AddConnectorConfigData, GatewayAttributeData } from './models/public-api';
+import { AttributeDatasource, } from '../../shared/datasources';
+import { GatewayConnectorVersionMappingUtil } from './utils';
+import { ReportStrategyVersionPipe } from '../../shared/pipes';
+import { ConnectorBaseInfo, AddConnectorConfigData, GatewayAttributeData } from './models';
 import { CommonModule } from '@angular/common';
-import { LatestVersionConfigPipe } from './pipes/public-api';
-import { ReportStrategyComponent } from '../../shared/components/public-api';
+import { LatestVersionConfigPipe } from './pipes';
+import { ReportStrategyComponent } from '../../shared/components';
 
 export class ForceErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null): boolean {

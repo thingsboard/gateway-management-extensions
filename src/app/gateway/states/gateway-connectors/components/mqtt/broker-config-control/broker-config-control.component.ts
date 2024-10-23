@@ -29,14 +29,14 @@ import {
   BrokerConfig,
   MqttVersions,
   PortLimits,
-} from '../../../models/public-api';
+} from '../../../models';
 import { SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
 import { generateSecret } from '@core/public-api';
 import { Subject } from 'rxjs';
 import { SecurityConfigComponent } from '../../security-config/security-config.component';
-import { GatewayPortTooltipPipe } from '../../../pipes/public-api';
-import { noLeadTrailSpacesRegex } from '../../../../../shared/models/public-api';
+import { GatewayPortTooltipPipe } from '../../../pipes';
+import { noLeadTrailSpacesRegex } from '../../../../../shared/models';
 
 @Component({
   selector: 'tb-broker-config-control',

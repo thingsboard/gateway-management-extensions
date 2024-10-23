@@ -15,7 +15,7 @@
 ///
 
 export * from './gateway-connectors.component';
-export * from './components/public-api';
-export * from './abstract/public-api';
-export * from './utils/public-api';
-export * from './models/public-api';
+export * from './components';
+export * from './abstract';
+export * from './utils';
+export * from './models';

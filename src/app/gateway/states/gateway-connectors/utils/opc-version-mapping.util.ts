@@ -27,8 +27,8 @@ import {
   OPCUaSourceType,
   RpcMethod,
   ServerConfig,
-} from '../models/public-api';
-import { Attribute, Timeseries, ValueType } from '../../../shared/models/public-api';
+} from '../models';
+import { Attribute, Timeseries, ValueType } from '../../../shared/models';
 
 export class OpcVersionMappingUtil {
 

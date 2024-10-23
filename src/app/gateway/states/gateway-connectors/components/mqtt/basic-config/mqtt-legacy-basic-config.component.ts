@@ -24,7 +24,7 @@ import {
   RequestMappingValue,
   RequestType,
   WorkersConfig,
-} from '../../../models/public-api';
+} from '../../../models';
 import {
   MqttBasicConfigDirective
 } from './mqtt-basic-config.abstract';
@@ -42,7 +42,7 @@ import {
 import {
   MappingTableComponent
 } from '../../mapping-table/mapping-table.component';
-import { MqttVersionMappingUtil } from '../../../utils/public-api';
+import { MqttVersionMappingUtil } from '../../../utils';
 
 @Component({
   selector: 'tb-mqtt-legacy-basic-config',

@@ -26,14 +26,14 @@ import {
 } from '@angular/forms';
 import {
   noLeadTrailSpacesRegex,
-} from '../../../../../shared/models/public-api';
+  TruncateWithTooltipDirective
+} from '../../../../../shared';
 import { SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
-import { GatewayPortTooltipPipe } from '../../../pipes/public-api';
+import { GatewayPortTooltipPipe } from '../../../pipes';
 import { takeUntil } from 'rxjs/operators';
-import { TruncateWithTooltipDirective } from '../../../../../shared/directives/public-api';
-import { SocketConfig, SocketType, PortLimits } from '../../../models/public-api';
+import { SocketConfig, SocketType, PortLimits } from '../../../models';
 
 @Component({
   selector: 'tb-socket-config',

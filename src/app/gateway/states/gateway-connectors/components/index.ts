@@ -16,14 +16,10 @@
 
 export * from './add-connector-dialog/add-connector-dialog.component';
 export * from './mapping-dialog/mapping-dialog.component';
-// export * from './mapping-data-keys-panel/mapping-data-keys-panel.component';
-// export * from './device-info-table/device-info-table.component';
-// export * from './type-value-panel/type-value-panel.component';
 export * from './mapping-table/mapping-table.component';
 export * from './security-config/security-config.component';
-// export * from './type-value-field/type-value-field.component';
 
-export * from './opc/public-api';
-export * from './mqtt/public-api';
-export * from './modbus/public-api';
-export * from './socket/public-api';
+export * from './opc';
+export * from './mqtt';
+export * from './modbus';
+export * from './socket';

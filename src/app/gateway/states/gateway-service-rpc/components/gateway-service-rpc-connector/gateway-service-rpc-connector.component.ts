@@ -40,13 +40,13 @@ import {
   SocketEncodings,
   SocketMethodProcessings,
   SocketMethodProcessingsTranslates,
-} from '../../models/public-api';
+} from '../../models';
 import {
   ConnectorType,
   GatewayConnectorDefaultTypesTranslatesMap,
   noLeadTrailSpacesRegex,
   jsonRequired
-} from '../../../../shared/public-api';
+} from '../../../../shared';
 import { MatDialog } from '@angular/material/dialog';
 import {
   JsonObjectEditDialogComponent,
@@ -57,7 +57,7 @@ import { Subject } from "rxjs";
 import { takeUntil } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/public-api';
-import { RestConnectorSecurityComponent } from '../public-api';
+import { RestConnectorSecurityComponent } from '..';
 
 @Component({
   selector: 'tb-gateway-service-rpc-connector',

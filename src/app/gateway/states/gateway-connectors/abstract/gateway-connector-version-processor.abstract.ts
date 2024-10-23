@@ -14,11 +14,11 @@
 /// limitations under the License.
 ///
 
-import { GatewayConnectorConfigVersionMap } from '../models/public-api';
+import { GatewayConnectorConfigVersionMap } from '../models';
 import {
   GatewayConnectorVersionMappingUtil
-} from '../utils/public-api';
-import { GatewayConnector } from '../../../shared/models/public-api';
+} from '../utils';
+import { GatewayConnector } from '../../../shared/models';
 
 export abstract class GatewayConnectorVersionProcessor<BasicConfig> {
   gatewayVersion: number;

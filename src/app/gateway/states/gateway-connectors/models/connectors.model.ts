@@ -21,7 +21,7 @@ import {
   ReportStrategyConfig,
   ValueType,
   MappingValueType
-} from '../../../shared/models/public-api';
+} from '../../../shared';
 import {
   ConverterConnectorMapping,
   ConverterMappingFormValue,

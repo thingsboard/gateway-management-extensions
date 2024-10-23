@@ -13,7 +13,7 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-import { MappingValueType, ModbusDataType, ValueType } from '../../../shared/models/public-api';
+import { MappingValueType, ModbusDataType, ValueType } from '../../../shared/models';
 
 export interface RPCCommand {
   command: string;

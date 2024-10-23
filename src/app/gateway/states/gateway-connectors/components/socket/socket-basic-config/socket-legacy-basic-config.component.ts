@@ -33,9 +33,9 @@ import { SocketConfigComponent } from '../socket-config/socket-config.component'
 import { DevicesConfigTableComponent } from '../devices-config-table/devices-config-table.component';
 import {
   GatewayConnectorBasicConfigDirective
-} from '../../../abstract/public-api';
-import { SocketVersionMappingUtil } from '../../../utils/public-api';
-import { SocketBasicConfig_v3_5_3, SocketLegacyBasicConfig } from '../../../models/public-api';
+} from '../../../abstract';
+import { SocketVersionMappingUtil } from '../../../utils';
+import { SocketBasicConfig_v3_5_3, SocketLegacyBasicConfig } from '../../../models';
 
 @Component({
   selector: 'tb-socket-legacy-basic-config',

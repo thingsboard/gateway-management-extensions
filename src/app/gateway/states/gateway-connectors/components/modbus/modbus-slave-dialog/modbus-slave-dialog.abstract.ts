@@ -34,11 +34,11 @@ import {
   ModbusSerialMethodType,
   ModbusSlaveInfo,
   PortLimits,
-} from '../../../models/public-api';
+} from '../../../models';
 import {
   noLeadTrailSpacesRegex,
   ReportStrategyDefaultValue,
-} from '../../../../../shared/public-api';
+} from '../../../../../shared';
 import { Subject } from 'rxjs';
 import { DialogComponent, helpBaseUrl } from '@shared/public-api';
 import { Store } from '@ngrx/store';

@@ -35,7 +35,7 @@ import {
   FormBuilder,
   NG_VALUE_ACCESSOR,
 } from '@angular/forms';
-import { TruncateWithTooltipDirective } from '../../../../../shared/directives/public-api';
+import { TruncateWithTooltipDirective } from '../../../../../shared/directives';
 import { isDefinedAndNotNull, DialogService } from '@core/public-api';
 import { CommonModule } from '@angular/common';
 import {
@@ -44,7 +44,7 @@ import {
   SharedModule
 } from '@shared/public-api';
 import { DeviceDialogComponent } from '../device-dialog/device-dialog.component';
-import { DeviceConfigInfo, DevicesConfigMapping } from '../../../models/public-api';
+import { DeviceConfigInfo, DevicesConfigMapping } from '../../../models';
 
 @Component({
   selector: 'tb-devices-config-table',

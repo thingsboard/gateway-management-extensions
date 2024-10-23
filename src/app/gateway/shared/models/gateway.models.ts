@@ -19,7 +19,7 @@ import {
   ConnectorBaseConfig_v3_5_2,
   ConnectorBaseConfig_v3_5_3,
   ConnectorLegacyConfig
-} from '../../states/gateway-connectors/models/public-api';
+} from '../../states/gateway-connectors/models';
 import { ConfigurationModes, ReportStrategyConfig } from './report-strategy.models';
 
 export const noLeadTrailSpacesRegex = /^\S+(?: \S+)*$/;

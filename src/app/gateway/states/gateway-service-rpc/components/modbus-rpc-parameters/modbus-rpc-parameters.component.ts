@@ -37,8 +37,8 @@ import { takeUntil } from 'rxjs/operators';
 import {
   ModbusFunctionCodeTranslationsMap,
   noLeadTrailSpacesRegex,
-} from '../../../../shared/public-api';
-import { ModbusDataType, ModbusObjectCountByDataType, ModbusEditableDataTypes } from '../../../../shared/models/public-api';
+} from '../../../../shared';
+import { ModbusDataType, ModbusObjectCountByDataType, ModbusEditableDataTypes } from '../../../../shared/models';
 import { RPCTemplateConfigModbus } from '../../models/rpc.models';
 
 @Component({

@@ -37,7 +37,7 @@ import {
   ReportStrategyDefaultValue,
   ReportStrategyType,
   ReportStrategyTypeTranslationsMap, TruncateWithTooltipDirective
-} from '../../public-api';
+} from '../..';
 import { filter, takeUntil } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { coerceBoolean, coerceNumber, SharedModule } from '@shared/public-api';

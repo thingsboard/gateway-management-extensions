@@ -18,8 +18,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import {
   OPCUaSourceType,
   SourceType
-} from '../models/public-api';
-import { MappingValueType } from '../../../shared/models/public-api';
+} from '../models';
+import { MappingValueType } from '../../../shared/models';
 
 @Pipe({
   name: 'getConnectorMappingHelpLink',

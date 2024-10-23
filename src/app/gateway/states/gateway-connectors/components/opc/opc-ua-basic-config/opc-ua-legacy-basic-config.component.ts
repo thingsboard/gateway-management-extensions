@@ -21,7 +21,7 @@ import {
   OPCBasicConfig_v3_5_2,
   OPCLegacyBasicConfig,
   ServerConfig,
-} from '../../../models/public-api';
+} from '../../../models';
 import { CommonModule } from '@angular/common';
 import { coerceBoolean, SharedModule } from '@shared/public-api';
 import { MappingTableComponent } from '../../mapping-table/mapping-table.component';
@@ -31,8 +31,8 @@ import {
 import {
   OpcServerConfigComponent
 } from '../opc-server-config/opc-server-config.component';
-import { GatewayConnectorBasicConfigDirective } from '../../../abstract/public-api';
-import { OpcVersionMappingUtil } from '../../../utils/public-api';
+import { GatewayConnectorBasicConfigDirective } from '../../../abstract';
+import { OpcVersionMappingUtil } from '../../../utils';
 
 @Component({
   selector: 'tb-opc-ua-legacy-basic-config',

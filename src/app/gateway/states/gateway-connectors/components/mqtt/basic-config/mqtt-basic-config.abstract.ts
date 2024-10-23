@@ -25,10 +25,10 @@ import {
   RequestMappingValue,
   RequestType,
   WorkersConfig
-} from '../../../models/public-api';
+} from '../../../models';
 import { isObject } from '@core/public-api';
 import { coerceBoolean } from '@shared/public-api';
-import { GatewayConnectorBasicConfigDirective } from '../../../abstract/public-api';
+import { GatewayConnectorBasicConfigDirective } from '../../../abstract';
 
 @Directive()
 export abstract class MqttBasicConfigDirective<BasicConfig>

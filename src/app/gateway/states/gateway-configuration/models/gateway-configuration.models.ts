@@ -18,8 +18,8 @@ import {
   ConfigurationModes,
   GatewayConnector,
   ReportStrategyConfig,
-} from '../../../shared/public-api';
-import { GatewayLogLevel } from '../../gateway-form/models/public-api';
+} from '../../../shared';
+import { GatewayLogLevel } from '../../gateway-form/models';
 
 export interface GatewayConfigValue {
   mode: ConfigurationModes;

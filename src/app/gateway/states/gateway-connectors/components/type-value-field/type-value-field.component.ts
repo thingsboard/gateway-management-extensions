@@ -31,7 +31,7 @@ import {
   MappingValueType,
   noLeadTrailSpacesRegex,
   ValueType
-} from '../../../../shared/models/public-api';
+} from '../../../../shared/models';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { coerceBoolean, SharedModule } from '@shared/public-api';

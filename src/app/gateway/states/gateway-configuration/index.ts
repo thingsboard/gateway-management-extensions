@@ -14,4 +14,6 @@
 /// limitations under the License.
 ///
 
-export * from './gateway/public-api';
+export * from './gateway-configuration.component';
+export * from './models';
+export * from './components';

@@ -19,12 +19,12 @@ import {
   MQTTBasicConfig,
   OPCBasicConfig,
   SocketBasicConfig,
-} from '../models/public-api';
+} from '../models';
 import {
   ConnectorType,
   GatewayConnector,
-} from '../../../shared/models/public-api';
-import { MqttVersionProcessor, OpcVersionProcessor, ModbusVersionProcessor, SocketVersionProcessor } from '../abstract/public-api';
+} from '../../../shared/models';
+import { MqttVersionProcessor, OpcVersionProcessor, ModbusVersionProcessor, SocketVersionProcessor } from '../abstract';
 import { isNumber, isString } from '@core/public-api';
 
 export abstract class GatewayConnectorVersionMappingUtil {

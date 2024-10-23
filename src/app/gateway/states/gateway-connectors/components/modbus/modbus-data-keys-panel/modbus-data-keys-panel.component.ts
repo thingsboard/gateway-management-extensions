@@ -34,7 +34,7 @@ import {
   ModbusDataType,
   ModbusEditableDataTypes,
   ModbusObjectCountByDataType
-} from '../../../../../shared/public-api';
+} from '../../../../../shared';
 import {
   ModbusBitTargetType,
   ModbusBitTargetTypeTranslationMap,
@@ -43,14 +43,14 @@ import {
   ModbusValueKey,
   ModifierType,
   ModifierTypesMap,
-} from '../../../models/public-api';
+} from '../../../models';
 import { CommonModule } from '@angular/common';
 import { generateSecret } from '@core/public-api';
 import { coerceBoolean, SharedModule } from '@shared/public-api';
 import { filter, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { ReportStrategyComponent } from '../../../../../shared/components/public-api';
-import { ConnectorMappingHelpLinkPipe } from '../../../pipes/public-api';
+import { ReportStrategyComponent } from '../../../../../shared';
+import { ConnectorMappingHelpLinkPipe } from '../../../pipes';
 
 @Component({
   selector: 'tb-modbus-data-keys-panel',

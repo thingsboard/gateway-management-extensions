@@ -39,13 +39,13 @@ import {
   MappingKeysType,
   OPCUaSourceType,
   RpcMethodsMapping,
-} from '../../models/public-api';
+} from '../../models';
 import {
   noLeadTrailSpacesRegex,
   ReportStrategyDefaultValue,
   MappingValueType,
   mappingValueTypesMap, ReportStrategyComponent,
-} from '../../../../shared/public-api';
+} from '../../../../shared';
 import { CommonModule } from '@angular/common';
 import { TypeValuePanelComponent } from '../type-value-panel/type-value-panel.component';
 import { TypeValueFieldComponent } from '../type-value-field/type-value-field.component';

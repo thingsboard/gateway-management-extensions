@@ -51,16 +51,16 @@ import {
   ServerSideRPCType,
   SourceType,
   SourceTypeTranslationsMap,
-} from '../../models/public-api';
+} from '../../models';
 import { Subject } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
 import { MatButton } from '@angular/material/button';
 import { TbPopoverService } from '@shared/components/popover.service';
 import { TranslateService } from '@ngx-translate/core';
-import { Attribute, noLeadTrailSpacesRegex, Timeseries } from '../../../../shared/models/public-api';
+import { Attribute, noLeadTrailSpacesRegex, Timeseries } from '../../../../shared/models';
 import { CommonModule } from '@angular/common';
-import { EllipsisChipListDirective } from '../../../../shared/directives/public-api';
-import { ConnectorMappingHelpLinkPipe } from '../../pipes/public-api';
+import { EllipsisChipListDirective } from '../../../../shared/directives';
+import { ConnectorMappingHelpLinkPipe } from '../../pipes';
 import { DeviceInfoTableComponent } from '../device-info-table/device-info-table.component';
 import { MappingDataKeysPanelComponent } from '../mapping-data-keys-panel/mapping-data-keys-panel.component';
 

@@ -14,7 +14,11 @@
 /// limitations under the License.
 ///
 
-export * from './components/public-api';
-export * from './pipes/public-api';
-export * from './gateway-service-rpc.component';
-export * from './models/public-api';
+export * from './gateway-logs';
+export * from './gateway-statistics';
+export * from './gateway-service-rpc';
+export * from './gateway-remote-shell';
+export * from './gateway-form';
+export * from './gateway-connectors';
+export * from './device-gateway-command';
+export * from './gateway-configuration';

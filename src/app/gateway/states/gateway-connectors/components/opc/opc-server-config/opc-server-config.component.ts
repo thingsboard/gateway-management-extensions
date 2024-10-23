@@ -29,11 +29,11 @@ import {
   SecurityPolicy,
   SecurityPolicyTypes,
   ServerConfig,
-} from '../../../models/public-api';
+} from '../../../models';
 import {
   noLeadTrailSpacesRegex,
   TruncateWithTooltipDirective
-} from '../../../../../shared/public-api';
+} from '../../../../../shared';
 import { SharedModule, HOUR, coerceBoolean } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';

@@ -15,8 +15,8 @@
 ///
 
 import { Pipe, PipeTransform } from '@angular/core';
-import { ConnectorType, GatewayVersion } from '../public-api';
-import { GatewayConnectorVersionMappingUtil } from '../../states/gateway-connectors/utils/public-api';
+import { ConnectorType, GatewayVersion } from '..';
+import { GatewayConnectorVersionMappingUtil } from '../../states/gateway-connectors/utils';
 
 @Pipe({
   name: 'withReportStrategy',

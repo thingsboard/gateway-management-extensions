@@ -16,12 +16,12 @@
 
 import { ChangeDetectionStrategy, Component, forwardRef } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { EllipsisChipListDirective } from '../../../../../shared/directives/public-api';
+import { EllipsisChipListDirective } from '../../../../../shared';
 import {
   ModbusBasicConfig_v3_5_2,
   ModbusMasterConfig,
   ModbusSlave,
-} from '../../../models/public-api';
+} from '../../../models';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/public-api';
 import { ModbusSlaveConfigComponent } from '../modbus-slave-config/modbus-slave-config.component';

@@ -20,7 +20,6 @@ import { PageComponent, SharedModule } from '@shared/public-api';
 import { TbPopoverComponent } from '@shared/components/popover.component';
 import { Store } from '@ngrx/store';
 import { AppState } from '@core/public-api';
-import { noLeadTrailSpacesRegex, } from '../../../../../shared/models/public-api';
 import {
   DeviceAttributesRequests,
   DeviceDataKey,
@@ -31,10 +30,10 @@ import {
   SocketDeviceKeys,
   SocketEncoding,
   SocketValueKey,
-} from '../../../models/public-api';
+} from '../../../models';
 import { CommonModule } from '@angular/common';
-import { EllipsisChipListDirective } from '../../../../../shared/directives/ellipsis-chip-list.directive';
-import { ConnectorMappingHelpLinkPipe } from '../../../pipes/gateway-help-link.pipe';
+import { EllipsisChipListDirective, noLeadTrailSpacesRegex } from '../../../../../shared';
+import { ConnectorMappingHelpLinkPipe } from '../../../pipes';
 
 @Component({
   selector: 'tb-device-data-keys-panel',

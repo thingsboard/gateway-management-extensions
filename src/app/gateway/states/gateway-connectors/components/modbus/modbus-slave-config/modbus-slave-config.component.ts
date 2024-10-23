@@ -29,7 +29,7 @@ import {
 import {
   noLeadTrailSpacesRegex,
   TruncateWithTooltipDirective
-} from '../../../../../shared/public-api';
+} from '../../../../../shared';
 import {
   ModbusBaudrates,
   ModbusMethodLabelsMap,
@@ -42,7 +42,7 @@ import {
   ModbusSlave,
   PortLimits,
   SlaveConfig,
-} from '../../../models/public-api';
+} from '../../../models';
 import { SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
@@ -50,7 +50,7 @@ import { takeUntil } from 'rxjs/operators';
 import { ModbusSecurityConfigComponent } from '../modbus-security-config/modbus-security-config.component';
 import { ModbusValuesComponent, } from '../modbus-values/modbus-values.component';
 import { isEqual } from '@core/public-api';
-import { GatewayPortTooltipPipe } from '../../../pipes/public-api';
+import { GatewayPortTooltipPipe } from '../../../pipes';
 
 @Component({
   selector: 'tb-modbus-slave-config',

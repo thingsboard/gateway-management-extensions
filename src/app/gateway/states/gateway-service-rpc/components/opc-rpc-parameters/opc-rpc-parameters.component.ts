@@ -39,10 +39,10 @@ import { takeUntil } from 'rxjs/operators';
 import {
   integerRegex,
   noLeadTrailSpacesRegex,
-} from '../../../../shared/public-api';
+} from '../../../../shared';
 import { isDefinedAndNotNull, isEqual } from '@core/public-api';
 import { OPCTypeValue, RPCTemplateConfigOPC } from '../../models/rpc.models';
-import { mappingValueTypesMap, MappingValueType } from '../../../../shared/models/public-api';
+import { mappingValueTypesMap, MappingValueType } from '../../../../shared/models';
 
 @Component({
   selector: 'tb-gateway-opc-rpc-parameters',

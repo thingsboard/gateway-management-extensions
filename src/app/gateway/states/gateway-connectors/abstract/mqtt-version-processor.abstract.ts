@@ -21,10 +21,10 @@ import {
   MQTTLegacyBasicConfig,
   RequestMappingData,
   RequestType,
-} from '../models/public-api';
-import { MqttVersionMappingUtil } from '../utils/public-api';
+} from '../models';
+import { MqttVersionMappingUtil } from '../utils';
 import { GatewayConnectorVersionProcessor } from './gateway-connector-version-processor.abstract';
-import { GatewayConnector } from '../../../shared/models/public-api';
+import { GatewayConnector } from '../../../shared/models';
 
 export class MqttVersionProcessor extends GatewayConnectorVersionProcessor<MQTTBasicConfig> {
 

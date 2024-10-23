@@ -19,13 +19,14 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import {
-  TruncateWithTooltipDirective
-} from '../../../../../shared/directives/public-api';
+  TruncateWithTooltipDirective,
+  ReportStrategyComponent,
+} from '../../../../../shared';
 import {
   ModbusProtocolType,
   ModbusSlaveInfo,
   SlaveConfig,
-} from '../../../models/public-api';
+} from '../../../models';
 import { SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
 import { ModbusValuesComponent } from '../modbus-values/modbus-values.component';
@@ -35,12 +36,9 @@ import { AppState } from '@core/public-api';
 import { Router } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
-  ReportStrategyComponent
-} from '../../../../../shared/components/public-api';
-import {
   ModbusSlaveDialogAbstract
 } from './modbus-slave-dialog.abstract';
-import { GatewayPortTooltipPipe } from '../../../pipes/public-api';
+import { GatewayPortTooltipPipe } from '../../../pipes';
 
 @Component({
   selector: 'tb-modbus-slave-dialog',

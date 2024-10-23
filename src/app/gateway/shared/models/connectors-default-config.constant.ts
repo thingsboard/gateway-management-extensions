@@ -28,7 +28,7 @@ import ftp from '../../assets/connector-default-configs/ftp.json';
 import xmpp from '../../assets/connector-default-configs/xmpp.json';
 import ocpp from '../../assets/connector-default-configs/ocpp.json';
 
-import { ConnectorType, GatewayConnector, GatewayVersionedDefaultConfig } from './public-api';
+import { ConnectorType, GatewayConnector, GatewayVersionedDefaultConfig } from '.';
 
 export const connectorConfigs = {
   [ConnectorType.MQTT]: mqtt,

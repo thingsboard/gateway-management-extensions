@@ -44,7 +44,7 @@ import { MatDialog } from '@angular/material/dialog';
 import {
   GatewayRemoteConfigurationDialogComponent,
   GatewayRemoteConfigurationDialogData
-} from '../../../gateway-remote-shell/public-api';
+} from '../../../gateway-remote-shell';
 import { DeviceService } from '@core/public-api';
 import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
@@ -54,7 +54,7 @@ import {
   ReportStrategyComponent,
   ReportStrategyDefaultValue,
   ReportStrategyType
-} from '../../../../shared/public-api';
+} from '../../../../shared';
 import { CommonModule } from '@angular/common';
 import {
   GatewayBasicConfigTab,
@@ -71,7 +71,7 @@ import {
   StorageTypes,
   SecurityTypes,
   LogSavingPeriod,
-} from '../../models/public-api';
+} from '../../models';
 import { MatTabGroup } from '@angular/material/tabs';
 
 @Component({

@@ -27,16 +27,16 @@ import {
   GatewayVersion,
   noLeadTrailSpacesRegex,
   getDefaultConfig
-} from '../../../../shared/public-api';
+} from '../../../../shared';
 import {
   AddConnectorConfigData,
   CreatedConnectorConfigData,
   GatewayConnectorConfigVersionMap,
-} from '../../models/public-api';
+} from '../../models';
 import { Subject } from 'rxjs';
 import { AppState } from '@core/public-api';
 import { takeUntil, tap } from 'rxjs/operators';
-import { LatestVersionConfigPipe } from '../../pipes/public-api';
+import { LatestVersionConfigPipe } from '../../pipes';
 import { CommonModule } from '@angular/common';
 
 @Component({

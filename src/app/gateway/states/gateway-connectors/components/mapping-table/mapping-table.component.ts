@@ -54,9 +54,9 @@ import {
   RequestType,
   RequestTypesTranslationsMap,
   ServerSideRpc,
-} from '../../models/public-api';
-import { TruncateWithTooltipDirective } from '../../../../shared/directives/public-api';
-import { MappingDialogComponent } from '../public-api';
+} from '../../models';
+import { TruncateWithTooltipDirective } from '../../../../shared/directives';
+import { MappingDialogComponent } from '..';
 import { isDefinedAndNotNull, isUndefinedOrNull, DialogService } from '@core/public-api';
 import { CommonModule } from '@angular/common';
 // @ts-ignore

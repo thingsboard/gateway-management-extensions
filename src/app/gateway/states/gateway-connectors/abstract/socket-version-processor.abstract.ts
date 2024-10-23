@@ -18,10 +18,10 @@ import {
   SocketBasicConfig,
   SocketBasicConfig_v3_5_3,
   SocketLegacyBasicConfig,
-} from '../models/public-api';
+} from '../models';
 import { GatewayConnectorVersionProcessor } from './gateway-connector-version-processor.abstract';
-import { SocketVersionMappingUtil } from '../utils/public-api';
-import { GatewayConnector } from '../../../shared/models/public-api';
+import { SocketVersionMappingUtil } from '../utils';
+import { GatewayConnector } from '../../../shared/models';
 
 export class SocketVersionProcessor extends GatewayConnectorVersionProcessor<SocketBasicConfig> {
 

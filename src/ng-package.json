@@ -2,6 +2,6 @@
   "$schema": "../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../dist/gateway-extension",
   "lib": {
-    "entryFile": "app/public-api.ts"
+    "entryFile": "app/index.ts"
   }
 }

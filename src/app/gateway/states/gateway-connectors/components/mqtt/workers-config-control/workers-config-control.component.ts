@@ -32,10 +32,10 @@ import {
 } from '@angular/forms';
 import { SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
-import { TruncateWithTooltipDirective } from '../../../../../shared/directives/public-api';
+import { TruncateWithTooltipDirective } from '../../../../../shared/directives';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { WorkersConfig } from '../../../models/public-api';
+import { WorkersConfig } from '../../../models';
 
 @Component({
   selector: 'tb-workers-config-control',

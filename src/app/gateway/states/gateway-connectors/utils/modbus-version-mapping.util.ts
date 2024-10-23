@@ -14,7 +14,7 @@
 /// limitations under the License.
 ///
 
-import { ModbusDataType, ReportStrategyType } from '../../../shared/models/public-api';
+import { ModbusDataType, ReportStrategyType } from '../../../shared/models';
 import {
   LegacySlaveConfig,
   ModbusLegacyRegisterValues,
@@ -25,7 +25,7 @@ import {
   ModbusValue,
   ModbusValues,
   SlaveConfig
-} from '../models/public-api';
+} from '../models';
 
 export class ModbusVersionMappingUtil {
 

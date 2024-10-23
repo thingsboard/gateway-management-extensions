@@ -15,9 +15,9 @@
 ///
 
 import { Pipe, PipeTransform } from '@angular/core';
-import { ConnectorType } from '../../../shared/public-api';
-import { GatewayConnectorVersionMappingUtil } from '../utils/public-api';
-import { GatewayConnectorConfigVersionMap } from '../models/public-api';
+import { ConnectorType } from '../../../shared';
+import { GatewayConnectorVersionMappingUtil } from '../utils';
+import { GatewayConnectorConfigVersionMap } from '../models';
 
 @Pipe({
   name: 'isLatestVersionConfig',

@@ -34,10 +34,10 @@ import {
 import { takeUntil } from 'rxjs/operators';
 import {
   noLeadTrailSpacesRegex,
-} from '../../../../shared/models/public-api';
+} from '../../../../shared/models';
 import { SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
-import { RestSecurityType, RestSecurityTypeTranslationsMap } from '../../models/public-api';
+import { RestSecurityType, RestSecurityTypeTranslationsMap } from '../../models';
 
 @Component({
   selector: 'tb-rest-connector-security',

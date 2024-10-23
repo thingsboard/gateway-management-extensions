@@ -23,12 +23,12 @@ import {
   RPCTemplate,
   RPCTemplateConfig,
   SaveRPCTemplateData,
-} from './models/public-api';
+} from './models';
 import {
   ConnectorType,
   GatewayConnectorDefaultTypesTranslatesMap,
   jsonRequired
-} from '../../shared/public-api';
+} from '../../shared';
 import {
   GatewayServiceRPCConnectorTemplateDialogComponent
 } from './components/gateway-service-rpc-connector-template-dialog/gateway-service-rpc-connector-template-dialog';

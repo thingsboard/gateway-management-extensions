@@ -35,13 +35,13 @@ import {
 } from '@angular/forms';
 import {
   noLeadTrailSpacesRegex,
-} from '../../../../shared/public-api';
+} from '../../../../shared';
 import {
   SecurityType,
   SecurityTypeTranslationsMap,
   ModeType,
   ConnectorSecurity
-} from '../../models/public-api';
+} from '../../models';
 import { takeUntil } from 'rxjs/operators';
 import { coerceBoolean, SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';

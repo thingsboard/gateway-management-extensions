@@ -19,10 +19,10 @@ import {
   OPCBasicConfig,
   OPCBasicConfig_v3_5_2,
   OPCLegacyBasicConfig,
-} from '../models/public-api';
+} from '../models';
 import { GatewayConnectorVersionProcessor } from './gateway-connector-version-processor.abstract';
-import { OpcVersionMappingUtil } from '../utils/public-api';
-import { GatewayConnector } from '../../../shared/models/public-api';
+import { OpcVersionMappingUtil } from '../utils';
+import { GatewayConnector } from '../../../shared/models';
 
 export class OpcVersionProcessor extends GatewayConnectorVersionProcessor<OPCBasicConfig> {
 

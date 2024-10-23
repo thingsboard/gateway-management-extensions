@@ -32,7 +32,7 @@ import { Router } from '@angular/router';
 import {
     EllipsisChipListDirective,
     noLeadTrailSpacesRegex,
-} from '../../../../../shared/public-api';
+} from '../../../../../shared';
 import {
   DevicesConfigMapping,
   MappingInfo,
@@ -42,7 +42,7 @@ import {
   SocketKeysNoKeysTextTranslationsMap,
   SocketKeysPanelTitleTranslationsMap,
   SocketValueKey,
-} from '../../../models/public-api';
+} from '../../../models';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MatButton } from '@angular/material/button';

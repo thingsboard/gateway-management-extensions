@@ -21,7 +21,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { DataKeyType, PageLink, Direction, SortOrder, SharedModule } from '@shared/public-api';
 import { WidgetContext } from '@home/models/widget-component.models';
-import { GatewayLogData, LogLink, GatewayStatus } from './models/public-api';
+import { GatewayLogData, LogLink, GatewayStatus } from './models';
 import { CommonModule } from '@angular/common';
 
 @Component({

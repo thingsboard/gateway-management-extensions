@@ -14,4 +14,4 @@
 /// limitations under the License.
 ///
 
-export * from './components/public-api';
+export * from './components';

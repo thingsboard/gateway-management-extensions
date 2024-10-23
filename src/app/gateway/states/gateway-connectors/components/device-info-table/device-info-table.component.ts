@@ -40,16 +40,16 @@ import {
 } from '@angular/forms';
 import {
   noLeadTrailSpacesRegex,
-} from '../../../../shared/public-api';
+} from '../../../../shared';
 import {
   DeviceInfoType,
   OPCUaSourceType,
   SourceType,
   SourceTypeTranslationsMap
-} from '../../models/public-api';
+} from '../../models';
 import { coerceBoolean, PageComponent, SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
-import { ConnectorMappingHelpLinkPipe } from '../../pipes/public-api';
+import { ConnectorMappingHelpLinkPipe } from '../../pipes';
 
 @Component({
   selector: 'tb-device-info-table',

@@ -25,10 +25,10 @@ import {
   ValidationErrors,
   Validator,
 } from '@angular/forms';
-import { MappingDataKey } from '../../models/public-api';
+import { MappingDataKey } from '../../models';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { ValueType } from '../../../../shared/models/public-api';
+import { ValueType } from '../../../../shared/models';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/public-api';
 

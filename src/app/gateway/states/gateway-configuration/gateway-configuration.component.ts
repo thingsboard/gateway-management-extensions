@@ -28,7 +28,7 @@ import {
   GatewayVersion,
   Attribute,
   ReportStrategyVersionPipe,
-} from '../../shared/public-api';
+} from '../../shared';
 import { deepTrim, isEqual, DeviceService, AttributeService } from '@core/public-api';
 import {
   GatewayBasicConfigTabKey,
@@ -44,7 +44,7 @@ import {
   LogConfig,
   SecurityTypes,
   LogSavingPeriod,
-} from './models/public-api';
+} from './models';
 import {
   DeviceId,
   NULL_UUID,
@@ -56,7 +56,7 @@ import {
   SharedModule
 } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
-import { GatewayBasicConfigurationComponent, GatewayAdvancedConfigurationComponent } from './components/public-api';
+import { GatewayBasicConfigurationComponent, GatewayAdvancedConfigurationComponent } from './components';
 
 @Component({
   selector: 'tb-gateway-configuration',

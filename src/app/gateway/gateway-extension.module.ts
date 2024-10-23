@@ -19,13 +19,13 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { GatewayStatisticsComponent } from './states/gateway-statistics/public-api';
-import { GatewayServiceRPCComponent } from './states/gateway-service-rpc/public-api';
-import { GatewayFormComponent } from './states/gateway-form/public-api';
-import { GatewayConnectorComponent } from './states/gateway-connectors/public-api';
-import { DeviceGatewayCommandComponent } from './states/device-gateway-command/public-api';
-import { GatewayConfigurationComponent } from './states/gateway-configuration/public-api';
-import { GatewayLogsComponent } from './states/gateway-logs/public-api';
+import { GatewayStatisticsComponent } from './states/gateway-statistics';
+import { GatewayServiceRPCComponent } from './states/gateway-service-rpc';
+import { GatewayFormComponent } from './states/gateway-form';
+import { GatewayConnectorComponent } from './states/gateway-connectors';
+import { DeviceGatewayCommandComponent } from './states/device-gateway-command';
+import { GatewayConfigurationComponent } from './states/gateway-configuration';
+import { GatewayLogsComponent } from './states/gateway-logs';
 
 @NgModule({
   imports: [

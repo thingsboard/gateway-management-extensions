@@ -14,6 +14,7 @@
 /// limitations under the License.
 ///
 
-export * from './states/public-api';
-export * from './shared/public-api';
-export * from './gateway-extension.module';
+export * from './components';
+export * from './pipes';
+export * from './gateway-service-rpc.component';
+export * from './models';

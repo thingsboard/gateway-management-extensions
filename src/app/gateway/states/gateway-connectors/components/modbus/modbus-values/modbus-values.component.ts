@@ -46,8 +46,8 @@ import {
   ModbusValueKey,
   ModbusValues,
   ModbusValuesState,
-} from '../../../models/public-api';
-import { EllipsisChipListDirective } from '../../../../../shared/directives/public-api';
+} from '../../../models';
+import { EllipsisChipListDirective } from '../../../../../shared';
 import { CommonModule } from '@angular/common';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';

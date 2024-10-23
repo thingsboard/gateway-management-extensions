@@ -28,7 +28,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
-import { GatewayConfigValue } from '../../models/public-api';
+import { GatewayConfigValue } from '../../models';
 
 @Component({
   selector: 'tb-gateway-advanced-configuration',
