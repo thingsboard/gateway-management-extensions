@@ -18,8 +18,8 @@ import {
   ConfigurationModes,
   GatewayConnector,
   ReportStrategyConfig,
+  GatewayLogLevel,
 } from '../../../shared/public-api';
-import { GatewayLogLevel } from '../../gateway-form/models/public-api';
 
 export interface GatewayConfigValue {
   mode: ConfigurationModes;
@@ -83,10 +83,7 @@ export interface GatewayLogsConfig {
   dateFormat: string;
   logFormat: string;
   type?: string;
-  remote?: {
-    enabled: boolean;
-    logLevel: GatewayLogLevel;
-  };
+  logLevel?: GatewayLogLevel;
   local: LocalLogs;
 }
 

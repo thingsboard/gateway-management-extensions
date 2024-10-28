@@ -43,7 +43,7 @@
   </div>
   <div class="tb-form-row column-xs">
     <div class="fixed-title-width tb-required" translate>gateway.value</div>
-    <mat-form-field fxFlex appearance="outline" subscriptSizing="dynamic" class="tb-inline-field flex tb-suffix-absolute">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="tb-inline-field flex tb-suffix-absolute">
       <ng-container [ngSwitch]="valueTypeFormGroup.get('type').value">
         <input *ngSwitchCase="MappingValueType.STRING" matInput required formControlName="string"
                placeholder="{{ 'gateway.set' | translate }}" />

@@ -142,7 +142,6 @@
     "check-connectors-configuration-pattern": "فترة فحص تكوين الموصلات غير صالحة",
     "add": "إضافة أمر",
     "timeout": "المهلة",
-    "timeout-ms": "المهلة (بالمللي ثانية)",
     "timeout-required": "المهلة مطلوبة",
     "timeout-min": "لا يمكن أن تكون المهلة أقل من 1",
     "timeout-pattern": "المهلة غير صالحة",

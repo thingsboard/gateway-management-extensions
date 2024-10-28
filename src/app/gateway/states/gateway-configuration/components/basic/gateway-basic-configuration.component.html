@@ -149,12 +149,11 @@
                 </mat-icon>
               </mat-form-field>
             </section>
-            <tb-error style="margin-top: -12px; display: block;" fxFlex="100"
+            <tb-error style="margin-top: -12px; display: block;"
                       *ngIf="basicFormGroup.get('thingsboard.security.type').value === 'usernamePassword'"
                       [error]="basicFormGroup.get('thingsboard.security').hasError('atLeastOne') ?
           ('device.client-id-or-user-name-necessary' | translate) : ''"></tb-error>
             <tb-file-input
-              fxFlex="100"
               hint="{{ 'gateway.hints.ca-cert' | translate }}"
               *ngIf="basicFormGroup.get('thingsboard.security.type').value.toLowerCase().includes('tls')"
               formControlName="caCert"
@@ -173,7 +172,7 @@
     <ng-template matTabContent>
       <div formGroupName="logs" class="mat-content mat-padding configuration-block">
         <div class="tb-form-panel no-padding-bottom">
-          <div fxLayout="column">
+          <div class="flex flex-col">
             <mat-form-field appearance="outline">
               <mat-label translate>gateway.logs.date-format</mat-label>
               <input matInput formControlName="dateFormat"/>
@@ -196,20 +195,24 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="tb-form-panel no-padding-bottom" formGroupName="remote">
-          <div translate class="tb-form-panel-title">gateway.logs.remote</div>
-          <div tb-hint-tooltip-icon="{{ 'gateway.hints.remote-log' | translate }}"
-               class="tb-form-row no-border no-padding">
-            <mat-slide-toggle class="mat-slide" color="primary" formControlName="enabled">
-              {{ 'gateway.logs.remote-logs'  | translate }}
-            </mat-slide-toggle>
-          </div>
-          <mat-form-field appearance="outline">
-            <mat-label translate>gateway.logs.level</mat-label>
-            <mat-select formControlName="logLevel">
-              <mat-option *ngFor="let logLevel of gatewayLogLevel" [value]="logLevel">{{ logLevel }}</mat-option>
-            </mat-select>
-          </mat-form-field>
+        <div class="tb-form-panel">
+          <mat-expansion-panel class="tb-settings" [expanded]="showRemoteLogsControl.value">
+            <mat-expansion-panel-header class="flex-wrap">
+              <mat-panel-title>
+                <mat-slide-toggle [formControl]="showRemoteLogsControl" class="mat-slide" (click)="$event.stopPropagation()">
+                  <mat-label>
+                    <div tb-hint-tooltip-icon="{{ 'gateway.hints.remote-log' | translate }}">{{ 'gateway.logs.remote' | translate }}</div>
+                  </mat-label>
+                </mat-slide-toggle>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-form-field appearance="outline">
+              <mat-label translate>gateway.logs.level</mat-label>
+              <mat-select formControlName="logLevel">
+                <mat-option *ngFor="let logLevel of remoteLogLevel" [value]="logLevel">{{ logLevel }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-expansion-panel>
         </div>
         <div class="tb-form-panel no-padding-bottom" formGroupName="local">
           <div translate class="tb-form-panel-title">gateway.logs.local</div>
@@ -592,7 +595,7 @@
           <div class="tb-form-panel-title" translate>gateway.statistics.commands</div>
           <div class="tb-form-panel-hint" translate>gateway.hints.commands</div>
           <ng-container formGroupName="statistics">
-            <div fxLayout="row" formArrayName="commands" class="statistics-container"
+            <div formArrayName="commands" class="flex flex-row statistics-container"
                  *ngFor="let commandControl of commandFormArray().controls; let $index = index">
               <section [formGroupName]="$index" class="tb-form-panel stroked no-padding-bottom no-gap command-container">
                 <section class="tb-form-row no-border no-padding tb-standard-fields column-xs">

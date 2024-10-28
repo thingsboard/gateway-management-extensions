@@ -17,7 +17,7 @@
 <div [formGroup]="deviceFormGroup" class="dialog-mapping">
   <mat-toolbar color="primary">
     <h2>{{ 'gateway.device' | translate}}</h2>
-    <span fxFlex></span>
+    <span class="flex-1"></span>
     <div [tb-help]="socketDeviceHelpLink"></div>
     <button mat-icon-button
             (click)="cancel()"
@@ -26,8 +26,8 @@
     </button>
   </mat-toolbar>
   <div mat-dialog-content>
-    <div class="tb-form-panel no-border no-padding" fxLayout="column">
-      <div class="tb-form-row column-xs" fxLayoutAlign="space-between center">
+    <div class="tb-form-panel no-border no-padding">
+      <div class="tb-form-row column-xs">
         <div class="fixed-title-width">
           <div class="tb-required" translate>
             gateway.address-filter
@@ -55,7 +55,7 @@
           </mat-form-field>
         </div>
       </div>
-      <div class="tb-form-row column-xs" fxLayoutAlign="space-between center">
+      <div class="tb-form-row column-xs">
         <div class="fixed-title-width tb-required" translate>gateway.device-name</div>
         <div class="tb-flex no-gap">
           <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
@@ -73,7 +73,7 @@
           </mat-form-field>
         </div>
       </div>
-      <div class="tb-form-row column-xs" fxLayoutAlign="space-between center">
+      <div class="tb-form-row column-xs">
         <div class="fixed-title-width tb-required" translate>gateway.device-profile</div>
         <div class="tb-flex no-gap">
           <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
@@ -91,7 +91,7 @@
           </mat-form-field>
         </div>
       </div>
-      <div class="tb-form-row column-xs" fxLayoutAlign="space-between center">
+      <div class="tb-form-row column-xs">
         <div class="fixed-title-width" tb-hint-tooltip-icon="{{ 'gateway.hints.encoding' | translate }}"
              translate>
           gateway.encoding
@@ -207,7 +207,7 @@
       </div>
     </div>
   </div>
-  <div mat-dialog-actions fxLayoutAlign="end center">
+  <div mat-dialog-actions class="justify-end">
     <button mat-button color="primary"
             type="button"
             cdkFocusInitial

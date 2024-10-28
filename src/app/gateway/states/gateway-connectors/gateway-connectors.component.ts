@@ -108,8 +108,9 @@ export class ForceErrorStateMatcher implements ErrorStateMatcher {
     ModbusLegacyBasicConfigComponent,
     SocketBasicConfigComponent,
     SocketLegacyBasicConfigComponent,
-    ReportStrategyComponent
-  ]
+    ReportStrategyComponent,
+    AddConnectorDialogComponent
+  ],
 })
 export class GatewayConnectorComponent extends PageComponent implements AfterViewInit, OnDestroy {
 

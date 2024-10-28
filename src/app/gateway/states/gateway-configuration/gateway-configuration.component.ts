@@ -165,7 +165,7 @@ export class GatewayConfigurationComponent implements AfterViewInit, OnDestroy {
       addAttribute(key, val);
     };
 
-    addAttribute('RemoteLoggingLevel', value.logs?.remote?.enabled ? value.logs.remote.logLevel : GatewayLogLevel.NONE);
+    addAttribute('RemoteLoggingLevel', value.logs?.logLevel ?? GatewayLogLevel.NONE);
 
     delete value.connectors;
     addAttribute('logs_configuration', this.generateLogsFile(value.logs));
@@ -375,10 +375,7 @@ export class GatewayConfigurationComponent implements AfterViewInit, OnDestroy {
         case 'RemoteLoggingLevel':
           formValue.logs = {
             ...formValue.logs,
-            remote: {
-              enabled: attr.value !== GatewayLogLevel.NONE,
-              logLevel: attr.value
-            }
+            logLevel: attr.value
           };
       }
     });

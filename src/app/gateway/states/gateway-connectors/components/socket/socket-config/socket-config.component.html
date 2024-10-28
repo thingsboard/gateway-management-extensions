@@ -14,7 +14,7 @@
   limitations under the License.
 -->
 <div class="tb-form-panel no-border no-padding padding-top" [formGroup]="socketConfigFormGroup">
-  <div class="tb-form-row column-xs" fxLayoutAlign="space-between center">
+  <div class="tb-form-row column-xs">
     <div class="fixed-title-width">
       <div tbTruncateWithTooltip>{{ 'gateway.connection-type' | translate }}</div>
     </div>
@@ -22,7 +22,7 @@
       <tb-toggle-option *ngFor="let type of socketTypes" [value]="type">{{ (type) }}</tb-toggle-option>
     </tb-toggle-select>
   </div>
-  <div class="tb-form-row column-xs" fxLayoutAlign="space-between center">
+  <div class="tb-form-row column-xs">
     <div class="fixed-title-width tb-required" translate>gateway.address</div>
     <div class="tb-flex no-gap">
       <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
@@ -39,7 +39,7 @@
       </mat-form-field>
     </div>
   </div>
-  <div class="tb-form-row column-xs" fxLayoutAlign="space-between center">
+  <div class="tb-form-row column-xs">
     <div class="fixed-title-width tb-required" translate>gateway.port</div>
     <div class="tb-flex no-gap">
       <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
@@ -59,7 +59,7 @@
       </mat-form-field>
     </div>
   </div>
-  <div class="tb-form-row column-xs" fxLayoutAlign="space-between center">
+  <div class="tb-form-row column-xs">
     <div class="fixed-title-width tb-required" translate>gateway.buffer-size</div>
     <div class="tb-flex no-gap">
       <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
