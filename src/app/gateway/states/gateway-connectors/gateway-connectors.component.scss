@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@import '../../styles/constants';
+@use '../../styles/constants' as constants;
 
 :host {
   width: 100%;
@@ -32,13 +32,13 @@
     height: 100%;
     width: 100%;
     flex-direction: row;
-    @media #{$mat-lt-lg} {
+    @media #{constants.$mat-lt-lg} {
       flex-direction: column;
     }
 
     & > section:not(.table-section) {
       max-width: unset;
-      @media #{$mat-gt-md} {
+      @media #{constants.$mat-gt-md} {
         max-width: 50%;
       }
     }
