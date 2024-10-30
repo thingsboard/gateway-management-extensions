@@ -39,7 +39,7 @@ import {
   ValidatorFn,
   Validators
 } from '@angular/forms';
-import { EntityId } from '@shared/public-api';
+import { coerceBoolean, DeviceCredentials, DeviceCredentialsType, EntityId, SharedModule } from '@shared/public-api';
 import { MatDialog } from '@angular/material/dialog';
 import {
   GatewayRemoteConfigurationDialogComponent,
@@ -48,7 +48,6 @@ import {
 import { DeviceService } from '@core/public-api';
 import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import { DeviceCredentials, DeviceCredentialsType, coerceBoolean, SharedModule } from '@shared/public-api';
 import {
   GatewayLogLevel,
   ReportStrategyComponent,
@@ -65,12 +64,12 @@ import {
   LocalLogsConfigs,
   LocalLogsConfigTranslateMap,
   LogConfig,
-  LogSavingPeriodTranslations,
-  SecurityTypesTranslationsMap,
-  StorageTypesTranslationMap,
-  StorageTypes,
-  SecurityTypes,
   LogSavingPeriod,
+  LogSavingPeriodTranslations,
+  SecurityTypes,
+  SecurityTypesTranslationsMap,
+  StorageTypes,
+  StorageTypesTranslationMap,
 } from '../../models/public-api';
 import { MatTabGroup } from '@angular/material/tabs';
 
@@ -116,15 +115,16 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
   readonly localLogsConfigTranslateMap = LocalLogsConfigTranslateMap;
   readonly securityTypes = SecurityTypesTranslationsMap;
   readonly gatewayLogLevel = Object.values(GatewayLogLevel);
+  readonly remoteLogLevel = Object.values(GatewayLogLevel).filter(key => key !== GatewayLogLevel.NONE);
   readonly ReportStrategyDefaultValue = ReportStrategyDefaultValue;
 
   private numberInputPattern = new RegExp(/^\d{1,15}$/);
 
   logSelector: FormControl;
+  showRemoteLogsControl: FormControl<boolean>;
   basicFormGroup: FormGroup;
 
-  private onChange: (value: GatewayConfigValue) => void;
-  private onTouched: () => void;
+  private onChange: (value: GatewayConfigValue) => void = () => {};
 
   private destroy$ = new Subject<void>();
 
@@ -132,13 +132,16 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
               private deviceService: DeviceService,
               private cd: ChangeDetectorRef,
               private dialog: MatDialog) {
+    this.showRemoteLogsControl = this.fb.control(false);
+    this.showRemoteLogsControl.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(enable => this.basicFormGroup.get('logs.logLevel')[enable ? 'enable' : 'disable']());
     this.initBasicFormGroup();
     this.observeFormChanges();
     this.basicFormGroup.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe(value => {
         this.onChange(value);
-        this.onTouched();
       });
   }
 
@@ -163,12 +166,11 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
-  }
+  registerOnTouched(_: () => void): void {}
 
   writeValue(basicConfig: GatewayConfigValue): void {
     this.basicFormGroup.patchValue(basicConfig, {emitEvent: false});
+    this.updateRemoteLogs(basicConfig?.logs?.logLevel ?? GatewayLogLevel.NONE);
     this.checkAndFetchCredentials(basicConfig?.thingsboard?.security ?? {} as GatewayConfigSecurity);
     if (basicConfig?.grpc) {
       this.toggleRpcFields(basicConfig.grpc.enabled);
@@ -181,6 +183,11 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
     return this.basicFormGroup.valid ? null : {
       basicFormGroup: {valid: false}
     };
+  }
+
+  private updateRemoteLogs(logLevel: GatewayLogLevel): void {
+    this.showRemoteLogsControl.patchValue(logLevel && logLevel !== GatewayLogLevel.NONE);
+    this.basicFormGroup.get('logs.logLevel').patchValue(logLevel === GatewayLogLevel.NONE ? GatewayLogLevel.INFO : logLevel, {emitEvent: false});
   }
 
   private atLeastOneRequired(validator: ValidatorFn, controls: string[] = null) {
@@ -370,10 +377,7 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
         [Validators.required, Validators.pattern(/^[^\s].*[^\s]$/)]
       ],
       type: ['remote', [Validators.required]],
-      remote: this.fb.group({
-        enabled: [false],
-        logLevel: [GatewayLogLevel.INFO, [Validators.required]]
-      }),
+      logLevel: [GatewayLogLevel.INFO],
       local: this.fb.group({})
     });
   }

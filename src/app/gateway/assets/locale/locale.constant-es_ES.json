@@ -136,7 +136,6 @@
     "check-connectors-configuration-pattern": "La configuración no es válida",
     "add": "Añadir comando",
     "timeout": "Timeout",
-    "timeout-ms": "Timeout (en ms)",
     "timeout-required": "Se requiere timeout",
     "timeout-min": "El timeout no puede ser menor de 1",
     "timeout-pattern": "El timeout no es válido",

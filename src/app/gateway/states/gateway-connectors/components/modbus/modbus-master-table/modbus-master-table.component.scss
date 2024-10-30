@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@import '../../../../../styles/constants';
+@use '../../../../../styles/constants' as constants;
 
 :host {
   width: 100%;
@@ -25,7 +25,7 @@
 
     .tb-master-table-content {
       width: 100%;
-      height: 100%;
+      height: calc(100% - 60px);
       background: #fff;
       overflow: hidden;
 
@@ -53,7 +53,7 @@
 
           .table-value-column {
             padding: 0 12px;
-            width: 38%;
+            width: 16%;
           }
         }
       }
@@ -64,7 +64,7 @@
     height: calc(100% - 120px);
   }
 
-  @media #{$mat-xs} {
+  @media #{constants.$mat-xs} {
     .mat-toolbar {
       height: auto;
       min-height: 100px;
@@ -74,6 +74,10 @@
         width: 100%;
       }
     }
+  }
+
+  .hint-container {
+    z-index: 1000;
   }
 }
 

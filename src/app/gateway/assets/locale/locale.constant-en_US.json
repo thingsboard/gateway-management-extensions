@@ -503,7 +503,6 @@
       "check-connectors-configuration-pattern": "Check connectors configuration is not valid",
       "add": "Add command",
       "timeout": "Timeout (in sec)",
-      "timeout-ms": "Timeout (in ms)",
       "timeout-required": "Timeout is required",
       "timeout-min": "Timeout can not be less then 1",
       "timeout-pattern": "Timeout is not valid",

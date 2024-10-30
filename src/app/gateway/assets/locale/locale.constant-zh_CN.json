@@ -136,7 +136,6 @@
     "check-connectors-configuration-pattern": "检查连接器配置无效",
     "add": "添加命令",
     "timeout": "超时时间",
-    "timeout-ms": "超时时间（毫秒）",
     "timeout-required": "超时时间是必需的",
     "timeout-min": "超时时间不能小于1",
     "timeout-pattern": "超时时间无效",

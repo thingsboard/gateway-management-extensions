@@ -23,7 +23,7 @@
         <div class="tb-form-panel stroked tb-flex">
           <ng-container [formGroup]="keyControl">
             <mat-expansion-panel class="tb-settings" [expanded]="last">
-              <mat-expansion-panel-header fxLayout="row wrap">
+              <mat-expansion-panel-header class="flex-wrap">
                 <mat-panel-title>
                   <div class="title-container"
                        *ngIf="keysType === SocketValueKey.TIMESERIES || keysType === SocketValueKey.ATTRIBUTES else valueTitle">
@@ -45,7 +45,7 @@
                      *ngIf="keysType === SocketValueKey.TIMESERIES || keysType === SocketValueKey.ATTRIBUTES">
                   <div class="tb-form-panel stroked">
                     <div class="tb-form-panel-title" translate>gateway.platform-side</div>
-                    <div class="tb-form-row column-xs" fxLayoutAlign="space-between center">
+                    <div class="tb-form-row column-xs">
                       <div class="fixed-title-width tb-required"
                            tb-hint-tooltip-icon="{{ 'gateway.hints.socket.key' | translate }}">
                         {{ 'gateway.key' | translate }}
@@ -69,7 +69,7 @@
                   </div>
                   <div class="tb-form-panel stroked">
                     <div class="tb-form-panel-title" translate>gateway.connector-side</div>
-                    <div class="tb-form-row column-xs" fxLayoutAlign="space-between center">
+                    <div class="tb-form-row column-xs">
                       <div class="fixed-title-width tb-flex align-center">
                         <span class="tb-required">{{ 'gateway.byte' | translate }}</span>
                         <div  matSuffix
@@ -80,7 +80,7 @@
                         </div>
                       </div>
                       <label for="byteFrom" class="tb-small-label">from</label>
-                      <mat-form-field fxFlex appearance="outline" subscriptSizing="dynamic" class="tb-flex no-gap">
+                      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="tb-flex no-gap flex-1">
                         <input matInput required formControlName="byteFrom" type="number" id="byteFrom"
                                placeholder="{{ 'gateway.set' | translate }}"/>
                         <mat-icon matSuffix
@@ -94,7 +94,7 @@
                         </mat-icon>
                       </mat-form-field>
                       <label for="byteTo" class="tb-small-label">to</label>
-                      <mat-form-field fxFlex appearance="outline" subscriptSizing="dynamic" class="tb-flex no-gap">
+                      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="tb-flex no-gap flex-1">
                         <input matInput required formControlName="byteTo" type="number" id="byteTo"
                                placeholder="{{ 'gateway.set' | translate }}"/>
                         <mat-icon matSuffix
@@ -111,7 +111,7 @@
                   </div>
                 </div>
                 <div class="tb-form-panel no-border no-padding" *ngIf="keysType === SocketValueKey.RPC_METHODS">
-                  <div class="tb-form-row column-xs" fxLayoutAlign="space-between center">
+                  <div class="tb-form-row column-xs">
                     <div class="fixed-title-width tb-required">
                       {{ 'gateway.method-name' | translate }}
                     </div>
@@ -130,7 +130,7 @@
                       </mat-form-field>
                     </div>
                   </div>
-                  <div class="tb-form-row column-xs" fxLayoutAlign="space-between center">
+                  <div class="tb-form-row column-xs">
                     <div class="fixed-title-width" tb-hint-tooltip-icon="{{ 'gateway.hints.encoding' | translate }}"
                          translate>
                       gateway.encoding
@@ -144,7 +144,7 @@
                       </mat-form-field>
                     </div>
                   </div>
-                  <div class="tb-form-row" fxLayoutAlign="space-between center">
+                  <div class="tb-form-row">
                     <mat-slide-toggle class="mat-slide" (click)="$event.stopPropagation()"
                                       formControlName="withResponse">
                       <mat-label tb-hint-tooltip-icon="{{ 'gateway.hints.socket.with-response' | translate }}">
@@ -154,7 +154,7 @@
                   </div>
                 </div>
                 <div class="tb-form-panel no-border no-padding" *ngIf="keysType === SocketValueKey.ATTRIBUTES_REQUESTS">
-                  <div class="tb-form-row column-xs" fxLayoutAlign="space-between center">
+                  <div class="tb-form-row column-xs">
                     <div class="fixed-title-width" tb-hint-tooltip-icon="{{ 'gateway.hints.socket.attribute-requests-type' | translate }}"
                          translate>
                       gateway.type
@@ -168,7 +168,7 @@
                       </mat-form-field>
                     </div>
                   </div>
-                  <div class="tb-form-row column-xs" fxLayoutAlign="space-between center">
+                  <div class="tb-form-row column-xs">
                     <div class="fixed-title-width">
                       {{ 'gateway.request-expression' | translate }}
                     </div>
@@ -192,7 +192,7 @@
                       </mat-form-field>
                     </div>
                   </div>
-                  <div class="tb-form-row column-xs" fxLayoutAlign="space-between center">
+                  <div class="tb-form-row column-xs">
                     <div class="fixed-title-width">
                       {{ 'gateway.attribute-name-expression' | translate }}
                     </div>
@@ -218,7 +218,7 @@
                   </div>
                 </div>
                 <div class="tb-form-panel no-border no-padding" *ngIf="keysType === SocketValueKey.ATTRIBUTES_UPDATES">
-                  <div class="tb-form-row column-xs" fxLayoutAlign="space-between center">
+                  <div class="tb-form-row column-xs">
                     <div class="fixed-title-width" tb-hint-tooltip-icon="{{ 'gateway.hints.encoding' | translate }}"
                          translate>
                       gateway.encoding
@@ -232,7 +232,7 @@
                       </mat-form-field>
                     </div>
                   </div>
-                  <div class="tb-form-row column-xs" fxLayoutAlign="space-between center">
+                  <div class="tb-form-row column-xs">
                     <div class="fixed-title-width tb-required">
                       {{ 'gateway.attribute-on-platform' | translate }}
                     </div>

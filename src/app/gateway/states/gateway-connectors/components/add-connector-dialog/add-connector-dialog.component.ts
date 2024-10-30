@@ -43,7 +43,7 @@ import { CommonModule } from '@angular/common';
   selector: 'tb-add-connector-dialog',
   templateUrl: './add-connector-dialog.component.html',
   styleUrls: ['./add-connector-dialog.component.scss'],
-  providers: [],
+  providers: [LatestVersionConfigPipe],
   standalone: true,
   imports: [
     CommonModule,

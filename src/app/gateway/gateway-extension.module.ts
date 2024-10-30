@@ -15,6 +15,7 @@
 ///
 
 import addGatewayLocale from './shared/models/gateway-locale.constant';
+import { addLibraryStyles } from '../scss/lib-styles';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
@@ -43,6 +44,7 @@ import { GatewayLogsComponent } from './states/gateway-logs/public-api';
 })
 export class GatewayExtensionModule {
   constructor(private translate: TranslateService) {
-    addGatewayLocale(translate)
+    addGatewayLocale(translate);
+    addLibraryStyles('tb-gateway-css');
   }
 }

@@ -20,7 +20,7 @@
       <div class="tb-form-panel stroked tb-flex">
         <ng-container [formGroup]="keyControl">
           <mat-expansion-panel class="tb-settings" [expanded]="last">
-            <mat-expansion-panel-header fxLayout="row wrap">
+            <mat-expansion-panel-header class="flex-wrap">
               <mat-panel-title>
                 <div class="title-container" tbTruncateWithTooltip>{{ keyControl.get('typeValue').value?.value ?? '' }}</div>
               </mat-panel-title>
