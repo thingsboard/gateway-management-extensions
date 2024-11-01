@@ -18,7 +18,7 @@ import {
   DevicesConfigMapping,
   ExpressionType,
   LegacyDevicesConfigMapping,
-  SocketBasicConfig_v3_5_3,
+  SocketBasicConfig_v3_6,
   SocketConfig,
   SocketLegacyBasicConfig,
 } from '../models/public-api';
@@ -30,7 +30,7 @@ export class SocketVersionMappingUtil {
     return socket;
   }
 
-  static mapSocketToDowngradedVersion(config: SocketBasicConfig_v3_5_3): SocketLegacyBasicConfig {
+  static mapSocketToDowngradedVersion(config: SocketBasicConfig_v3_6): SocketLegacyBasicConfig {
     const { devices, socket } = config ?? {};
     return {
       ...socket,
@@ -38,8 +38,8 @@ export class SocketVersionMappingUtil {
     }
   }
 
-  static mapDevicesToUpgradedVersion(config: SocketLegacyBasicConfig): DevicesConfigMapping[] {
-    return config.devices?.map(device => ({
+  static mapDevicesToUpgradedVersion(devices: LegacyDevicesConfigMapping[]): DevicesConfigMapping[] {
+    return devices?.map(device => ({
       ...device,
       attributeRequests: device.attributeRequests?.map(request => ({
         ...request,

@@ -16,7 +16,7 @@
 
 import {
   SocketBasicConfig,
-  SocketBasicConfig_v3_5_3,
+  SocketBasicConfig_v3_6,
   SocketLegacyBasicConfig,
 } from '../models/public-api';
 import { GatewayConnectorVersionProcessor } from './gateway-connector-version-processor.abstract';
@@ -32,7 +32,7 @@ export class SocketVersionProcessor extends GatewayConnectorVersionProcessor<Soc
     super(gatewayVersionIn, connector);
   }
 
-  getUpgradedVersion(): GatewayConnector<SocketBasicConfig_v3_5_3> {
+  getUpgradedVersion(): GatewayConnector<SocketBasicConfig_v3_6> {
     const configurationJson = this.connector.configurationJson;
     return {
       ...this.connector,
@@ -41,7 +41,7 @@ export class SocketVersionProcessor extends GatewayConnectorVersionProcessor<Soc
         devices: configurationJson?.devices ? SocketVersionMappingUtil.mapDevicesToUpgradedVersion(configurationJson.devices) : [],
       },
       configVersion: this.gatewayVersionIn
-    } as GatewayConnector<SocketBasicConfig_v3_5_3>;
+    } as GatewayConnector<SocketBasicConfig_v3_6>;
   }
 
   getDowngradedVersion(): GatewayConnector<SocketLegacyBasicConfig> {

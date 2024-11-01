@@ -82,7 +82,7 @@ export class ModbusVersionMappingUtil {
     const values = Object.keys(slave.values).reduce((acc, valueKey) => {
       acc = {
         ...acc,
-        [valueKey]: this.mapValuesToUpgradedVersion(slave.values[valueKey][0])
+        [valueKey]: this.mapValuesToUpgradedVersion(slave.values[valueKey][0] ?? {})
       };
       return acc;
     }, {} as ModbusRegisterValues);

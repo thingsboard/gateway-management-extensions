@@ -35,7 +35,7 @@ import {
   GatewayConnectorBasicConfigDirective
 } from '../../../abstract/public-api';
 import { SocketVersionMappingUtil } from '../../../utils/public-api';
-import { SocketBasicConfig_v3_5_3, SocketLegacyBasicConfig } from '../../../models/public-api';
+import { SocketBasicConfig_v3_6, SocketLegacyBasicConfig } from '../../../models/public-api';
 
 @Component({
   selector: 'tb-socket-legacy-basic-config',
@@ -63,9 +63,9 @@ import { SocketBasicConfig_v3_5_3, SocketLegacyBasicConfig } from '../../../mode
   styleUrls: ['./socket-basic-config.component.scss']
 })
 
-export class SocketLegacyBasicConfigComponent extends GatewayConnectorBasicConfigDirective<SocketBasicConfig_v3_5_3, SocketLegacyBasicConfig> implements ControlValueAccessor, Validator, OnDestroy {
+export class SocketLegacyBasicConfigComponent extends GatewayConnectorBasicConfigDirective<SocketBasicConfig_v3_6, SocketLegacyBasicConfig> implements ControlValueAccessor, Validator, OnDestroy {
 
-  protected getMappedValue(config: SocketBasicConfig_v3_5_3): SocketLegacyBasicConfig {
+  protected getMappedValue(config: SocketBasicConfig_v3_6): SocketLegacyBasicConfig {
     return SocketVersionMappingUtil.mapSocketToDowngradedVersion(config);
   }
 
@@ -76,10 +76,10 @@ export class SocketLegacyBasicConfigComponent extends GatewayConnectorBasicConfi
     });
   }
 
-  protected mapConfigToFormValue(config: SocketLegacyBasicConfig): SocketBasicConfig_v3_5_3 {
+  protected mapConfigToFormValue(config: SocketLegacyBasicConfig): SocketBasicConfig_v3_6 {
     return {
       socket: SocketVersionMappingUtil.mapSocketToUpgradedVersion(config),
-      devices: config?.devices ? SocketVersionMappingUtil.mapDevicesToUpgradedVersion(config) : [],
+      devices: config?.devices ? SocketVersionMappingUtil.mapDevicesToUpgradedVersion(config.devices) : [],
     };
   }
 }

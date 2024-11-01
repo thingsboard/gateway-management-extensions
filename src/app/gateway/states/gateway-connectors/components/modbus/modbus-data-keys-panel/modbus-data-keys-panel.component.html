@@ -25,7 +25,7 @@
               <mat-expansion-panel-header class="flex-wrap">
                 <mat-panel-title>
                   <div *ngIf="isMaster else tagName" class="title-container" tbTruncateWithTooltip>
-                    {{ keyControl.get('tag').value }}{{ '-' }}{{ keyControl.get('value').value }}
+                    {{ keyControl.get('tag').value }}{{ ': ' }}{{ keyControl.get('value').value }}
                   </div>
                   <ng-template #tagName>
                     <div class="tb-flex">

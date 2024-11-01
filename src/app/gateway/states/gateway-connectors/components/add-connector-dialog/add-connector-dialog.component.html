@@ -80,7 +80,7 @@
           </mat-label>
         </mat-slide-toggle>
       </div>
-      <div *ngIf="connectorForm.get('type').value === connectorType.MQTT" class="tb-form-row column-xs">
+      <div *ngIf="connectorForm.get('type').value === connectorType.MQTT && !(data.gatewayVersion | withReportStrategy : connectorType.MQTT)" class="tb-form-row column-xs">
         <mat-slide-toggle class="mat-slide" formControlName="sendDataOnlyOnChange">
           <mat-label tb-hint-tooltip-icon="{{ 'gateway.send-change-data-hint' | translate }}">
             {{ 'gateway.send-change-data' | translate }}

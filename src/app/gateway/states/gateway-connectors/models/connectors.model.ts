@@ -40,7 +40,7 @@ import {
   DeviceAttributesUpdate,
   DeviceDataKey,
   DeviceRpcMethod,
-  SocketBasicConfig_v3_5_3,
+  SocketBasicConfig_v3_6,
   SocketEncoding,
   SocketLegacyBasicConfig
 } from './socket.models';
@@ -304,7 +304,7 @@ export type ConnectorLegacyConfig = ConnectorBaseInfo | MQTTLegacyBasicConfig | 
 
 export type ConnectorBaseConfig_v3_5_2 = ConnectorBaseInfo | MQTTBasicConfig_v3_5_2 | OPCBasicConfig_v3_5_2 | ModbusBasicConfig_v3_5_2;
 
-export type ConnectorBaseConfig_v3_5_3 = ConnectorBaseInfo | SocketBasicConfig_v3_5_3;
+export type ConnectorBaseConfig_v3_6 = ConnectorBaseInfo | SocketBasicConfig_v3_6;
 
 export interface DevicesConfigMapping {
   address: string;
