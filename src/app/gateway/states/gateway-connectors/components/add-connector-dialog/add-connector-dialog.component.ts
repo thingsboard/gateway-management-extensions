@@ -26,7 +26,8 @@ import {
   GatewayLogLevel,
   GatewayVersion,
   noLeadTrailSpacesRegex,
-  getDefaultConfig
+  getDefaultConfig,
+  ReportStrategyVersionPipe
 } from '../../../../shared/public-api';
 import {
   AddConnectorConfigData,
@@ -47,7 +48,8 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [
     CommonModule,
-    SharedModule
+    SharedModule,
+    ReportStrategyVersionPipe
   ]
 })
 export class AddConnectorDialogComponent

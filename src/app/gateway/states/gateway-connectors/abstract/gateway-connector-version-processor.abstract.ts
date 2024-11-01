@@ -14,7 +14,7 @@
 /// limitations under the License.
 ///
 
-import { GatewayConnectorConfigVersionMap } from '../models/public-api';
+import { ConnectorBaseInfo, GatewayConnectorConfigVersionMap } from '../models/public-api';
 import {
   GatewayConnectorVersionMappingUtil
 } from '../utils/public-api';
@@ -26,7 +26,7 @@ export abstract class GatewayConnectorVersionProcessor<BasicConfig> {
 
   protected constructor(protected gatewayVersionIn: string | number, protected connector: GatewayConnector<BasicConfig>) {
     this.gatewayVersion = GatewayConnectorVersionMappingUtil.parseVersion(this.gatewayVersionIn);
-    this.configVersion = GatewayConnectorVersionMappingUtil.parseVersion(this.connector.configVersion);
+    this.configVersion = GatewayConnectorVersionMappingUtil.parseVersion(this.connector.configVersion ?? (this.connector.configurationJson as ConnectorBaseInfo).configVersion);
   }
 
   getProcessedByVersion(): GatewayConnector<BasicConfig> {
@@ -56,8 +56,13 @@ export abstract class GatewayConnectorVersionProcessor<BasicConfig> {
   }
 
   private isVersionUpgradeNeeded(): boolean {
-    return this.gatewayVersion >= GatewayConnectorVersionMappingUtil.parseVersion(GatewayConnectorConfigVersionMap.get(this.connector.type))
-      && (!this.configVersion || this.configVersion < this.gatewayVersion);
+    const connectorTypeLastVersion = GatewayConnectorVersionMappingUtil.parseVersion(GatewayConnectorConfigVersionMap.get(this.connector.type));
+
+    const isGatewayUpgradable = this.gatewayVersion >= connectorTypeLastVersion;
+    const isConfigUpgradeNeeded = !this.configVersion ||
+      (this.configVersion < this.gatewayVersion && this.configVersion < connectorTypeLastVersion);
+
+    return isGatewayUpgradable && isConfigUpgradeNeeded;
   }
 
   private isVersionDowngradeNeeded(): boolean {

@@ -73,9 +73,9 @@ export const SocketKeysPanelTitleTranslationsMap = new Map<SocketValueKey, strin
   ]
 );
 
-export type SocketBasicConfig = SocketBasicConfig_v3_5_3 | SocketLegacyBasicConfig;
+export type SocketBasicConfig = SocketBasicConfig_v3_6 | SocketLegacyBasicConfig;
 
-export interface SocketBasicConfig_v3_5_3 {
+export interface SocketBasicConfig_v3_6 {
   socket: SocketConfig;
   devices: DevicesConfigMapping[];
 }

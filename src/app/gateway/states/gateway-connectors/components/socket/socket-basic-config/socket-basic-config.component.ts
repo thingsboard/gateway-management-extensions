@@ -27,7 +27,7 @@ import {
   NG_VALUE_ACCESSOR,
   Validator,
 } from '@angular/forms';
-import { SocketBasicConfig_v3_5_3, SocketConfig } from '../../../models/public-api';
+import { SocketBasicConfig_v3_6, SocketConfig } from '../../../models/public-api';
 import { SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
 import { SocketConfigComponent } from '../socket-config/socket-config.component';
@@ -62,9 +62,9 @@ import {
   styleUrls: ['./socket-basic-config.component.scss']
 })
 
-export class SocketBasicConfigComponent extends GatewayConnectorBasicConfigDirective<SocketBasicConfig_v3_5_3, SocketBasicConfig_v3_5_3> implements ControlValueAccessor, Validator, OnDestroy {
+export class SocketBasicConfigComponent extends GatewayConnectorBasicConfigDirective<SocketBasicConfig_v3_6, SocketBasicConfig_v3_6> implements ControlValueAccessor, Validator, OnDestroy {
 
-  protected getMappedValue(config: SocketBasicConfig_v3_5_3): SocketBasicConfig_v3_5_3 {
+  protected getMappedValue(config: SocketBasicConfig_v3_6): SocketBasicConfig_v3_6 {
     return config;
   }
 
@@ -75,7 +75,7 @@ export class SocketBasicConfigComponent extends GatewayConnectorBasicConfigDirec
     });
   }
 
-  protected mapConfigToFormValue(config: SocketBasicConfig_v3_5_3): SocketBasicConfig_v3_5_3 {
+  protected mapConfigToFormValue(config: SocketBasicConfig_v3_6): SocketBasicConfig_v3_6 {
     return {
       socket: config.socket ?? {} as SocketConfig,
       devices: config.devices ?? [],

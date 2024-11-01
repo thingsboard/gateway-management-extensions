@@ -45,10 +45,13 @@ export abstract class GatewayConnectorVersionMappingUtil {
   }
 
   static parseVersion(version: string | number): number {
-    if (isNumber(version)) {
-      return version as number;
+    if (isNumber(version)) return version as number;
+
+    if (isString(version)) {
+      const [major, minor = '0', patch = '0'] = (version as string).split('.');
+      return parseFloat(`${major}.${minor}${patch.slice(0, 1)}`);
     }
 
-    return isString(version) ? parseFloat((version as string).replace(/\./g, '').slice(0, 3)) / 100 : 0;
+    return 0;
   }
 }
