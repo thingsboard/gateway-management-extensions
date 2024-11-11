@@ -86,4 +86,8 @@ export class GatewayServiceRPCConnectorTemplatesComponent {
       }]).subscribe(() => {
     })
   }
+
+  getRpcParamsRowClasses(value: unknown): string {
+    return this.isObject(value) ? 'flex-col' : 'flex-row justify-between items-center';
+  }
 }

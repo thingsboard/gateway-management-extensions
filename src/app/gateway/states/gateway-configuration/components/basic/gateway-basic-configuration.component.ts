@@ -385,8 +385,8 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
   private initCheckingDeviceActivityFormGroup(): FormGroup {
     return this.fb.group({
       checkDeviceInactivity: [false],
-      inactivityTimeoutSeconds: [200, [Validators.min(1), Validators.pattern(this.numberInputPattern)]],
-      inactivityCheckPeriodSeconds: [500, [Validators.min(1), Validators.pattern(this.numberInputPattern)]]
+      inactivityTimeoutSeconds: [300, [Validators.min(1), Validators.pattern(this.numberInputPattern)]],
+      inactivityCheckPeriodSeconds: [10, [Validators.min(1), Validators.pattern(this.numberInputPattern)]]
     });
   }
 
