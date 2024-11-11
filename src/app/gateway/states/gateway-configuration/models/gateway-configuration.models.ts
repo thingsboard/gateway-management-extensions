@@ -237,3 +237,5 @@ export const SecurityTypesTranslationsMap = new Map<SecurityTypes, string>(
   ]
 );
 
+export const numberInputPattern = new RegExp(/^\d{1,15}$/);
+

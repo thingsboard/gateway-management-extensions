@@ -1,0 +1,175 @@
+<!--
+  Copyright © 2016-2024 The Thingsboard Authors
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<div [formGroup]="storageFormGroup" class="mat-content mat-padding configuration-block">
+  <div class="tb-form-panel no-padding-bottom">
+    <div translate class="tb-form-panel-title">gateway.storage</div>
+    <div translate class="tb-form-panel-hint">gateway.hints.storage</div>
+    <tb-toggle-select class="flex" formControlName="type">
+      <tb-toggle-option *ngFor="let storageType of storageTypes" [value]="storageType">
+        {{ storageTypesTranslationMap.get(storageType) | translate }}
+      </tb-toggle-option>
+    </tb-toggle-select>
+    <div class="tb-form-panel-hint">{{ 'gateway.hints.' + storageFormGroup.get('type').value | translate }}</div>
+    <ng-container [ngSwitch]="storageFormGroup.get('type').value">
+      <section *ngSwitchCase="StorageTypes.MEMORY" class="tb-form-row no-border no-padding tb-standard-fields column-xs">
+        <mat-form-field appearance="outline" class="flex">
+          <mat-label translate>gateway.storage-read-record-count</mat-label>
+          <input type="number" matInput formControlName="read_records_count"/>
+          <mat-error *ngIf="storageFormGroup.get('read_records_count').hasError('required')">
+            {{ 'gateway.storage-read-record-count-required' | translate }}
+          </mat-error>
+          <mat-error *ngIf="storageFormGroup.get('read_records_count').hasError('min')">
+            {{ 'gateway.storage-read-record-count-min' | translate }}
+          </mat-error>
+          <mat-error *ngIf="storageFormGroup.get('read_records_count').hasError('pattern')">
+            {{ 'gateway.storage-read-record-count-pattern' | translate }}
+          </mat-error>
+          <mat-icon matIconSuffix style="cursor:pointer;"
+                    matTooltip="{{ 'gateway.hints.read-record-count' | translate }}">info_outlined
+          </mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="flex">
+          <mat-label translate>gateway.storage-max-records</mat-label>
+          <input type="number" matInput formControlName="max_records_count"/>
+          <mat-error *ngIf="storageFormGroup.get('max_records_count').hasError('required')">
+            {{ 'gateway.storage-max-records-required' | translate }}
+          </mat-error>
+          <mat-error *ngIf="storageFormGroup.get('max_records_count').hasError('min')">
+            {{ 'gateway.storage-max-records-min' | translate }}
+          </mat-error>
+          <mat-error *ngIf="storageFormGroup.get('max_records_count').hasError('pattern')">
+            {{ 'gateway.storage-max-records-pattern' | translate }}
+          </mat-error>
+          <mat-icon matIconSuffix style="cursor:pointer;"
+                    matTooltip="{{ 'gateway.hints.max-records-count' | translate }}">info_outlined
+          </mat-icon>
+        </mat-form-field>
+      </section>
+      <section *ngSwitchCase="StorageTypes.FILE">
+        <div class="tb-form-row no-border no-padding tb-standard-fields column-xs">
+          <mat-form-field appearance="outline" class="flex">
+            <mat-label translate>gateway.storage-data-folder-path</mat-label>
+            <input matInput formControlName="data_folder_path"/>
+            <mat-error *ngIf="storageFormGroup.get('data_folder_path').hasError('required')">
+              {{ 'gateway.storage-data-folder-path-required' | translate }}
+            </mat-error>
+            <mat-icon class="mat-form-field-infix pointer-event suffix-icon" aria-hidden="false"
+                      aria-label="help-icon"
+                      matSuffix style="cursor:pointer;"
+                      matTooltip="{{ 'gateway.hints.data-folder' | translate }}">info_outlined
+            </mat-icon>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="flex">
+            <mat-label translate>gateway.storage-max-files</mat-label>
+            <input matInput type="number" formControlName="max_file_count"/>
+            <mat-error *ngIf="storageFormGroup.get('max_file_count').hasError('required')">
+              {{ 'gateway.storage-max-files-required' | translate }}
+            </mat-error>
+            <mat-error *ngIf="storageFormGroup.get('max_file_count').hasError('min')">
+              {{ 'gateway.storage-max-files-min' | translate }}
+            </mat-error>
+            <mat-error *ngIf="storageFormGroup.get('max_file_count').hasError('pattern')">
+              {{ 'gateway.storage-max-files-pattern' | translate }}
+            </mat-error>
+            <mat-icon matIconSuffix style="cursor:pointer;"
+                      matTooltip="{{ 'gateway.hints.max-file-count' | translate }}">info_outlined
+            </mat-icon>
+          </mat-form-field>
+        </div>
+        <div class="tb-form-row no-border no-padding tb-standard-fields column-xs">
+          <mat-form-field appearance="outline" class="flex">
+            <mat-label translate>gateway.storage-max-read-record-count</mat-label>
+            <input matInput type="number" formControlName="max_read_records_count"/>
+            <mat-error *ngIf="storageFormGroup.get('max_read_records_count').hasError('required')">
+              {{ 'gateway.storage-max-read-record-count-required' | translate }}
+            </mat-error>
+            <mat-error *ngIf="storageFormGroup.get('max_read_records_count').hasError('min')">
+              {{ 'gateway.storage-max-read-record-count-min' | translate }}
+            </mat-error>
+            <mat-error *ngIf="storageFormGroup.get('max_read_records_count').hasError('pattern')">
+              {{ 'gateway.storage-max-read-record-count-pattern' | translate }}
+            </mat-error>
+            <mat-icon matIconSuffix style="cursor:pointer;"
+                      matTooltip="{{ 'gateway.hints.max-read-count' | translate }}">info_outlined
+            </mat-icon>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="flex">
+            <mat-label translate>gateway.storage-max-file-records</mat-label>
+            <input matInput type="number" formControlName="max_records_per_file"/>
+            <mat-error *ngIf="storageFormGroup.get('max_records_per_file').hasError('required')">
+              {{ 'gateway.storage-max-records-required' | translate }}
+            </mat-error>
+            <mat-error *ngIf="storageFormGroup.get('max_records_per_file').hasError('min')">
+              {{ 'gateway.storage-max-records-min' | translate }}
+            </mat-error>
+            <mat-error *ngIf="storageFormGroup.get('max_records_per_file').hasError('pattern')">
+              {{ 'gateway.storage-max-records-pattern' | translate }}
+            </mat-error>
+            <mat-icon matIconSuffix style="cursor:pointer;"
+                      matTooltip="{{ 'gateway.hints.max-records' | translate }}">info_outlined
+            </mat-icon>
+          </mat-form-field>
+        </div>
+      </section>
+      <section *ngSwitchCase="StorageTypes.SQLITE">
+        <div class="tb-form-row no-border no-padding tb-standard-fields column-xs">
+          <mat-form-field appearance="outline" class="flex">
+            <mat-label translate>gateway.storage-path</mat-label>
+            <input matInput formControlName="data_file_path"/>
+            <mat-error *ngIf="storageFormGroup.get('data_file_path').hasError('required')">
+              {{ 'gateway.storage-path-required' | translate }}
+            </mat-error>
+            <mat-icon matIconSuffix style="cursor:pointer;"
+                      matTooltip="{{ 'gateway.hints.data-folder' | translate }}">info_outlined
+            </mat-icon>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="flex">
+            <mat-label translate>gateway.messages-ttl-check-in-hours</mat-label>
+            <input matInput type="number" formControlName="messages_ttl_check_in_hours"/>
+            <mat-error *ngIf="storageFormGroup.get('messages_ttl_check_in_hours').hasError('required')">
+              {{ 'gateway.messages-ttl-check-in-hours-required' | translate }}
+            </mat-error>
+            <mat-error *ngIf="storageFormGroup.get('messages_ttl_check_in_hours').hasError('min')">
+              {{ 'gateway.messages-ttl-check-in-hours-min' | translate }}
+            </mat-error>
+            <mat-error *ngIf="storageFormGroup.get('messages_ttl_check_in_hours').hasError('pattern')">
+              {{ 'gateway.messages-ttl-check-in-hours-pattern' | translate }}
+            </mat-error>
+            <mat-icon matIconSuffix style="cursor:pointer;"
+                      matTooltip="{{ 'gateway.hints.ttl-check-hour' | translate }}">info_outlined
+            </mat-icon>
+          </mat-form-field>
+        </div>
+        <mat-form-field appearance="outline" class="mat-block">
+          <mat-label translate>gateway.messages-ttl-in-days</mat-label>
+          <input matInput type="number" formControlName="messages_ttl_in_days"/>
+          <mat-error *ngIf="storageFormGroup.get('messages_ttl_in_days').hasError('required')">
+            {{ 'gateway.messages-ttl-in-days-required' | translate }}
+          </mat-error>
+          <mat-error *ngIf="storageFormGroup.get('messages_ttl_in_days').hasError('min')">
+            {{ 'gateway.messages-ttl-in-days-min' | translate }}
+          </mat-error>
+          <mat-error *ngIf="storageFormGroup.get('messages_ttl_in_days').hasError('pattern')">
+            {{ 'gateway.messages-ttl-in-days-pattern' | translate }}
+          </mat-error>
+          <mat-icon matIconSuffix style="cursor:pointer;"
+                    matTooltip="{{ 'gateway.hints.ttl-messages-day' | translate }}">info_outlined
+          </mat-icon>
+        </mat-form-field>
+      </section>
+    </ng-container>
+  </div>
+</div>
