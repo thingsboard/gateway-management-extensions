@@ -168,13 +168,13 @@ export interface ModbusSecurity {
 }
 
 export enum ModbusBitTargetType {
-  Boolean = 'bool',
-  Integer = 'int',
+  BooleanType = 'bool',
+  IntegerType = 'int',
 }
 
 export const ModbusBitTargetTypeTranslationMap = new Map<ModbusBitTargetType, string>([
-  [ModbusBitTargetType.Boolean, 'gateway.boolean'],
-  [ModbusBitTargetType.Integer, 'gateway.integer'],
+  [ModbusBitTargetType.BooleanType, 'gateway.boolean'],
+  [ModbusBitTargetType.IntegerType, 'gateway.integer'],
 ]);
 
 export const ModbusMethodLabelsMap = new Map<ModbusMethodType | ModbusSerialMethodType, string>(

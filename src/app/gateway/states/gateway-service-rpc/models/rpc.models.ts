@@ -149,10 +149,10 @@ export interface RPCTemplateConfigOPC {
 
 export interface OPCTypeValue {
   type: MappingValueType;
-  boolean?: boolean;
-  double?: number;
-  integer?: number;
-  string?: string;
+  booleanValue?: boolean;
+  doubleValue?: number;
+  integerValue?: number;
+  stringValue?: string;
 }
 
 export interface SaveRPCTemplateData {

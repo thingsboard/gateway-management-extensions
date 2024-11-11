@@ -74,16 +74,16 @@ export class TypeValueFieldComponent implements ControlValueAccessor, Validator,
   constructor(private fb: UntypedFormBuilder) {
     this.valueTypeFormGroup = this.fb.group({
       type: [MappingValueType.STRING],
-      string: [{ value: '', disabled: this.rawData }, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-      integer: [{ value: 0, disabled: true }, [Validators.required, Validators.pattern(integerRegex)]],
-      double: [{ value: 0, disabled: true }, [Validators.required]],
-      boolean: [{ value: false, disabled: true }, [Validators.required]],
-      raw: [{ value: '', disabled: !this.rawData }, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
+      stringValue: [{ value: '', disabled: this.rawData }, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
+      integerValue: [{ value: 0, disabled: true }, [Validators.required, Validators.pattern(integerRegex)]],
+      doubleValue: [{ value: 0, disabled: true }, [Validators.required]],
+      booleanValue: [{ value: false, disabled: true }, [Validators.required]],
+      rawValue: [{ value: '', disabled: !this.rawData }, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
     });
     this.valueTypeFormGroup.valueChanges.pipe(
       takeUntil(this.destroy$)
     ).subscribe(({ type, ...config }) => {
-      this.onChange({ type, value: config[type] });
+      this.onChange({ type, value: config[type + 'Value'] });
     });
     this.observeTypeChange();
   }
@@ -99,10 +99,10 @@ export class TypeValueFieldComponent implements ControlValueAccessor, Validator,
       .subscribe(type => this.toggleTypeInputs(type));
   }
 
-  private toggleTypeInputs(type): void {
+  private toggleTypeInputs(type: MappingValueType | 'raw'): void {
     this.valueTypeFormGroup.disable({emitEvent: false});
     this.valueTypeFormGroup.get('type').enable({emitEvent: false});
-    this.valueTypeFormGroup.get(type).enable({emitEvent: false});
+    this.valueTypeFormGroup.get(type + 'Value').enable({emitEvent: false});
   }
 
   registerOnChange(fn: (v: ValueType) => {}): void {
@@ -114,14 +114,14 @@ export class TypeValueFieldComponent implements ControlValueAccessor, Validator,
   writeValue(valueTypeIn: ValueType): void {
     const valueType = this.getValueType(valueTypeIn?.value);
     const config = {
-      string: '',
-      raw: '',
-      integer: 0,
-      double: 0,
-      boolean: false,
+      stringValue: '',
+      rawValue: '',
+      integerValue: 0,
+      doubleValue: 0,
+      booleanValue: false,
       type: valueType,
     };
-    config[valueType] = valueTypeIn?.value;
+    config[valueType + 'Value'] = valueTypeIn?.value;
     this.toggleTypeInputs(valueType);
 
     this.valueTypeFormGroup.patchValue(config, {emitEvent: false})
@@ -133,17 +133,17 @@ export class TypeValueFieldComponent implements ControlValueAccessor, Validator,
     };
   }
 
-  private getValueType(arg: unknown): string {
+  private getValueType(arg: unknown): MappingValueType | 'raw' {
     if (this.rawData) {
       return 'raw';
     }
     switch (typeof arg) {
       case 'boolean':
-        return 'boolean';
+        return MappingValueType.BOOLEAN;
       case 'number':
-        return Number.isInteger(arg) ? 'integer' : 'float';
+        return Number.isInteger(arg) ? MappingValueType.INTEGER : MappingValueType.DOUBLE;
       default:
-        return 'string';
+        return MappingValueType.STRING;
     }
   }
 }

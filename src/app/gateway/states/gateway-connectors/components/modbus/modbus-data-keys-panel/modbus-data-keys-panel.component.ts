@@ -140,7 +140,7 @@ export class ModbusDataKeysPanelComponent implements OnInit, OnDestroy {
       modifierType: [{ value: ModifierType.MULTIPLIER, disabled: true }],
       modifierValue: [{ value: 1, disabled: true }, [Validators.pattern(nonZeroFloat)]],
       bit: [{ value: null, disabled: true }],
-      bitTargetType: [{ value: ModbusBitTargetType.Integer, disabled: true }],
+      bitTargetType: [{ value: ModbusBitTargetType.IntegerType, disabled: true }],
       id: [{value: id, disabled: true}],
     });
     this.showModifiersMap.set(id, false);
@@ -231,7 +231,7 @@ export class ModbusDataKeysPanelComponent implements OnInit, OnDestroy {
         disabled: !this.enableModifiersControlMap.get(id).value
       }],
       bit: [{ value: bit, disabled: type !== ModbusDataType.BITS || objectsCount < 2 }, [Validators.max(objectsCount - 1)]],
-      bitTargetType: [{ value: bitTargetType ?? ModbusBitTargetType.Integer, disabled: type !== ModbusDataType.BITS || this.hideNewFields }],
+      bitTargetType: [{ value: bitTargetType ?? ModbusBitTargetType.IntegerType, disabled: type !== ModbusDataType.BITS || this.hideNewFields }],
       modifierValue: [
         { value: multiplier ?? divider ?? 1, disabled: !this.enableModifiersControlMap.get(id).value },
         [Validators.pattern(nonZeroFloat)]

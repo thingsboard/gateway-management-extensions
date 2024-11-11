@@ -71,7 +71,7 @@
         </mat-form-field>
       </div>
 
-      <div *ngIf="gatewayConfigurationGroup.get('securityType').value == 'tls'" class="flex flex-col">
+      <div *ngIf="gatewayConfigurationGroup.get('securityType').value === 'tls'" class="flex flex-col">
         <mat-form-field>
           <mat-label>{{ 'gateway.tls-path-ca-certificate' | translate }}</mat-label>
           <input matInput type="text" formControlName="caCertPath">
@@ -170,7 +170,7 @@
             'gap-1.25': layoutGap,
             'flex-row': alignment,
             'flex-col': !alignment
-          }" *ngIf="gatewayConfigurationGroup.get('storageType').value == 'file'">
+          }" *ngIf="gatewayConfigurationGroup.get('storageType').value === 'file'">
           <mat-form-field class="flex-1">
             <mat-label>{{ 'gateway.storage-max-files' | translate }}</mat-label>
             <input matInput type="number" formControlName="maxFilesCount">
