@@ -67,6 +67,7 @@ import { MatTabGroup } from '@angular/material/tabs';
 import { GatewayStorageConfigurationComponent } from './storage/gateway-storage-configuration.component';
 import { GatewayGrpcConfigurationComponent } from './grpc/gateway-grpc-configuration.component';
 import { GatewayLogsConfigurationComponent } from './logs/gateway-logs-configuration.component';
+import { GatewaySecurityConfigurationComponent } from './security/gateway-security-configuration.component';
 
 @Component({
   selector: 'tb-gateway-basic-configuration',
@@ -80,6 +81,7 @@ import { GatewayLogsConfigurationComponent } from './logs/gateway-logs-configura
     GatewayStorageConfigurationComponent,
     GatewayGrpcConfigurationComponent,
     GatewayLogsConfigurationComponent,
+    GatewaySecurityConfigurationComponent,
   ],
   providers: [
     {
@@ -105,7 +107,6 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
 
   @ViewChild('configGroup') configGroup: MatTabGroup;
 
-  readonly securityTypes = SecurityTypesTranslationsMap;
   readonly ReportStrategyDefaultValue = ReportStrategyDefaultValue;
 
   basicFormGroup: FormGroup;
@@ -152,7 +153,6 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
 
   writeValue(basicConfig: GatewayConfigValue): void {
     this.basicFormGroup.patchValue(basicConfig, {emitEvent: false});
-    this.checkAndFetchCredentials(basicConfig?.thingsboard?.security ?? {} as GatewayConfigSecurity);
     const commands = basicConfig?.thingsboard?.statistics?.commands ?? [];
     commands.forEach((command: GatewayConfigCommand) => this.addCommand(command, false));
   }
@@ -160,17 +160,6 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
   validate(): ValidationErrors | null {
     return this.basicFormGroup.valid ? null : {
       basicFormGroup: {valid: false}
-    };
-  }
-
-  private atLeastOneRequired(validator: ValidatorFn, controls: string[] = null) {
-    return (group: FormGroup): ValidationErrors | null => {
-      if (!controls) {
-        controls = Object.keys(group.controls);
-      }
-      const hasAtLeastOne = group?.controls && controls.some(k => !validator(group.controls[k]));
-
-      return hasAtLeastOne ? null : {atLeastOne: true};
     };
   }
 
@@ -184,18 +173,6 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
     }
     this.commandFormArray().removeAt(index);
     this.basicFormGroup.markAsDirty();
-  }
-
-  private removeAllSecurityValidators(): void {
-    const securityGroup = this.basicFormGroup.get('thingsboard.security') as FormGroup;
-    securityGroup.clearValidators();
-    for (const controlsKey in securityGroup.controls) {
-      if (controlsKey !== 'type') {
-        securityGroup.controls[controlsKey].clearValidators();
-        securityGroup.controls[controlsKey].setErrors(null);
-        securityGroup.controls[controlsKey].updateValueAndValidity();
-      }
-    }
   }
 
   private openConfigurationConfirmDialog(): void {
@@ -256,7 +233,7 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
       minPackSizeToSend: [500, [Validators.required, Validators.min(100), Validators.pattern(numberInputPattern)]],
       handleDeviceRenaming: [true],
       checkingDeviceActivity: this.initCheckingDeviceActivityFormGroup(),
-      security: this.initSecurityFormGroup(),
+      security: [],
       qos: [1, [Validators.required, Validators.min(0), Validators.max(1), Validators.pattern(/^[^.\s]+$/)]],
       reportStrategy: [{
         value: { type: ReportStrategyType.OnReportPeriod, reportPeriod: ReportStrategyDefaultValue.Gateway },
@@ -273,36 +250,9 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
     });
   }
 
-  private initSecurityFormGroup(): FormGroup {
-    return this.fb.group({
-      type: [SecurityTypes.ACCESS_TOKEN, [Validators.required]],
-      accessToken: [null, [Validators.required, Validators.pattern(/^[^.\s]+$/)]],
-      clientId: [null, [Validators.pattern(/^[^.\s]+$/)]],
-      username: [null, [Validators.pattern(/^[^.\s]+$/)]],
-      password: [null, [Validators.pattern(/^[^.\s]+$/)]],
-      caCert: [null],
-      cert: [null],
-      privateKey: [null]
-    });
-  }
-
   private observeFormChanges(): void {
-    this.observeSecurityPasswordChanges();
     this.observeRemoteConfigurationChanges();
     this.observeDeviceActivityChanges();
-    this.observeSecurityTypeChanges();
-  }
-
-  private observeSecurityPasswordChanges(): void {
-    const securityUsername = this.basicFormGroup.get('thingsboard.security.username');
-    this.basicFormGroup.get('thingsboard.security.password').valueChanges.pipe(takeUntil(this.destroy$)).subscribe(password => {
-      if (password && password !== '') {
-        securityUsername.setValidators([Validators.required]);
-      } else {
-        securityUsername.clearValidators();
-      }
-      securityUsername.updateValueAndValidity({ emitEvent: false });
-    });
   }
 
   private observeRemoteConfigurationChanges(): void {
@@ -329,104 +279,5 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
       checkingDeviceActivityGroup.get('inactivityTimeoutSeconds').updateValueAndValidity({ emitEvent: false });
       checkingDeviceActivityGroup.get('inactivityCheckPeriodSeconds').updateValueAndValidity({ emitEvent: false });
     });
-  }
-
-  private observeSecurityTypeChanges(): void {
-    const securityGroup = this.basicFormGroup.get('thingsboard.security') as FormGroup;
-
-    securityGroup.get('type').valueChanges.pipe(takeUntil(this.destroy$)).subscribe(type => {
-      this.removeAllSecurityValidators();
-
-      switch (type) {
-        case SecurityTypes.ACCESS_TOKEN:
-          this.addAccessTokenValidators(securityGroup);
-          break;
-        case SecurityTypes.TLS_PRIVATE_KEY:
-          this.addTlsPrivateKeyValidators(securityGroup);
-          break;
-        case SecurityTypes.TLS_ACCESS_TOKEN:
-          this.addTlsAccessTokenValidators(securityGroup);
-          break;
-        case SecurityTypes.USERNAME_PASSWORD:
-          securityGroup.addValidators([this.atLeastOneRequired(Validators.required, ['clientId', 'username'])]);
-          break;
-      }
-
-      securityGroup.updateValueAndValidity();
-    });
-
-    ['caCert', 'privateKey', 'cert'].forEach(field => {
-      securityGroup.get(field).valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => this.cd.detectChanges());
-    });
-  }
-
-  private addAccessTokenValidators(group: FormGroup): void {
-    group.get('accessToken').addValidators([Validators.required, Validators.pattern(/^[^.\s]+$/)]);
-    group.get('accessToken').updateValueAndValidity();
-  }
-
-  private addTlsPrivateKeyValidators(group: FormGroup): void {
-    ['caCert', 'privateKey', 'cert'].forEach(field => {
-      group.get(field).addValidators([Validators.required]);
-      group.get(field).updateValueAndValidity();
-    });
-  }
-
-  private addTlsAccessTokenValidators(group: FormGroup): void {
-    this.addAccessTokenValidators(group);
-    group.get('caCert').addValidators([Validators.required]);
-    group.get('caCert').updateValueAndValidity();
-  }
-
-  private checkAndFetchCredentials(security: GatewayConfigSecurity): void {
-    if (security.type === SecurityTypes.TLS_PRIVATE_KEY) {
-      return;
-    }
-
-    this.deviceService.getDeviceCredentials(this.device.id).pipe(takeUntil(this.destroy$)).subscribe(credentials => {
-      this.updateSecurityType(security, credentials);
-      this.updateCredentials(credentials, security);
-      this.basicFormGroup.updateValueAndValidity();
-      this.initialCredentialsUpdated.emit(credentials);
-    });
-  }
-
-  private updateSecurityType(security: GatewayConfigSecurity, credentials: DeviceCredentials): void {
-    const isAccessToken = credentials.credentialsType === DeviceCredentialsType.ACCESS_TOKEN
-      || security.type === SecurityTypes.TLS_ACCESS_TOKEN;
-    const securityType = isAccessToken
-      ? (security.type === SecurityTypes.TLS_ACCESS_TOKEN ? SecurityTypes.TLS_ACCESS_TOKEN : SecurityTypes.ACCESS_TOKEN)
-      : (credentials.credentialsType === DeviceCredentialsType.MQTT_BASIC ? SecurityTypes.USERNAME_PASSWORD : null);
-
-    if (securityType) {
-      this.basicFormGroup.get('thingsboard.security.type').setValue(securityType, { emitEvent: false });
-    }
-  }
-
-  private updateCredentials(credentials: DeviceCredentials, security: GatewayConfigSecurity): void {
-    switch (credentials.credentialsType) {
-      case DeviceCredentialsType.ACCESS_TOKEN:
-        this.updateAccessTokenCredentials(credentials, security);
-        break;
-      case DeviceCredentialsType.MQTT_BASIC:
-        this.updateMqttBasicCredentials(credentials);
-        break;
-      case DeviceCredentialsType.X509_CERTIFICATE:
-        break;
-    }
-  }
-
-  private updateAccessTokenCredentials(credentials: DeviceCredentials, security: GatewayConfigSecurity): void {
-    this.basicFormGroup.get('thingsboard.security.accessToken').setValue(credentials.credentialsId, { emitEvent: false });
-    if (security.type === SecurityTypes.TLS_ACCESS_TOKEN) {
-      this.basicFormGroup.get('thingsboard.security.caCert').setValue(security.caCert, { emitEvent: false });
-    }
-  }
-
-  private updateMqttBasicCredentials(credentials: DeviceCredentials): void {
-    const parsedValue = JSON.parse(credentials.credentialsValue);
-    this.basicFormGroup.get('thingsboard.security.clientId').setValue(parsedValue.clientId, { emitEvent: false });
-    this.basicFormGroup.get('thingsboard.security.username').setValue(parsedValue.userName, { emitEvent: false });
-    this.basicFormGroup.get('thingsboard.security.password').setValue(parsedValue.password, { emitEvent: false });
   }
 }
