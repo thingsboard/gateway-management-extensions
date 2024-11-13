@@ -19,7 +19,9 @@ import {
   FormBuilder,
   FormControl,
   FormGroup,
+  NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
+  ValidationErrors,
   Validators
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -39,11 +41,18 @@ import { GatewayLogLevel } from '../../../../../shared/models/public-api';
   selector: 'tb-gateway-logs-configuration',
   templateUrl: './gateway-logs-configuration.component.html',
   styleUrls: ['./gateway-logs-configuration.component.scss'],
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => GatewayLogsConfigurationComponent),
-    multi: true
-  }],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => GatewayLogsConfigurationComponent),
+      multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => GatewayLogsConfigurationComponent),
+      multi: true
+    }
+  ],
   standalone: true,
   imports: [
     CommonModule,
@@ -92,6 +101,12 @@ export class GatewayLogsConfigurationComponent implements ControlValueAccessor {
 
   getLogFormGroup(value: string): FormGroup {
     return this.logsFormGroup.get(`local.${value}`) as FormGroup;
+  }
+
+  validate(): ValidationErrors | null {
+    return this.logsFormGroup.valid ? null : {
+      logsFormGroup: {valid: false}
+    };
   }
 
   private initLogsFormGroup(): FormGroup {

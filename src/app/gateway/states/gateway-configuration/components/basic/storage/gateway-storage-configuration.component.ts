@@ -14,7 +14,15 @@
 /// limitations under the License.
 ///
 import { Component, forwardRef } from '@angular/core';
-import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  FormBuilder,
+  FormGroup,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validators
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/public-api';
 import {
@@ -28,11 +36,18 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'tb-gateway-storage-configuration',
   templateUrl: './gateway-storage-configuration.component.html',
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => GatewayStorageConfigurationComponent),
-    multi: true
-  }],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => GatewayStorageConfigurationComponent),
+      multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => GatewayStorageConfigurationComponent),
+      multi: true
+    }
+  ],
   standalone: true,
   imports: [
     CommonModule,
@@ -66,6 +81,12 @@ export class GatewayStorageConfigurationComponent implements ControlValueAccesso
   }
 
   registerOnTouched(_: () => {}): void {}
+
+  validate(): ValidationErrors | null {
+    return this.storageFormGroup.valid ? null : {
+      storageFormGroup: {valid: false}
+    };
+  }
 
   private removeAllStorageValidators(): void {
     for (const storageKey in this.storageFormGroup.controls) {

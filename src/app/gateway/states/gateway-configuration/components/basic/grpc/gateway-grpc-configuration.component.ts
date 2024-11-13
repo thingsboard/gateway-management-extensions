@@ -14,7 +14,15 @@
 /// limitations under the License.
 ///
 import { Component, forwardRef } from '@angular/core';
-import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  FormBuilder,
+  FormGroup,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validators
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/public-api';
 import {
@@ -26,11 +34,18 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'tb-gateway-grpc-configuration',
   templateUrl: './gateway-grpc-configuration.component.html',
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => GatewayGrpcConfigurationComponent),
-    multi: true
-  }],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => GatewayGrpcConfigurationComponent),
+      multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => GatewayGrpcConfigurationComponent),
+      multi: true
+    }
+  ],
   standalone: true,
   imports: [
     CommonModule,
@@ -65,6 +80,12 @@ export class GatewayGrpcConfigurationComponent implements ControlValueAccessor {
   }
 
   registerOnTouched(_: () => {}): void {}
+
+  validate(): ValidationErrors | null {
+    return this.grpcFormGroup.valid ? null : {
+      grpcFormGroup: {valid: false}
+    };
+  }
 
   private toggleRpcFields(enable: boolean): void {
     const grpcGroup = this.grpcFormGroup as FormGroup;

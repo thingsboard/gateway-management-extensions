@@ -87,15 +87,19 @@ export interface GatewayLogsConfig {
   local: LocalLogs;
 }
 
-export interface GatewayConfigSecurity {
+export interface GatewayConfigSecurity extends GatewayUsernamePasswordConfig {
   type: SecurityTypes;
   accessToken?: string;
-  clientId?: string;
-  username?: string;
-  password?: string;
+
   caCert?: string;
   cert?: string;
   privateKey?: string;
+}
+
+export interface GatewayUsernamePasswordConfig {
+  clientId?: string;
+  username?: string;
+  password?: string;
 }
 
 export interface GatewayConfigCommand {

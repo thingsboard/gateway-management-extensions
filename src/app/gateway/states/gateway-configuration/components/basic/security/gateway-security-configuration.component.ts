@@ -18,35 +18,45 @@ import {
   ControlValueAccessor,
   FormBuilder,
   FormGroup,
+  NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   ValidationErrors,
-  ValidatorFn,
   Validators
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DeviceCredentials, DeviceCredentialsType, EntityId, SharedModule } from '@shared/public-api';
 import {
   GatewayConfigSecurity,
-  SecurityTypes, SecurityTypesTranslationsMap,
+  SecurityTypes,
+  SecurityTypesTranslationsMap,
 } from '../../../models/public-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DeviceService } from '@core/public-api';
+import { GatewayUsernameConfigurationComponent } from './gateway-username-configuration/gateway-username-configuration.component';
 
 @Component({
   selector: 'tb-gateway-security-configuration',
   templateUrl: './gateway-security-configuration.component.html',
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => GatewaySecurityConfigurationComponent),
-    multi: true
-  }],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => GatewaySecurityConfigurationComponent),
+      multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => GatewaySecurityConfigurationComponent),
+      multi: true
+    }
+  ],
   standalone: true,
   imports: [
     CommonModule,
     SharedModule,
+    GatewayUsernameConfigurationComponent,
   ]
 })
-export class GatewaySecurityConfigurationComponent implements ControlValueAccessor {
+export class GatewaySecurityConfigurationComponent implements ControlValueAccessor, Validators {
 
   @Input() device: EntityId;
   @Output() initialCredentialsUpdated = new EventEmitter<DeviceCredentials>();
@@ -63,12 +73,8 @@ export class GatewaySecurityConfigurationComponent implements ControlValueAccess
     private deviceService: DeviceService,
     private destroyRef: DestroyRef,
   ) {
-    this.securityFormGroup = this.initSecurityFormGroup();
-    this.securityFormGroup.valueChanges.pipe(takeUntilDestroyed()).subscribe(value => {
-      this.onChange(value);
-    });
-    this.observeSecurityPasswordChanges();
-    this.observeSecurityTypeChanges();
+    this.securityFormGroup = this.createSecurityFormGroup();
+    this.setupFormListeners();
   }
 
   writeValue(value: GatewayConfigSecurity): void {
@@ -82,99 +88,56 @@ export class GatewaySecurityConfigurationComponent implements ControlValueAccess
 
   registerOnTouched(_: () => {}): void {}
 
-  private initSecurityFormGroup(): FormGroup {
+  validate(): ValidationErrors | null {
+    return this.securityFormGroup.valid ? null : {
+      securityFormGroup: {valid: false}
+    };
+  }
+
+  private createSecurityFormGroup(): FormGroup {
     return this.fb.group({
       type: [SecurityTypes.ACCESS_TOKEN, [Validators.required]],
       accessToken: [null, [Validators.required, Validators.pattern(/^[^.\s]+$/)]],
-      clientId: [null, [Validators.pattern(/^[^.\s]+$/)]],
-      username: [null, [Validators.pattern(/^[^.\s]+$/)]],
-      password: [null, [Validators.pattern(/^[^.\s]+$/)]],
-      caCert: [null],
-      cert: [null],
-      privateKey: [null]
+      caCert: [null, [Validators.required]],
+      usernamePassword: [],
     });
   }
 
-  private observeSecurityPasswordChanges(): void {
-    const securityUsername = this.securityFormGroup.get('username');
-    this.securityFormGroup.get('password').valueChanges.pipe(takeUntilDestroyed()).subscribe(password => {
-      if (password && password !== '') {
-        securityUsername.setValidators([Validators.required]);
-      } else {
-        securityUsername.clearValidators();
+  private setupFormListeners(): void {
+    this.securityFormGroup.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(({ usernamePassword, ...value }) => {
+      if (this.securityFormGroup.get('type').value === SecurityTypes.USERNAME_PASSWORD) {
+        this.onChange(usernamePassword);
       }
-      securityUsername.updateValueAndValidity({ emitEvent: false });
+      this.onChange(value);
+    });
+    this.listenToSecurityTypeChanges();
+    this.securityFormGroup.get('caCert').valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.cd.detectChanges());
+  }
+
+  private listenToSecurityTypeChanges(): void {
+    this.securityFormGroup.get('type').valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(type => {
+      this.updateValidatorsBasedOnSecurityType(type);
     });
   }
 
-  private observeSecurityTypeChanges(): void {
-    const securityGroup = this.securityFormGroup as FormGroup;
-
-    securityGroup.get('type').valueChanges.pipe(takeUntilDestroyed()).subscribe(type => {
-      this.removeAllSecurityValidators();
-
-      switch (type) {
-        case SecurityTypes.ACCESS_TOKEN:
-          this.addAccessTokenValidators(securityGroup);
-          break;
-        case SecurityTypes.TLS_PRIVATE_KEY:
-          this.addTlsPrivateKeyValidators(securityGroup);
-          break;
-        case SecurityTypes.TLS_ACCESS_TOKEN:
-          this.addTlsAccessTokenValidators(securityGroup);
-          break;
-        case SecurityTypes.USERNAME_PASSWORD:
-          securityGroup.addValidators([this.atLeastOneRequired(Validators.required, ['clientId', 'username'])]);
-          break;
-      }
-
-      securityGroup.updateValueAndValidity();
-    });
-
-    ['caCert', 'privateKey', 'cert'].forEach(field => {
-      securityGroup.get(field).valueChanges.pipe(takeUntilDestroyed()).subscribe(() => this.cd.detectChanges());
-    });
-  }
-
-  private addTlsPrivateKeyValidators(group: FormGroup): void {
-    ['caCert', 'privateKey', 'cert'].forEach(field => {
-      group.get(field).addValidators([Validators.required]);
-      group.get(field).updateValueAndValidity();
-    });
-  }
-
-  private addTlsAccessTokenValidators(group: FormGroup): void {
-    this.addAccessTokenValidators(group);
-    group.get('caCert').addValidators([Validators.required]);
-    group.get('caCert').updateValueAndValidity();
-  }
-
-  private addAccessTokenValidators(group: FormGroup): void {
-    group.get('accessToken').addValidators([Validators.required, Validators.pattern(/^[^.\s]+$/)]);
-    group.get('accessToken').updateValueAndValidity();
-  }
-
-  private removeAllSecurityValidators(): void {
-    const securityGroup = this.securityFormGroup as FormGroup;
-    securityGroup.clearValidators();
-    for (const controlsKey in securityGroup.controls) {
-      if (controlsKey !== 'type') {
-        securityGroup.controls[controlsKey].clearValidators();
-        securityGroup.controls[controlsKey].setErrors(null);
-        securityGroup.controls[controlsKey].updateValueAndValidity();
-      }
+  private updateValidatorsBasedOnSecurityType(type: SecurityTypes): void {
+    this.securityFormGroup.disable({ emitEvent: false });
+    this.securityFormGroup.get('type').enable({ emitEvent: false });
+    switch (type) {
+      case SecurityTypes.ACCESS_TOKEN:
+        this.securityFormGroup.get('accessToken').enable({ emitEvent: false });
+        break;
+      case SecurityTypes.TLS_PRIVATE_KEY:
+        this.securityFormGroup.get('caCert').enable({ emitEvent: false });
+        break;
+      case SecurityTypes.TLS_ACCESS_TOKEN:
+        this.securityFormGroup.get('accessToken').enable({ emitEvent: false });
+        this.securityFormGroup.get('caCert').enable({ emitEvent: false });
+        break;
+      case SecurityTypes.USERNAME_PASSWORD:
+        this.securityFormGroup.get('usernamePassword').enable({ emitEvent: false });
+        break;
     }
-  }
-
-  private atLeastOneRequired(validator: ValidatorFn, controls: string[] = null) {
-    return (group: FormGroup): ValidationErrors | null => {
-      if (!controls) {
-        controls = Object.keys(group.controls);
-      }
-      const hasAtLeastOne = group?.controls && controls.some(k => !validator(group.controls[k]));
-
-      return hasAtLeastOne ? null : {atLeastOne: true};
-    };
   }
 
   private checkAndFetchCredentials(security: GatewayConfigSecurity): void {
@@ -191,15 +154,20 @@ export class GatewaySecurityConfigurationComponent implements ControlValueAccess
   }
 
   private updateSecurityType(security: GatewayConfigSecurity, credentials: DeviceCredentials): void {
-    const isAccessToken = credentials.credentialsType === DeviceCredentialsType.ACCESS_TOKEN
-      || security.type === SecurityTypes.TLS_ACCESS_TOKEN;
-    const securityType = isAccessToken
-      ? (security.type === SecurityTypes.TLS_ACCESS_TOKEN ? SecurityTypes.TLS_ACCESS_TOKEN : SecurityTypes.ACCESS_TOKEN)
-      : (credentials.credentialsType === DeviceCredentialsType.MQTT_BASIC ? SecurityTypes.USERNAME_PASSWORD : null);
-
+    const securityType = this.determineSecurityType(security, credentials);
     if (securityType) {
       this.securityFormGroup.get('type').setValue(securityType, { emitEvent: false });
+      this.updateValidatorsBasedOnSecurityType(securityType);
     }
+  }
+
+  private determineSecurityType(security: GatewayConfigSecurity, credentials: DeviceCredentials): SecurityTypes | null {
+    const isAccessToken = credentials.credentialsType === DeviceCredentialsType.ACCESS_TOKEN
+      || security.type === SecurityTypes.TLS_ACCESS_TOKEN;
+    if (isAccessToken) {
+      return security.type === SecurityTypes.TLS_ACCESS_TOKEN ? SecurityTypes.TLS_ACCESS_TOKEN : SecurityTypes.ACCESS_TOKEN;
+    }
+    return credentials.credentialsType === DeviceCredentialsType.MQTT_BASIC ? SecurityTypes.USERNAME_PASSWORD : null;
   }
 
   private updateCredentials(credentials: DeviceCredentials, security: GatewayConfigSecurity): void {
@@ -211,6 +179,7 @@ export class GatewaySecurityConfigurationComponent implements ControlValueAccess
         this.updateMqttBasicCredentials(credentials);
         break;
       case DeviceCredentialsType.X509_CERTIFICATE:
+        // Handle X509 certificate if needed
         break;
     }
   }
@@ -224,8 +193,10 @@ export class GatewaySecurityConfigurationComponent implements ControlValueAccess
 
   private updateMqttBasicCredentials(credentials: DeviceCredentials): void {
     const parsedValue = JSON.parse(credentials.credentialsValue);
-    this.securityFormGroup.get('clientId').setValue(parsedValue.clientId, { emitEvent: false });
-    this.securityFormGroup.get('username').setValue(parsedValue.userName, { emitEvent: false });
-    this.securityFormGroup.get('password').setValue(parsedValue.password, { emitEvent: false });
+    this.securityFormGroup.patchValue({
+      clientId: parsedValue.clientId,
+      username: parsedValue.userName,
+      password: parsedValue.password
+    }, { emitEvent: false });
   }
 }

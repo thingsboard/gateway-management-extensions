@@ -293,15 +293,17 @@ export class GatewayConfigurationComponent implements AfterViewInit, OnDestroy {
       ts: new Date().getTime()
     };
 
-    this.addLocalLoggers(logAttrObj, logsObj.local);
+    this.addLocalLoggers(logAttrObj, logsObj?.local);
 
     return logAttrObj;
   }
 
   private addLocalLoggers(logAttrObj: LogAttribute, localLogs: LocalLogs): void {
-    for (const key of Object.keys(localLogs)) {
-      logAttrObj.handlers[key + 'Handler'] = this.createHandlerObj(localLogs[key], key);
-      logAttrObj.loggers[key] = this.createLoggerObj(localLogs[key], key);
+    if (localLogs) {
+      for (const key of Object.keys(localLogs)) {
+        logAttrObj.handlers[key + 'Handler'] = this.createHandlerObj(localLogs[key], key);
+        logAttrObj.loggers[key] = this.createLoggerObj(localLogs[key], key);
+      }
     }
   }
 

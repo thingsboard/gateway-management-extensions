@@ -1,0 +1,61 @@
+<section [formGroup]="usernameFormGroup">
+  <div class="tb-form-row no-border no-padding tb-standard-fields">
+    <mat-form-field appearance="outline" class="flex">
+      <mat-label translate>security.clientId</mat-label>
+      <input matInput formControlName="clientId"/>
+      <mat-error *ngIf="usernameFormGroup.get('clientId').hasError('required')">
+        {{ 'security.clientId-required' | translate }}
+      </mat-error>
+      <tb-copy-button
+        matSuffix
+        miniButton="false"
+        *ngIf="usernameFormGroup.get('clientId').value"
+        [copyText]="usernameFormGroup.get('clientId').value"
+        tooltipText="{{ 'gateway.copy-client-id' | translate }}"
+        tooltipPosition="above"
+        icon="content_copy">
+      </tb-copy-button>
+      <mat-icon matIconSuffix style="cursor:pointer;"
+                matTooltip="{{ 'gateway.hints.client-id' | translate }}">info_outlined
+      </mat-icon>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="flex">
+      <mat-label translate>security.username</mat-label>
+      <input matInput formControlName="username"/>
+      <mat-error *ngIf="usernameFormGroup.get('username').hasError('required')">
+        {{ 'security.username-required' | translate }}
+      </mat-error>
+      <tb-copy-button
+        matSuffix
+        miniButton="false"
+        *ngIf="usernameFormGroup.get('username').value"
+        [copyText]="usernameFormGroup.get('username').value"
+        tooltipText="{{ 'gateway.copy-username' | translate }}"
+        tooltipPosition="above"
+        icon="content_copy">
+      </tb-copy-button>
+      <mat-icon matIconSuffix style="cursor:pointer;"
+                matTooltip="{{ 'gateway.hints.username' | translate }}">info_outlined
+      </mat-icon>
+    </mat-form-field>
+  </div>
+  <mat-form-field appearance="outline" subscriptSizing="dynamic" style="width: 100%">
+    <mat-label translate>gateway.password</mat-label>
+    <input matInput formControlName="password"/>
+    <tb-copy-button
+      matSuffix
+      miniButton="false"
+      *ngIf="usernameFormGroup.get('password').value"
+      [copyText]="usernameFormGroup.get('password').value"
+      tooltipText="{{ 'gateway.copy-password' | translate }}"
+      tooltipPosition="above"
+      icon="content_copy">
+    </tb-copy-button>
+    <mat-icon matIconSuffix style="cursor:pointer;"
+              matTooltip="{{ 'gateway.hints.password' | translate }}">info_outlined
+    </mat-icon>
+  </mat-form-field>
+</section>
+<tb-error class="block"
+          *ngIf="!usernameFormGroup.get('username').value && !usernameFormGroup.get('clientId').value && !usernameFormGroup.pristine"
+          [error]="('device.client-id-or-user-name-necessary' | translate)"></tb-error>
