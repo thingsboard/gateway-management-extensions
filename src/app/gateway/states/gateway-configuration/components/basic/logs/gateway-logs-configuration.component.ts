@@ -90,7 +90,7 @@ export class GatewayLogsConfigurationComponent implements AfterViewInit, Validat
       .subscribe(enable => this.logsFormGroup.get('logLevel')[enable ? 'enable' : 'disable']());
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.initialized.emit({ logs: this.logsFormGroup.value });
   }
 

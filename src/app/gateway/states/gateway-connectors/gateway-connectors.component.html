@@ -176,7 +176,7 @@
               *ngIf="connectorForm.get('configVersion').value | isLatestVersionConfig : ConnectorType.MQTT else legacy"
               formControlName="basicConfig"
               [generalTabContent]="generalTabContent"
-              [withReportStrategy]="connectorForm.get('configVersion').value | withReportStrategy : ConnectorType.OPCUA"
+              [withReportStrategy]="connectorForm.get('configVersion').value | withReportStrategy : ConnectorType.MQTT"
               (initialized)="basicConfigInitSubject.next()"
             />
             <ng-template #legacy>
@@ -184,6 +184,7 @@
                 (initialized)="basicConfigInitSubject.next()"
                 formControlName="basicConfig"
                 [generalTabContent]="generalTabContent"
+                [withReportStrategy]="connectorForm.get('configVersion').value | withReportStrategy : ConnectorType.MQTT"
               />
             </ng-template>
           </ng-container>
@@ -200,6 +201,7 @@
                 (initialized)="basicConfigInitSubject.next()"
                 formControlName="basicConfig"
                 [generalTabContent]="generalTabContent"
+                [withReportStrategy]="connectorForm.get('configVersion').value | withReportStrategy : ConnectorType.OPCUA"
               />
             </ng-template>
           </ng-container>

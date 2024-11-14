@@ -198,7 +198,8 @@ export class GatewayConfigurationComponent implements AfterViewInit, OnDestroy {
         if (this.shouldUpdateAccessToken(securityConfig)) {
           newCredentials = {
             credentialsType: DeviceCredentialsType.ACCESS_TOKEN,
-            credentialsId: securityConfig.accessToken
+            credentialsId: securityConfig.accessToken,
+            credentialsValue: null
           };
         }
         break;

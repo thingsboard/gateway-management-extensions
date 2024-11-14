@@ -203,7 +203,7 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
     this.commandFormArray().push(commandFormGroup, { emitEvent });
   }
 
-  onInitialized(value) {
+  onInitialized(value: GatewayConfigValue): void {
     this.basicFormGroup.patchValue(value, {emitEvent: false});
     this.initialized.emit(this.basicFormGroup.value);
   }

@@ -118,7 +118,7 @@ export class GatewayStatisticsComponent implements AfterViewInit {
   }
 
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
     this.sort.sortChange.subscribe(() => this.sortData());
     this.init();

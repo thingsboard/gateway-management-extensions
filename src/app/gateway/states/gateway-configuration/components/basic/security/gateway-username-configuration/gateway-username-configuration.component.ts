@@ -19,7 +19,8 @@ import {
   FormBuilder,
   FormGroup,
   NG_VALIDATORS,
-  NG_VALUE_ACCESSOR, ValidationErrors,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
   Validators
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
