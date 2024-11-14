@@ -35,10 +35,9 @@ import {
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   ValidationErrors,
-  ValidatorFn,
   Validators
 } from '@angular/forms';
-import { coerceBoolean, DeviceCredentials, DeviceCredentialsType, EntityId, SharedModule } from '@shared/public-api';
+import { coerceBoolean, DeviceCredentials, EntityId, SharedModule } from '@shared/public-api';
 import { MatDialog } from '@angular/material/dialog';
 import {
   GatewayRemoteConfigurationDialogComponent,
@@ -57,11 +56,8 @@ import {
   GatewayBasicConfigTab,
   GatewayBasicConfigTabKey,
   GatewayConfigCommand,
-  GatewayConfigSecurity,
   GatewayConfigValue,
   numberInputPattern,
-  SecurityTypes,
-  SecurityTypesTranslationsMap,
 } from '../../models/public-api';
 import { MatTabGroup } from '@angular/material/tabs';
 import { GatewayStorageConfigurationComponent } from './storage/gateway-storage-configuration.component';
@@ -104,6 +100,7 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
   @Input() @coerceBoolean() withReportStrategy = false;
 
   @Output() initialCredentialsUpdated = new EventEmitter<DeviceCredentials>();
+  @Output() initialized = new EventEmitter();
 
   @ViewChild('configGroup') configGroup: MatTabGroup;
 
@@ -204,6 +201,11 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
     });
 
     this.commandFormArray().push(commandFormGroup, { emitEvent });
+  }
+
+  onInitialized(value) {
+    this.basicFormGroup.patchValue(value, {emitEvent: false});
+    this.initialized.emit(this.basicFormGroup.value);
   }
 
   private initBasicFormGroup(): void {

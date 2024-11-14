@@ -57,5 +57,10 @@
   </mat-form-field>
 </section>
 <tb-error class="block"
-          *ngIf="!usernameFormGroup.get('username').value && !usernameFormGroup.get('clientId').value && !usernameFormGroup.pristine"
-          [error]="('device.client-id-or-user-name-necessary' | translate)"></tb-error>
+          *ngIf="usernameFormGroup.hasError('atLeastOneRequired') && usernameFormGroup.touched"
+          [error]="('device.client-id-or-user-name-necessary' | translate)">
+</tb-error>
+<tb-error class="block"
+          *ngIf="usernameFormGroup.hasError('usernameRequired') && usernameFormGroup.touched"
+          [error]="('gateway.hints.username-required-with-password' | translate)">
+</tb-error>

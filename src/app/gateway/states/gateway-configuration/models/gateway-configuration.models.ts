@@ -90,7 +90,6 @@ export interface GatewayLogsConfig {
 export interface GatewayConfigSecurity extends GatewayUsernamePasswordConfig {
   type: SecurityTypes;
   accessToken?: string;
-
   caCert?: string;
   cert?: string;
   privateKey?: string;

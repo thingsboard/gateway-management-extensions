@@ -13,7 +13,16 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-import { ChangeDetectorRef, Component, DestroyRef, EventEmitter, forwardRef, Input, Output } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  DestroyRef,
+  EventEmitter,
+  forwardRef,
+  Input,
+  Output
+} from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -56,10 +65,11 @@ import { GatewayUsernameConfigurationComponent } from './gateway-username-config
     GatewayUsernameConfigurationComponent,
   ]
 })
-export class GatewaySecurityConfigurationComponent implements ControlValueAccessor, Validators {
+export class GatewaySecurityConfigurationComponent implements AfterViewInit, ControlValueAccessor, Validators {
 
   @Input() device: EntityId;
   @Output() initialCredentialsUpdated = new EventEmitter<DeviceCredentials>();
+  @Output() initialized = new EventEmitter();
 
   securityFormGroup: FormGroup;
 
@@ -77,9 +87,17 @@ export class GatewaySecurityConfigurationComponent implements ControlValueAccess
     this.setupFormListeners();
   }
 
+  ngAfterViewInit(): void {
+    this.checkAndFetchCredentials(this.securityFormGroup.value ?? {} as GatewayConfigSecurity);
+  }
+
   writeValue(value: GatewayConfigSecurity): void {
-    this.checkAndFetchCredentials(value ?? {} as GatewayConfigSecurity);
-    this.securityFormGroup.patchValue(value, { emitEvent: false });
+    const { clientId, username, password, ...security } = value ?? {} as GatewayConfigSecurity;
+    if (security?.type === SecurityTypes.USERNAME_PASSWORD) {
+      this.securityFormGroup.patchValue({...security, usernamePassword: { clientId, username, password } }, { emitEvent: false });
+    } else {
+      this.securityFormGroup.patchValue(security, { emitEvent: false });
+    }
   }
 
   registerOnChange(fn: (config: GatewayConfigSecurity) => {}): void {
@@ -105,10 +123,7 @@ export class GatewaySecurityConfigurationComponent implements ControlValueAccess
 
   private setupFormListeners(): void {
     this.securityFormGroup.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(({ usernamePassword, ...value }) => {
-      if (this.securityFormGroup.get('type').value === SecurityTypes.USERNAME_PASSWORD) {
-        this.onChange(usernamePassword);
-      }
-      this.onChange(value);
+      this.onChange(usernamePassword ? { ...value, ...usernamePassword } : value);
     });
     this.listenToSecurityTypeChanges();
     this.securityFormGroup.get('caCert').valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.cd.detectChanges());
@@ -148,8 +163,8 @@ export class GatewaySecurityConfigurationComponent implements ControlValueAccess
     this.deviceService.getDeviceCredentials(this.device.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(credentials => {
       this.updateSecurityType(security, credentials);
       this.updateCredentials(credentials, security);
-      this.securityFormGroup.updateValueAndValidity();
-      this.initialCredentialsUpdated.emit(credentials);
+      this.initialCredentialsUpdated.emit({...credentials, version: null} as DeviceCredentials);
+      this.initialized.emit({ thingsboard: { security: this.securityFormGroup.value } });
     });
   }
 

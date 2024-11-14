@@ -13,7 +13,7 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-import { Component, forwardRef } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, forwardRef, Output } from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -59,7 +59,9 @@ import { GatewayLogLevel } from '../../../../../shared/models/public-api';
     SharedModule,
   ]
 })
-export class GatewayLogsConfigurationComponent implements ControlValueAccessor {
+export class GatewayLogsConfigurationComponent implements AfterViewInit, Validators, ControlValueAccessor {
+
+  @Output() initialized = new EventEmitter();
 
   logsFormGroup: FormGroup;
   logSelector: FormControl;
@@ -86,6 +88,10 @@ export class GatewayLogsConfigurationComponent implements ControlValueAccessor {
     this.showRemoteLogsControl.valueChanges
       .pipe(takeUntilDestroyed())
       .subscribe(enable => this.logsFormGroup.get('logLevel')[enable ? 'enable' : 'disable']());
+  }
+
+  ngAfterViewInit() {
+    this.initialized.emit({ logs: this.logsFormGroup.value });
   }
 
   writeValue(value: GatewayLogsConfig): void {
@@ -131,11 +137,11 @@ export class GatewayLogsConfigurationComponent implements ControlValueAccessor {
       savingTime: [config.savingTime || 3, [Validators.required, Validators.min(0)]],
       savingPeriod: [config.savingPeriod || LogSavingPeriod.days, [Validators.required]]
     });
-    localLogsFormGroup.addControl(name, configGroup);
+    localLogsFormGroup.addControl(name, configGroup, {emitEvent: false});
   }
 
   private updateRemoteLogs(logLevel: GatewayLogLevel): void {
-    this.showRemoteLogsControl.patchValue(logLevel && logLevel !== GatewayLogLevel.NONE);
+    this.showRemoteLogsControl.patchValue(logLevel && logLevel !== GatewayLogLevel.NONE, {emitEvent: false});
     this.logsFormGroup.get('logLevel').patchValue(logLevel === GatewayLogLevel.NONE ? GatewayLogLevel.INFO : logLevel, {emitEvent: false});
   }
 }

@@ -19,8 +19,7 @@ import {
   FormBuilder,
   FormGroup,
   NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  ValidationErrors,
+  NG_VALUE_ACCESSOR, ValidationErrors,
   Validators
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -56,7 +55,6 @@ export class GatewayUsernameConfigurationComponent implements ControlValueAccess
 
   usernameFormGroup: FormGroup;
 
-  private disabled = false;
   private onChange: (value: GatewayUsernamePasswordConfig) => void = () => {};
 
   constructor(
@@ -77,15 +75,17 @@ export class GatewayUsernameConfigurationComponent implements ControlValueAccess
   registerOnTouched(_: () => {}): void {}
 
   setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
+    if (isDisabled) {
+      this.usernameFormGroup.disable({ emitEvent: false });
+    } else {
+      this.usernameFormGroup.enable({ emitEvent: false });
+    }
   }
 
   validate(): ValidationErrors | null {
-    const baseNotValid = !this.usernameFormGroup.valid;
-    const atLeastOneRequired = !this.usernameFormGroup.get('username').value && !this.usernameFormGroup.get('clientId').value;
-    const usernameRequired = !this.usernameFormGroup.get('username').value && this.usernameFormGroup.get('password').value;
-
-    return baseNotValid || atLeastOneRequired || usernameRequired && !this.disabled ? { usernameFormGroup: false } : null;
+    return this.usernameFormGroup.valid ? null : {
+      usernameFormGroup: { valid: false }
+    };
   }
 
   private initForm(): void {
@@ -97,6 +97,30 @@ export class GatewayUsernameConfigurationComponent implements ControlValueAccess
       clientId: [null, [Validators.pattern(/^[^.\s]+$/)]],
       username: [null, [Validators.pattern(/^[^.\s]+$/)]],
       password: [null, [Validators.pattern(/^[^.\s]+$/)]],
+    }, {
+      validators: [this.atLeastOneRequired, this.usernameRequired]
     });
+  }
+
+  private atLeastOneRequired(control: FormGroup): { [key: string]: boolean } | null {
+    const clientId = control.get('clientId').value;
+    const username = control.get('username').value;
+
+    if (!clientId && !username) {
+      return { atLeastOneRequired: true };
+    }
+
+    return null;
+  }
+
+  private usernameRequired(control: FormGroup): { [key: string]: boolean } | null {
+    const username = control.get('username').value;
+    const password = control.get('password').value;
+
+    if (!username && password) {
+      return { usernameRequired: true };
+    }
+
+    return null;
   }
 }

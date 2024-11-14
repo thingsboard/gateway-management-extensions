@@ -13,7 +13,7 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-import { Component, forwardRef } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, forwardRef, Output } from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -36,6 +36,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'tb-gateway-storage-configuration',
   templateUrl: './gateway-storage-configuration.component.html',
+  styleUrls: ['gateway-storage-configuration.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -54,7 +55,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     SharedModule,
   ]
 })
-export class GatewayStorageConfigurationComponent implements ControlValueAccessor {
+export class GatewayStorageConfigurationComponent implements AfterViewInit, Validators, ControlValueAccessor {
+
+  @Output() initialized = new EventEmitter();
 
   readonly StorageTypes = StorageTypes;
   readonly storageTypes = Object.values(StorageTypes);
@@ -70,6 +73,10 @@ export class GatewayStorageConfigurationComponent implements ControlValueAccesso
     this.storageFormGroup.valueChanges.pipe(takeUntilDestroyed()).subscribe(value => {
       this.onChange(value);
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.initialized.emit({ storage: this.storageFormGroup.value });
   }
 
   writeValue(value: GatewayStorageConfig): void {

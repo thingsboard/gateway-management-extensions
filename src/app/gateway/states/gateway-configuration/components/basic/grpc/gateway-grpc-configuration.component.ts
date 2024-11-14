@@ -13,7 +13,7 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-import { Component, forwardRef } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, forwardRef, Output } from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -46,13 +46,16 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
       multi: true
     }
   ],
+  styleUrls: ['./gateway-grpc-configuration.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
     SharedModule,
   ]
 })
-export class GatewayGrpcConfigurationComponent implements ControlValueAccessor {
+export class GatewayGrpcConfigurationComponent implements AfterViewInit, Validators, ControlValueAccessor {
+
+  @Output() initialized = new EventEmitter();
 
   grpcFormGroup: FormGroup;
 
@@ -66,6 +69,10 @@ export class GatewayGrpcConfigurationComponent implements ControlValueAccessor {
     this.grpcFormGroup.get('enabled').valueChanges.pipe(takeUntilDestroyed()).subscribe(value => {
       this.toggleRpcFields(value);
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.initialized.emit({ grpc: this.grpcFormGroup.value });
   }
 
   writeValue(value: GatewayGRPCConfig): void {

@@ -62,25 +62,19 @@
             </mat-form-field>
           </div>
         </div>
-        <tb-gateway-security-configuration formControlName="security" [device]="device" (initialCredentialsUpdated)="initialCredentialsUpdated.emit($event)"/>
+        <tb-gateway-security-configuration formControlName="security" [device]="device" (initialCredentialsUpdated)="initialCredentialsUpdated.emit($event)" (initialized)="onInitialized($event)"/>
         <tb-report-strategy *ngIf="withReportStrategy" [defaultValue]="ReportStrategyDefaultValue.Gateway" class="tb-form-panel" formControlName="reportStrategy"/>
       </div>
     </ng-template>
   </mat-tab>
   <mat-tab label="{{ 'gateway.logs.logs' | translate }}">
-    <ng-template matTabContent>
-      <tb-gateway-logs-configuration formControlName="logs"/>
-    </ng-template>
+    <tb-gateway-logs-configuration formControlName="logs" (initialized)="onInitialized($event)"/>
   </mat-tab>
   <mat-tab label="{{ 'gateway.storage' | translate }}">
-    <ng-template matTabContent>
-      <tb-gateway-storage-configuration formControlName="storage"/>
-    </ng-template>
+    <tb-gateway-storage-configuration formControlName="storage" (initialized)="onInitialized($event)"/>
   </mat-tab>
   <mat-tab label="{{ 'gateway.grpc' | translate }}">
-    <ng-template matTabContent>
-      <tb-gateway-grpc-configuration formControlName="grpc"/>
-    </ng-template>
+    <tb-gateway-grpc-configuration formControlName="grpc" (initialized)="onInitialized($event)"/>
   </mat-tab>
   <mat-tab label="{{ 'gateway.statistics.statistics' | translate }}">
     <ng-template matTabContent>

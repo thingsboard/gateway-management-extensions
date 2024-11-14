@@ -132,7 +132,11 @@ export class GatewayConfigurationComponent implements AfterViewInit, OnDestroy {
 
   onInitialCredentialsUpdate(credentials: DeviceCredentials): void {
     this.initialCredentials = credentials;
-    this.gatewayConfigGroup.markAsPristine({emitEvent: false});
+  }
+
+  onInitialized(value: GatewayConfigValue): void {
+    this.gatewayConfigGroup.get('basicConfig').patchValue(value, {emitEvent: false});
+    this.gatewayConfigGroup.get('advancedConfig').patchValue(value, {emitEvent: false});
   }
 
   private observeAlignConfigs(): void {
@@ -360,7 +364,7 @@ export class GatewayConfigurationComponent implements AfterViewInit, OnDestroy {
       switch (attr.key) {
         case 'general_configuration':
           formValue.thingsboard = attr.value;
-          this.updateFormControls(attr.value);
+          this.setInitialCredentials(attr.value);
           break;
         case 'grpc_configuration':
           formValue.grpc = attr.value;
@@ -382,19 +386,21 @@ export class GatewayConfigurationComponent implements AfterViewInit, OnDestroy {
       }
     });
 
-    this.gatewayConfigGroup.get('basicConfig').setValue(formValue, { emitEvent: false });
-    this.gatewayConfigGroup.get('advancedConfig').setValue(formValue, { emitEvent: false });
+    this.gatewayConfigGroup.get('basicConfig').patchValue(formValue, { emitEvent: false });
+    this.gatewayConfigGroup.get('advancedConfig').patchValue(formValue, { emitEvent: false });
   }
 
-  private updateFormControls(thingsboard: GatewayGeneralConfig): void {
+  private setInitialCredentials(thingsboard: GatewayGeneralConfig): void {
     const { type, accessToken, ...securityConfig } = thingsboard.security ?? {};
 
-    this.initialCredentials = {
-      deviceId: this.device as DeviceId,
-      credentialsType: type as unknown as DeviceCredentialsType,
-      credentialsId: accessToken,
-      credentialsValue: JSON.stringify(securityConfig)
-    };
+    if (!this.initialCredentials) {
+      this.initialCredentials = {
+        deviceId: this.device as DeviceId,
+        credentialsType: type as unknown as DeviceCredentialsType,
+        credentialsId: accessToken,
+        credentialsValue: JSON.stringify(securityConfig)
+      };
+    }
   }
 
   private logsToObj(logsConfig: LogAttribute): GatewayLogsConfig {
