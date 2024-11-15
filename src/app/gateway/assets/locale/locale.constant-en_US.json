@@ -644,6 +644,7 @@
       "max-records-count": "Maximum number of data entries in storage before sending to platform",
       "ttl-check-hour": "How often will the Gateway check data for obsolescence",
       "ttl-messages-day": "Maximum number of days that the storage will retain data",
+      "username-required-with-password": "Username required if password is specified",
       "commands": "Commands for collecting additional statistic",
       "attribute": "Statistic telemetry key",
       "timeout": "Timeout for command executing",

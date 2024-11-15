@@ -1,0 +1,81 @@
+<!--
+  Copyright © 2016-2024 The Thingsboard Authors
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<section [formGroup]="usernameFormGroup">
+  <div class="tb-form-row no-border no-padding tb-standard-fields">
+    <mat-form-field appearance="outline" class="flex">
+      <mat-label translate>security.clientId</mat-label>
+      <input matInput formControlName="clientId"/>
+      <mat-error *ngIf="usernameFormGroup.get('clientId').hasError('required')">
+        {{ 'security.clientId-required' | translate }}
+      </mat-error>
+      <tb-copy-button
+        matSuffix
+        miniButton="false"
+        *ngIf="usernameFormGroup.get('clientId').value"
+        [copyText]="usernameFormGroup.get('clientId').value"
+        tooltipText="{{ 'gateway.copy-client-id' | translate }}"
+        tooltipPosition="above"
+        icon="content_copy">
+      </tb-copy-button>
+      <mat-icon matIconSuffix style="cursor:pointer;"
+                matTooltip="{{ 'gateway.hints.client-id' | translate }}">info_outlined
+      </mat-icon>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="flex">
+      <mat-label translate>security.username</mat-label>
+      <input matInput formControlName="username"/>
+      <mat-error *ngIf="usernameFormGroup.get('username').hasError('required')">
+        {{ 'security.username-required' | translate }}
+      </mat-error>
+      <tb-copy-button
+        matSuffix
+        miniButton="false"
+        *ngIf="usernameFormGroup.get('username').value"
+        [copyText]="usernameFormGroup.get('username').value"
+        tooltipText="{{ 'gateway.copy-username' | translate }}"
+        tooltipPosition="above"
+        icon="content_copy">
+      </tb-copy-button>
+      <mat-icon matIconSuffix style="cursor:pointer;"
+                matTooltip="{{ 'gateway.hints.username' | translate }}">info_outlined
+      </mat-icon>
+    </mat-form-field>
+  </div>
+  <mat-form-field appearance="outline" subscriptSizing="dynamic" style="width: 100%">
+    <mat-label translate>gateway.password</mat-label>
+    <input matInput formControlName="password"/>
+    <tb-copy-button
+      matSuffix
+      miniButton="false"
+      *ngIf="usernameFormGroup.get('password').value"
+      [copyText]="usernameFormGroup.get('password').value"
+      tooltipText="{{ 'gateway.copy-password' | translate }}"
+      tooltipPosition="above"
+      icon="content_copy">
+    </tb-copy-button>
+    <mat-icon matIconSuffix style="cursor:pointer;"
+              matTooltip="{{ 'gateway.hints.password' | translate }}">info_outlined
+    </mat-icon>
+  </mat-form-field>
+</section>
+<tb-error class="block"
+          *ngIf="usernameFormGroup.hasError('atLeastOneRequired') && usernameFormGroup.touched"
+          [error]="('device.client-id-or-user-name-necessary' | translate)">
+</tb-error>
+<tb-error class="block"
+          *ngIf="usernameFormGroup.hasError('usernameRequired') && usernameFormGroup.touched"
+          [error]="('gateway.hints.username-required-with-password' | translate)">
+</tb-error>

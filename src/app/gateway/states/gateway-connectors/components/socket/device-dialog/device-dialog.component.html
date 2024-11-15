@@ -108,7 +108,7 @@
       <div class="tb-form-row space-between tb-flex">
         <div class="fixed-title-width" translate>gateway.timeseries</div>
         <div class="tb-flex ellipsis-chips-container">
-          <mat-chip-listbox class="tb-flex" [tb-ellipsis-chip-list]="deviceFormGroup.get('telemetry').value">
+          <mat-chip-listbox class="tb-flex" [tbEllipsisChipList]="deviceFormGroup.get('telemetry').value">
             <mat-chip *ngFor="let telemetry of deviceFormGroup.get('telemetry').value">
               {{ telemetry.key }}
             </mat-chip>
@@ -128,7 +128,7 @@
       <div class="tb-form-row space-between tb-flex">
         <div class="fixed-title-width" translate>gateway.attributes</div>
         <div class="tb-flex ellipsis-chips-container">
-          <mat-chip-listbox [tb-ellipsis-chip-list]="deviceFormGroup.get('attributes').value" class="tb-flex">
+          <mat-chip-listbox [tbEllipsisChipList]="deviceFormGroup.get('attributes').value" class="tb-flex">
             <mat-chip *ngFor="let attribute of deviceFormGroup.get('attributes').value">
               {{ attribute.key }}
             </mat-chip>
@@ -148,7 +148,7 @@
       <div class="tb-form-row space-between tb-flex">
         <div class="fixed-title-width" translate>gateway.attribute-requests</div>
         <div class="tb-flex ellipsis-chips-container">
-          <mat-chip-listbox [tb-ellipsis-chip-list]="deviceFormGroup.get('attributeRequests').value" class="tb-flex">
+          <mat-chip-listbox [tbEllipsisChipList]="deviceFormGroup.get('attributeRequests').value" class="tb-flex">
             <mat-chip *ngFor="let request of deviceFormGroup.get('attributeRequests').value">
               {{ request.type }}
             </mat-chip>
@@ -168,7 +168,7 @@
       <div class="tb-form-row space-between tb-flex">
         <div class="fixed-title-width" translate>gateway.attribute-updates</div>
         <div class="tb-flex ellipsis-chips-container">
-          <mat-chip-listbox [tb-ellipsis-chip-list]="deviceFormGroup.get('attributeUpdates').value" class="tb-flex">
+          <mat-chip-listbox [tbEllipsisChipList]="deviceFormGroup.get('attributeUpdates').value" class="tb-flex">
             <mat-chip *ngFor="let attribute of deviceFormGroup.get('attributeUpdates').value">
               {{ attribute.encoding }}
             </mat-chip>
@@ -188,7 +188,7 @@
       <div class="tb-form-row space-between tb-flex">
         <div class="fixed-title-width" translate>gateway.rpc-methods</div>
         <div class="tb-flex ellipsis-chips-container">
-          <mat-chip-listbox [tb-ellipsis-chip-list]="deviceFormGroup.get('serverSideRpc').value" class="tb-flex">
+          <mat-chip-listbox [tbEllipsisChipList]="deviceFormGroup.get('serverSideRpc').value" class="tb-flex">
             <mat-chip *ngFor="let rpc of deviceFormGroup.get('serverSideRpc').value">
               {{ rpc.methodRPC }}
             </mat-chip>

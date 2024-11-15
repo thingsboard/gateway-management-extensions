@@ -94,7 +94,7 @@
                   <div class="tb-form-row space-between tb-flex">
                     <div class="fixed-title-width" translate>gateway.attributes</div>
                     <div class="tb-flex ellipsis-chips-container">
-                      <mat-chip-listbox [tb-ellipsis-chip-list]="converterAttributes" class="tb-flex">
+                      <mat-chip-listbox [tbEllipsisChipList]="converterAttributes" class="tb-flex">
                           <mat-chip *ngFor="let attribute of converterAttributes">
                             {{ attribute }}
                           </mat-chip>
@@ -116,7 +116,7 @@
                   <div class="tb-form-row space-between tb-flex">
                     <div class="fixed-title-width" translate>gateway.timeseries</div>
                     <div class="tb-flex ellipsis-chips-container">
-                      <mat-chip-listbox class="tb-flex" [tb-ellipsis-chip-list]="converterTelemetry">
+                      <mat-chip-listbox class="tb-flex" [tbEllipsisChipList]="converterTelemetry">
                         <mat-chip *ngFor="let telemetry of converterTelemetry">
                           {{ telemetry }}
                         </mat-chip>
@@ -161,7 +161,7 @@
                     <div class="tb-form-row space-between tb-flex">
                       <div class="fixed-title-width" translate>gateway.keys</div>
                       <div class="tb-flex ellipsis-chips-container">
-                        <mat-chip-listbox [tb-ellipsis-chip-list]="customKeys" class="tb-flex">
+                        <mat-chip-listbox [tbEllipsisChipList]="customKeys" class="tb-flex">
                           <mat-chip *ngFor="let telemetry of customKeys">
                             {{ telemetry }}
                           </mat-chip>
@@ -626,7 +626,7 @@
           <div class="tb-form-row space-between tb-flex">
             <div class="fixed-title-width" translate>gateway.attributes</div>
             <div class="tb-flex ellipsis-chips-container">
-              <mat-chip-listbox [tb-ellipsis-chip-list]="opcAttributes" class="tb-flex">
+              <mat-chip-listbox [tbEllipsisChipList]="opcAttributes" class="tb-flex">
                 <mat-chip *ngFor="let attribute of opcAttributes">
                   {{ attribute }}
                 </mat-chip>
@@ -648,7 +648,7 @@
           <div class="tb-form-row space-between tb-flex">
             <div class="fixed-title-width" translate>gateway.timeseries</div>
             <div class="tb-flex ellipsis-chips-container">
-              <mat-chip-listbox class="tb-flex" [tb-ellipsis-chip-list]="opcTelemetry">
+              <mat-chip-listbox class="tb-flex" [tbEllipsisChipList]="opcTelemetry">
                 <mat-chip *ngFor="let telemetry of opcTelemetry">
                   {{ telemetry }}
                 </mat-chip>
@@ -670,7 +670,7 @@
           <div class="tb-form-row space-between tb-flex">
             <div class="fixed-title-width" translate>gateway.attribute-updates</div>
             <div class="tb-flex ellipsis-chips-container">
-              <mat-chip-listbox [tb-ellipsis-chip-list]="opcAttributesUpdates" class="tb-flex">
+              <mat-chip-listbox [tbEllipsisChipList]="opcAttributesUpdates" class="tb-flex">
                 <mat-chip *ngFor="let attribute of opcAttributesUpdates">
                   {{ attribute }}
                 </mat-chip>
@@ -692,7 +692,7 @@
           <div class="tb-form-row space-between tb-flex">
             <div class="fixed-title-width" translate>gateway.rpc-methods</div>
             <div class="tb-flex ellipsis-chips-container">
-              <mat-chip-listbox [tb-ellipsis-chip-list]="opcRpcMethods" class="tb-flex">
+              <mat-chip-listbox [tbEllipsisChipList]="opcRpcMethods" class="tb-flex">
                 <mat-chip *ngFor="let attribute of opcRpcMethods">
                   {{ attribute }}
                 </mat-chip>

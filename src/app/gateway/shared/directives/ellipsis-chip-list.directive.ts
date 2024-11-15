@@ -28,7 +28,7 @@ import { fromEvent, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Directive({
-  selector: '[tb-ellipsis-chip-list]',
+  selector: '[tbEllipsisChipList]',
   standalone: true,
 })
 export class EllipsisChipListDirective implements OnDestroy {
@@ -38,7 +38,7 @@ export class EllipsisChipListDirective implements OnDestroy {
   private destroy$ = new Subject<void>();
   private intersectionObserver: IntersectionObserver;
 
-  @Input('tb-ellipsis-chip-list')
+  @Input('tbEllipsisChipList')
   set chips(value: string[]) {
     if (!isEqual(this.chipsValue, value)) {
       this.chipsValue = value;

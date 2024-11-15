@@ -14,7 +14,7 @@
 /// limitations under the License.
 ///
 
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ConnectorType } from '../../../../shared/public-api';
 import {
   RPCTemplate,
@@ -38,7 +38,7 @@ import { KeyValueIsNotEmptyPipe, RpcTemplateArrayViewPipe } from '../../pipes/pu
     KeyValueIsNotEmptyPipe
   ]
 })
-export class GatewayServiceRPCConnectorTemplatesComponent implements OnInit {
+export class GatewayServiceRPCConnectorTemplatesComponent {
 
   @Input()
   connectorType: ConnectorType;
@@ -63,9 +63,6 @@ export class GatewayServiceRPCConnectorTemplatesComponent implements OnInit {
   constructor(private attributeService: AttributeService) {
   }
 
-  ngOnInit() {
-  }
-
   public applyTemplate($event: Event, template: RPCTemplate): void {
     $event.stopPropagation();
     this.useTemplate.emit(template);
@@ -88,5 +85,9 @@ export class GatewayServiceRPCConnectorTemplatesComponent implements OnInit {
         value: this.rpcTemplates
       }]).subscribe(() => {
     })
+  }
+
+  getRpcParamsRowClasses(value: unknown): string {
+    return this.isObject(value) ? 'flex-col' : 'flex-row justify-between items-center';
   }
 }

@@ -86,7 +86,7 @@ export class GatewayLogsComponent implements OnInit, AfterViewInit {
     this.updateWidgetTitle();
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.ctx.defaultSubscription.onTimewindowChangeFunction = timewindow => {

@@ -13,11 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 :host {
-  .config-container {
-    height: calc(100% - 120px);
-    padding: 8px;
+  .configuration-block {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-height: 70vh;
+  }
+
+  .dialog-mode {
+    .configuration-block {
+      max-height: 60vh;
+    }
   }
 }
-

@@ -35,10 +35,7 @@
     [ngTemplateOutletContext]="{ $implicit: config, innerValue: false }">
   </ng-container>
   <ng-template #RPCTemplateRef let-config let-innerValue='innerValue'>
-    <div [class]="{
-        'flex-col': isObject(config.value),
-        'flex-row justify-between items-center': !isObject(config.value),
-      }" [style]="{'padding-left': innerValue ? '16px': '0'}"
+    <div [class]="this.getRpcParamsRowClasses(config.value)" [style]="{'padding-left': innerValue ? '16px': '0'}"
          class="rpc-params-row flex">
       <div class="template-key">
         {{!innerValue ? ('gateway.rpc.' + config.key | translate) : config.key}}

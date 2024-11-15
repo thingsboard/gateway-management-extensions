@@ -1,0 +1,135 @@
+<!--
+  Copyright © 2016-2024 The Thingsboard Authors
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<div [formGroup]="grpcFormGroup" class="mat-content mat-padding configuration-block">
+  <div class="tb-form-panel no-padding-bottom w-full">
+    <mat-slide-toggle class="mat-slide" color="primary" formControlName="enabled">
+      {{ 'gateway.grpc'  | translate }}
+    </mat-slide-toggle>
+    <div tb-hint-tooltip-icon="{{ 'gateway.hints.permit-without-calls' | translate }}"
+         class="tb-form-row no-border no-padding">
+      <mat-slide-toggle class="mat-slide" color="primary" formControlName="keepalivePermitWithoutCalls">
+        {{ 'gateway.permit-without-calls'  | translate }}
+      </mat-slide-toggle>
+    </div>
+    <section>
+      <section class="tb-form-row no-border no-padding tb-standard-fields column-xs">
+        <mat-form-field appearance="outline" class="flex">
+          <mat-label translate>gateway.server-port</mat-label>
+          <input matInput formControlName="serverPort" type="number" min="0"/>
+          <mat-icon matIconSuffix style="cursor:pointer;"
+                    matTooltip="{{ 'gateway.hints.server-port' | translate }}">info_outlined
+          </mat-icon>
+          <mat-error *ngIf="grpcFormGroup.get('serverPort').hasError('required')">
+            {{ 'gateway.thingsboard-port-required' | translate }}
+          </mat-error>
+          <mat-error *ngIf="grpcFormGroup.get('serverPort').hasError('min')">
+            {{ 'gateway.thingsboard-port-min' | translate }}
+          </mat-error>
+          <mat-error *ngIf="grpcFormGroup.get('serverPort').hasError('max')">
+            {{ 'gateway.thingsboard-port-max' | translate }}
+          </mat-error>
+          <mat-error *ngIf="grpcFormGroup.get('serverPort').hasError('pattern')">
+            {{ 'gateway.thingsboard-port-pattern' | translate }}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="flex">
+          <mat-label translate>gateway.grpc-keep-alive-timeout</mat-label>
+          <input matInput formControlName="keepAliveTimeoutMs" type="number" min="0"/>
+          <mat-icon matIconSuffix style="cursor:pointer;"
+                    matTooltip="{{ 'gateway.hints.grpc-keep-alive-timeout' | translate }}">info_outlined
+          </mat-icon>
+          <mat-error *ngIf="grpcFormGroup.get('keepAliveTimeoutMs').hasError('required')">
+            {{ 'gateway.grpc-keep-alive-timeout-required' | translate }}
+          </mat-error>
+          <mat-error *ngIf="grpcFormGroup.get('keepAliveTimeoutMs').hasError('min')">
+            {{ 'gateway.grpc-keep-alive-timeout-min' | translate }}
+          </mat-error>
+          <mat-error *ngIf="grpcFormGroup.get('keepAliveTimeoutMs').hasError('pattern')">
+            {{ 'gateway.grpc-keep-alive-timeout-pattern' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </section>
+      <section class="tb-form-row no-border no-padding tb-standard-fields column-xs">
+        <mat-form-field appearance="outline" class="flex">
+          <mat-label translate>gateway.grpc-keep-alive</mat-label>
+          <input matInput formControlName="keepAliveTimeMs" type="number" min="0"/>
+          <mat-icon matIconSuffix style="cursor:pointer;"
+                    matTooltip="{{ 'gateway.hints.grpc-keep-alive' | translate }}">info_outlined
+          </mat-icon>
+          <mat-error *ngIf="grpcFormGroup.get('keepAliveTimeMs').hasError('required')">
+            {{ 'gateway.grpc-keep-alive-required' | translate }}
+          </mat-error>
+          <mat-error *ngIf="grpcFormGroup.get('keepAliveTimeMs').hasError('min')">
+            {{ 'gateway.grpc-keep-alive-min' | translate }}
+          </mat-error>
+          <mat-error *ngIf="grpcFormGroup.get('keepAliveTimeMs').hasError('pattern')">
+            {{ 'gateway.grpc-keep-alive-pattern' | translate }}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="flex">
+          <mat-label translate>gateway.grpc-min-time-between-pings</mat-label>
+          <input matInput formControlName="minTimeBetweenPingsMs" type="number" min="0"/>
+          <mat-icon matIconSuffix style="cursor:pointer;"
+                    matTooltip="{{ 'gateway.hints.grpc-min-time-between-pings' | translate }}">info_outlined
+          </mat-icon>
+          <mat-error *ngIf="grpcFormGroup.get('minTimeBetweenPingsMs').hasError('required')">
+            {{ 'gateway.grpc-min-time-between-pings-required' | translate }}
+          </mat-error>
+          <mat-error *ngIf="grpcFormGroup.get('minTimeBetweenPingsMs').hasError('min')">
+            {{ 'gateway.grpc-min-time-between-pings-min' | translate }}
+          </mat-error>
+          <mat-error *ngIf="grpcFormGroup.get('minTimeBetweenPingsMs').hasError('pattern')">
+            {{ 'gateway.grpc-min-time-between-pings-pattern' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </section>
+      <section class="tb-form-row no-border no-padding tb-standard-fields column-xs">
+        <mat-form-field appearance="outline" class="flex">
+          <mat-label translate>gateway.grpc-max-pings-without-data</mat-label>
+          <input matInput formControlName="maxPingsWithoutData" type="number" min="0"/>
+          <mat-icon matIconSuffix style="cursor:pointer;"
+                    matTooltip="{{ 'gateway.hints.grpc-max-pings-without-data' | translate }}">info_outlined
+          </mat-icon>
+          <mat-error *ngIf="grpcFormGroup.get('maxPingsWithoutData').hasError('required')">
+            {{ 'gateway.grpc-max-pings-without-data-required' | translate }}
+          </mat-error>
+          <mat-error *ngIf="grpcFormGroup.get('maxPingsWithoutData').hasError('min')">
+            {{ 'gateway.grpc-max-pings-without-data-min' | translate }}
+          </mat-error>
+          <mat-error *ngIf="grpcFormGroup.get('maxPingsWithoutData').hasError('pattern')">
+            {{ 'gateway.grpc-max-pings-without-data-pattern' | translate }}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="flex">
+          <mat-label translate>gateway.grpc-min-ping-interval-without-data</mat-label>
+          <input matInput formControlName="minPingIntervalWithoutDataMs" type="number" min="0"/>
+          <mat-icon matIconSuffix style="cursor:pointer;"
+                    matTooltip="{{ 'gateway.hints.grpc-min-ping-interval-without-data' | translate }}">info_outlined
+          </mat-icon>
+          <mat-error *ngIf="grpcFormGroup.get('minPingIntervalWithoutDataMs').hasError('required')">
+            {{ 'gateway.grpc-min-ping-interval-without-data-required' | translate }}
+          </mat-error>
+          <mat-error *ngIf="grpcFormGroup.get('minPingIntervalWithoutDataMs').hasError('min')">
+            {{ 'gateway.grpc-min-ping-interval-without-data-min' | translate }}
+          </mat-error>
+          <mat-error *ngIf="grpcFormGroup.get('minPingIntervalWithoutDataMs').hasError('pattern')">
+            {{ 'gateway.grpc-min-ping-interval-without-data-pattern' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </section>
+    </section>
+  </div>
+</div>

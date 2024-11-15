@@ -1,0 +1,55 @@
+<!--
+  Copyright © 2016-2024 The Thingsboard Authors
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<div class="tb-form-panel">
+  <div translate class="tb-form-panel-title">security.security</div>
+  <ng-container [formGroup]="securityFormGroup">
+    <tb-toggle-select class="toggle-group flex" formControlName="type">
+      <tb-toggle-option *ngFor="let securityType of securityTypes | keyvalue"
+                        [value]="securityType.key">{{ securityType.value | translate }}
+      </tb-toggle-option>
+    </tb-toggle-select>
+    <mat-form-field appearance="outline"
+                    *ngIf="securityFormGroup.get('type').value.toLowerCase().includes('accesstoken')">
+      <mat-label translate>security.access-token</mat-label>
+      <input matInput formControlName="accessToken"/>
+      <mat-error *ngIf="securityFormGroup.get('accessToken').hasError('required')">
+        {{ 'security.access-token-required' | translate }}
+      </mat-error>
+      <tb-copy-button
+        matSuffix
+        miniButton="false"
+        *ngIf="securityFormGroup.get('accessToken').value"
+        [copyText]="securityFormGroup.get('accessToken').value"
+        tooltipText="{{ 'device.copy-access-token' | translate }}"
+        tooltipPosition="above"
+        icon="content_copy">
+      </tb-copy-button>
+      <mat-icon matIconSuffix style="cursor:pointer;"
+                matTooltip="{{ 'gateway.hints.token' | translate }}">info_outlined
+      </mat-icon>
+    </mat-form-field>
+    <tb-gateway-username-configuration [class.hidden]="securityFormGroup.get('type').value !== 'usernamePassword'" formControlName="usernamePassword"/>
+    <tb-file-input
+      hint="{{ 'gateway.hints.ca-cert' | translate }}"
+      *ngIf="securityFormGroup.get('type').value.toLowerCase().includes('tls')"
+      formControlName="caCert"
+      label="{{ 'security.ca-cert' | translate }}"
+      [allowedExtensions]="'pem,cert,key'"
+      [accept]="'.pem, application/pem,.cert, application/cert, .key,application/key'"
+      dropLabel="{{ 'gateway.drop-file' | translate }}">
+    </tb-file-input>
+  </ng-container>
+</div>

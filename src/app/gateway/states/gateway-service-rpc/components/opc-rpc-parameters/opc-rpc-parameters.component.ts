@@ -133,16 +133,16 @@ export class OpcRpcParametersComponent implements ControlValueAccessor, Validato
   addArgument(value: OPCTypeValue = {} as OPCTypeValue): void {
     const fromGroup = this.fb.group({
       type: [value.type ?? MappingValueType.STRING],
-      string: [
-        value.string ?? { value: '', disabled: !(isEqual(value, {}) || value.string)},
+      stringValue: [
+        value.stringValue ?? { value: '', disabled: !(isEqual(value, {}) || value.stringValue)},
         [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]
       ],
-      integer: [
-        {value: value.integer ?? 0, disabled: !isDefinedAndNotNull(value.integer)},
+      integerValue: [
+        {value: value.integerValue ?? 0, disabled: !isDefinedAndNotNull(value.integerValue)},
         [Validators.required, Validators.pattern(integerRegex)]
       ],
-      double: [{value: value.double ?? 0, disabled: !isDefinedAndNotNull(value.double)}, [Validators.required]],
-      boolean: [{value: value.boolean ?? false, disabled: !isDefinedAndNotNull(value.boolean)}, [Validators.required]],
+      doubleValue: [{value: value.doubleValue ?? 0, disabled: !isDefinedAndNotNull(value.doubleValue)}, [Validators.required]],
+      booleanValue: [{value: value.booleanValue ?? false, disabled: !isDefinedAndNotNull(value.booleanValue)}, [Validators.required]],
     });
     this.observeTypeChange(fromGroup);
     (this.rpcParametersFormGroup.get('arguments') as FormArray).push(fromGroup, {emitEvent: false});

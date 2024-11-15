@@ -45,15 +45,15 @@
     <div class="fixed-title-width tb-required" translate>gateway.value</div>
     <mat-form-field appearance="outline" subscriptSizing="dynamic" class="tb-inline-field flex tb-suffix-absolute">
       <ng-container [ngSwitch]="valueTypeFormGroup.get('type').value">
-        <input *ngSwitchCase="MappingValueType.STRING" matInput required formControlName="string"
+        <input *ngSwitchCase="MappingValueType.STRING" matInput required formControlName="stringValue"
                placeholder="{{ 'gateway.set' | translate }}" />
-        <input *ngSwitchCase="MappingValueType.INTEGER" matInput required formControlName="integer" type="number"
+        <input *ngSwitchCase="MappingValueType.INTEGER" matInput required formControlName="integerValue" type="number"
                placeholder="{{ 'gateway.set' | translate }}" />
-        <input *ngSwitchCase="MappingValueType.DOUBLE" matInput required formControlName="double" type="number"
+        <input *ngSwitchCase="MappingValueType.DOUBLE" matInput required formControlName="doubleValue" type="number"
                placeholder="{{ 'gateway.set' | translate }}" />
-        <input *ngSwitchCase="'raw'" matInput required formControlName="raw"
+        <input *ngSwitchCase="'raw'" matInput required formControlName="rawValue"
                placeholder="{{ 'gateway.set' | translate }}" />
-        <mat-select *ngSwitchCase="MappingValueType.BOOLEAN" formControlName="boolean">
+        <mat-select *ngSwitchCase="MappingValueType.BOOLEAN" formControlName="booleanValue">
           <mat-option [value]="true">true</mat-option>
           <mat-option [value]="false">false</mat-option>
         </mat-select>
