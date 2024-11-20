@@ -30,7 +30,8 @@ import {
   NG_VALUE_ACCESSOR,
   UntypedFormGroup,
   ValidationErrors,
-  Validator, Validators,
+  Validator,
+  Validators,
 } from '@angular/forms';
 import { SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
@@ -120,7 +121,7 @@ export class OpcRpcParametersComponent implements ControlValueAccessor, Validato
     this.rpcParametersFormGroup.valueChanges.pipe(
       takeUntil(this.destroy$)
     ).subscribe(params => {
-      const updatedArguments = params.arguments.map(({type, ...config}) => ({type, value: config[type]}));
+      const updatedArguments = params.arguments.map(({type, ...config}) => ({type, value: config[type + 'Value']}));
       this.onChange({method: params.method, arguments: updatedArguments});
       this.onTouched();
     });
@@ -161,7 +162,7 @@ export class OpcRpcParametersComponent implements ControlValueAccessor, Validato
       .subscribe(type => {
         dataKeyFormGroup.disable({emitEvent: false});
         dataKeyFormGroup.get('type').enable({emitEvent: false});
-        dataKeyFormGroup.get(type).enable({emitEvent: false});
+        dataKeyFormGroup.get(type + 'Value').enable({emitEvent: false});
       });
   }
 }

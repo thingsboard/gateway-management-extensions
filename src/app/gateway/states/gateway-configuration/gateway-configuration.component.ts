@@ -353,37 +353,40 @@ export class GatewayConfigurationComponent implements AfterViewInit, OnDestroy {
   }
 
   private updateConfigs(attributes: AttributeData[]): void {
-    const formValue: GatewayConfigValue = {
-      thingsboard: {} as GatewayGeneralConfig,
-      grpc: {} as GatewayGRPCConfig,
-      logs: {} as GatewayLogsConfig,
-      storage: {} as GatewayStorageConfig,
-      mode: ConfigurationModes.BASIC
-    };
+    let formValue = {} as GatewayConfigValue;
 
     attributes.forEach(attr => {
       switch (attr.key) {
         case 'general_configuration':
-          formValue.thingsboard = attr.value;
+          if (attr.value) {
+            formValue = { ...formValue, thingsboard: attr.value };
+          }
           this.setInitialCredentials(attr.value);
           break;
         case 'grpc_configuration':
-          formValue.grpc = attr.value;
+          if (attr.value) {
+            formValue = { ...formValue, grpc: attr.value };
+          }
           break;
         case 'logs_configuration':
-          formValue.logs = this.logsToObj(attr.value);
+          if (attr.value) {
+            formValue = { ...formValue, logs: this.logsToObj(attr.value) };
+          }
           break;
         case 'storage_configuration':
-          formValue.storage = attr.value;
+          if (attr.value) {
+            formValue = { ...formValue, storage: attr.value };
+          }
           break;
         case 'mode':
-          formValue.mode = attr.value;
+          if (attr.value) {
+          }
+          formValue = { ...formValue, mode: attr.value ?? ConfigurationModes.BASIC };
           break;
         case 'RemoteLoggingLevel':
-          formValue.logs = {
-            ...formValue.logs,
-            logLevel: attr.value
-          };
+          if (attr.value && formValue.logs) {
+            formValue = { ...formValue, logs: {...formValue.logs, logLevel: attr.value} };
+          }
       }
     });
 

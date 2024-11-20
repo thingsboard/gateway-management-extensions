@@ -14,6 +14,7 @@
 /// limitations under the License.
 ///
 import { DevicesConfigMapping } from './connectors.model';
+import { ReportStrategyConfig } from '../../../shared/models/public-api';
 
 export enum SocketType {
   TCP = 'TCP',
@@ -55,6 +56,7 @@ export interface DeviceDataKey {
   key: string;
   byteFrom: number;
   byteTo: number;
+  reportStrategy: ReportStrategyConfig;
 }
 
 export interface DeviceRpcMethod {

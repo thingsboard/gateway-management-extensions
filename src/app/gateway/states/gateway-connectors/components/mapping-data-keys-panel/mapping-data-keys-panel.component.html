@@ -59,7 +59,11 @@
                   </div>
                   <div class="tb-form-panel stroked">
                     <div class="tb-form-panel-title" translate>gateway.connector-side</div>
-                    <tb-type-value-field formControlName="typeValue" [rawData]="rawData"></tb-type-value-field>
+                    <tb-type-value-field
+                      formControlName="typeValue"
+                      [rawData]="rawData"
+                      [helpLink]="this.keysType | getConnectorMappingHelpLink : keyControl.get('typeValue').value : valueTypeKeys"
+                    />
                   </div>
                 </div>
                 <div class="tb-form-panel no-border no-padding" *ngIf="keysType === MappingKeysType.CUSTOM">

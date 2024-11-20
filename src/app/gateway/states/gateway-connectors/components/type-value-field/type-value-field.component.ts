@@ -62,6 +62,7 @@ import { CommonModule } from '@angular/common';
 export class TypeValueFieldComponent implements ControlValueAccessor, Validator, OnDestroy {
 
   @Input() @coerceBoolean() rawData: boolean;
+  @Input() helpLink: string;
 
   valueTypeKeys: MappingValueType[] = Object.values(MappingValueType) as MappingValueType[];
   valueTypeFormGroup: UntypedFormGroup;

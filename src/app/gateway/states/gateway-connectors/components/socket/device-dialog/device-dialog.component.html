@@ -119,6 +119,8 @@
           <button type="button"
                   mat-icon-button
                   color="primary"
+                  matTooltip="{{ 'action.edit' | translate }}"
+                  matTooltipPosition="above"
                   #socketTelemetryButton
                   (click)="manageKeys($event, socketTelemetryButton, SocketValueKey.TIMESERIES)">
             <tb-icon matButtonIcon>edit</tb-icon>
@@ -139,6 +141,8 @@
           <button type="button"
                   mat-icon-button
                   color="primary"
+                  matTooltip="{{ 'action.edit' | translate }}"
+                  matTooltipPosition="above"
                   #attributesButton
                   (click)="manageKeys($event, attributesButton, SocketValueKey.ATTRIBUTES)">
             <tb-icon matButtonIcon>edit</tb-icon>
@@ -159,6 +163,8 @@
           <button type="button"
                   mat-icon-button
                   color="primary"
+                  matTooltip="{{ 'action.edit' | translate }}"
+                  matTooltipPosition="above"
                   #attributeRequestsButton
                   (click)="manageKeys($event, attributeRequestsButton, SocketValueKey.ATTRIBUTES_REQUESTS)">
             <tb-icon matButtonIcon>edit</tb-icon>
@@ -179,6 +185,8 @@
           <button type="button"
                   mat-icon-button
                   color="primary"
+                  matTooltip="{{ 'action.edit' | translate }}"
+                  matTooltipPosition="above"
                   #attributesUpdatesButton
                   (click)="manageKeys($event, attributesUpdatesButton, SocketValueKey.ATTRIBUTES_UPDATES)">
             <tb-icon matButtonIcon>edit</tb-icon>
@@ -199,6 +207,8 @@
           <button type="button"
                   mat-icon-button
                   color="primary"
+                  matTooltip="{{ 'action.edit' | translate }}"
+                  matTooltipPosition="above"
                   #rpcMethodsButton
                   (click)="manageKeys($event, rpcMethodsButton, SocketValueKey.RPC_METHODS)">
             <tb-icon matButtonIcon>edit</tb-icon>

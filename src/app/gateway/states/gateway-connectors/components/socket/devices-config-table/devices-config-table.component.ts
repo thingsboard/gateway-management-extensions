@@ -21,6 +21,7 @@ import {
   Component,
   ElementRef,
   forwardRef,
+  Input,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -33,7 +34,10 @@ import {
   ControlValueAccessor,
   FormArray,
   FormBuilder,
+  NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validator,
 } from '@angular/forms';
 import { TruncateWithTooltipDirective } from '../../../../../shared/directives/public-api';
 import { isDefinedAndNotNull, DialogService } from '@core/public-api';
@@ -41,7 +45,8 @@ import { CommonModule } from '@angular/common';
 import {
   // @ts-ignore
   TbTableDatasource,
-  SharedModule
+  SharedModule,
+  coerceBoolean
 } from '@shared/public-api';
 import { DeviceDialogComponent } from '../device-dialog/device-dialog.component';
 import { DeviceConfigInfo, DevicesConfigMapping } from '../../../models/public-api';
@@ -57,11 +62,18 @@ import { DeviceConfigInfo, DevicesConfigMapping } from '../../../models/public-a
       useExisting: forwardRef(() => DevicesConfigTableComponent),
       multi: true
     },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => DevicesConfigTableComponent),
+      multi: true
+    }
   ],
   standalone: true,
   imports: [CommonModule, SharedModule, TruncateWithTooltipDirective]
 })
-export class DevicesConfigTableComponent implements ControlValueAccessor, AfterViewInit, OnInit, OnDestroy {
+export class DevicesConfigTableComponent implements ControlValueAccessor, Validator, AfterViewInit, OnInit, OnDestroy {
+
+  @Input() @coerceBoolean() withReportStrategy = true;
 
   @ViewChild('searchInput') searchInputField: ElementRef;
 
@@ -153,6 +165,12 @@ export class DevicesConfigTableComponent implements ControlValueAccessor, AfterV
     });
   }
 
+  validate(): ValidationErrors | null {
+    return this.devicesFormGroup.controls.length ? null : {
+      devicesFormGroup: {valid: false}
+    };
+  }
+
   private getDeviceDialog(
     value: DevicesConfigMapping,
     buttonTitle: string
@@ -163,6 +181,7 @@ export class DevicesConfigTableComponent implements ControlValueAccessor, AfterV
       data: {
         value,
         buttonTitle,
+        withReportStrategy: this.withReportStrategy,
       }
     });
   }

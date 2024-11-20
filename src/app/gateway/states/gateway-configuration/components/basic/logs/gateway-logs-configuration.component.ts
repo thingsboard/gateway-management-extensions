@@ -119,11 +119,11 @@ export class GatewayLogsConfigurationComponent implements AfterViewInit, Validat
     return this.fb.group({
       dateFormat: ['%Y-%m-%d %H:%M:%S', [Validators.required, Validators.pattern(/^[^\s].*[^\s]$/)]],
       logFormat: [
-        '%(asctime)s - |%(levelname)s| - [%(filename)s] - %(module)s - %(funcName)s - %(lineno)d - %(message)s',
+        '%(asctime)s.%(msecs)03d - |%(levelname)s| - [%(filename)s] - %(module)s - %(funcName)s - %(lineno)d - %(message)s',
         [Validators.required, Validators.pattern(/^[^\s].*[^\s]$/)]
       ],
       type: ['remote', [Validators.required]],
-      logLevel: [GatewayLogLevel.INFO],
+      logLevel: [{ value: GatewayLogLevel.INFO, disabled: true }],
       local: this.fb.group({})
     });
   }
@@ -141,7 +141,9 @@ export class GatewayLogsConfigurationComponent implements AfterViewInit, Validat
   }
 
   private updateRemoteLogs(logLevel: GatewayLogLevel): void {
-    this.showRemoteLogsControl.patchValue(logLevel && logLevel !== GatewayLogLevel.NONE, {emitEvent: false});
+    const enable = logLevel && logLevel !== GatewayLogLevel.NONE;
+    this.showRemoteLogsControl.patchValue(enable, {emitEvent: false});
+    this.logsFormGroup.get('logLevel')[enable ? 'enable' : 'disable']({emitEvent: false});
     this.logsFormGroup.get('logLevel').patchValue(logLevel === GatewayLogLevel.NONE ? GatewayLogLevel.INFO : logLevel, {emitEvent: false});
   }
 }

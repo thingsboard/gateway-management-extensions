@@ -16,11 +16,11 @@
 
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormGroup, UntypedFormArray, UntypedFormBuilder, Validators } from '@angular/forms';
-import { PageComponent, SharedModule } from '@shared/public-api';
+import { coerceBoolean, PageComponent, SharedModule } from '@shared/public-api';
 import { TbPopoverComponent } from '@shared/components/popover.component';
 import { Store } from '@ngrx/store';
 import { AppState } from '@core/public-api';
-import { noLeadTrailSpacesRegex, } from '../../../../../shared/models/public-api';
+import { noLeadTrailSpacesRegex, ReportStrategyDefaultValue, } from '../../../../../shared/models/public-api';
 import {
   DeviceAttributesRequests,
   DeviceDataKey,
@@ -35,6 +35,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { EllipsisChipListDirective } from '../../../../../shared/directives/ellipsis-chip-list.directive';
 import { ConnectorMappingHelpLinkPipe } from '../../../pipes/gateway-help-link.pipe';
+import { ReportStrategyComponent } from '../../../../../shared/components/report-strategy/report-strategy.component';
 
 @Component({
   selector: 'tb-device-data-keys-panel',
@@ -48,6 +49,7 @@ import { ConnectorMappingHelpLinkPipe } from '../../../pipes/gateway-help-link.p
     SharedModule,
     EllipsisChipListDirective,
     ConnectorMappingHelpLinkPipe,
+    ReportStrategyComponent,
   ]
 })
 export class DeviceDataKeysPanelComponent extends PageComponent implements OnInit {
@@ -59,6 +61,7 @@ export class DeviceDataKeysPanelComponent extends PageComponent implements OnIni
   @Input() keys: Array<SocketDeviceKeys>;
   @Input() keysType: SocketValueKey;
   @Input() popover: TbPopoverComponent<DeviceDataKeysPanelComponent>;
+  @Input() @coerceBoolean() withReportStrategy = true;
 
   @Output() keysDataApplied = new EventEmitter<Array<SocketDeviceKeys>>();
 
@@ -67,6 +70,7 @@ export class DeviceDataKeysPanelComponent extends PageComponent implements OnIni
   readonly requestsType = Object.values(RequestsType);
   readonly expressionType = Object.values(ExpressionType);
   readonly ExpressionType = ExpressionType;
+  readonly ReportStrategyDefaultValue = ReportStrategyDefaultValue;
 
   keysListFormArray: UntypedFormArray;
 
@@ -109,6 +113,7 @@ export class DeviceDataKeysPanelComponent extends PageComponent implements OnIni
         key: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
         byteFrom: [0, [Validators.required]],
         byteTo: [0, [Validators.required]],
+        reportStrategy: [{value: null, disabled: this.isReportStrategyDisabled()}]
       });
     }
     this.keysListFormArray.push(dataKeyFormGroup);
@@ -139,7 +144,7 @@ export class DeviceDataKeysPanelComponent extends PageComponent implements OnIni
         dataKeyFormGroup = this.fb.group({
           methodRPC: [rpcKeyData.methodRPC, [Validators.required]],
           encoding: [rpcKeyData.encoding, [Validators.required]],
-          withResponse: [true]
+          withResponse: [rpcKeyData.withResponse]
         });
       } else if (this.keysType === SocketValueKey.ATTRIBUTES_REQUESTS) {
         const attributeRequestsKeyData = keyData as DeviceAttributesRequests;
@@ -156,15 +161,20 @@ export class DeviceDataKeysPanelComponent extends PageComponent implements OnIni
           attributeOnThingsBoard: [(keyData as SocketAttributeUpdates).attributeOnThingsBoard, [Validators.required]],
         });
       } else {
-        const {key, byteFrom, byteTo} = keyData as DeviceDataKey;
+        const {key, byteFrom, byteTo, reportStrategy} = keyData as DeviceDataKey;
         dataKeyFormGroup = this.fb.group({
           key: [key, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
           byteFrom: [byteFrom ?? 0, [Validators.required]],
-          byteTo: [byteTo ?? 0, [Validators.required]]
+          byteTo: [byteTo ?? 0, [Validators.required]],
+          reportStrategy: [{ value: reportStrategy, disabled: this.isReportStrategyDisabled()}]
         });
       }
       keysControlGroups.push(dataKeyFormGroup);
     });
     return this.fb.array(keysControlGroups);
+  }
+
+  private isReportStrategyDisabled(): boolean {
+    return !(this.withReportStrategy && (this.keysType === SocketValueKey.ATTRIBUTES || this.keysType === SocketValueKey.TIMESERIES));
   }
 }

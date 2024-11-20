@@ -65,6 +65,8 @@ import { SocketBasicConfig_v3_6, SocketLegacyBasicConfig } from '../../../models
 
 export class SocketLegacyBasicConfigComponent extends GatewayConnectorBasicConfigDirective<SocketBasicConfig_v3_6, SocketLegacyBasicConfig> implements ControlValueAccessor, Validator, OnDestroy {
 
+  isLegacy = true;
+
   protected getMappedValue(config: SocketBasicConfig_v3_6): SocketLegacyBasicConfig {
     return SocketVersionMappingUtil.mapSocketToDowngradedVersion(config);
   }

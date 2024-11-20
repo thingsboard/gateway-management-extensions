@@ -47,7 +47,9 @@
                     <div class="tb-form-panel-title" translate>gateway.platform-side</div>
                     <div class="tb-form-row column-xs">
                       <div class="fixed-title-width tb-required"
-                           tb-hint-tooltip-icon="{{ 'gateway.hints.socket.key' | translate }}">
+                           tb-hint-tooltip-icon="{{ keysType === SocketValueKey.ATTRIBUTES
+                           ? ('gateway.hints.socket.key-attribute' | translate)
+                           : ('gateway.hints.socket.key-telemetry' | translate) }}">
                         {{ 'gateway.key' | translate }}
                       </div>
                       <div class="tb-flex no-gap">
@@ -108,6 +110,12 @@
                         </mat-icon>
                       </mat-form-field>
                     </div>
+                    <tb-report-strategy
+                      *ngIf="withReportStrategy && (keysType === SocketValueKey.ATTRIBUTES || keysType === SocketValueKey.TIMESERIES)"
+                      [isExpansionMode]="true"
+                      [defaultValue]="ReportStrategyDefaultValue.Key"
+                      formControlName="reportStrategy"
+                    />
                   </div>
                 </div>
                 <div class="tb-form-panel no-border no-padding" *ngIf="keysType === SocketValueKey.RPC_METHODS">
@@ -169,7 +177,7 @@
                     </div>
                   </div>
                   <div class="tb-form-row column-xs">
-                    <div class="fixed-title-width">
+                    <div class="fixed-title-width tb-required">
                       {{ 'gateway.request-expression' | translate }}
                     </div>
                     <div class="tb-flex">
@@ -182,6 +190,14 @@
                       <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
                         <input matInput name="value" formControlName="requestExpression"
                                placeholder="{{ 'gateway.set' | translate }}"/>
+                        <mat-icon matSuffix
+                                  matTooltipPosition="above"
+                                  matTooltipClass="tb-error-tooltip"
+                                  [matTooltip]="('gateway.request-expression-required') | translate"
+                                  *ngIf="keyControl.get('requestExpression').hasError('required') && keyControl.get('requestExpression').touched"
+                                  class="tb-error">
+                          warning
+                        </mat-icon>
                         <div  matSuffix
                               *ngIf="keyControl.get('requestExpressionSource').value === ExpressionType.Expression"
                               class="see-example"
@@ -193,7 +209,7 @@
                     </div>
                   </div>
                   <div class="tb-form-row column-xs">
-                    <div class="fixed-title-width">
+                    <div class="fixed-title-width tb-required">
                       {{ 'gateway.attribute-name-expression' | translate }}
                     </div>
                     <div class="tb-flex">
@@ -206,6 +222,14 @@
                       <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
                         <input matInput name="value" formControlName="attributeNameExpression"
                                placeholder="{{ 'gateway.set' | translate }}"/>
+                        <mat-icon matSuffix
+                                  matTooltipPosition="above"
+                                  matTooltipClass="tb-error-tooltip"
+                                  [matTooltip]="('gateway.attribute-name-expression-required') | translate"
+                                  *ngIf="keyControl.get('attributeNameExpression').hasError('required') && keyControl.get('attributeNameExpression').touched"
+                                  class="tb-error">
+                          warning
+                        </mat-icon>
                         <div  matSuffix
                               *ngIf="keyControl.get('attributeNameExpressionSource').value === ExpressionType.Expression"
                               class="see-example"
@@ -243,7 +267,7 @@
                         <mat-icon matSuffix
                                   matTooltipPosition="above"
                                   matTooltipClass="tb-error-tooltip"
-                                  [matTooltip]="('gateway.attribute-on-platform-required') | translate"
+                                  [matTooltip]="('gateway.hints.socket.attribute-on-platform-required') | translate"
                                   *ngIf="keyControl.get('attributeOnThingsBoard').hasError('required') && keyControl.get('attributeOnThingsBoard').touched"
                                   class="tb-error">
                           warning
