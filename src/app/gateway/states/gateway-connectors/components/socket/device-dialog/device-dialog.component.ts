@@ -137,7 +137,8 @@ export class DeviceDialogComponent extends DialogComponent<DeviceDialogComponent
       panelTitle: SocketKeysPanelTitleTranslationsMap.get(keysType),
       addKeyTitle: SocketKeysAddKeyTranslationsMap.get(keysType),
       deleteKeyTitle: SocketKeysDeleteKeyTranslationsMap.get(keysType),
-      noKeysText: SocketKeysNoKeysTextTranslationsMap.get(keysType)
+      noKeysText: SocketKeysNoKeysTextTranslationsMap.get(keysType),
+      withReportStrategy: this.data.withReportStrategy,
     };
     this.keysPopupClosed = false;
     const dataKeysPanelPopover = this.popoverService.displayPopover(

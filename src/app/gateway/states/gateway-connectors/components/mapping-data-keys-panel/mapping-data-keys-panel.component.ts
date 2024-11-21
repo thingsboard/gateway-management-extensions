@@ -50,6 +50,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { TypeValuePanelComponent } from '../type-value-panel/type-value-panel.component';
 import { TypeValueFieldComponent } from '../type-value-field/type-value-field.component';
+import { ConnectorMappingHelpLinkPipe } from '../../pipes/public-api';
 
 @Component({
   selector: 'tb-mapping-data-keys-panel',
@@ -62,6 +63,7 @@ import { TypeValueFieldComponent } from '../type-value-field/type-value-field.co
     ReportStrategyComponent,
     TypeValuePanelComponent,
     TypeValueFieldComponent,
+    ConnectorMappingHelpLinkPipe,
   ],
 })
 export class MappingDataKeysPanelComponent extends PageComponent implements OnInit {

@@ -98,6 +98,7 @@ export class GatewaySecurityConfigurationComponent implements AfterViewInit, Con
     } else {
       this.securityFormGroup.patchValue(security, { emitEvent: false });
     }
+    this.toggleBySecurityType(this.securityFormGroup.get('type').value);
   }
 
   registerOnChange(fn: (config: GatewayConfigSecurity) => {}): void {
@@ -131,11 +132,11 @@ export class GatewaySecurityConfigurationComponent implements AfterViewInit, Con
 
   private listenToSecurityTypeChanges(): void {
     this.securityFormGroup.get('type').valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(type => {
-      this.updateValidatorsBasedOnSecurityType(type);
+      this.toggleBySecurityType(type);
     });
   }
 
-  private updateValidatorsBasedOnSecurityType(type: SecurityTypes): void {
+  private toggleBySecurityType(type: SecurityTypes): void {
     this.securityFormGroup.disable({ emitEvent: false });
     this.securityFormGroup.get('type').enable({ emitEvent: false });
     switch (type) {
@@ -172,7 +173,7 @@ export class GatewaySecurityConfigurationComponent implements AfterViewInit, Con
     const securityType = this.determineSecurityType(security, credentials);
     if (securityType) {
       this.securityFormGroup.get('type').setValue(securityType, { emitEvent: false });
-      this.updateValidatorsBasedOnSecurityType(securityType);
+      this.toggleBySecurityType(securityType);
     }
   }
 

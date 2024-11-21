@@ -64,6 +64,8 @@ import {
 
 export class SocketBasicConfigComponent extends GatewayConnectorBasicConfigDirective<SocketBasicConfig_v3_6, SocketBasicConfig_v3_6> implements ControlValueAccessor, Validator, OnDestroy {
 
+  isLegacy = false;
+
   protected getMappedValue(config: SocketBasicConfig_v3_6): SocketBasicConfig_v3_6 {
     return config;
   }

@@ -67,8 +67,8 @@
                     matTooltipPosition="above"
                     matTooltipClass="tb-error-tooltip"
                     [matTooltip]="('gateway.value-required') | translate"
-                    *ngIf="argumentFormGroup.get(argumentFormGroup.get('type').value).hasError('required')
-                              && argumentFormGroup.get(argumentFormGroup.get('type').value).touched"
+                    *ngIf="argumentFormGroup.get(argumentFormGroup.get('type').value + 'Value').hasError('required')
+                              && argumentFormGroup.get(argumentFormGroup.get('type').value + 'Value').touched"
                     class="tb-error">
             warning
           </mat-icon>

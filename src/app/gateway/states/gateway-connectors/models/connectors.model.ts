@@ -318,4 +318,10 @@ export interface DevicesConfigMapping {
   serverSideRpc: DeviceRpcMethod[];
 }
 
+export interface DeviceConfigInfo {
+  value: DevicesConfigMapping;
+  buttonTitle: string;
+  withReportStrategy?: boolean;
+}
+
 

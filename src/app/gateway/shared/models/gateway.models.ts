@@ -100,6 +100,7 @@ export interface GatewayConnectorBase {
   configVersion?: string;
   reportStrategy?: ReportStrategyConfig;
   sendDataOnlyOnChange?: boolean;
+  enableRemoteLogging?: boolean;
   ts?: number;
 }
 

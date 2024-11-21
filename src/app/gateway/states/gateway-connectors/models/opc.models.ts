@@ -81,11 +81,6 @@ export interface LegacyDeviceConnectorMapping {
   attributes_updates?: LegacyDeviceAttributeUpdate[];
 }
 
-export interface DeviceConfigInfo {
-  value: DevicesConfigMapping,
-  buttonTitle: string,
-}
-
 export enum DeviceInfoType {
   FULL = 'full',
   PARTIAL = 'partial'

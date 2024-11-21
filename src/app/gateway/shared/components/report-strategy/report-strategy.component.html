@@ -32,7 +32,15 @@
   </ng-template>
   <ng-template #strategyFields>
     <div class="tb-form-row column-xs">
-      <div class="fixed-title-width">{{ 'gateway.type' | translate }}</div>
+      <div class="fixed-title-width flex items-center gap-2">
+        {{ 'gateway.type' | translate }}
+        <div  matSuffix
+              class="see-example"
+              [tb-help-popup]="'widget/lib/gateway/report-strategy_fn'"
+              tb-help-popup-placement="right"
+              [tb-help-popup-style]="{maxWidth: '970px'}">
+        </div>
+      </div>
       <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
         <mat-select formControlName="type">
           <mat-option *ngFor="let type of reportStrategyTypes" [value]="type">{{ ReportTypeTranslateMap.get(type) | translate }}</mat-option>

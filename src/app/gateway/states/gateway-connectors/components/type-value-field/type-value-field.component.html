@@ -67,6 +67,13 @@
                 class="tb-error">
         warning
       </mat-icon>
+      <div matSuffix
+           class="see-example"
+           *ngIf="helpLink"
+           [tb-help-popup]="helpLink"
+           tb-help-popup-placement="left"
+           [tb-help-popup-style]="{maxWidth: '970px'}">
+      </div>
     </mat-form-field>
   </div>
 </ng-container>

@@ -319,6 +319,7 @@
     "remote-shell": "Remote shell",
     "remote-configuration": "Remote Configuration",
     "request-expression": "Request expression",
+    "request-expression-required": "Request expression is required",
     "retries": "Retries",
     "retries-on-empty": "Retries on empty",
     "retries-on-invalid": "Retries on invalid",
@@ -619,6 +620,7 @@
     "write-register": "Write Register",
     "write-registers": "Write Registers",
     "hints": {
+      "buffer-size": "Buffer size for received data blocks.",
       "encoding": "Encoding used for writing received string data to storage.",
       "modbus-master": "Configuration sections for connecting to Modbus servers and reading data from them.",
       "modbus-server": "Configuration section for the Modbus server, storing data and sending updates to the platform when changes occur or at fixed intervals.",
@@ -679,8 +681,9 @@
       "socket": {
         "attribute-on-platform-required": "Attribute on platform is required",
         "attribute-requests-type": "The type of requested attribute can be “shared” or “client.",
-        "with-response": "Boolean flag that specifies whether to send a response back to ThingsBoard.",
-        "key": "Name for telemetry on platform."
+        "with-response": "Boolean flag that specifies whether to send a response back to platform.",
+        "key-telemetry": "Name for telemetry on platform.",
+        "key-attribute": "Name for attribute on platform."
       },
       "modbus": {
         "bit-target-type": "The response type can be either an integer (1/0) or a boolean (True/False).",

@@ -14,7 +14,7 @@
 /// limitations under the License.
 ///
 
-import { Component, forwardRef, OnDestroy, OnInit } from '@angular/core';
+import { Component, forwardRef, Input, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
@@ -57,6 +57,8 @@ import { TypeValueFieldComponent } from '../type-value-field/type-value-field.co
   ]
 })
 export class TypeValuePanelComponent implements ControlValueAccessor, Validator, OnInit, OnDestroy {
+
+  @Input() helpLink: string;
 
   valueListFormArray: UntypedFormArray;
 
