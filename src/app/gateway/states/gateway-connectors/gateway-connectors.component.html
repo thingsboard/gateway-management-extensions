@@ -235,6 +235,23 @@
               />
             </ng-template>
           </ng-container>
+          <ng-container *ngSwitchCase="ConnectorType.BACNET">
+            <tb-bacnet-basic-config
+              *ngIf="connectorForm.get('configVersion').value | isLatestVersionConfig : ConnectorType.BACNET else legacy"
+              formControlName="basicConfig"
+              [generalTabContent]="generalTabContent"
+              (initialized)="basicConfigInitSubject.next()"
+              [withReportStrategy]="connectorForm.get('configVersion').value | withReportStrategy : ConnectorType.BACNET"
+            />
+            <ng-template #legacy>
+              <tb-bacnet-legacy-basic-config
+                formControlName="basicConfig"
+                (initialized)="basicConfigInitSubject.next()"
+                [generalTabContent]="generalTabContent"
+                [withReportStrategy]="connectorForm.get('configVersion').value | withReportStrategy : ConnectorType.BACNET"
+              />
+            </ng-template>
+          </ng-container>
         </ng-container>
       </ng-container>
       <ng-template #defaultConfig>

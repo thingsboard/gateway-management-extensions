@@ -17,7 +17,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import {
   OPCUaSourceType,
-  SourceType
+  MQTTSourceType
 } from '../models/public-api';
 import { MappingValueType } from '../../../shared/models/public-api';
 
@@ -26,7 +26,7 @@ import { MappingValueType } from '../../../shared/models/public-api';
   standalone: true,
 })
 export class ConnectorMappingHelpLinkPipe implements PipeTransform {
-  transform(field: string, sourceType: SourceType | OPCUaSourceType, sourceTypes?: Array<SourceType | OPCUaSourceType | MappingValueType> ): string {
+  transform(field: string, sourceType: MQTTSourceType | OPCUaSourceType, sourceTypes?: Array<MQTTSourceType | OPCUaSourceType | MappingValueType> ): string {
     if (!sourceTypes || sourceTypes?.includes(OPCUaSourceType.PATH)) {
       if (sourceType !== OPCUaSourceType.CONST) {
         return `widget/lib/gateway/${field}-${sourceType}_fn`;

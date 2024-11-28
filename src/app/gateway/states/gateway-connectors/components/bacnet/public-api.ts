@@ -13,10 +13,10 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
+export * from './application-config/bacnet-application-config.component';
+export * from './device-data-keys-pannel/bacnet-device-data-keys-panel.component';
+export * from './basic-config/bacnet-basic-config.component';
+export * from './device-data-key/bacnet-device-data-key.component';
+export * from './device-dialog/bacnet-device-dialog.component';
+export * from './devices-config-table/bacnet-devices-config-table.component';
 
-export * from './models/public-api';
-export * from './directives/public-api';
-export * from './datasources/public-api';
-export * from './components/public-api';
-export * from './pipes/public-api';
-export * from './abstract/public-api';

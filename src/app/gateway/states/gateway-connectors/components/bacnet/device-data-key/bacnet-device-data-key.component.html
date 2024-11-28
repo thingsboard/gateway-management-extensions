@@ -1,0 +1,139 @@
+<!--
+Copyright © 2016-2024 The Thingsboard Authors
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<div class="tb-form-panel no-border no-padding" [formGroup]="formGroup">
+  <div class="tb-form-panel stroked">
+    <div class="tb-form-panel-title" translate>gateway.platform-side</div>
+    <div class="tb-form-row column-xs">
+    @if (keyType() !== BacnetDeviceKeysType.RPC_METHODS) {
+      <div class="fixed-title-width tb-required"
+           tb-hint-tooltip-icon="{{ keyType() === BacnetDeviceKeysType.TIMESERIES
+                           ? ('gateway.hints.socket.key-telemetry' | translate)
+                           : ('gateway.hints.socket.key-attribute' | translate) }}">
+        {{ 'gateway.key' | translate }}
+      </div>
+      <div class="tb-flex no-gap">
+        <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+          <input matInput name="value" formControlName="key"
+                 placeholder="{{ 'gateway.set' | translate }}"/>
+          @if (formGroup.get('key').hasError('required') && formGroup.get('key').touched) {
+            <mat-icon matSuffix
+                      matTooltipPosition="above"
+                      matTooltipClass="tb-error-tooltip"
+                      [matTooltip]="('gateway.key-required') | translate"
+                      class="tb-error">
+              warning
+            </mat-icon>
+          }
+        </mat-form-field>
+      </div>
+    } @else {
+      <div class="fixed-title-width tb-required"
+           tb-hint-tooltip-icon="{{ ('gateway.hints.method' | translate) }}">
+        {{ 'gateway.method' | translate }}
+      </div>
+      <div class="tb-flex no-gap">
+        <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+          <input matInput name="value" formControlName="method"
+                 placeholder="{{ 'gateway.set' | translate }}"/>
+          @if (formGroup.get('method').hasError('required') && formGroup.get('method').touched) {
+            <mat-icon matSuffix
+                      matTooltipPosition="above"
+                      matTooltipClass="tb-error-tooltip"
+                      [matTooltip]="('gateway.method-required') | translate"
+                      class="tb-error">
+              warning
+            </mat-icon>
+          }
+        </mat-form-field>
+      </div>
+    }
+    </div>
+  </div>
+  <div class="tb-form-panel stroked">
+    <div class="tb-form-panel-title" translate>gateway.connector-side</div>
+    @if (keyType() === BacnetDeviceKeysType.ATTRIBUTES_UPDATES || keyType() === BacnetDeviceKeysType.RPC_METHODS) {
+      <div class="tb-form-row column-xs">
+        <div class="tb-flex row space-between align-center no-gap fill-width">
+          <div class="fixed-title-width tb-required">{{ 'gateway.bacnet.request-type.label' | translate }}</div>
+          <tb-toggle-select formControlName="requestType" appearance="fill">
+            @for (type of requestTypes; track $index) {
+              <tb-toggle-option [value]="type">
+                {{ BacnetRequestTypeTranslationsMap.get(type) | translate }}
+              </tb-toggle-option>
+            }
+          </tb-toggle-select>
+        </div>
+      </div>
+    }
+    @if (keyType() === BacnetDeviceKeysType.RPC_METHODS) {
+      <div class="tb-form-row column-xs">
+        <div class="fixed-title-width tb-required">
+          <span tbTruncateWithTooltip translate>gateway.request-timeout</span>
+        </div>
+        <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+          <input matInput type="number" min="0" name="value" formControlName="requestTimeout" placeholder="{{ 'gateway.set' | translate }}"/>
+        </mat-form-field>
+      </div>
+    }
+    <div class="tb-form-row column-xs">
+      <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.object-id' | translate }}" translate>gateway.object-id</div>
+      <div class="tb-flex no-gap raw-value-option">
+        <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+          <mat-select formControlName="objectType">
+            @for (type of objectTypes; track $index) {
+              <mat-option [value]="type">
+                {{ BacnetKeyObjectTypeTranslationsMap.get(type) | translate }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="tb-form-table-row-cell tb-flex no-gap">
+        <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+          <input matInput type="number" min="0" name="value" formControlName="objectId" placeholder="{{ 'gateway.set' | translate }}"/>
+          @if (formGroup.get('objectId').hasError('required') && formGroup.get('objectId').touched) {
+            <mat-icon matSuffix
+                      matTooltipPosition="above"
+                      matTooltipClass="tb-error-tooltip"
+                      [matTooltip]="('gateway.object-id-required') | translate"
+                      class="tb-error">
+              warning
+            </mat-icon>
+          }
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="tb-form-row column-xs">
+      <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.property-id' | translate }}" translate>gateway.property-id</div>
+      <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+        <mat-select formControlName="propertyId">
+          @for (id of propertyIds; track $index) {
+            <mat-option [value]="id">
+              {{ BacnetPropertyIdTranslationsMap.get(id) | translate }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+    @if (!isReportStrategyDisabled()) {
+      <tb-report-strategy
+        [isExpansionMode]="true"
+        [defaultValue]="ReportStrategyDefaultValue.Key"
+        formControlName="reportStrategy"
+      />
+    }
+  </div>
+</div>

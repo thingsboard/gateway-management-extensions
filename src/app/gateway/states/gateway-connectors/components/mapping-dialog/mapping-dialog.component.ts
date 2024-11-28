@@ -49,7 +49,7 @@ import {
   RequestTypesTranslationsMap,
   RpcMethod,
   ServerSideRPCType,
-  SourceType,
+  MQTTSourceType,
   SourceTypeTranslationsMap,
 } from '../../models/public-api';
 import { Subject } from 'rxjs';
@@ -88,10 +88,10 @@ export class MappingDialogComponent extends DialogComponent<MappingDialogCompone
   readonly convertorTypes: ConvertorType[] = Object.values(ConvertorType) as ConvertorType[];
   readonly ConvertorTypeEnum = ConvertorType;
   readonly ConvertorTypeTranslationsMap = ConvertorTypeTranslationsMap;
-  readonly sourceTypes: SourceType[] = Object.values(SourceType) as SourceType[];
+  readonly sourceTypes: MQTTSourceType[] = Object.values(MQTTSourceType) as MQTTSourceType[];
   readonly OPCUaSourceTypes = Object.values(OPCUaSourceType) as Array<OPCUaSourceType>;
   readonly OPCUaSourceTypesEnum = OPCUaSourceType;
-  readonly sourceTypesEnum = SourceType;
+  readonly sourceTypesEnum = MQTTSourceType;
   readonly SourceTypeTranslationsMap = SourceTypeTranslationsMap;
   readonly requestTypes: RequestType[] = Object.values(RequestType) as RequestType[];
   readonly RequestTypeEnum = RequestType;
@@ -348,10 +348,10 @@ export class MappingDialogComponent extends DialogComponent<MappingDialogCompone
       attributeRequests: this.fb.group({
         topicFilter: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
         deviceInfo: this.fb.group({
-          deviceNameExpressionSource: [SourceType.MSG, []],
+          deviceNameExpressionSource: [MQTTSourceType.MSG, []],
           deviceNameExpression: ['', [Validators.required]],
         }),
-        attributeNameExpressionSource: [SourceType.MSG, []],
+        attributeNameExpressionSource: [MQTTSourceType.MSG, []],
         attributeNameExpression: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
         topicExpression: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
         valueExpression: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],

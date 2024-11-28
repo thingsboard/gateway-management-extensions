@@ -31,7 +31,7 @@ import {
   RequestMappingFormValue,
   RequestMappingValue,
   RequestsMapping,
-  SourceType
+  MQTTSourceType
 } from './mqtt.models';
 import { DeviceConnectorMapping, OPCBasicConfig_v3_5_2, OPCLegacyBasicConfig, OpcUaMapping } from './opc.models';
 import { ModbusBasicConfig_v3_5_2, ModbusLegacyBasicConfig } from './modbus.models';
@@ -39,11 +39,12 @@ import {
   DeviceAttributesRequests,
   DeviceAttributesUpdate,
   DeviceDataKey,
-  DeviceRpcMethod,
+  DeviceRpcMethod, ExpressionType,
   SocketBasicConfig_v3_6,
   SocketEncoding,
   SocketLegacyBasicConfig
 } from './socket.models';
+import { BacnetBasicConfig_v3_6_2 } from './bacnet.models';
 
 export interface ConnectorBaseInfo {
   name: string;
@@ -78,17 +79,18 @@ export enum PortLimits {
 }
 
 export const GatewayConnectorConfigVersionMap = new Map<ConnectorType, GatewayVersion>([
-  [ConnectorType.SOCKET, GatewayVersion.Current],
+  [ConnectorType.SOCKET, GatewayVersion.v3_6_0],
   [ConnectorType.MQTT, GatewayVersion.v3_5_2],
   [ConnectorType.OPCUA, GatewayVersion.v3_5_2],
   [ConnectorType.MODBUS, GatewayVersion.v3_5_2],
+  [ConnectorType.BACNET, GatewayVersion.Current],
 ]);
 
 export interface ConnectorDeviceInfo {
   deviceNameExpression: string;
-  deviceNameExpressionSource: SourceType | OPCUaSourceType;
+  deviceNameExpressionSource: MQTTSourceType | OPCUaSourceType;
   deviceProfileExpression: string;
-  deviceProfileExpressionSource: SourceType | OPCUaSourceType;
+  deviceProfileExpressionSource: MQTTSourceType | OPCUaSourceType;
 }
 
 export enum OPCUaSourceType {
@@ -180,14 +182,17 @@ export interface MappingDataKey {
   type: MappingValueType;
 }
 
-export const SourceTypeTranslationsMap = new Map<SourceType | OPCUaSourceType, string>(
+export type SourceType = MQTTSourceType | OPCUaSourceType | ExpressionType;
+
+export const SourceTypeTranslationsMap = new Map<SourceType, string>(
   [
-    [SourceType.MSG, 'gateway.source-type.msg'],
-    [SourceType.TOPIC, 'gateway.source-type.topic'],
-    [SourceType.CONST, 'gateway.source-type.const'],
+    [MQTTSourceType.MSG, 'gateway.source-type.msg'],
+    [MQTTSourceType.TOPIC, 'gateway.source-type.topic'],
+    [MQTTSourceType.CONST, 'gateway.source-type.const'],
     [OPCUaSourceType.PATH, 'gateway.source-type.path'],
     [OPCUaSourceType.IDENTIFIER, 'gateway.source-type.identifier'],
-    [OPCUaSourceType.CONST, 'gateway.source-type.const']
+    [OPCUaSourceType.CONST, 'gateway.source-type.const'],
+    [ExpressionType.Expression, 'gateway.source-type.expression']
   ]
 );
 
@@ -305,6 +310,8 @@ export type ConnectorLegacyConfig = ConnectorBaseInfo | MQTTLegacyBasicConfig | 
 export type ConnectorBaseConfig_v3_5_2 = ConnectorBaseInfo | MQTTBasicConfig_v3_5_2 | OPCBasicConfig_v3_5_2 | ModbusBasicConfig_v3_5_2;
 
 export type ConnectorBaseConfig_v3_6 = ConnectorBaseInfo | SocketBasicConfig_v3_6;
+
+export type ConnectorBaseConfig_v3_6_2 = ConnectorBaseInfo | BacnetBasicConfig_v3_6_2;
 
 export interface DevicesConfigMapping {
   address: string;

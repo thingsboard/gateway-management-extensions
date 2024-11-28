@@ -14,6 +14,46 @@
     "add-rpc-method": "Add method",
     "add-rpc-request": "Add request",
     "add-value": "Add argument",
+    "advanced-settings": "Advanced settings",
+    "application": "Application",
+    "bacnet": {
+      "apdu-length": "APDU Length",
+      "object-type": {
+        "analog-input": "Analog Input",
+        "analog-output": "Analog Output",
+        "analog-value": "Analog Value",
+        "binary-input": "Binary Input",
+        "binary-output": "Binary Output",
+        "binary-value": "Binary Value"
+      },
+      "request-type": {
+        "label": "Request Type",
+        "write": "Write Property",
+        "read": "Read Property"
+      },
+      "property-id": {
+        "present-value": "Present Value",
+        "status-flags": "Status Flags",
+        "cov-increment": "COV Increment",
+        "event-state": "Event State",
+        "out-of-service": "Out of Service",
+        "polarity": "Polarity",
+        "priority-array": "Priority Array",
+        "relinquish-default": "Relinquish Default",
+        "current-command-priority": "Current Command Priority",
+        "event-message-texts": "Event Message Texts",
+        "event-message-texts-config": "Event Message Texts Config",
+        "event-algorithm-inhibit-reference": "Event Algorithm Inhibit Reference",
+        "time-delay-normal": "Time Delay Normal"
+      },
+      "segmentation": {
+        "label": "Segmentation",
+        "no": "None",
+        "both": "Both",
+        "transmit": "Transmit",
+        "receive": "Receive"
+      }
+    },
     "baudrate": "Baudrate",
     "buffer-size": "Buffer size",
     "buffer-size-required": "Buffer size is required",
@@ -300,6 +340,8 @@
     "password": "Password",
     "password-required": "Password is required.",
     "permit-without-calls": "Keep alive permit without calls",
+    "period": "Period (ms)",
+    "property-id": "Property ID",
     "poll-period": "Poll period (ms)",
     "poll-period-error": "Poll period should be at least {{min}} (ms).",
     "port": "Port",
@@ -558,7 +600,8 @@
       "topic": "Extract from topic",
       "const": "Constant",
       "identifier": "Identifier",
-      "path": "Path"
+      "path": "Path",
+      "expression": "Expression"
     },
     "workers-settings": "Workers settings",
     "thingsboard": "ThingsBoard",
@@ -606,6 +649,7 @@
       "exactly-once": "2 - Exactly once"
     },
     "objects-count": "Objects count",
+    "object-id": "Object ID",
     "objects-count-required": "Objects count is required",
     "wait-after-failed-attempts": "Wait after failed attempts (ms)",
     "tls-path-private-key": "Path to private key on gateway",
@@ -615,6 +659,7 @@
     "username": "Username",
     "username-required": "Username is required.",
     "unit-id-required": "Unit ID is required.",
+    "vendor-id": "Vendor ID",
     "write-coil": "Write Coil",
     "write-coils": "Write Coils",
     "write-register": "Write Register",
@@ -634,6 +679,7 @@
       "password": "MQTT password for the gateway form platform server",
       "ca-cert": "Path to CA certificate file",
       "date-form": "Date format in log message",
+      "object-id-required": "Object ID is required",
       "data-folder": "Path to the folder that will contain data (Relative or Absolute)",
       "log-format": "Log message format",
       "remote-log": "Enables remote logging and logs reading from the gateway",

@@ -14,64 +14,44 @@
 /// limitations under the License.
 ///
 
-import { AfterViewInit, Directive, EventEmitter, inject, Input, OnDestroy, Output, TemplateRef } from '@angular/core';
-import { ControlValueAccessor, FormBuilder, FormGroup, ValidationErrors, Validator } from '@angular/forms';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { AfterViewInit, Directive, EventEmitter, inject, Input, Output, TemplateRef } from '@angular/core';
+import { FormBuilder, UntypedFormGroup } from '@angular/forms';
+import { ControlValueAccessorBaseAbstract } from '../../../shared/abstract/public-api';
 
 @Directive()
 export abstract class GatewayConnectorBasicConfigDirective<InputBasicConfig, OutputBasicConfig>
-  implements AfterViewInit, ControlValueAccessor, Validator, OnDestroy {
+  extends ControlValueAccessorBaseAbstract<OutputBasicConfig>
+  implements AfterViewInit {
 
   @Input() generalTabContent: TemplateRef<any>;
-  @Output() initialized = new EventEmitter<void>();
+  @Input() withReportStrategy = true;
 
-  basicFormGroup: FormGroup;
+  @Output() initialized = new EventEmitter<void>();
 
   protected fb = inject(FormBuilder);
   protected onChange!: (value: OutputBasicConfig) => void;
-  protected onTouched!: () => void;
-  protected destroy$ = new Subject<void>();
 
-  constructor() {
-    this.basicFormGroup = this.initBasicFormGroup();
-
-    this.basicFormGroup.valueChanges
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value) => this.onBasicFormGroupChange(value));
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  get basicFormGroup(): UntypedFormGroup {
+    return this.formGroup;
   }
 
   ngAfterViewInit(): void {
     this.initialized.emit();
   }
 
-  validate(): ValidationErrors | null {
-    return this.basicFormGroup.valid ? null : { basicFormGroup: { valid: false } };
+  protected override onWriteValue(config: OutputBasicConfig): void {
+    this.formGroup.setValue(this.mapConfigToFormValue(config), { emitEvent: false });
   }
 
-  registerOnChange(fn: (value: OutputBasicConfig) => void): void {
-    this.onChange = fn;
+  protected override mapOnChangeValue(config: InputBasicConfig): OutputBasicConfig {
+    return this.getMappedValue(config);
   }
 
-  registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
-  }
-
-  writeValue(config: OutputBasicConfig): void {
-    this.basicFormGroup.setValue(this.mapConfigToFormValue(config), { emitEvent: false });
-  }
-
-  protected onBasicFormGroupChange(value: InputBasicConfig): void {
-    this.onChange(this.getMappedValue(value));
-    this.onTouched();
+  protected override initFormGroup(): UntypedFormGroup {
+    return this.initBasicFormGroup();
   }
 
   protected abstract mapConfigToFormValue(config: OutputBasicConfig): InputBasicConfig;
   protected abstract getMappedValue(config: InputBasicConfig): OutputBasicConfig;
-  protected abstract initBasicFormGroup(): FormGroup;
+  protected abstract initBasicFormGroup(): UntypedFormGroup;
 }

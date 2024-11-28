@@ -43,9 +43,9 @@ import {
 } from '../../../../shared/public-api';
 import {
   DeviceInfoType,
-  OPCUaSourceType,
-  SourceType,
-  SourceTypeTranslationsMap
+  MQTTSourceType,
+  SourceTypeTranslationsMap,
+  SourceType
 } from '../../models/public-api';
 import { coerceBoolean, PageComponent, SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
@@ -90,7 +90,7 @@ export class DeviceInfoTableComponent extends PageComponent implements ControlVa
   required = false;
 
   @Input()
-  sourceTypes: Array<SourceType | OPCUaSourceType> = Object.values(SourceType) as Array<SourceType | OPCUaSourceType>;
+  sourceTypes: Array<SourceType> = Object.values(MQTTSourceType) as Array<SourceType>;
 
   deviceInfoTypeValue: any;
 
