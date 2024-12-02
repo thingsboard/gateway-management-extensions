@@ -1,5 +1,21 @@
+///
+/// Copyright © 2016-2024 The Thingsboard Authors
+///
+/// Licensed under the Apache License, Version 2.0 (the "License");
+/// you may not use this file except in compliance with the License.
+/// You may obtain a copy of the License at
+///
+///     http://www.apache.org/licenses/LICENSE-2.0
+///
+/// Unless required by applicable law or agreed to in writing, software
+/// distributed under the License is distributed on an "AS IS" BASIS,
+/// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+/// See the License for the specific language governing permissions and
+/// limitations under the License.
+///
 import { DeviceInfo } from '@shared/models/device.models';
 import { ConnectorDeviceInfo } from './connectors.model';
+import { ReportStrategyConfig } from '../../../shared/models/report-strategy.models';
 
 export enum SegmentationType {
   BOTH = "segmentedBoth",
@@ -185,10 +201,11 @@ export interface BacnetApplicationConfig {
   objectName: string;
   host: string;
   port: string;
+  mask?: string;
   objectIdentifier: number;
   maxApduLengthAccepted: number;
   segmentationSupported: SegmentationType;
-  vendorIdentifier: number;
+  vendorIdentifier?: number;
 }
 
 export interface BacnetApplicationLegacyConfig extends Omit<BacnetApplicationConfig, 'host' | 'port'> {
@@ -211,6 +228,7 @@ export interface BacnetKey {
   objectType: BacnetKeyObjectType;
   objectId: string;
   propertyId: BacnetPropertyId;
+  reportStrategy?: ReportStrategyConfig;
 }
 
 export type BacnetDeviceKey = BacnetKey | ServerSideRpcBacnetKey | AttributeUpdateBacnetKey;

@@ -1,3 +1,18 @@
+///
+/// Copyright © 2016-2024 The Thingsboard Authors
+///
+/// Licensed under the Apache License, Version 2.0 (the "License");
+/// you may not use this file except in compliance with the License.
+/// You may obtain a copy of the License at
+///
+///     http://www.apache.org/licenses/LICENSE-2.0
+///
+/// Unless required by applicable law or agreed to in writing, software
+/// distributed under the License is distributed on an "AS IS" BASIS,
+/// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+/// See the License for the specific language governing permissions and
+/// limitations under the License.
+///
 import { ChangeDetectionStrategy, Component, forwardRef, input, OnInit } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR, UntypedFormGroup, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -15,7 +30,8 @@ import {
   BacnetPropertyIdTranslationsMap,
   BacnetRequestType,
   BacnetRequestTypeTranslationsMap,
-  BacnetPropertyIdByObjectType
+  BacnetPropertyIdByObjectType,
+  BacnetDeviceKey
 } from '../../../models/public-api';
 import { TruncateWithTooltipDirective, EllipsisChipListDirective } from '../../../../../shared/directives/public-api';
 import { ControlValueAccessorBaseAbstract } from '../../../../../shared/abstract/public-api';
@@ -97,5 +113,9 @@ export class BacnetDeviceDataKeyComponent extends ControlValueAccessorBaseAbstra
 
   protected override initFormGroup(): UntypedFormGroup {
     return this.fb.group({});
+  }
+
+  protected override mapOnChangeValue({reportStrategy, ...updatedKey}: BacnetDeviceKey): BacnetDeviceKey {
+    return (reportStrategy ? { ...updatedKey, reportStrategy } : updatedKey) as BacnetDeviceKey;
   }
 }

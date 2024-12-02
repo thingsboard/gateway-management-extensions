@@ -62,7 +62,7 @@
             <div tbTruncateWithTooltip>{{ 'gateway.device-name' | translate }}</div>
           </mat-header-cell>
           <mat-cell *matCellDef="let device" class="table-value-column">
-            <div tbTruncateWithTooltip>{{ device['deviceInfo']['deviceNameExpression'] }}</div>
+            <div tbTruncateWithTooltip>{{ device['deviceInfo']?.['deviceNameExpression'] }}</div>
           </mat-cell>
         </ng-container>
         <ng-container [matColumnDef]="'host'">

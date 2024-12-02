@@ -18,6 +18,7 @@
     "application": "Application",
     "bacnet": {
       "apdu-length": "APDU Length",
+      "object-name": "Object Name",
       "object-type": {
         "analog-input": "Analog Input",
         "analog-output": "Analog Output",
@@ -322,6 +323,7 @@
     "mqtt-version": "MQTT version",
     "name": "Name",
     "name-required": "Name is required.",
+    "network-mask": "Network mask",
     "no-attributes": "No attributes",
     "no-attribute-updates": "No attribute updates",
     "no-attribute-requests": "No attribute requests",
@@ -340,7 +342,6 @@
     "password": "Password",
     "password-required": "Password is required.",
     "permit-without-calls": "Keep alive permit without calls",
-    "period": "Period (ms)",
     "property-id": "Property ID",
     "poll-period": "Poll period (ms)",
     "poll-period-error": "Poll period should be at least {{min}} (ms).",
@@ -462,6 +463,7 @@
       "rpc-connection": "RPC command"
     },
     "request-type": "Request type",
+    "request-timeout": "Request timeout (ms)",
     "requests-mapping": "Requests mapping",
     "requests-mapping-hint": "MQTT Connector requests allows you to connect, disconnect, process attribute requests from the device, handle attribute updates on the server and RPC processing configuration.",
     "request-topic-expression": "Request topic expression",
@@ -724,6 +726,7 @@
       "min-pack-size-to-send": "Minimum package size for sending.",
       "max-payload-size-bytes": "Maximum package size in bytes",
       "poll-period": "Period in milliseconds to read data from nodes.",
+      "poll-period-required": "Poll period is required.",
       "socket": {
         "attribute-on-platform-required": "Attribute on platform is required",
         "attribute-requests-type": "The type of requested attribute can be “shared” or “client.",
@@ -760,6 +763,16 @@
         "key": "Key to be used as the attribute key for the platform instance.",
         "data-keys": "For more information about function codes and data types click on help icon",
         "modifier": "The retrieved value will be adjusted (by multiplying or dividing it) based on the specified modifier value."
+      },
+      "bacnet": {
+        "object-id": "The gateway object identifier in the BACnet network.",
+        "vendor-id": "The gateway vendor identifier in the BACnet network",
+        "apdu-length": "Maximal length of the APDU.",
+        "segmentation": "Segmentation type for transmitting large BACnet messages.",
+        "key-object-id": "Object id in the BACnet device.",
+        "property-id": "Property id in the BACnet device.",
+        "request-type": "“writeProperty” to write data and “readProperty” to read data.",
+        "request-timeout": "Timeout to wait the response from the BACnet device, milliseconds."
       }
     }
   }

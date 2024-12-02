@@ -37,8 +37,8 @@ import { isDefinedAndNotNull, AppState } from '@core/public-api';
 import {
   MappingDataKey,
   MappingKeysType,
-  OPCUaSourceType,
   RpcMethodsMapping,
+  SourceType,
 } from '../../models/public-api';
 import {
   noLeadTrailSpacesRegex,
@@ -46,6 +46,7 @@ import {
   MappingValueType,
   mappingValueTypesMap,
   ReportStrategyComponent,
+  ConnectorType,
 } from '../../../../shared/public-api';
 import { CommonModule } from '@angular/common';
 import { TypeValuePanelComponent } from '../type-value-panel/type-value-panel.component';
@@ -74,7 +75,8 @@ export class MappingDataKeysPanelComponent extends PageComponent implements OnIn
   @Input() noKeysText: string;
   @Input() keys: Array<MappingDataKey> | {[key: string]: any};
   @Input() keysType: MappingKeysType;
-  @Input() valueTypeKeys: Array<MappingValueType | OPCUaSourceType> = Object.values(MappingValueType) as Array<MappingValueType | OPCUaSourceType>;
+  @Input() connectorType: ConnectorType;
+  @Input() sourceType: SourceType;
   @Input() valueTypeEnum = MappingValueType;
   @Input() valueTypes = mappingValueTypesMap;
   @Input() @coerceBoolean() rawData = false;

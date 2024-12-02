@@ -15,25 +15,32 @@
 ///
 
 import { Pipe, PipeTransform } from '@angular/core';
-import {
-  OPCUaSourceType,
-  MQTTSourceType
-} from '../models/public-api';
-import { MappingValueType } from '../../../shared/models/public-api';
+import { OPCUaSourceType, SourceType } from '../models/public-api';
+import { ConnectorType } from '../../../shared/models/public-api';
 
 @Pipe({
   name: 'getConnectorMappingHelpLink',
   standalone: true,
 })
 export class ConnectorMappingHelpLinkPipe implements PipeTransform {
-  transform(field: string, sourceType: MQTTSourceType | OPCUaSourceType, sourceTypes?: Array<MQTTSourceType | OPCUaSourceType | MappingValueType> ): string {
-    if (!sourceTypes || sourceTypes?.includes(OPCUaSourceType.PATH)) {
-      if (sourceType !== OPCUaSourceType.CONST) {
-        return `widget/lib/gateway/${field}-${sourceType}_fn`;
-      } else {
-        return;
-      }
-    } else if (field === 'attributes' || field === 'timeseries') {
+  transform(connectorType: ConnectorType, field: string, sourceType: SourceType): string {
+    switch (connectorType) {
+      case ConnectorType.OPCUA:
+        return this.getOPCConnectorMappingHelpLink(field, sourceType);
+      case ConnectorType.MQTT:
+        return this.getMqttConnectorMappingHelpLink(field);
+    }
+  }
+
+  private getOPCConnectorMappingHelpLink(field: string, sourceType: SourceType): string {
+    if (sourceType !== OPCUaSourceType.CONST) {
+      return `widget/lib/gateway/${field}-${sourceType}_fn`;
+    }
+    return;
+  }
+
+  private getMqttConnectorMappingHelpLink(field: string): string {
+    if (field === 'attributes' || field === 'timeseries') {
       return 'widget/lib/gateway/attributes_timeseries_expressions_fn';
     }
     return 'widget/lib/gateway/expressions_fn';

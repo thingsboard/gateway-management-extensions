@@ -39,6 +39,7 @@ import {
   Validators
 } from '@angular/forms';
 import {
+  ConnectorType,
   noLeadTrailSpacesRegex,
 } from '../../../../shared/public-api';
 import {
@@ -88,6 +89,8 @@ export class DeviceInfoTableComponent extends PageComponent implements ControlVa
   @coerceBoolean()
   @Input()
   required = false;
+
+  @Input() connectorType: ConnectorType = ConnectorType.MQTT;
 
   @Input()
   sourceTypes: Array<SourceType> = Object.values(MQTTSourceType) as Array<SourceType>;

@@ -61,14 +61,23 @@
           }
         </mat-form-field>
       </div>
-      <tb-device-info-table formControlName="deviceInfo" [deviceInfoType]="DeviceInfoType.FULL" [sourceTypes]="sourceTypes" required="true">
+      <tb-device-info-table formControlName="deviceInfo" [deviceInfoType]="DeviceInfoType.FULL" [sourceTypes]="sourceTypes" [connectorType]="ConnectorType.BACNET" required="true">
       </tb-device-info-table>
       <div class="tb-form-row column-xs">
         <div class="fixed-title-width tb-required">
-          <span tbTruncateWithTooltip translate>gateway.period</span>
+          <span tbTruncateWithTooltip translate>gateway.poll-period</span>
         </div>
         <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
           <input matInput type="number" min="0" name="value" formControlName="pollPeriod" placeholder="{{ 'gateway.set' | translate }}"/>
+          @if (deviceFormGroup.get('pollPeriod').hasError('required') && deviceFormGroup.get('pollPeriod').touched) {
+            <mat-icon matSuffix
+                      matTooltipPosition="above"
+                      matTooltipClass="tb-error-tooltip"
+                      [matTooltip]="('gateway.hints.poll-period-required') | translate"
+                      class="tb-error">
+              warning
+            </mat-icon>
+          }
         </mat-form-field>
       </div>
       <div class="tb-form-row space-between tb-flex">

@@ -36,6 +36,7 @@ import { DialogComponent, helpBaseUrl, SharedModule } from '@shared/public-api';
 import { TbPopoverService } from '@shared/components/popover.service';
 
 import {
+  ConnectorType,
   EllipsisChipListDirective,
   noLeadTrailSpacesRegex,
   TruncateWithTooltipDirective,
@@ -83,6 +84,7 @@ export class BacnetDeviceDialogComponent extends DialogComponent<BacnetDeviceDia
   readonly portLimits = PortLimits;
   readonly deviceHelpLink = helpBaseUrl + '/docs/iot-gateway/config/bacnet/#device-object-settings';
   readonly sourceTypes = Object.values(ExpressionType) as ExpressionType[];
+  readonly ConnectorType = ConnectorType;
 
   constructor(protected store: Store<AppState>,
               protected router: Router,
@@ -101,7 +103,7 @@ export class BacnetDeviceDialogComponent extends DialogComponent<BacnetDeviceDia
       host: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
       port: [null, [Validators.required, Validators.min(PortLimits.MIN), Validators.max(PortLimits.MAX)]],
       deviceInfo: [],
-      pollPeriod: [],
+      pollPeriod: [null, [Validators.required, Validators.min(0)]],
       timeseries: [[]],
       attributes: [[]],
       attributeUpdates: [[]],

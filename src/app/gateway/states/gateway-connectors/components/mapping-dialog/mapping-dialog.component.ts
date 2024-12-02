@@ -57,7 +57,7 @@ import { startWith, takeUntil } from 'rxjs/operators';
 import { MatButton } from '@angular/material/button';
 import { TbPopoverService } from '@shared/components/popover.service';
 import { TranslateService } from '@ngx-translate/core';
-import { Attribute, noLeadTrailSpacesRegex, Timeseries } from '../../../../shared/models/public-api';
+import { Attribute, ConnectorType, noLeadTrailSpacesRegex, Timeseries } from '../../../../shared/models/public-api';
 import { CommonModule } from '@angular/common';
 import { EllipsisChipListDirective } from '../../../../shared/directives/public-api';
 import { ConnectorMappingHelpLinkPipe } from '../../pipes/public-api';
@@ -103,6 +103,7 @@ export class MappingDialogComponent extends DialogComponent<MappingDialogCompone
   readonly MappingTypeTranslationsMap = MappingTypeTranslationsMap;
   readonly DataConversionTranslationsMap = DataConversionTranslationsMap;
   readonly HelpLinkByMappingTypeMap = HelpLinkByMappingTypeMap;
+  readonly ConnectorType = ConnectorType;
 
   keysPopupClosed = true;
 
@@ -227,11 +228,12 @@ export class MappingDialogComponent extends DialogComponent<MappingDialogCompone
         deleteKeyTitle: MappingKeysDeleteKeyTranslationsMap.get(keysType),
         noKeysText: MappingKeysNoKeysTextTranslationsMap.get(keysType),
         withReportStrategy: this.data.withReportStrategy,
+        connectorType: this.data.mappingType === MappingType.OPCUA ? ConnectorType.OPCUA : ConnectorType.MQTT,
       };
       if (this.data.mappingType === MappingType.OPCUA) {
-        ctx.valueTypeKeys = Object.values(OPCUaSourceType);
         ctx.valueTypeEnum = OPCUaSourceType;
         ctx.valueTypes = SourceTypeTranslationsMap;
+        ctx.sourceType = this.mappingForm.get('deviceNodeSource').value;
       }
       this.keysPopupClosed = false;
       const dataKeysPanelPopover = this.popoverService.displayPopover(trigger, this.renderer,

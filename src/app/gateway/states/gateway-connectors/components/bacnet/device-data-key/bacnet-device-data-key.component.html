@@ -1,17 +1,17 @@
 <!--
-Copyright © 2016-2024 The Thingsboard Authors
+  Copyright © 2016-2024 The Thingsboard Authors
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+      http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
 -->
 <div class="tb-form-panel no-border no-padding" [formGroup]="formGroup">
   <div class="tb-form-panel stroked">
@@ -67,7 +67,7 @@ limitations under the License.
     @if (keyType() === BacnetDeviceKeysType.ATTRIBUTES_UPDATES || keyType() === BacnetDeviceKeysType.RPC_METHODS) {
       <div class="tb-form-row column-xs">
         <div class="tb-flex row space-between align-center no-gap fill-width">
-          <div class="fixed-title-width tb-required">{{ 'gateway.bacnet.request-type.label' | translate }}</div>
+          <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.bacnet.request-type' | translate }}">{{ 'gateway.bacnet.request-type.label' | translate }}</div>
           <tb-toggle-select formControlName="requestType" appearance="fill">
             @for (type of requestTypes; track $index) {
               <tb-toggle-option [value]="type">
@@ -80,16 +80,14 @@ limitations under the License.
     }
     @if (keyType() === BacnetDeviceKeysType.RPC_METHODS) {
       <div class="tb-form-row column-xs">
-        <div class="fixed-title-width tb-required">
-          <span tbTruncateWithTooltip translate>gateway.request-timeout</span>
-        </div>
+        <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.bacnet.request-timeout' | translate }}" translate>gateway.request-timeout</div>
         <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
           <input matInput type="number" min="0" name="value" formControlName="requestTimeout" placeholder="{{ 'gateway.set' | translate }}"/>
         </mat-form-field>
       </div>
     }
     <div class="tb-form-row column-xs">
-      <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.object-id' | translate }}" translate>gateway.object-id</div>
+      <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.bacnet.key-object-id' | translate }}" translate>gateway.object-id</div>
       <div class="tb-flex no-gap raw-value-option">
         <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
           <mat-select formControlName="objectType">
@@ -117,7 +115,7 @@ limitations under the License.
       </div>
     </div>
     <div class="tb-form-row column-xs">
-      <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.property-id' | translate }}" translate>gateway.property-id</div>
+      <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.bacnet.property-id' | translate }}" translate>gateway.property-id</div>
       <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
         <mat-select formControlName="propertyId">
           @for (id of propertyIds; track $index) {

@@ -614,7 +614,7 @@
                 </mat-icon>
                 <div matSuffix
                      class="see-example"
-                     [tb-help-popup]="'device-node' | getConnectorMappingHelpLink: mappingForm.get('deviceNodeSource').value"
+                     [tb-help-popup]="ConnectorType.OPCUA | getConnectorMappingHelpLink: 'device-node' : mappingForm.get('deviceNodeSource').value"
                      tb-help-popup-placement="left"
                      [tb-help-popup-style]="{maxWidth: '970px'}">
                 </div>

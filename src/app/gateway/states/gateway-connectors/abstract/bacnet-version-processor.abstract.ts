@@ -33,7 +33,7 @@ export class BacnetVersionProcessor extends GatewayConnectorVersionProcessor<Bac
     return {
       ...this.connector,
       configurationJson: {
-        application: configurationJson ? BacnetVersionMappingUtil.mapApplicationToUpgradedVersion(configurationJson.general) : {},
+        application: configurationJson?.general ? BacnetVersionMappingUtil.mapApplicationToUpgradedVersion(configurationJson.general) : {},
         devices: configurationJson?.devices ? BacnetVersionMappingUtil.mapDevicesToUpgradedVersion(configurationJson.devices) : [],
       },
       configVersion: this.gatewayVersionIn
@@ -45,7 +45,7 @@ export class BacnetVersionProcessor extends GatewayConnectorVersionProcessor<Bac
     return {
       ...this.connector,
       configurationJson: {
-        general: configurationJson ? BacnetVersionMappingUtil.mapApplicationToDowngradedVersion(configurationJson.application) : {},
+        general: configurationJson?.application ? BacnetVersionMappingUtil.mapApplicationToDowngradedVersion(configurationJson.application) : {},
         devices: configurationJson?.devices ? BacnetVersionMappingUtil.mapDevicesToDowngradedVersion(configurationJson.devices) : [],
       },
       configVersion: this.gatewayVersionIn

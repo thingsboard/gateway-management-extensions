@@ -27,18 +27,21 @@ import {
 export class BacnetVersionMappingUtil {
 
   static mapApplicationToUpgradedVersion(general: BacnetApplicationLegacyConfig): BacnetApplicationConfig {
-    const { address, ...restGeneral } = general;
+    const { address = '', ...restGeneral } = general;
+    const [hostAddress, port] = address.split(':');
+    const [host, mask] = hostAddress.split('/');
     return {
-      host: address.split(':')[0],
-      port: address.split(':')[1],
+      host,
+      port,
+      mask,
       ...restGeneral,
     };
   }
 
   static mapApplicationToDowngradedVersion(application: BacnetApplicationConfig): BacnetApplicationLegacyConfig {
-    const { host = '', port = '', ...restApplication } = application;
+    const { host = '', port = '', mask = '', ...restApplication } = application;
     return {
-      address: `${host}:${port}`,
+      address: mask ? `${host}/${mask}:${port}` : `${host}:${port}`,
       ...restApplication,
     };
   }
