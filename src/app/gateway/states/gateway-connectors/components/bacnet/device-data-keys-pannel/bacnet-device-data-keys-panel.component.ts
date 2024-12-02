@@ -14,7 +14,7 @@
 /// limitations under the License.
 ///
 
-import { ChangeDetectionStrategy, Component, Input, OnInit, output } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, Input, OnInit, output } from '@angular/core';
 import { AbstractControl, UntypedFormArray, UntypedFormBuilder } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
@@ -33,7 +33,6 @@ import { BacnetDeviceDataKeyComponent } from '../device-data-key/bacnet-device-d
   selector: 'tb-bacnet-device-data-keys-panel',
   templateUrl: './bacnet-device-data-keys-panel.component.html',
   styleUrls: ['./bacnet-device-data-keys-panel.component.scss'],
-  providers: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
@@ -54,7 +53,7 @@ export class BacnetDeviceDataKeysPanelComponent extends PageComponent implements
   @Input() keys: Array<BacnetDeviceKey>;
   @Input() keysType: BacnetDeviceKeysType;
   @Input() popover: TbPopoverComponent<BacnetDeviceDataKeysPanelComponent>;
-  @Input() withReportStrategy = true;
+  @Input({ transform: booleanAttribute }) withReportStrategy = true;
 
   keysDataApplied = output<Array<BacnetDeviceKey>>();
 

@@ -47,7 +47,7 @@ export class BacnetVersionMappingUtil {
   }
 
   static mapDevicesToUpgradedVersion(devices: BacnetLegacyDeviceConfig[]): BacnetDeviceConfig[] {
-    return devices?.map(({ address = '', deviceName, deviceType, attributes, timeseries, attributeUpdates, serverSideRpc, ...device }) => ({
+    return (devices?.map(({ address = '', deviceName, deviceType, attributes, timeseries, attributeUpdates, serverSideRpc, ...device }) => ({
       ...device,
       host: address.split(':')[0],
       port: address.split(':')[1],
@@ -61,7 +61,7 @@ export class BacnetVersionMappingUtil {
       timeseries: this.getUpdateKeys(timeseries),
       attributeUpdates: this.getUpdateKeys(attributeUpdates),
       serverSideRpc: this.getUpdateKeys(serverSideRpc),
-    })) ?? [] as any[];
+    })) ?? []) as BacnetDeviceConfig[];
   }
 
   static mapDevicesToDowngradedVersion(devices: BacnetDeviceConfig[]): BacnetLegacyDeviceConfig[] {

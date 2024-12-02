@@ -47,7 +47,7 @@ export abstract class GatewayConnectorVersionMappingUtil {
       case ConnectorType.SOCKET:
         return new SocketVersionProcessor(gatewayVersion, connector as GatewayConnector<SocketBasicConfig>).getProcessedByVersion();
       case ConnectorType.BACNET:
-        return new BacnetVersionProcessor(gatewayVersion, connector as GatewayConnector<BacnetBasicConfig>).getProcessedByVersion() as any;
+        return new BacnetVersionProcessor(gatewayVersion, connector as GatewayConnector<BacnetBasicConfig>).getProcessedByVersion();
       default:
         return connector;
     }

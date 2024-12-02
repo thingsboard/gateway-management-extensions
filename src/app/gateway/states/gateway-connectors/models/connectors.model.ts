@@ -44,7 +44,7 @@ import {
   SocketEncoding,
   SocketLegacyBasicConfig
 } from './socket.models';
-import { BacnetBasicConfig_v3_6_2 } from './bacnet.models';
+import { BacnetBasicConfig_v3_6_2, BacnetLegacyBasicConfig } from './bacnet.models';
 
 export interface ConnectorBaseInfo {
   name: string;
@@ -88,9 +88,9 @@ export const GatewayConnectorConfigVersionMap = new Map<ConnectorType, GatewayVe
 
 export interface ConnectorDeviceInfo {
   deviceNameExpression: string;
-  deviceNameExpressionSource: MQTTSourceType | OPCUaSourceType;
+  deviceNameExpressionSource: SourceType;
   deviceProfileExpression: string;
-  deviceProfileExpressionSource: MQTTSourceType | OPCUaSourceType;
+  deviceProfileExpressionSource: SourceType;
 }
 
 export enum OPCUaSourceType {
@@ -305,7 +305,7 @@ export interface ServerSideRpc {
   valueExpression: string;
 }
 
-export type ConnectorLegacyConfig = ConnectorBaseInfo | MQTTLegacyBasicConfig | OPCLegacyBasicConfig | ModbusLegacyBasicConfig | SocketLegacyBasicConfig;
+export type ConnectorLegacyConfig = ConnectorBaseInfo | MQTTLegacyBasicConfig | OPCLegacyBasicConfig | ModbusLegacyBasicConfig | SocketLegacyBasicConfig | BacnetLegacyBasicConfig;
 
 export type ConnectorBaseConfig_v3_5_2 = ConnectorBaseInfo | MQTTBasicConfig_v3_5_2 | OPCBasicConfig_v3_5_2 | ModbusBasicConfig_v3_5_2;
 

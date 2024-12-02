@@ -15,11 +15,12 @@
 ///
 import {
   AfterViewInit,
+  booleanAttribute,
   DestroyRef,
   Directive,
   ElementRef,
   inject,
-  input,
+  Input,
   ViewChild,
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
@@ -40,7 +41,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Directive()
 export abstract class AbstractDevicesConfigTableComponent<Entity> implements ControlValueAccessor, Validator, AfterViewInit {
 
-  withReportStrategy = input(true);
+  @Input({ transform: booleanAttribute }) withReportStrategy = true;
 
   @ViewChild('searchInput') searchInputField: ElementRef;
 

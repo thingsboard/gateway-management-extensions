@@ -13,7 +13,7 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-import { ChangeDetectionStrategy, Component, forwardRef, input, OnInit } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, forwardRef, Input, OnInit } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR, UntypedFormGroup, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
@@ -64,8 +64,8 @@ import { ControlValueAccessorBaseAbstract } from '../../../../../shared/abstract
 })
 export class BacnetDeviceDataKeyComponent extends ControlValueAccessorBaseAbstract<any> implements OnInit {
 
-  keyType = input<BacnetDeviceKeysType>();
-  withReportStrategy = input<boolean>(false);
+  @Input() keyType: BacnetDeviceKeysType;
+  @Input({ transform: booleanAttribute }) withReportStrategy = true;
 
   propertyIds = BacnetPropertyIdByObjectType.get(BacnetKeyObjectType.analogOutput);
 
@@ -84,18 +84,18 @@ export class BacnetDeviceDataKeyComponent extends ControlValueAccessorBaseAbstra
   }
 
   isReportStrategyDisabled(): boolean {
-    return !(this.withReportStrategy() && (this.keyType() === BacnetDeviceKeysType.ATTRIBUTES || this.keyType() === BacnetDeviceKeysType.TIMESERIES));
+    return !(this.withReportStrategy && (this.keyType === BacnetDeviceKeysType.ATTRIBUTES || this.keyType === BacnetDeviceKeysType.TIMESERIES));
   }
 
   private initKeyFormGroup(): UntypedFormGroup {
     return this.fb.group({
-      key: [{ value: '', disabled: this.keyType() === BacnetDeviceKeysType.RPC_METHODS }, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-      method: [{ value: '', disabled: this.keyType() !== BacnetDeviceKeysType.RPC_METHODS }, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
+      key: [{ value: '', disabled: this.keyType === BacnetDeviceKeysType.RPC_METHODS }, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
+      method: [{ value: '', disabled: this.keyType !== BacnetDeviceKeysType.RPC_METHODS }, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
       objectType: [BacnetKeyObjectType.analogOutput],
       objectId: [0, [Validators.required]],
       propertyId: [BacnetPropertyId.presentValue],
-      requestTimeout: [{ value: 0, disabled: this.keyType() !== BacnetDeviceKeysType.RPC_METHODS }],
-      requestType: [{ value: BacnetRequestType.Write, disabled: this.keyType() === BacnetDeviceKeysType.ATTRIBUTES || this.keyType() === BacnetDeviceKeysType.TIMESERIES }],
+      requestTimeout: [{ value: 0, disabled: this.keyType !== BacnetDeviceKeysType.RPC_METHODS }],
+      requestType: [{ value: BacnetRequestType.Write, disabled: this.keyType === BacnetDeviceKeysType.ATTRIBUTES || this.keyType === BacnetDeviceKeysType.TIMESERIES }],
       reportStrategy: [{ value: null, disabled: this.isReportStrategyDisabled()}],
     });
   }

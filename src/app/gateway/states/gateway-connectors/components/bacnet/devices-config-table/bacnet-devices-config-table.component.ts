@@ -21,10 +21,10 @@ import { BacnetDeviceDialogComponent } from '../device-dialog/bacnet-device-dial
 import { take } from 'rxjs/operators';
 import { MatDialogRef } from '@angular/material/dialog';
 import { SharedModule, TbTableDatasource } from '@shared/public-api';
-import { AbstractDevicesConfigTableComponent } from '../../../abstract/basic-config-entity-table.abstract';
+import { AbstractDevicesConfigTableComponent } from '../../../abstract/public-api';
 import { CommonModule } from '@angular/common';
 import { isDefinedAndNotNull } from '@core/public-api';
-import { TruncateWithTooltipDirective } from '../../../../../shared/directives/truncate-with-tooltip.directive';
+import { TruncateWithTooltipDirective } from '../../../../../shared/directives/public-api';
 
 @Component({
   selector: 'tb-bacnet-devices-config-table',
@@ -100,7 +100,7 @@ export class BacnetDevicesConfigTableComponent extends AbstractDevicesConfigTabl
       data: {
         value,
         buttonTitle,
-        withReportStrategy: this.withReportStrategy(),
+        withReportStrategy: this.withReportStrategy,
       }
     });
   }

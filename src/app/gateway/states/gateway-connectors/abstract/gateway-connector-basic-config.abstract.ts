@@ -14,7 +14,16 @@
 /// limitations under the License.
 ///
 
-import { AfterViewInit, Directive, EventEmitter, inject, Input, Output, TemplateRef } from '@angular/core';
+import {
+  AfterViewInit,
+  booleanAttribute,
+  Directive,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+  TemplateRef
+} from '@angular/core';
 import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ControlValueAccessorBaseAbstract } from '../../../shared/abstract/public-api';
 
@@ -24,7 +33,7 @@ export abstract class GatewayConnectorBasicConfigDirective<InputBasicConfig, Out
   implements AfterViewInit {
 
   @Input() generalTabContent: TemplateRef<any>;
-  @Input() withReportStrategy = true;
+  @Input({ transform: booleanAttribute }) withReportStrategy = true;
 
   @Output() initialized = new EventEmitter<void>();
 
