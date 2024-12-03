@@ -20,7 +20,6 @@ import { CommonModule } from '@angular/common';
 
 import { SharedModule } from '@shared/public-api';
 import { noLeadTrailSpacesRegex, ReportStrategyDefaultValue } from '../../../../../shared/models/public-api';
-import { ConnectorMappingHelpLinkPipe } from '../../../pipes/gateway-help-link.pipe';
 import { ReportStrategyComponent } from '../../../../../shared/components/public-api';
 import {
   BacnetDeviceKeysType,
@@ -33,7 +32,6 @@ import {
   BacnetPropertyIdByObjectType,
   BacnetDeviceKey
 } from '../../../models/public-api';
-import { TruncateWithTooltipDirective, EllipsisChipListDirective } from '../../../../../shared/directives/public-api';
 import { ControlValueAccessorBaseAbstract } from '../../../../../shared/abstract/public-api';
 
 @Component({
@@ -56,10 +54,7 @@ import { ControlValueAccessorBaseAbstract } from '../../../../../shared/abstract
   imports: [
     CommonModule,
     SharedModule,
-    EllipsisChipListDirective,
-    ConnectorMappingHelpLinkPipe,
     ReportStrategyComponent,
-    TruncateWithTooltipDirective,
   ]
 })
 export class BacnetDeviceDataKeyComponent extends ControlValueAccessorBaseAbstract<any> implements OnInit {
@@ -95,7 +90,7 @@ export class BacnetDeviceDataKeyComponent extends ControlValueAccessorBaseAbstra
       objectId: [0, [Validators.required]],
       propertyId: [BacnetPropertyId.presentValue],
       requestTimeout: [{ value: 0, disabled: this.keyType !== BacnetDeviceKeysType.RPC_METHODS }],
-      requestType: [{ value: BacnetRequestType.Write, disabled: this.keyType === BacnetDeviceKeysType.ATTRIBUTES || this.keyType === BacnetDeviceKeysType.TIMESERIES }],
+      requestType: [{ value: BacnetRequestType.Write, disabled: this.keyType !== BacnetDeviceKeysType.RPC_METHODS }],
       reportStrategy: [{ value: null, disabled: this.isReportStrategyDisabled()}],
     });
   }

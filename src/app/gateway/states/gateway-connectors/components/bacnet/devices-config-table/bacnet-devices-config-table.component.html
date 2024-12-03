@@ -14,7 +14,7 @@
   limitations under the License.
 -->
 <div class="tb-device-table tb-absolute-fill">
-  <div class="tb-master-table-content flex flex-col">
+  <div class="tb-device-table-content flex flex-col">
     <mat-toolbar class="mat-mdc-table-toolbar" [class.!hidden]="textSearchMode">
       <div class="mat-toolbar-tools" *ngIf="(dataSource.isEmpty() | async) === false">
         <div class="title-container">
@@ -61,8 +61,8 @@
           <mat-header-cell *matHeaderCellDef class="table-value-column">
             <div tbTruncateWithTooltip>{{ 'gateway.device-name' | translate }}</div>
           </mat-header-cell>
-          <mat-cell *matCellDef="let device" class="table-value-column">
-            <div tbTruncateWithTooltip>{{ device['deviceInfo']?.['deviceNameExpression'] }}</div>
+          <mat-cell *matCellDef="let device">
+            <div class="table-value-column" tbTruncateWithTooltip>{{ device['deviceInfo']?.['deviceNameExpression'] }}</div>
           </mat-cell>
         </ng-container>
         <ng-container [matColumnDef]="'host'">

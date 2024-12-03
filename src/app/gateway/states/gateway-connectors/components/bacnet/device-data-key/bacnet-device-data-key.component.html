@@ -17,9 +17,9 @@
   <div class="tb-form-panel stroked">
     <div class="tb-form-panel-title" translate>gateway.platform-side</div>
     <div class="tb-form-row column-xs">
-    @if (keyType() !== BacnetDeviceKeysType.RPC_METHODS) {
+    @if (keyType !== BacnetDeviceKeysType.RPC_METHODS) {
       <div class="fixed-title-width tb-required"
-           tb-hint-tooltip-icon="{{ keyType() === BacnetDeviceKeysType.TIMESERIES
+           tb-hint-tooltip-icon="{{ keyType === BacnetDeviceKeysType.TIMESERIES
                            ? ('gateway.hints.socket.key-telemetry' | translate)
                            : ('gateway.hints.socket.key-attribute' | translate) }}">
         {{ 'gateway.key' | translate }}
@@ -64,7 +64,7 @@
   </div>
   <div class="tb-form-panel stroked">
     <div class="tb-form-panel-title" translate>gateway.connector-side</div>
-    @if (keyType() === BacnetDeviceKeysType.ATTRIBUTES_UPDATES || keyType() === BacnetDeviceKeysType.RPC_METHODS) {
+    @if (keyType === BacnetDeviceKeysType.RPC_METHODS) {
       <div class="tb-form-row column-xs">
         <div class="tb-flex row space-between align-center no-gap fill-width">
           <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.bacnet.request-type' | translate }}">{{ 'gateway.bacnet.request-type.label' | translate }}</div>
@@ -78,7 +78,7 @@
         </div>
       </div>
     }
-    @if (keyType() === BacnetDeviceKeysType.RPC_METHODS) {
+    @if (keyType === BacnetDeviceKeysType.RPC_METHODS) {
       <div class="tb-form-row column-xs">
         <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.bacnet.request-timeout' | translate }}" translate>gateway.request-timeout</div>
         <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">

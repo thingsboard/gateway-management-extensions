@@ -62,7 +62,7 @@
                     <tb-type-value-field
                       formControlName="typeValue"
                       [rawData]="rawData"
-                      [helpLink]="connectorType | getConnectorMappingHelpLink : this.keysType : keyControl.get('typeValue').value"
+                      [helpLink]="connectorType | getConnectorMappingHelpLink : this.keysType : keyControl.get('typeValue').value.type"
                     />
                   </div>
                 </div>

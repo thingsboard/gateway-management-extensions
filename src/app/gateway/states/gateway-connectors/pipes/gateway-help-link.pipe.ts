@@ -26,23 +26,32 @@ export class ConnectorMappingHelpLinkPipe implements PipeTransform {
   transform(connectorType: ConnectorType, field: string, sourceType: SourceType): string {
     switch (connectorType) {
       case ConnectorType.OPCUA:
-        return this.getOPCConnectorMappingHelpLink(field, sourceType);
+        return this.getOpcConnectorHelpLink(field, sourceType);
       case ConnectorType.MQTT:
-        return this.getMqttConnectorMappingHelpLink(field);
+        return this.getMqttConnectorHelpLink(field);
+      case ConnectorType.BACNET:
+        return this.getBacnetConnectorHelpLink(field, sourceType);
     }
   }
 
-  private getOPCConnectorMappingHelpLink(field: string, sourceType: SourceType): string {
+  private getOpcConnectorHelpLink(field: string, sourceType: SourceType): string {
     if (sourceType !== OPCUaSourceType.CONST) {
       return `widget/lib/gateway/${field}-${sourceType}_fn`;
     }
     return;
   }
 
-  private getMqttConnectorMappingHelpLink(field: string): string {
+  private getMqttConnectorHelpLink(field: string): string {
     if (field === 'attributes' || field === 'timeseries') {
       return 'widget/lib/gateway/attributes_timeseries_expressions_fn';
     }
     return 'widget/lib/gateway/expressions_fn';
+  }
+
+  private getBacnetConnectorHelpLink(field: string, sourceType: SourceType): string {
+    if (sourceType !== OPCUaSourceType.CONST) {
+      return `widget/lib/gateway/bacnet-device-${field}-${sourceType}_fn`;
+    }
+    return;
   }
 }

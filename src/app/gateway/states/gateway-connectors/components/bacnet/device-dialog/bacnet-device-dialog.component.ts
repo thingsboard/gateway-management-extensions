@@ -103,7 +103,7 @@ export class BacnetDeviceDialogComponent extends DialogComponent<BacnetDeviceDia
       host: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
       port: [null, [Validators.required, Validators.min(PortLimits.MIN), Validators.max(PortLimits.MAX)]],
       deviceInfo: [],
-      pollPeriod: [null, [Validators.required, Validators.min(0)]],
+      pollPeriod: [0, [Validators.required, Validators.min(0)]],
       timeseries: [[]],
       attributes: [[]],
       attributeUpdates: [[]],

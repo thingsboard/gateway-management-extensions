@@ -669,6 +669,7 @@
     "hints": {
       "buffer-size": "Buffer size for received data blocks.",
       "encoding": "Encoding used for writing received string data to storage.",
+      "method": "Name for method on a platform.",
       "modbus-master": "Configuration sections for connecting to Modbus servers and reading data from them.",
       "modbus-server": "Configuration section for the Modbus server, storing data and sending updates to the platform when changes occur or at fixed intervals.",
       "remote-configuration": "Enables remote configuration and management of the gateway",

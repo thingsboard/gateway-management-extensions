@@ -104,6 +104,18 @@ export class BacnetDevicesConfigTableComponent extends AbstractDevicesConfigTabl
       }
     });
   }
+
+  protected override updateTableData(data: DevicesConfigMapping[], textSearch?: string): void {
+    if (textSearch) {
+      data = data.filter(item =>
+        Object.values(item).some(value =>
+          value.toString().toLowerCase().includes(textSearch.toLowerCase())
+          || value.deviceNameExpression?.toString().toLowerCase().includes(textSearch.toLowerCase())
+        )
+      );
+    }
+    this.dataSource.loadData(data);
+  }
 }
 
 class DevicesDatasource extends TbTableDatasource<DevicesConfigMapping> {

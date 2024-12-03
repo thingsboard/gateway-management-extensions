@@ -78,7 +78,7 @@ export class BacnetApplicationConfigComponent extends ControlValueAccessorBaseAb
 
   protected override onWriteValue(applicationConfig: BacnetApplicationConfig): void {
     const {
-      maxApduLengthAccepted = 1024,
+      maxApduLengthAccepted = 1476,
       segmentationSupported = SegmentationType.BOTH,
       ...restConfig
     } = applicationConfig;
