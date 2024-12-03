@@ -14,7 +14,7 @@
   limitations under the License.
 -->
 <div class="flex flex-1 flex-col" [class]="{'border': isConnector}">
-  <div class="command-form lt-sm:flex-col flex flex-row gap-2.5" [formGroup]="commandForm">
+  <div class="command-form flex flex-row gap-2.5 lt-sm:flex-col" [formGroup]="commandForm">
     <ng-container *ngIf="!isConnector; else connectorForm">
       <mat-form-field>
         <mat-label>{{ 'gateway.statistics.command' | translate }}</mat-label>
