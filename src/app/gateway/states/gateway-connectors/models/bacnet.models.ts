@@ -13,9 +13,8 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-import { DeviceInfo } from '@shared/models/device.models';
 import { ConnectorDeviceInfo } from './connectors.model';
-import { ReportStrategyConfig } from '../../../shared/models/report-strategy.models';
+import { ReportStrategyConfig } from '../../../shared/models/public-api';
 
 export enum SegmentationType {
   BOTH = "segmentedBoth",

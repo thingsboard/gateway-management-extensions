@@ -47,7 +47,6 @@ export abstract class AbstractDevicesConfigTableComponent<Entity> implements Con
 
   textSearchMode = false;
   dataSource: TbTableDatasource<Entity>;
-  entityFormGroup: FormArray;
 
   protected onChange: (value: Entity[]) => void = () => {};
   protected translate = inject(TranslateService);
@@ -58,10 +57,11 @@ export abstract class AbstractDevicesConfigTableComponent<Entity> implements Con
   protected destroyRef = inject(DestroyRef);
 
   textSearch = this.fb.control('', { nonNullable: true });
+  entityFormArray: FormArray;
 
   constructor() {
-    this.entityFormGroup = this.fb.array([]);
-    this.entityFormGroup.valueChanges.pipe(
+    this.entityFormArray = this.fb.array([]);
+    this.entityFormArray.valueChanges.pipe(
       takeUntilDestroyed()
     ).subscribe(value => {
       this.updateTableData(value);
@@ -75,7 +75,7 @@ export abstract class AbstractDevicesConfigTableComponent<Entity> implements Con
       debounceTime(150),
       distinctUntilChanged((prev, current) => (prev ?? '') === current.trim()),
       takeUntilDestroyed(this.destroyRef)
-    ).subscribe(text => this.updateTableData(this.entityFormGroup.value, text.trim()));
+    ).subscribe(text => this.updateTableData(this.entityFormArray.value, text.trim()));
   }
 
   registerOnChange(fn: (value: Entity[]) => void): void {
@@ -85,7 +85,7 @@ export abstract class AbstractDevicesConfigTableComponent<Entity> implements Con
   registerOnTouched(_: () => void): void {}
 
   writeValue(devices: Entity[]): void {
-    this.entityFormGroup.clear();
+    this.entityFormArray.clear();
     this.pushDataAsFormArrays(devices);
   }
 
@@ -98,13 +98,13 @@ export abstract class AbstractDevicesConfigTableComponent<Entity> implements Con
   }
 
   exitFilterMode(): void {
-    this.updateTableData(this.entityFormGroup.value);
+    this.updateTableData(this.entityFormArray.value);
     this.textSearchMode = false;
     this.textSearch.reset();
   }
 
   validate(): ValidationErrors | null {
-    return this.entityFormGroup.controls.length ? null : {
+    return this.entityFormArray.controls.length ? null : {
       devicesFormGroup: {valid: false}
     };
   }
@@ -122,7 +122,7 @@ export abstract class AbstractDevicesConfigTableComponent<Entity> implements Con
 
   private pushDataAsFormArrays(entity: Entity[]): void {
     if (entity?.length) {
-      entity.forEach((slave: any) => this.entityFormGroup.push(this.fb.control(slave)));
+      entity.forEach(data => this.entityFormArray.push(this.fb.control<Entity>(data)));
     }
   }
 

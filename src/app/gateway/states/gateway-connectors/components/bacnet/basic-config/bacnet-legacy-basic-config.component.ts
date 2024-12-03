@@ -53,21 +53,21 @@ import { BacnetBasicConfig_v3_6_2, BacnetLegacyBasicConfig } from '../../../mode
 })
 export class BacnetLegacyBasicConfigComponent extends GatewayConnectorBasicConfigDirective<BacnetBasicConfig_v3_6_2, BacnetLegacyBasicConfig> {
 
-  protected override initBasicFormGroup(): FormGroup {
+  protected initBasicFormGroup(): FormGroup {
     return this.fb.group({
       application: [],
       devices: [],
     });
   }
 
-  protected override mapConfigToFormValue(config: BacnetLegacyBasicConfig): BacnetBasicConfig_v3_6_2 {
+  protected mapConfigToFormValue(config: BacnetLegacyBasicConfig): BacnetBasicConfig_v3_6_2 {
     return {
       application: config.general ? BacnetVersionMappingUtil.mapApplicationToUpgradedVersion(config.general) : {},
       devices: config.devices?.length ? BacnetVersionMappingUtil.mapDevicesToUpgradedVersion(config.devices) : [],
     } as BacnetBasicConfig_v3_6_2;
   }
 
-  protected override getMappedValue(value: BacnetBasicConfig_v3_6_2): BacnetLegacyBasicConfig {
+  protected getMappedValue(value: BacnetBasicConfig_v3_6_2): BacnetLegacyBasicConfig {
     return {
       general: value.application ? BacnetVersionMappingUtil.mapApplicationToDowngradedVersion(value.application) : {},
       devices: value.devices?.length ? BacnetVersionMappingUtil.mapDevicesToDowngradedVersion(value.devices) : [],

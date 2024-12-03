@@ -57,7 +57,7 @@ import { ControlValueAccessorBaseAbstract } from '../../../../../shared/abstract
     ReportStrategyComponent,
   ]
 })
-export class BacnetDeviceDataKeyComponent extends ControlValueAccessorBaseAbstract<any> implements OnInit {
+export class BacnetDeviceDataKeyComponent extends ControlValueAccessorBaseAbstract<BacnetDeviceKey> implements OnInit {
 
   @Input() keyType: BacnetDeviceKeysType;
   @Input({ transform: booleanAttribute }) withReportStrategy = true;
@@ -106,11 +106,11 @@ export class BacnetDeviceDataKeyComponent extends ControlValueAccessorBaseAbstra
       });
   }
 
-  protected override initFormGroup(): UntypedFormGroup {
+  protected initFormGroup(): UntypedFormGroup {
     return this.fb.group({});
   }
 
-  protected override mapOnChangeValue({reportStrategy, ...updatedKey}: BacnetDeviceKey): BacnetDeviceKey {
+  protected mapOnChangeValue({reportStrategy, ...updatedKey}: BacnetDeviceKey): BacnetDeviceKey {
     return (reportStrategy ? { ...updatedKey, reportStrategy } : updatedKey) as BacnetDeviceKey;
   }
 }

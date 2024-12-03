@@ -25,7 +25,7 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatButton } from '@angular/material/button';
 import { Router } from '@angular/router';
@@ -42,8 +42,9 @@ import {
   TruncateWithTooltipDirective,
 } from '../../../../../shared/public-api';
 import {
+  BacnetDeviceConfig,
+  BacnetDeviceKey,
   DeviceInfoType,
-  DevicesConfigMapping,
   ExpressionType,
   MappingInfo,
   PortLimits,
@@ -74,9 +75,18 @@ import { BacnetDeviceDataKeysPanelComponent } from '../device-data-keys-pannel/b
     DeviceInfoTableComponent,
   ]
 })
-export class BacnetDeviceDialogComponent extends DialogComponent<BacnetDeviceDialogComponent, DevicesConfigMapping> {
+export class BacnetDeviceDialogComponent extends DialogComponent<BacnetDeviceDialogComponent, BacnetDeviceConfig> {
 
-  deviceFormGroup: UntypedFormGroup;
+  deviceFormGroup = this.fb.group({
+    host: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
+    port: [null, [Validators.required, Validators.min(PortLimits.MIN), Validators.max(PortLimits.MAX)]],
+    deviceInfo: [],
+    pollPeriod: [0, [Validators.required, Validators.min(0)]],
+    timeseries: [[] as BacnetDeviceKey[]],
+    attributes: [[] as BacnetDeviceKey[]],
+    attributeUpdates: [[] as BacnetDeviceKey[]],
+    serverSideRpc: [[] as BacnetDeviceKey[]],
+  });
   keysPopupClosed = true;
 
   readonly BacnetDeviceKeysType = BacnetDeviceKeysType;
@@ -89,7 +99,7 @@ export class BacnetDeviceDialogComponent extends DialogComponent<BacnetDeviceDia
   constructor(protected store: Store<AppState>,
               protected router: Router,
               @Inject(MAT_DIALOG_DATA) public data: MappingInfo,
-              public dialogRef: MatDialogRef<BacnetDeviceDialogComponent, DevicesConfigMapping>,
+              public dialogRef: MatDialogRef<BacnetDeviceDialogComponent, BacnetDeviceConfig>,
               private fb: FormBuilder,
               private popoverService: TbPopoverService,
               private renderer: Renderer2,
@@ -99,16 +109,6 @@ export class BacnetDeviceDialogComponent extends DialogComponent<BacnetDeviceDia
   ) {
     super(store, router, dialogRef);
 
-    this.deviceFormGroup = this.fb.group({
-      host: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-      port: [null, [Validators.required, Validators.min(PortLimits.MIN), Validators.max(PortLimits.MAX)]],
-      deviceInfo: [],
-      pollPeriod: [0, [Validators.required, Validators.min(0)]],
-      timeseries: [[]],
-      attributes: [[]],
-      attributeUpdates: [[]],
-      serverSideRpc: [[]],
-    });
     this.deviceFormGroup.patchValue(this.data.value, { emitEvent: false })
   }
 
@@ -120,7 +120,7 @@ export class BacnetDeviceDialogComponent extends DialogComponent<BacnetDeviceDia
 
   add(): void {
     if (this.deviceFormGroup.valid) {
-      this.dialogRef.close(this.deviceFormGroup.value);
+      this.dialogRef.close(this.deviceFormGroup.value as BacnetDeviceConfig);
     }
   }
 
@@ -159,7 +159,7 @@ export class BacnetDeviceDialogComponent extends DialogComponent<BacnetDeviceDia
       true
     );
     dataKeysPanelPopover.tbComponentRef.instance.popover = dataKeysPanelPopover;
-    dataKeysPanelPopover.tbComponentRef.instance.keysDataApplied.subscribe((keysData) => {
+    dataKeysPanelPopover.tbComponentRef.instance.keysDataApplied.subscribe((keysData: BacnetDeviceKey[]) => {
       dataKeysPanelPopover.hide();
       keysControl.patchValue(keysData);
       keysControl.markAsDirty();

@@ -23,9 +23,6 @@ import { PageComponent, SharedModule } from '@shared/public-api';
 import { TbPopoverComponent } from '@shared/components/popover.component';
 
 import { ReportStrategyDefaultValue } from '../../../../../shared/models/public-api';
-import { EllipsisChipListDirective } from '../../../../../shared/directives/public-api';
-import { ConnectorMappingHelpLinkPipe } from '../../../pipes/gateway-help-link.pipe';
-import { ReportStrategyComponent } from '../../../../../shared/components/public-api';
 import { BacnetDeviceKey, BacnetDeviceKeysType } from '../../../models/public-api';
 import { BacnetDeviceDataKeyComponent } from '../device-data-key/bacnet-device-data-key.component';
 
@@ -38,9 +35,6 @@ import { BacnetDeviceDataKeyComponent } from '../device-data-key/bacnet-device-d
   imports: [
     CommonModule,
     SharedModule,
-    EllipsisChipListDirective,
-    ConnectorMappingHelpLinkPipe,
-    ReportStrategyComponent,
     BacnetDeviceDataKeyComponent,
   ]
 })

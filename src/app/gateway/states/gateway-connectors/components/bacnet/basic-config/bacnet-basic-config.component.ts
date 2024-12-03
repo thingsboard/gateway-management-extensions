@@ -50,21 +50,21 @@ import { BacnetDevicesConfigTableComponent } from '../devices-config-table/bacne
 })
 export class BacnetBasicConfigComponent extends GatewayConnectorBasicConfigDirective<BacnetBasicConfig_v3_6_2, BacnetBasicConfig_v3_6_2> {
 
-  protected override initBasicFormGroup(): FormGroup {
+  protected initBasicFormGroup(): FormGroup {
     return this.fb.group({
       application: [],
       devices: [],
     });
   }
 
-  protected override mapConfigToFormValue(config: BacnetBasicConfig_v3_6_2): BacnetBasicConfig_v3_6_2 {
+  protected mapConfigToFormValue(config: BacnetBasicConfig_v3_6_2): BacnetBasicConfig_v3_6_2 {
     return {
       application: config.application ?? {},
       devices: config.devices ?? [],
     } as BacnetBasicConfig_v3_6_2;
   }
 
-  protected override getMappedValue(value: BacnetBasicConfig_v3_6_2): BacnetBasicConfig_v3_6_2 {
+  protected getMappedValue(value: BacnetBasicConfig_v3_6_2): BacnetBasicConfig_v3_6_2 {
     return {
       application: value.application,
       devices: value.devices ?? [],

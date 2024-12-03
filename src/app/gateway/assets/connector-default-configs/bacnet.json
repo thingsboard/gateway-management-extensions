@@ -1,5 +1,5 @@
 {
-  "3.6.1": {
+  "3.6.2": {
     "application": {
       "objectName": "TB_gateway",
       "host": "0.0.0.0",
@@ -39,7 +39,6 @@
         "attributeUpdates": [
           {
             "key": "brightness",
-            "requestType": "writeProperty",
             "objectType": "analogOutput",
             "objectId": "1",
             "propertyId": "presentValue"

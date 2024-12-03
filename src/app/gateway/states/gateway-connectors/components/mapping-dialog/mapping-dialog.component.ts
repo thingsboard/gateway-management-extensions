@@ -51,6 +51,7 @@ import {
   ServerSideRPCType,
   MQTTSourceType,
   SourceTypeTranslationsMap,
+  SourceType,
 } from '../../models/public-api';
 import { Subject } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
@@ -88,7 +89,7 @@ export class MappingDialogComponent extends DialogComponent<MappingDialogCompone
   readonly convertorTypes: ConvertorType[] = Object.values(ConvertorType) as ConvertorType[];
   readonly ConvertorTypeEnum = ConvertorType;
   readonly ConvertorTypeTranslationsMap = ConvertorTypeTranslationsMap;
-  readonly sourceTypes: MQTTSourceType[] = Object.values(MQTTSourceType) as MQTTSourceType[];
+  readonly sourceTypes: SourceType[] = Object.values(MQTTSourceType) as MQTTSourceType[];
   readonly OPCUaSourceTypes = Object.values(OPCUaSourceType) as Array<OPCUaSourceType>;
   readonly OPCUaSourceTypesEnum = OPCUaSourceType;
   readonly sourceTypesEnum = MQTTSourceType;

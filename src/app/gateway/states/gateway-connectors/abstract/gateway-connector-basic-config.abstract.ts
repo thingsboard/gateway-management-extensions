@@ -24,7 +24,7 @@ import {
   Output,
   TemplateRef
 } from '@angular/core';
-import { FormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ControlValueAccessorBaseAbstract } from '../../../shared/abstract/public-api';
 
 @Directive()
@@ -40,7 +40,7 @@ export abstract class GatewayConnectorBasicConfigDirective<InputBasicConfig, Out
   protected fb = inject(FormBuilder);
   protected onChange!: (value: OutputBasicConfig) => void;
 
-  get basicFormGroup(): UntypedFormGroup {
+  get basicFormGroup(): FormGroup {
     return this.formGroup;
   }
 
@@ -56,11 +56,11 @@ export abstract class GatewayConnectorBasicConfigDirective<InputBasicConfig, Out
     return this.getMappedValue(config);
   }
 
-  protected override initFormGroup(): UntypedFormGroup {
+  protected override initFormGroup(): FormGroup {
     return this.initBasicFormGroup();
   }
 
   protected abstract mapConfigToFormValue(config: OutputBasicConfig): InputBasicConfig;
   protected abstract getMappedValue(config: InputBasicConfig): OutputBasicConfig;
-  protected abstract initBasicFormGroup(): UntypedFormGroup;
+  protected abstract initBasicFormGroup(): FormGroup;
 }

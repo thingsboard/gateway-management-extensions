@@ -39,7 +39,8 @@ import {
   DeviceAttributesRequests,
   DeviceAttributesUpdate,
   DeviceDataKey,
-  DeviceRpcMethod, ExpressionType,
+  DeviceRpcMethod,
+  ExpressionType,
   SocketBasicConfig_v3_6,
   SocketEncoding,
   SocketLegacyBasicConfig
