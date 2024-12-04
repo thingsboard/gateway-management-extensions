@@ -1,0 +1,66 @@
+/*
+ * Copyright © 2016-2024 The Thingsboard Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+:host {
+  width: 100%;
+  height: 100%;
+  display: flex;
+
+  .divider {
+    position: absolute;
+    width: 3px;
+    top: 12px;
+    border-radius: 2px;
+    bottom: 4px;
+    left: 10px;
+  }
+  .divider-green .divider {
+    border: 1px solid rgb(25,128,56);
+    background-color: rgb(25,128,56);
+  }
+
+  .divider-green .mat-mdc-card-content {
+    color: rgb(25,128,56);
+  }
+
+  .divider-red .divider {
+    border: 1px solid rgb(203,37,48);
+    background-color: rgb(203,37,48);
+  }
+
+  .divider-red .mat-mdc-card-content {
+    color: rgb(203,37,48);
+  }
+}
+
+.mdc-card {
+  position: relative;
+  padding-left: 10px;
+  box-shadow: none;
+}
+
+.mat-mdc-card-subtitle {
+  font-weight: 400;
+  font-size: 12px;
+}
+
+.mat-mdc-card-header {
+  padding: 8px 16px 0;
+}
+
+.mat-mdc-card-content:last-child {
+  padding-bottom: 8px;
+  font-size: 16px;
+}
