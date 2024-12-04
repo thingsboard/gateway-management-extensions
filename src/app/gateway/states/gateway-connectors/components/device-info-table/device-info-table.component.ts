@@ -39,13 +39,14 @@ import {
   Validators
 } from '@angular/forms';
 import {
+  ConnectorType,
   noLeadTrailSpacesRegex,
 } from '../../../../shared/public-api';
 import {
   DeviceInfoType,
-  OPCUaSourceType,
-  SourceType,
-  SourceTypeTranslationsMap
+  MQTTSourceType,
+  SourceTypeTranslationsMap,
+  SourceType
 } from '../../models/public-api';
 import { coerceBoolean, PageComponent, SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
@@ -89,8 +90,10 @@ export class DeviceInfoTableComponent extends PageComponent implements ControlVa
   @Input()
   required = false;
 
+  @Input() connectorType: ConnectorType = ConnectorType.MQTT;
+
   @Input()
-  sourceTypes: Array<SourceType | OPCUaSourceType> = Object.values(SourceType) as Array<SourceType | OPCUaSourceType>;
+  sourceTypes: Array<SourceType> = Object.values(MQTTSourceType) as Array<SourceType>;
 
   deviceInfoTypeValue: any;
 

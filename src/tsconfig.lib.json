@@ -6,7 +6,6 @@
     "declaration": true,
     "declarationMap": true,
     "inlineSources": true,
-    "resolveJsonModule": true,
     "esModuleInterop": true
   },
   "exclude": [

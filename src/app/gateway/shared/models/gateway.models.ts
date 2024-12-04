@@ -18,6 +18,7 @@ import { AbstractControl, ValidationErrors } from '@angular/forms';
 import {
   ConnectorBaseConfig_v3_5_2,
   ConnectorBaseConfig_v3_6,
+  ConnectorBaseConfig_v3_6_2,
   ConnectorLegacyConfig
 } from '../../states/gateway-connectors/models/public-api';
 import { ConfigurationModes, ReportStrategyConfig } from './report-strategy.models';
@@ -39,7 +40,8 @@ export enum GatewayLogLevel {
 }
 
 export enum GatewayVersion {
-  Current = '3.6',
+  Current = '3.6.2',
+  v3_6_0 = '3.6',
   v3_5_2 = '3.5.2',
   Legacy = 'legacy'
 }
@@ -82,7 +84,7 @@ export const GatewayConnectorDefaultTypesTranslatesMap = new Map<ConnectorType, 
   [ConnectorType.CUSTOM, 'CUSTOM']
 ]);
 
-export type ConnectorBaseConfig = ConnectorBaseConfig_v3_6 | ConnectorBaseConfig_v3_5_2 | ConnectorLegacyConfig;
+export type ConnectorBaseConfig = ConnectorBaseConfig_v3_6_2 | ConnectorBaseConfig_v3_6 | ConnectorBaseConfig_v3_5_2 | ConnectorLegacyConfig;
 
 export interface GatewayConnector<BaseConfig = ConnectorBaseConfig> extends GatewayConnectorBase {
   configurationJson: BaseConfig;
@@ -108,6 +110,7 @@ export interface GatewayVersionedDefaultConfig {
   legacy: GatewayConnector<ConnectorLegacyConfig>;
   '3.5.2'?: GatewayConnector<ConnectorBaseConfig_v3_5_2>;
   '3.6'?: GatewayConnector<ConnectorBaseConfig_v3_6>;
+  '3.6.2'?: GatewayConnector<ConnectorBaseConfig_v3_6_2>;
 }
 
 export interface Attribute {

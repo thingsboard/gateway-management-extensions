@@ -13,10 +13,4 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-
-export * from './models/public-api';
-export * from './directives/public-api';
-export * from './datasources/public-api';
-export * from './components/public-api';
-export * from './pipes/public-api';
-export * from './abstract/public-api';
+export * from './control-value-accessor-base.abstract';

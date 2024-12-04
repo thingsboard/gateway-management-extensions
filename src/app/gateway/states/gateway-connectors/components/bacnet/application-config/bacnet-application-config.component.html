@@ -1,0 +1,125 @@
+<!--
+  Copyright © 2016-2024 The Thingsboard Authors
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<div class="tb-form-panel no-border no-padding padding-top" [formGroup]="applicationConfigFormGroup">
+  <div class="tb-form-row column-xs">
+    <div class="fixed-title-width tb-required" translate>gateway.bacnet.object-name</div>
+    <div class="tb-flex no-gap">
+      <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+        <input matInput autocomplete="off" name="value" formControlName="objectName" placeholder="{{ 'gateway.set' | translate }}"/>
+        @if (applicationConfigFormGroup.get('objectName').hasError('required') && applicationConfigFormGroup.get('objectName').touched) {
+          <mat-icon matSuffix
+                    matTooltipPosition="above"
+                    matTooltipClass="tb-error-tooltip"
+                    [matTooltip]="'gateway.name-required' | translate"
+                    class="tb-error">
+            warning
+          </mat-icon>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="tb-form-row column-xs">
+    <div class="fixed-title-width tb-required" translate>gateway.host</div>
+    <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+      <input matInput name="value" formControlName="host" placeholder="{{ 'gateway.set' | translate }}"/>
+      @if (applicationConfigFormGroup.get('host').hasError('required') && applicationConfigFormGroup.get('host').touched) {
+        <mat-icon matSuffix
+                  matTooltipPosition="above"
+                  matTooltipClass="tb-error-tooltip"
+                  [matTooltip]="('gateway.host-required') | translate"
+                  class="tb-error">
+          warning
+        </mat-icon>
+      }
+    </mat-form-field>
+  </div>
+  <div class="tb-form-row column-xs">
+    <div class="fixed-title-width tb-required" translate>gateway.port</div>
+    <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+      <input matInput type="number" min="{{portLimits.MIN}}" max="{{portLimits.MAX}}"
+             name="value" formControlName="port" placeholder="{{ 'gateway.set' | translate }}"/>
+      @if ((applicationConfigFormGroup.get('port').hasError('required')
+        || applicationConfigFormGroup.get('port').hasError('min')
+        || applicationConfigFormGroup.get('port').hasError('max'))
+        && applicationConfigFormGroup.get('port').touched) {
+        <mat-icon matSuffix
+                  matTooltipPosition="above"
+                  matTooltipClass="tb-error-tooltip"
+                  [matTooltip]="applicationConfigFormGroup.get('port') | getGatewayPortTooltip"
+                  class="tb-error">
+          warning
+        </mat-icon>
+      }
+    </mat-form-field>
+  </div>
+  <div class="tb-form-row column-xs">
+    <div class="fixed-title-width" translate>gateway.network-mask</div>
+    <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+      <input matInput name="value" formControlName="mask" placeholder="{{ 'gateway.set' | translate }}"/>
+    </mat-form-field>
+  </div>
+  <div class="tb-form-row column-xs">
+    <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.bacnet.object-id' | translate }}" translate>gateway.object-id</div>
+    <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+      <input matInput type="number" min="0" name="value" formControlName="objectIdentifier" placeholder="{{ 'gateway.set' | translate }}"/>
+      @if (applicationConfigFormGroup.get('objectIdentifier').hasError('required') &&
+      applicationConfigFormGroup.get('objectIdentifier').touched) {
+        <mat-icon matSuffix
+                  matTooltipPosition="above"
+                  matTooltipClass="tb-error-tooltip"
+                  [matTooltip]="('gateway.hints.object-id-required') | translate"
+                  class="tb-error">
+          warning
+        </mat-icon>
+      }
+    </mat-form-field>
+  </div>
+  <div class="tb-form-row column-xs">
+    <div class="fixed-title-width" tb-hint-tooltip-icon="{{ 'gateway.hints.bacnet.vendor-id' | translate }}" translate>gateway.vendor-id</div>
+    <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+      <input matInput type="number" min="0" name="value" formControlName="vendorIdentifier" placeholder="{{ 'gateway.set' | translate }}"/>
+    </mat-form-field>
+  </div>
+  <div class="tb-form-panel stroked">
+    <mat-expansion-panel class="tb-settings">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <div class="tb-form-panel-title" translate>gateway.advanced-settings</div>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="tb-form-panel no-border no-padding padding-top">
+        <div class="tb-form-row column-xs">
+          <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.bacnet.apdu-length' | translate }}" translate>gateway.bacnet.apdu-length</div>
+          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+            <input matInput type="number" min="0" name="value" formControlName="maxApduLengthAccepted" placeholder="{{ 'gateway.set' | translate }}"/>
+          </mat-form-field>
+        </div>
+        <div class="tb-form-row column-xs">
+          <div class="fixed-title-width" tb-hint-tooltip-icon="{{ 'gateway.hints.bacnet.segmentation' | translate }}" translate>gateway.bacnet.segmentation.label</div>
+          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+            <mat-select formControlName="segmentationSupported">
+              @for (segmentation of segmentationTypes; track segmentation) {
+                <mat-option [value]="segmentation">
+                  {{ SegmentationTypeTranslationsMap.get(segmentation) | translate }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </div>
+</div>

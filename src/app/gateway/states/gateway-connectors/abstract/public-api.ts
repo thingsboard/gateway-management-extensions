@@ -20,3 +20,5 @@ export * from './modbus-version-processor.abstract';
 export * from './opc-version-processor.abstract';
 export * from './gateway-connector-basic-config.abstract';
 export * from './socket-version-processor.abstract';
+export * from './bacnet-version-processor.abstract';
+export * from './basic-config-entity-table.abstract';

@@ -27,7 +27,7 @@ import { GatewayConnectorVersionProcessor } from './gateway-connector-version-pr
 import { ModbusVersionMappingUtil } from '../utils/public-api';
 import { GatewayConnector } from '../../../shared/models/public-api';
 
-export class ModbusVersionProcessor extends GatewayConnectorVersionProcessor<any> {
+export class ModbusVersionProcessor extends GatewayConnectorVersionProcessor<ModbusBasicConfig> {
 
   constructor(
     protected gatewayVersionIn: string,

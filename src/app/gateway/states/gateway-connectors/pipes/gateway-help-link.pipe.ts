@@ -15,27 +15,43 @@
 ///
 
 import { Pipe, PipeTransform } from '@angular/core';
-import {
-  OPCUaSourceType,
-  SourceType
-} from '../models/public-api';
-import { MappingValueType } from '../../../shared/models/public-api';
+import { OPCUaSourceType, SourceType } from '../models/public-api';
+import { ConnectorType } from '../../../shared/models/public-api';
 
 @Pipe({
   name: 'getConnectorMappingHelpLink',
   standalone: true,
 })
 export class ConnectorMappingHelpLinkPipe implements PipeTransform {
-  transform(field: string, sourceType: SourceType | OPCUaSourceType, sourceTypes?: Array<SourceType | OPCUaSourceType | MappingValueType> ): string {
-    if (!sourceTypes || sourceTypes?.includes(OPCUaSourceType.PATH)) {
-      if (sourceType !== OPCUaSourceType.CONST) {
-        return `widget/lib/gateway/${field}-${sourceType}_fn`;
-      } else {
-        return;
-      }
-    } else if (field === 'attributes' || field === 'timeseries') {
+  transform(connectorType: ConnectorType, field: string, sourceType: SourceType): string {
+    switch (connectorType) {
+      case ConnectorType.OPCUA:
+        return this.getOpcConnectorHelpLink(field, sourceType);
+      case ConnectorType.MQTT:
+        return this.getMqttConnectorHelpLink(field);
+      case ConnectorType.BACNET:
+        return this.getBacnetConnectorHelpLink(field, sourceType);
+    }
+  }
+
+  private getOpcConnectorHelpLink(field: string, sourceType: SourceType): string {
+    if (sourceType !== OPCUaSourceType.CONST) {
+      return `widget/lib/gateway/${field}-${sourceType}_fn`;
+    }
+    return;
+  }
+
+  private getMqttConnectorHelpLink(field: string): string {
+    if (field === 'attributes' || field === 'timeseries') {
       return 'widget/lib/gateway/attributes_timeseries_expressions_fn';
     }
     return 'widget/lib/gateway/expressions_fn';
+  }
+
+  private getBacnetConnectorHelpLink(field: string, sourceType: SourceType): string {
+    if (sourceType !== OPCUaSourceType.CONST) {
+      return `widget/lib/gateway/bacnet-device-${field}-${sourceType}_fn`;
+    }
+    return;
   }
 }

@@ -56,7 +56,7 @@ export enum ConvertorType {
   CUSTOM = 'custom'
 }
 
-export enum SourceType {
+export enum MQTTSourceType {
   MSG = 'message',
   TOPIC = 'topic',
   CONST = 'constant'
@@ -170,7 +170,7 @@ export interface AttributeRequest {
   retain: boolean;
   topicFilter: string;
   deviceInfo: ConnectorDeviceInfo;
-  attributeNameExpressionSource: SourceType;
+  attributeNameExpressionSource: MQTTSourceType;
   attributeNameExpression: string;
   topicExpression: string;
   valueExpression: string;

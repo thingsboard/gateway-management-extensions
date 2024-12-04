@@ -28,7 +28,7 @@ import {
   RequestType,
   ServerSideRpc,
   ServerSideRpcType,
-  SourceType
+  MQTTSourceType
 } from '../models/public-api';
 
 export class MqttVersionMappingUtil {
@@ -96,8 +96,8 @@ export class MqttVersionMappingUtil {
         const newValue = {
           ...rest,
           attributeNameJsonExpression: attributeNameExpression || null,
-          deviceNameJsonExpression: deviceInfo?.deviceNameExpressionSource !== SourceType.TOPIC ? deviceInfo?.deviceNameExpression : null,
-          deviceNameTopicExpression: deviceInfo?.deviceNameExpressionSource === SourceType.TOPIC ? deviceInfo?.deviceNameExpression : null,
+          deviceNameJsonExpression: deviceInfo?.deviceNameExpressionSource !== MQTTSourceType.TOPIC ? deviceInfo?.deviceNameExpression : null,
+          deviceNameTopicExpression: deviceInfo?.deviceNameExpressionSource === MQTTSourceType.TOPIC ? deviceInfo?.deviceNameExpression : null,
         };
 
         this.cleanUpNewFields(newValue);
@@ -126,14 +126,14 @@ export class MqttVersionMappingUtil {
 
     return converter.type !== ConvertorType.BYTES ? {
       ...restConverter,
-      deviceNameJsonExpression: deviceInfo?.deviceNameExpressionSource === SourceType.MSG ? deviceInfo.deviceNameExpression : null,
+      deviceNameJsonExpression: deviceInfo?.deviceNameExpressionSource === MQTTSourceType.MSG ? deviceInfo.deviceNameExpression : null,
       deviceTypeJsonExpression:
-        deviceInfo?.deviceProfileExpressionSource === SourceType.MSG ? deviceInfo.deviceProfileExpression : null,
+        deviceInfo?.deviceProfileExpressionSource === MQTTSourceType.MSG ? deviceInfo.deviceProfileExpression : null,
       deviceNameTopicExpression:
-        deviceInfo?.deviceNameExpressionSource !== SourceType.MSG
+        deviceInfo?.deviceNameExpressionSource !== MQTTSourceType.MSG
           ? deviceInfo?.deviceNameExpression
           : null,
-      deviceTypeTopicExpression: deviceInfo?.deviceProfileExpressionSource !== SourceType.MSG
+      deviceTypeTopicExpression: deviceInfo?.deviceProfileExpressionSource !== MQTTSourceType.MSG
         ? deviceInfo?.deviceProfileExpression
         : null,
     } : {
@@ -154,14 +154,14 @@ export class MqttVersionMappingUtil {
     deleteNullProperties(obj);
   }
 
-  private static getTypeSourceByValue(value: string): SourceType {
+  private static getTypeSourceByValue(value: string): MQTTSourceType {
     if (value.includes('${')) {
-      return SourceType.MSG;
+      return MQTTSourceType.MSG;
     }
     if (value.includes(`/`)) {
-      return SourceType.TOPIC;
+      return MQTTSourceType.TOPIC;
     }
-    return SourceType.CONST;
+    return MQTTSourceType.CONST;
   }
 
   private static extractConverterDeviceInfo(converter: LegacyConverter): ConnectorDeviceInfo {
@@ -170,14 +170,14 @@ export class MqttVersionMappingUtil {
       || converter.deviceNameTopicExpression
       || null;
     const deviceNameExpressionSource = converter.deviceNameExpressionSource
-      ? converter.deviceNameExpressionSource as SourceType
+      ? converter.deviceNameExpressionSource as MQTTSourceType
       : deviceNameExpression ? this.getTypeSourceByValue(deviceNameExpression) : null;
     const deviceProfileExpression = converter.deviceProfileExpression
       || converter.deviceTypeTopicExpression
       || converter.deviceTypeJsonExpression
       || 'default';
     const deviceProfileExpressionSource = converter.deviceProfileExpressionSource
-      ? converter.deviceProfileExpressionSource as SourceType
+      ? converter.deviceProfileExpressionSource as MQTTSourceType
       : deviceProfileExpression ? this.getTypeSourceByValue(deviceProfileExpression) : null;
 
     return deviceNameExpression || deviceProfileExpression ? {

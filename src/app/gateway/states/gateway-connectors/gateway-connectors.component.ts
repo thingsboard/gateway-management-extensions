@@ -82,6 +82,10 @@ import { ConnectorBaseInfo, AddConnectorConfigData, GatewayAttributeData } from 
 import { CommonModule } from '@angular/common';
 import { LatestVersionConfigPipe } from './pipes/public-api';
 import { ReportStrategyComponent } from '../../shared/components/public-api';
+import { BacnetBasicConfigComponent } from './components/bacnet/basic-config/bacnet-basic-config.component';
+import {
+  BacnetLegacyBasicConfigComponent
+} from './components/bacnet/basic-config/bacnet-legacy-basic-config.component';
 
 export class ForceErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null): boolean {
@@ -109,7 +113,9 @@ export class ForceErrorStateMatcher implements ErrorStateMatcher {
     SocketBasicConfigComponent,
     SocketLegacyBasicConfigComponent,
     ReportStrategyComponent,
-    AddConnectorDialogComponent
+    AddConnectorDialogComponent,
+    BacnetBasicConfigComponent,
+    BacnetLegacyBasicConfigComponent
   ],
 })
 export class GatewayConnectorComponent extends PageComponent implements AfterViewInit, OnDestroy {
@@ -125,6 +131,7 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
     ConnectorType.OPCUA,
     ConnectorType.MODBUS,
     ConnectorType.SOCKET,
+    ConnectorType.BACNET,
   ]);
   readonly gatewayLogLevel = Object.values(GatewayLogLevel);
   readonly displayedColumns = ['enabled', 'key', 'type', 'syncStatus', 'errors', 'actions'];

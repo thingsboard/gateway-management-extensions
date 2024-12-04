@@ -41,7 +41,6 @@ import { ReportStrategyComponent } from '../../../../../shared/components/report
   selector: 'tb-device-data-keys-panel',
   templateUrl: './device-data-keys-panel.component.html',
   styleUrls: ['./device-data-keys-panel.component.scss'],
-  providers: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [

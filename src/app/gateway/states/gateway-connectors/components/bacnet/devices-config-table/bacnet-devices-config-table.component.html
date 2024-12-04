@@ -57,20 +57,28 @@
     </mat-toolbar>
     <div class="table-container">
       <table mat-table [dataSource]="dataSource">
-        <ng-container [matColumnDef]="'address'">
-          <mat-header-cell *matHeaderCellDef class="table-value-column">
-            {{ 'gateway.address-filter' | translate }}
-          </mat-header-cell>
-          <mat-cell *matCellDef="let device" class="table-value-column">
-            <div tbTruncateWithTooltip>{{ device['address'] }}</div>
-          </mat-cell>
-        </ng-container>
         <ng-container [matColumnDef]="'deviceName'">
           <mat-header-cell *matHeaderCellDef class="table-value-column">
             <div tbTruncateWithTooltip>{{ 'gateway.device-name' | translate }}</div>
           </mat-header-cell>
+          <mat-cell *matCellDef="let device">
+            <div class="table-value-column" tbTruncateWithTooltip>{{ device['deviceInfo']?.['deviceNameExpression'] }}</div>
+          </mat-cell>
+        </ng-container>
+        <ng-container [matColumnDef]="'host'">
+          <mat-header-cell *matHeaderCellDef class="table-value-column">
+            {{ 'gateway.host' | translate }}
+          </mat-header-cell>
           <mat-cell *matCellDef="let device" class="table-value-column">
-            <div tbTruncateWithTooltip>{{ device['deviceName'] }}</div>
+            <div tbTruncateWithTooltip>{{ device['host'] }}</div>
+          </mat-cell>
+        </ng-container>
+        <ng-container [matColumnDef]="'port'">
+          <mat-header-cell *matHeaderCellDef class="table-value-column">
+            {{ 'gateway.port' | translate }}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let device" class="table-value-column">
+            <div tbTruncateWithTooltip>{{ device['port'] }}</div>
           </mat-cell>
         </ng-container>
         <ng-container matColumnDef="actions" stickyEnd>
@@ -108,8 +116,8 @@
             </div>
           </mat-cell>
         </ng-container>
-        <mat-header-row class="mat-row-select" *matHeaderRowDef="['address', 'deviceName', 'actions']; sticky: true"></mat-header-row>
-        <mat-row *matRowDef="let device; columns: ['address', 'deviceName', 'actions']"></mat-row>
+        <mat-header-row class="mat-row-select" *matHeaderRowDef="['deviceName', 'host', 'port', 'actions']; sticky: true"></mat-header-row>
+        <mat-row *matRowDef="let device; columns: ['deviceName', 'host', 'port', 'actions']"></mat-row>
       </table>
       <section [class.!hidden]="textSearchMode || (dataSource.isEmpty() | async) === false"
                class="mat-headline-5 tb-absolute-fill tb-add-new items-center justify-center">

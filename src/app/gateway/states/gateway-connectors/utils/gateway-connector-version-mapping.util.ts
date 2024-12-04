@@ -15,6 +15,7 @@
 ///
 
 import {
+  BacnetBasicConfig,
   ModbusBasicConfig,
   MQTTBasicConfig,
   OPCBasicConfig,
@@ -24,7 +25,13 @@ import {
   ConnectorType,
   GatewayConnector,
 } from '../../../shared/models/public-api';
-import { MqttVersionProcessor, OpcVersionProcessor, ModbusVersionProcessor, SocketVersionProcessor } from '../abstract/public-api';
+import {
+  MqttVersionProcessor,
+  OpcVersionProcessor,
+  ModbusVersionProcessor,
+  SocketVersionProcessor,
+  BacnetVersionProcessor
+} from '../abstract/public-api';
 import { isNumber, isString } from '@core/public-api';
 
 export abstract class GatewayConnectorVersionMappingUtil {
@@ -39,6 +46,8 @@ export abstract class GatewayConnectorVersionMappingUtil {
         return new ModbusVersionProcessor(gatewayVersion, connector as GatewayConnector<ModbusBasicConfig>).getProcessedByVersion();
       case ConnectorType.SOCKET:
         return new SocketVersionProcessor(gatewayVersion, connector as GatewayConnector<SocketBasicConfig>).getProcessedByVersion();
+      case ConnectorType.BACNET:
+        return new BacnetVersionProcessor(gatewayVersion, connector as GatewayConnector<BacnetBasicConfig>).getProcessedByVersion();
       default:
         return connector;
     }

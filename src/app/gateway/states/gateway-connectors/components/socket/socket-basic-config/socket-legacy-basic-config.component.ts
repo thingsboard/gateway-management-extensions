@@ -18,14 +18,11 @@ import {
   ChangeDetectionStrategy,
   Component,
   forwardRef,
-  OnDestroy,
 } from '@angular/core';
 import {
-  ControlValueAccessor,
   FormGroup,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
-  Validator,
 } from '@angular/forms';
 import { SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
@@ -63,7 +60,7 @@ import { SocketBasicConfig_v3_6, SocketLegacyBasicConfig } from '../../../models
   styleUrls: ['./socket-basic-config.component.scss']
 })
 
-export class SocketLegacyBasicConfigComponent extends GatewayConnectorBasicConfigDirective<SocketBasicConfig_v3_6, SocketLegacyBasicConfig> implements ControlValueAccessor, Validator, OnDestroy {
+export class SocketLegacyBasicConfigComponent extends GatewayConnectorBasicConfigDirective<SocketBasicConfig_v3_6, SocketLegacyBasicConfig> {
 
   isLegacy = true;
 
