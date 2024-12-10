@@ -14,7 +14,7 @@
 /// limitations under the License.
 ///
 import { DevicesConfigMapping } from './connectors.model';
-import { ReportStrategyConfig } from '../../../shared/models/public-api';
+import { ReportStrategyConfig, SocketEncoding } from '../../../shared/models/public-api';
 
 export enum SocketType {
   TCP = 'TCP',
@@ -27,17 +27,6 @@ export enum SocketValueKey {
   ATTRIBUTES_REQUESTS = 'attributeRequests',
   ATTRIBUTES_UPDATES = 'attributeUpdates',
   RPC_METHODS = 'serverSideRpc',
-}
-
-export enum SocketEncoding {
-  UTF8 = 'utf-8',
-  HEX = 'hex',
-  UTF16 = 'utf-16',
-  UTF32 = 'utf-32',
-  UTF16BE = 'utf-16-be',
-  UTF16LE = 'utf-16-le',
-  UTF32BE = 'utf-32-be',
-  UTF32LE = 'utf-32-le',
 }
 
 export interface SocketConfig {

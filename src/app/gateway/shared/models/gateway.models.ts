@@ -124,3 +124,14 @@ export interface Timeseries {
   type: string;
   value: string;
 }
+
+export enum SocketEncoding {
+  UTF8 = 'utf-8',
+  HEX = 'hex',
+  UTF16 = 'utf-16',
+  UTF32 = 'utf-32',
+  UTF16BE = 'utf-16-be',
+  UTF16LE = 'utf-16-le',
+  UTF32BE = 'utf-32-be',
+  UTF32LE = 'utf-32-le',
+}

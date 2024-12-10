@@ -30,13 +30,13 @@ import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { DialogComponent, helpBaseUrl, SharedModule } from '@shared/public-api';
 import { Router } from '@angular/router';
 import {
-    EllipsisChipListDirective,
-    noLeadTrailSpacesRegex,
+  EllipsisChipListDirective,
+  noLeadTrailSpacesRegex,
+  SocketEncoding,
 } from '../../../../../shared/public-api';
 import {
   DevicesConfigMapping,
   MappingInfo,
-  SocketEncoding,
   SocketKeysAddKeyTranslationsMap,
   SocketKeysDeleteKeyTranslationsMap,
   SocketKeysNoKeysTextTranslationsMap,

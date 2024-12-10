@@ -18,22 +18,13 @@ import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { WidgetContext } from '@home/models/widget-component.models';
-import {
-  RPCCommand,
-  RPCTemplate,
-  RPCTemplateConfig,
-  SaveRPCTemplateData,
-} from './models/public-api';
-import {
-  ConnectorType,
-  GatewayConnectorDefaultTypesTranslatesMap,
-  jsonRequired
-} from '../../shared/public-api';
+import { RPCCommand, RPCTemplate, RPCTemplateConfig, SaveRPCTemplateData } from './models/public-api';
+import { ConnectorType, GatewayConnectorDefaultTypesTranslatesMap, jsonRequired } from '../../shared/public-api';
 import {
   GatewayServiceRPCConnectorTemplateDialogComponent
 } from './components/gateway-service-rpc-connector-template-dialog/gateway-service-rpc-connector-template-dialog';
-import { DatasourceType, widgetType, EntityType, AttributeScope, ContentType, SharedModule } from '@shared/public-api';
-import { UtilsService, IWidgetSubscription, WidgetSubscriptionOptions, AttributeService } from '@core/public-api';
+import { AttributeScope, ContentType, DatasourceType, EntityType, SharedModule, widgetType } from '@shared/public-api';
+import { AttributeService, IWidgetSubscription, UtilsService, WidgetSubscriptionOptions } from '@core/public-api';
 import { CommonModule } from '@angular/common';
 import {
   GatewayServiceRPCConnectorComponent
@@ -44,6 +35,7 @@ import { OpcRpcParametersComponent } from './components/opc-rpc-parameters/opc-r
 import {
   GatewayServiceRPCConnectorTemplatesComponent
 } from './components/gateway-service-rpc-connector-templates/gateway-service-rpc-connector-templates.component';
+import { SocketRpcParametersComponent } from './components/socket-rpc-parameters/socket-rpc-parameters.component';
 
 @Component({
   selector: 'tb-gateway-service-rpc',
@@ -58,6 +50,7 @@ import {
     MqttRpcParametersComponent,
     OpcRpcParametersComponent,
     GatewayServiceRPCConnectorTemplatesComponent,
+    SocketRpcParametersComponent,
   ]
 })
 export class GatewayServiceRPCComponent implements OnInit {
@@ -95,6 +88,7 @@ export class GatewayServiceRPCComponent implements OnInit {
     ConnectorType.MQTT,
     ConnectorType.OPCUA,
     ConnectorType.MODBUS,
+    ConnectorType.SOCKET
   ]);
 
   private subscription: IWidgetSubscription;
