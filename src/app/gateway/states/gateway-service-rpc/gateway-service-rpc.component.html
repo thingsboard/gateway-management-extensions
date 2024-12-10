@@ -53,6 +53,7 @@
             <tb-gateway-modbus-rpc-parameters *ngSwitchCase="ConnectorType.MODBUS" formControlName="params"/>
             <tb-gateway-mqtt-rpc-parameters *ngSwitchCase="ConnectorType.MQTT" formControlName="params"/>
             <tb-gateway-opc-rpc-parameters *ngSwitchCase="ConnectorType.OPCUA" formControlName="params"/>
+            <tb-gateway-socket-rpc-parameters *ngSwitchCase="ConnectorType.SOCKET" formControlName="params"/>
           </ng-container>
           <div class="fex-row template-actions flex flex-1 items-center justify-end gap-2.5">
             <button mat-raised-button

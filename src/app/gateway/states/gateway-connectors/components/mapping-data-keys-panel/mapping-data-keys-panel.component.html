@@ -54,6 +54,13 @@
                                   class="tb-error">
                           warning
                         </mat-icon>
+                        <div matSuffix
+                             class="see-example"
+                             *ngIf="connectorType | getConnectorMappingHelpLink : this.keysType : keyControl.get('typeValue').value?.type : convertorType"
+                             [tb-help-popup]="connectorType | getConnectorMappingHelpLink : this.keysType : keyControl.get('typeValue').value?.type : convertorType"
+                             tb-help-popup-placement="left"
+                             [tb-help-popup-style]="{maxWidth: '970px'}">
+                        </div>
                       </mat-form-field>
                     </div>
                   </div>
@@ -62,7 +69,7 @@
                     <tb-type-value-field
                       formControlName="typeValue"
                       [rawData]="rawData"
-                      [helpLink]="connectorType | getConnectorMappingHelpLink : this.keysType : keyControl.get('typeValue').value.type"
+                      [helpLink]="connectorType | getConnectorMappingHelpLink : this.keysType : keyControl.get('typeValue').value?.type : convertorType"
                     />
                   </div>
                 </div>

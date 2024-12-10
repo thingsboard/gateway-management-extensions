@@ -1,0 +1,41 @@
+<!--
+  Copyright © 2016-2024 The Thingsboard Authors
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<ng-container [formGroup]="formGroup">
+  <mat-form-field class="w-full">
+    <mat-label>{{ 'gateway.rpc.methodRPC' | translate }}</mat-label>
+    <input matInput formControlName="methodRPC" placeholder="rpcMethod1"/>
+  </mat-form-field>
+  <mat-form-field class="mat-block">
+    <mat-label>{{ 'gateway.rpc.methodProcessing' | translate }}</mat-label>
+    <mat-select formControlName="methodProcessing">
+      <mat-option *ngFor="let method of socketMethodProcessings" [value]="method">
+        {{ SocketMethodProcessingsTranslates.get(method) | translate }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="mat-block">
+    <mat-label>{{ 'gateway.encoding' | translate }}</mat-label>
+    <mat-select formControlName="encoding">
+      <mat-option *ngFor="let encoding of socketEncoding" [value]="encoding">{{ encoding.toUpperCase() }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-slide-toggle class="mat-slide margin" formControlName="withResponse">
+    {{ 'gateway.rpc.withResponse' | translate }}
+  </mat-slide-toggle>
+</ng-container>
+
+

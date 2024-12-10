@@ -20,7 +20,11 @@ import { coerceBoolean, PageComponent, SharedModule } from '@shared/public-api';
 import { TbPopoverComponent } from '@shared/components/popover.component';
 import { Store } from '@ngrx/store';
 import { AppState } from '@core/public-api';
-import { noLeadTrailSpacesRegex, ReportStrategyDefaultValue, } from '../../../../../shared/models/public-api';
+import {
+  noLeadTrailSpacesRegex,
+  ReportStrategyDefaultValue,
+  SocketEncoding,
+} from '../../../../../shared/models/public-api';
 import {
   DeviceAttributesRequests,
   DeviceDataKey,
@@ -29,12 +33,9 @@ import {
   RequestsType,
   SocketAttributeUpdates,
   SocketDeviceKeys,
-  SocketEncoding,
   SocketValueKey,
 } from '../../../models/public-api';
 import { CommonModule } from '@angular/common';
-import { EllipsisChipListDirective } from '../../../../../shared/directives/ellipsis-chip-list.directive';
-import { ConnectorMappingHelpLinkPipe } from '../../../pipes/gateway-help-link.pipe';
 import { ReportStrategyComponent } from '../../../../../shared/components/report-strategy/report-strategy.component';
 
 @Component({
@@ -46,8 +47,6 @@ import { ReportStrategyComponent } from '../../../../../shared/components/report
   imports: [
     CommonModule,
     SharedModule,
-    EllipsisChipListDirective,
-    ConnectorMappingHelpLinkPipe,
     ReportStrategyComponent,
   ]
 })

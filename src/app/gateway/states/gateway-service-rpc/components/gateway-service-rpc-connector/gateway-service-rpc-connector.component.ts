@@ -37,9 +37,6 @@ import {
   RPCTemplateConfig,
   SNMPMethods,
   SNMPMethodsTranslations,
-  SocketEncodings,
-  SocketMethodProcessings,
-  SocketMethodProcessingsTranslates,
 } from '../../models/public-api';
 import {
   ConnectorType,
@@ -57,7 +54,6 @@ import { Subject } from "rxjs";
 import { takeUntil } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/public-api';
-import { RestConnectorSecurityComponent } from '../public-api';
 
 @Component({
   selector: 'tb-gateway-service-rpc-connector',
@@ -74,7 +70,6 @@ import { RestConnectorSecurityComponent } from '../public-api';
   imports: [
     CommonModule,
     SharedModule,
-    RestConnectorSecurityComponent
   ]
 })
 export class GatewayServiceRPCConnectorComponent implements OnInit, OnDestroy, ControlValueAccessor {
@@ -94,15 +89,12 @@ export class GatewayServiceRPCConnectorComponent implements OnInit, OnDestroy, C
   bACnetObjectTypes = Object.values(BACnetObjectTypes) as BACnetObjectTypes[];
   bLEMethods = Object.values(BLEMethods) as BLEMethods[];
   cANByteOrders = Object.values(CANByteOrders) as CANByteOrders[];
-  socketMethodProcessings = Object.values(SocketMethodProcessings) as SocketMethodProcessings[];
-  socketEncodings = Object.values(SocketEncodings) as SocketEncodings[];
   sNMPMethods = Object.values(SNMPMethods) as SNMPMethods[];
   hTTPMethods = Object.values(HTTPMethods) as HTTPMethods[];
 
   bACnetRequestTypesTranslates = BACnetRequestTypesTranslates;
   bACnetObjectTypesTranslates = BACnetObjectTypesTranslates;
   bLEMethodsTranslates = BLEMethodsTranslates;
-  SocketMethodProcessingsTranslates = SocketMethodProcessingsTranslates;
   SNMPMethodsTranslations = SNMPMethodsTranslations;
   gatewayConnectorDefaultTypesTranslates = GatewayConnectorDefaultTypesTranslatesMap;
 
@@ -175,14 +167,6 @@ export class GatewayServiceRPCConnectorComponent implements OnInit, OnDestroy, C
         formGroup = this.fb.group({
           methodRPC: [null, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
           valueExpression: [null, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-          withResponse: [false, []]
-        })
-        break;
-      case ConnectorType.SOCKET:
-        formGroup = this.fb.group({
-          methodRPC: [null, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-          methodProcessing: [null, [Validators.required]],
-          encoding: [SocketEncodings.UTF_8, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
           withResponse: [false, []]
         })
         break;

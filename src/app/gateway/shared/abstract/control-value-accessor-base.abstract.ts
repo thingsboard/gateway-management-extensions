@@ -18,7 +18,7 @@ import { DestroyRef, Directive, inject } from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
-  UntypedFormGroup,
+  FormGroup,
   ValidationErrors,
   Validator
 } from '@angular/forms';
@@ -27,7 +27,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Directive()
 export abstract class ControlValueAccessorBaseAbstract<FormValueType> implements ControlValueAccessor, Validator {
 
-  formGroup: UntypedFormGroup;
+  formGroup: FormGroup;
 
   protected onChange!: (value: FormValueType) => void;
   protected fb = inject(FormBuilder);
@@ -67,5 +67,5 @@ export abstract class ControlValueAccessorBaseAbstract<FormValueType> implements
     this.formGroup.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => this.onChange(this.mapOnChangeValue(value)));
   }
 
-  protected abstract initFormGroup(): UntypedFormGroup;
+  protected abstract initFormGroup(): FormGroup;
 }

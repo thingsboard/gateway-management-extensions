@@ -35,6 +35,7 @@ import { Store } from '@ngrx/store';
 import { PageComponent } from '@shared/public-api';
 import { isDefinedAndNotNull, AppState } from '@core/public-api';
 import {
+  ConvertorType,
   MappingDataKey,
   MappingKeysType,
   RpcMethodsMapping,
@@ -76,6 +77,7 @@ export class MappingDataKeysPanelComponent extends PageComponent implements OnIn
   @Input() keys: Array<MappingDataKey> | {[key: string]: any};
   @Input() keysType: MappingKeysType;
   @Input() connectorType: ConnectorType;
+  @Input() convertorType: ConvertorType;
   @Input() sourceType: SourceType;
   @Input() valueTypeEnum = MappingValueType;
   @Input() valueTypes = mappingValueTypesMap;

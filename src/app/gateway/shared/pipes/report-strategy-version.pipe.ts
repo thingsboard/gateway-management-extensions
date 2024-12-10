@@ -30,6 +30,6 @@ export class ReportStrategyVersionPipe implements PipeTransform {
     }
 
     return parsedConfigVersion
-      >= GatewayConnectorVersionMappingUtil.parseVersion(GatewayVersion.Current);
+      >= GatewayConnectorVersionMappingUtil.parseVersion(GatewayVersion.v3_6_0);
   }
 }
