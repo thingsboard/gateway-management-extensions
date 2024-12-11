@@ -153,27 +153,6 @@
           {{ 'gateway.rpc.withResponse' | translate }}
         </mat-slide-toggle>
       </ng-template>
-      <ng-template [ngSwitchCase]="ConnectorType.SOCKET">
-        <mat-form-field>
-          <mat-label>{{ 'gateway.rpc.methodRPC' | translate }}</mat-label>
-          <input matInput formControlName="methodRPC" placeholder="rpcMethod1"/>
-        </mat-form-field>
-        <mat-form-field class="mat-block">
-          <mat-label>{{ 'gateway.rpc.methodProcessing' | translate }}</mat-label>
-          <mat-select formControlName="methodProcessing">
-            <mat-option *ngFor="let method of socketMethodProcessings" [value]="method">
-              {{ SocketMethodProcessingsTranslates.get(method) | translate }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="mat-block">
-          <mat-label>{{ 'gateway.encoding' | translate }}</mat-label>
-          <input matInput formControlName="encoding" placeholder="{{socketEncodings[0]}}"/>
-        </mat-form-field>
-        <mat-slide-toggle class="mat-slide margin" formControlName="withResponse">
-          {{ 'gateway.rpc.withResponse' | translate }}
-        </mat-slide-toggle>
-      </ng-template>
       <ng-template [ngSwitchCase]="ConnectorType.XMPP">
         <mat-form-field>
           <mat-label>{{ 'gateway.rpc.methodRPC' | translate }}</mat-label>

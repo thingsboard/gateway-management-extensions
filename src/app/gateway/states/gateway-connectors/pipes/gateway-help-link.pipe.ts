@@ -15,7 +15,7 @@
 ///
 
 import { Pipe, PipeTransform } from '@angular/core';
-import { OPCUaSourceType, SourceType } from '../models/public-api';
+import { ConvertorType, MappingKeysType, MQTTSourceType, OPCUaSourceType, SourceType } from '../models/public-api';
 import { ConnectorType } from '../../../shared/models/public-api';
 
 @Pipe({
@@ -23,12 +23,12 @@ import { ConnectorType } from '../../../shared/models/public-api';
   standalone: true,
 })
 export class ConnectorMappingHelpLinkPipe implements PipeTransform {
-  transform(connectorType: ConnectorType, field: string, sourceType: SourceType): string {
+  transform(connectorType: ConnectorType, field: string, sourceType: SourceType, convertorType?: ConvertorType): string {
     switch (connectorType) {
       case ConnectorType.OPCUA:
         return this.getOpcConnectorHelpLink(field, sourceType);
       case ConnectorType.MQTT:
-        return this.getMqttConnectorHelpLink(field);
+        return this.getMqttConnectorHelpLink(field, sourceType, convertorType);
       case ConnectorType.BACNET:
         return this.getBacnetConnectorHelpLink(field, sourceType);
     }
@@ -41,11 +41,17 @@ export class ConnectorMappingHelpLinkPipe implements PipeTransform {
     return;
   }
 
-  private getMqttConnectorHelpLink(field: string): string {
-    if (field === 'attributes' || field === 'timeseries') {
-      return 'widget/lib/gateway/attributes_timeseries_expressions_fn';
+  private getMqttConnectorHelpLink(field: string, sourceType: SourceType, convertorType: ConvertorType): string {
+    if (sourceType === MQTTSourceType.CONST) {
+      return;
     }
-    return 'widget/lib/gateway/expressions_fn';
+    if (!convertorType) {
+      return `widget/lib/gateway/mqtt-expression_fn`;
+    }
+    if ((field === MappingKeysType.ATTRIBUTES || field === MappingKeysType.TIMESERIES) && convertorType === ConvertorType.JSON) {
+      return 'widget/lib/gateway/mqtt-json-key-expression_fn';
+    }
+    return `widget/lib/gateway/mqtt-${convertorType}-expression_fn`;
   }
 
   private getBacnetConnectorHelpLink(field: string, sourceType: SourceType): string {

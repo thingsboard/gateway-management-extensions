@@ -20,7 +20,8 @@ import {
   GatewayVersion,
   ReportStrategyConfig,
   ValueType,
-  MappingValueType
+  MappingValueType,
+  SocketEncoding
 } from '../../../shared/models/public-api';
 import {
   ConverterConnectorMapping,
@@ -42,7 +43,6 @@ import {
   DeviceRpcMethod,
   ExpressionType,
   SocketBasicConfig_v3_6,
-  SocketEncoding,
   SocketLegacyBasicConfig
 } from './socket.models';
 import { BacnetBasicConfig_v3_6_2, BacnetLegacyBasicConfig } from './bacnet.models';

@@ -230,6 +230,7 @@ export class MappingDialogComponent extends DialogComponent<MappingDialogCompone
         noKeysText: MappingKeysNoKeysTextTranslationsMap.get(keysType),
         withReportStrategy: this.data.withReportStrategy,
         connectorType: this.data.mappingType === MappingType.OPCUA ? ConnectorType.OPCUA : ConnectorType.MQTT,
+        convertorType: this.converterType,
       };
       if (this.data.mappingType === MappingType.OPCUA) {
         ctx.valueTypeEnum = OPCUaSourceType;

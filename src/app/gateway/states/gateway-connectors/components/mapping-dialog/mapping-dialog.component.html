@@ -81,11 +81,11 @@
               </div>
               <ng-container [formGroupName]="converterType" [ngSwitch]="converterType">
                 <ng-template [ngSwitchCase]="ConvertorTypeEnum.JSON">
-                  <tb-device-info-table formControlName="deviceInfo" [deviceInfoType]="DeviceInfoType.FULL" required="true">
+                  <tb-device-info-table formControlName="deviceInfo" [convertorType]="ConvertorTypeEnum.JSON" [deviceInfoType]="DeviceInfoType.FULL" required="true">
                   </tb-device-info-table>
                 </ng-template>
                 <ng-template [ngSwitchCase]="ConvertorTypeEnum.BYTES">
-                  <tb-device-info-table formControlName="deviceInfo" [deviceInfoType]="DeviceInfoType.FULL"
+                  <tb-device-info-table formControlName="deviceInfo" [deviceInfoType]="DeviceInfoType.FULL" [convertorType]="ConvertorTypeEnum.BYTES"
                                         [sourceTypes]="[sourceTypesEnum.MSG, sourceTypesEnum.CONST]" required="true">
                   </tb-device-info-table>
                 </ng-template>
