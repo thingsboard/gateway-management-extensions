@@ -14,14 +14,14 @@
 /// limitations under the License.
 ///
 
-import { ChangeDetectorRef, Component, Input, AfterViewInit, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, AfterViewInit, DestroyRef } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
 } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Observable, of, Subject } from 'rxjs';
-import { mergeMap, switchMap, takeUntil } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { filter, mergeMap, switchMap, take } from 'rxjs/operators';
 import {
   GatewayLogLevel,
   ConfigurationModes,
@@ -29,27 +29,20 @@ import {
   Attribute,
   ReportStrategyVersionPipe,
 } from '../../shared/public-api';
-import { deepTrim, isEqual, DeviceService, AttributeService } from '@core/public-api';
+import { deepTrim, isEqual, AttributeService } from '@core/public-api';
 import {
   GatewayBasicConfigTabKey,
-  GatewayConfigSecurity,
   GatewayConfigValue,
-  GatewayGeneralConfig,
-  GatewayGRPCConfig,
   GatewayLogsConfig,
-  GatewayStorageConfig,
   LocalLogs,
   LocalLogsConfigs,
   LogAttribute,
   LogConfig,
-  SecurityTypes,
   LogSavingPeriod,
 } from './models/public-api';
 import {
   DeviceId,
   NULL_UUID,
-  DeviceCredentials,
-  DeviceCredentialsType,
   EntityId,
   AttributeData,
   AttributeScope,
@@ -57,6 +50,8 @@ import {
 } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
 import { GatewayBasicConfigurationComponent, GatewayAdvancedConfigurationComponent } from './components/public-api';
+import { GatewayDeviceCredentialsService } from './services/public-api';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tb-gateway-configuration',
@@ -69,28 +64,28 @@ import { GatewayBasicConfigurationComponent, GatewayAdvancedConfigurationCompone
     ReportStrategyVersionPipe,
     GatewayBasicConfigurationComponent,
     GatewayAdvancedConfigurationComponent,
-  ]
+  ],
+  providers: [GatewayDeviceCredentialsService]
 })
-export class GatewayConfigurationComponent implements AfterViewInit, OnDestroy {
+export class GatewayConfigurationComponent implements AfterViewInit {
 
-  @Input() device: EntityId;
+  @Input() device: DeviceId;
   @Input() defaultTab: GatewayBasicConfigTabKey;
 
   @Input() dialogRef: MatDialogRef<GatewayConfigurationComponent>;
 
-  initialCredentials: DeviceCredentials;
   gatewayConfigGroup: FormGroup;
   ConfigurationModes = ConfigurationModes;
   gatewayVersion: GatewayVersion;
 
-  private destroy$ = new Subject<void>();
   private readonly gatewayConfigAttributeKeys =
     ['general_configuration', 'grpc_configuration', 'logs_configuration', 'storage_configuration', 'RemoteLoggingLevel', 'mode'];
 
   constructor(private fb: FormBuilder,
               private attributeService: AttributeService,
-              private deviceService: DeviceService,
-              private cd: ChangeDetectorRef
+              private cd: ChangeDetectorRef,
+              private gatewayCredentialsService: GatewayDeviceCredentialsService,
+              private destroyRef: DestroyRef
   ) {
 
     this.gatewayConfigGroup = this.fb.group({
@@ -106,11 +101,6 @@ export class GatewayConfigurationComponent implements AfterViewInit, OnDestroy {
     this.fetchConfigAttribute(this.device);
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   saveConfig(): void {
     const { mode, advancedConfig } = deepTrim(this.removeEmpty(this.gatewayConfigGroup.value));
     const value = { mode, ...advancedConfig as GatewayConfigValue };
@@ -118,8 +108,8 @@ export class GatewayConfigurationComponent implements AfterViewInit, OnDestroy {
     const attributes = this.generateAttributes(value);
 
     this.attributeService.saveEntityAttributes(this.device, AttributeScope.SHARED_SCOPE, attributes).pipe(
-      switchMap(_ => this.updateCredentials(value.thingsboard.security)),
-      takeUntil(this.destroy$),
+      switchMap(_ => this.gatewayCredentialsService.updateCredentials(value.thingsboard.security)),
+      takeUntilDestroyed(this.destroyRef),
     ).subscribe(() => {
       if (this.dialogRef) {
         this.dialogRef.close();
@@ -130,17 +120,13 @@ export class GatewayConfigurationComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  onInitialCredentialsUpdate(credentials: DeviceCredentials): void {
-    this.initialCredentials = credentials;
-  }
-
   onInitialized(value: GatewayConfigValue): void {
     this.gatewayConfigGroup.get('basicConfig').patchValue(value, {emitEvent: false});
     this.gatewayConfigGroup.get('advancedConfig').patchValue(value, {emitEvent: false});
   }
 
   private observeAlignConfigs(): void {
-    this.gatewayConfigGroup.get('basicConfig').valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => {
+    this.gatewayConfigGroup.get('basicConfig').valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
       const advancedControl = this.gatewayConfigGroup.get('advancedConfig');
 
       if (!isEqual(advancedControl.value, value) && this.gatewayConfigGroup.get('mode').value === ConfigurationModes.BASIC) {
@@ -148,7 +134,7 @@ export class GatewayConfigurationComponent implements AfterViewInit, OnDestroy {
       }
     });
 
-    this.gatewayConfigGroup.get('advancedConfig').valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => {
+    this.gatewayConfigGroup.get('advancedConfig').valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
       const basicControl = this.gatewayConfigGroup.get('basicConfig');
 
       if (!isEqual(basicControl.value, value) && this.gatewayConfigGroup.get('mode').value === ConfigurationModes.ADVANCED) {
@@ -181,65 +167,6 @@ export class GatewayConfigurationComponent implements AfterViewInit, OnDestroy {
     addAttribute('mode', value.mode);
 
     return attributes;
-  }
-
-  private updateCredentials(securityConfig: GatewayConfigSecurity): Observable<DeviceCredentials> {
-    let newCredentials: Partial<DeviceCredentials> = {};
-
-    switch (securityConfig.type) {
-      case SecurityTypes.USERNAME_PASSWORD:
-        if (this.shouldUpdateCredentials(securityConfig)) {
-          newCredentials = this.generateMqttCredentials(securityConfig);
-        }
-        break;
-
-      case SecurityTypes.ACCESS_TOKEN:
-      case SecurityTypes.TLS_ACCESS_TOKEN:
-        if (this.shouldUpdateAccessToken(securityConfig)) {
-          newCredentials = {
-            credentialsType: DeviceCredentialsType.ACCESS_TOKEN,
-            credentialsId: securityConfig.accessToken,
-            credentialsValue: null
-          };
-        }
-        break;
-    }
-
-    return Object.keys(newCredentials).length
-      ? this.deviceService.saveDeviceCredentials({ ...this.initialCredentials, ...newCredentials })
-      : of(null);
-  }
-
-  private shouldUpdateCredentials(securityConfig: GatewayConfigSecurity): boolean {
-    if (this.initialCredentials.credentialsType !== DeviceCredentialsType.MQTT_BASIC) {
-      return true;
-    }
-    const parsedCredentials = JSON.parse(this.initialCredentials.credentialsValue);
-    return !(
-      parsedCredentials.clientId === securityConfig.clientId &&
-      parsedCredentials.userName === securityConfig.username &&
-      parsedCredentials.password === securityConfig.password
-    );
-  }
-
-  private generateMqttCredentials(securityConfig: GatewayConfigSecurity): Partial<DeviceCredentials> {
-    const { clientId, username, password } = securityConfig;
-
-    const credentialsValue = {
-      ...(clientId && { clientId }),
-      ...(username && { userName: username }),
-      ...(password && { password }),
-    };
-
-    return {
-      credentialsType: DeviceCredentialsType.MQTT_BASIC,
-      credentialsValue: JSON.stringify(credentialsValue)
-    };
-  }
-
-  private shouldUpdateAccessToken(securityConfig: GatewayConfigSecurity): boolean {
-    return this.initialCredentials.credentialsType !== DeviceCredentialsType.ACCESS_TOKEN ||
-      this.initialCredentials.credentialsId !== securityConfig.accessToken;
   }
 
   cancel(): void {
@@ -343,7 +270,7 @@ export class GatewayConfigurationComponent implements AfterViewInit, OnDestroy {
         mergeMap(attributes => attributes.length ? of(attributes) : this.attributeService.getEntityAttributes(
           entityId, AttributeScope.SHARED_SCOPE, this.gatewayConfigAttributeKeys)
         ),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(attributes => {
         this.gatewayVersion = attributes.find(attribute => attribute.key === 'Version')?.value;
@@ -355,13 +282,14 @@ export class GatewayConfigurationComponent implements AfterViewInit, OnDestroy {
   private updateConfigs(attributes: AttributeData[]): void {
     let formValue = {} as GatewayConfigValue;
 
+    this.gatewayCredentialsService.setInitialCredentials(this.device);
+
     attributes.forEach(attr => {
       switch (attr.key) {
         case 'general_configuration':
           if (attr.value) {
             formValue = { ...formValue, thingsboard: attr.value };
           }
-          this.setInitialCredentials(attr.value);
           break;
         case 'grpc_configuration':
           if (attr.value) {
@@ -390,20 +318,17 @@ export class GatewayConfigurationComponent implements AfterViewInit, OnDestroy {
       }
     });
 
-    this.gatewayConfigGroup.get('basicConfig').patchValue(formValue, { emitEvent: false });
-    this.gatewayConfigGroup.get('advancedConfig').patchValue(formValue, { emitEvent: false });
-  }
-
-  private setInitialCredentials(thingsboard: GatewayGeneralConfig): void {
-    const { type, accessToken, ...securityConfig } = thingsboard.security ?? {};
-
-    if (!this.initialCredentials) {
-      this.initialCredentials = {
-        deviceId: this.device as DeviceId,
-        credentialsType: type as unknown as DeviceCredentialsType,
-        credentialsId: accessToken,
-        credentialsValue: JSON.stringify(securityConfig)
-      };
+    if (formValue.thingsboard?.security) {
+      this.gatewayCredentialsService.initialCredentials$.pipe(filter(Boolean), take(1), takeUntilDestroyed(this.destroyRef)).subscribe(credentials => {
+        if (this.gatewayCredentialsService.shouldUpdateSecurityConfig(formValue.thingsboard.security)) {
+          formValue.thingsboard.security = this.gatewayCredentialsService.credentialsToSecurityConfig(credentials);
+        }
+        this.gatewayConfigGroup.get('basicConfig').patchValue(formValue, { emitEvent: false });
+        this.gatewayConfigGroup.get('advancedConfig').patchValue(formValue, { emitEvent: false });
+      });
+    } else {
+      this.gatewayConfigGroup.get('basicConfig').patchValue(formValue, { emitEvent: false });
+      this.gatewayConfigGroup.get('advancedConfig').patchValue(formValue, { emitEvent: false });
     }
   }
 

@@ -41,7 +41,6 @@
       [defaultTab]="defaultTab"
       [dialogMode]="!!dialogRef"
       [withReportStrategy]="gatewayVersion | withReportStrategy"
-      (initialCredentialsUpdated)="onInitialCredentialsUpdate($event)"
       (initialized)="onInitialized($event)"
     />
     <tb-gateway-advanced-configuration

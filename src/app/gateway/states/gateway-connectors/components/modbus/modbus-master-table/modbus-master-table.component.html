@@ -15,7 +15,7 @@
 -->
 <div class="tb-master-table tb-absolute-fill">
   <div class="tb-form-panel no-border no-padding padding-top hint-container">
-    <div class="tb-form-hint tb-primary-fill tb-flex center" tbTruncateWithTooltip>{{ 'gateway.hints.modbus-master' | translate }}</div>
+    <div class="tb-form-hint tb-primary-fill tb-flex" tbTruncateWithTooltip>{{ 'gateway.hints.modbus-master' | translate }}</div>
   </div>
   <div class="tb-master-table-content flex flex-col">
     <mat-toolbar class="mat-mdc-table-toolbar" [class.!hidden]="textSearchMode">
@@ -93,10 +93,7 @@
           </mat-cell>
         </ng-container>
         <ng-container matColumnDef="actions" stickyEnd>
-          <mat-header-cell *matHeaderCellDef>
-            <div class="gt-md:!hidden" style="width: 48px; min-width: 48px; max-width: 48px;"></div>
-            <div class="lt-lg:!hidden" [style]="{ minWidth: '48px', textAlign: 'center'}"></div>
-          </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef class="w-12"/>
           <mat-cell *matCellDef="let slave; let i = index">
             <ng-template #rowActions>
               <button mat-icon-button

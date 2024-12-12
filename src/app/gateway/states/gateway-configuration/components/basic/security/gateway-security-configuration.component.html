@@ -28,15 +28,26 @@
       <mat-error *ngIf="securityFormGroup.get('accessToken').hasError('required')">
         {{ 'security.access-token-required' | translate }}
       </mat-error>
-      <tb-copy-button
-        matSuffix
-        miniButton="false"
-        *ngIf="securityFormGroup.get('accessToken').value"
-        [copyText]="securityFormGroup.get('accessToken').value"
-        tooltipText="{{ 'device.copy-access-token' | translate }}"
-        tooltipPosition="above"
-        icon="content_copy">
-      </tb-copy-button>
+      @if (securityFormGroup.get('accessToken').value) {
+        <tb-copy-button
+          matSuffix
+          miniButton="false"
+          [copyText]="securityFormGroup.get('accessToken').value"
+          tooltipText="{{ 'device.copy-access-token' | translate }}"
+          tooltipPosition="above"
+          icon="content_copy">
+        </tb-copy-button>
+      } @else {
+        <button type="button"
+                matSuffix
+                mat-icon-button
+                aria-label="Generate"
+                matTooltip="{{ 'device.generate-access-token' | translate }}"
+                matTooltipPosition="above"
+                (click)="generateAccessToken()">
+          <mat-icon>autorenew</mat-icon>
+        </button>
+      }
       <mat-icon matIconSuffix style="cursor:pointer;"
                 matTooltip="{{ 'gateway.hints.token' | translate }}">info_outlined
       </mat-icon>

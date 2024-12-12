@@ -13,7 +13,7 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-import { Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
+import { Component, forwardRef } from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -24,9 +24,10 @@ import {
   Validators
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { DeviceCredentials, EntityId, SharedModule } from '@shared/public-api';
+import { SharedModule } from '@shared/public-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { GatewayUsernamePasswordConfig } from '../../../../models/public-api';
+import { generateSecret } from '@core/public-api';
 
 @Component({
   selector: 'tb-gateway-username-configuration',
@@ -50,9 +51,6 @@ import { GatewayUsernamePasswordConfig } from '../../../../models/public-api';
   ]
 })
 export class GatewayUsernameConfigurationComponent implements ControlValueAccessor, Validators {
-
-  @Input() device: EntityId;
-  @Output() initialCredentialsUpdated = new EventEmitter<DeviceCredentials>();
 
   usernameFormGroup: FormGroup;
 
@@ -123,5 +121,9 @@ export class GatewayUsernameConfigurationComponent implements ControlValueAccess
     }
 
     return null;
+  }
+
+  public generate(formControlName: string): void {
+    this.usernameFormGroup.get(formControlName).patchValue(generateSecret(20));
   }
 }
