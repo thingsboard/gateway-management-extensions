@@ -59,6 +59,7 @@
     "baudrate": "Baudrate",
     "buffer-size": "Buffer size",
     "buffer-size-required": "Buffer size is required",
+    "buffer-size-range": "Buffer size should be greater than 0",
     "bytesize": "Bytesize",
     "boolean": "Boolean",
     "bit": "Bit",

@@ -70,7 +70,7 @@
         <mat-icon matSuffix
                   matTooltipPosition="above"
                   matTooltipClass="tb-error-tooltip"
-                  [matTooltip]="('gateway.buffer-size-required') | translate"
+                  [matTooltip]="(socketConfigFormGroup.get('bufferSize').hasError('min') ? 'gateway.buffer-size-range' : 'gateway.buffer-size-required') | translate"
                   *ngIf="socketConfigFormGroup.get('bufferSize').hasError('required')
                          || socketConfigFormGroup.get('bufferSize').hasError('min')
                          && socketConfigFormGroup.get('bufferSize').touched"
