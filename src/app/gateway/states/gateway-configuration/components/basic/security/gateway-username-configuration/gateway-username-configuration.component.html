@@ -21,15 +21,26 @@
       <mat-error *ngIf="usernameFormGroup.get('clientId').hasError('required')">
         {{ 'security.clientId-required' | translate }}
       </mat-error>
-      <tb-copy-button
-        matSuffix
-        miniButton="false"
-        *ngIf="usernameFormGroup.get('clientId').value"
-        [copyText]="usernameFormGroup.get('clientId').value"
-        tooltipText="{{ 'gateway.copy-client-id' | translate }}"
-        tooltipPosition="above"
-        icon="content_copy">
-      </tb-copy-button>
+      @if (usernameFormGroup.get('clientId').value) {
+        <tb-copy-button
+          matSuffix
+          miniButton="false"
+          [copyText]="usernameFormGroup.get('clientId').value"
+          tooltipText="{{ 'gateway.copy-client-id' | translate }}"
+          tooltipPosition="above"
+          icon="content_copy">
+        </tb-copy-button>
+      } @else {
+        <button type="button"
+                matSuffix
+                mat-icon-button
+                aria-label="Generate"
+                matTooltip="{{ 'device.generate-client-id' | translate }}"
+                matTooltipPosition="above"
+                (click)="generate('clientId')">
+          <mat-icon>autorenew</mat-icon>
+        </button>
+      }
       <mat-icon matIconSuffix style="cursor:pointer;"
                 matTooltip="{{ 'gateway.hints.client-id' | translate }}">info_outlined
       </mat-icon>
@@ -40,15 +51,26 @@
       <mat-error *ngIf="usernameFormGroup.get('username').hasError('required')">
         {{ 'security.username-required' | translate }}
       </mat-error>
-      <tb-copy-button
-        matSuffix
-        miniButton="false"
-        *ngIf="usernameFormGroup.get('username').value"
-        [copyText]="usernameFormGroup.get('username').value"
-        tooltipText="{{ 'gateway.copy-username' | translate }}"
-        tooltipPosition="above"
-        icon="content_copy">
-      </tb-copy-button>
+      @if (usernameFormGroup.get('username').value) {
+        <tb-copy-button
+          matSuffix
+          miniButton="false"
+          [copyText]="usernameFormGroup.get('username').value"
+          tooltipText="{{ 'gateway.copy-username' | translate }}"
+          tooltipPosition="above"
+          icon="content_copy">
+        </tb-copy-button>
+      } @else {
+        <button type="button"
+                matSuffix
+                mat-icon-button
+                aria-label="Generate"
+                matTooltip="{{ 'device.generate-user-name' | translate }}"
+                matTooltipPosition="above"
+                (click)="generate('username')">
+          <mat-icon>autorenew</mat-icon>
+        </button>
+      }
       <mat-icon matIconSuffix style="cursor:pointer;"
                 matTooltip="{{ 'gateway.hints.username' | translate }}">info_outlined
       </mat-icon>
@@ -57,15 +79,26 @@
   <mat-form-field appearance="outline" subscriptSizing="dynamic" style="width: 100%">
     <mat-label translate>gateway.password</mat-label>
     <input matInput formControlName="password"/>
-    <tb-copy-button
-      matSuffix
-      miniButton="false"
-      *ngIf="usernameFormGroup.get('password').value"
-      [copyText]="usernameFormGroup.get('password').value"
-      tooltipText="{{ 'gateway.copy-password' | translate }}"
-      tooltipPosition="above"
-      icon="content_copy">
-    </tb-copy-button>
+    @if (usernameFormGroup.get('password').value) {
+      <tb-copy-button
+        matSuffix
+        miniButton="false"
+        [copyText]="usernameFormGroup.get('password').value"
+        tooltipText="{{ 'gateway.copy-password' | translate }}"
+        tooltipPosition="above"
+        icon="content_copy">
+      </tb-copy-button>
+    } @else {
+      <button type="button"
+              matSuffix
+              mat-icon-button
+              aria-label="Generate"
+              matTooltip="{{ 'device.generate-password' | translate }}"
+              matTooltipPosition="above"
+              (click)="generate('password')">
+        <mat-icon>autorenew</mat-icon>
+      </button>
+    }
     <mat-icon matIconSuffix style="cursor:pointer;"
               matTooltip="{{ 'gateway.hints.password' | translate }}">info_outlined
     </mat-icon>

@@ -75,7 +75,7 @@ export class SocketConfigComponent implements ControlValueAccessor, Validator, O
       address: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
       type: [SocketType.TCP],
       port: [50000, [Validators.required, Validators.min(PortLimits.MIN), Validators.max(PortLimits.MAX)]],
-      bufferSize: [1024, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]]
+      bufferSize: [1024, [Validators.required, Validators.min(1), Validators.pattern(noLeadTrailSpacesRegex)]]
     });
 
     this.socketConfigFormGroup.valueChanges

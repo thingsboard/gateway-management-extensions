@@ -70,6 +70,7 @@
       <div matSuffix
            class="see-example"
            *ngIf="helpLink"
+           (click)="$event.stopPropagation()"
            [tb-help-popup]="helpLink"
            tb-help-popup-placement="left"
            [tb-help-popup-style]="{maxWidth: '970px'}">

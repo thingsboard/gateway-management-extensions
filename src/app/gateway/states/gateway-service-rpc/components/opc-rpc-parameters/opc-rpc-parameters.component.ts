@@ -111,7 +111,7 @@ export class OpcRpcParametersComponent implements ControlValueAccessor, Validato
 
   writeValue(params: RPCTemplateConfigOPC): void {
     this.clearArguments();
-    params.arguments?.map(({type, value}) => ({type, [type]: value }))
+    params.arguments?.map(({type, value}) => ({type, [type + 'Value']: value }))
       .forEach(argument => this.addArgument(argument as OPCTypeValue));
     this.cdr.markForCheck();
     this.rpcParametersFormGroup.get('method').patchValue(params.method);

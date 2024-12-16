@@ -59,6 +59,7 @@
     "baudrate": "Baudrate",
     "buffer-size": "Buffer size",
     "buffer-size-required": "Buffer size is required",
+    "buffer-size-range": "Buffer size should be greater than 0",
     "bytesize": "Bytesize",
     "boolean": "Boolean",
     "bit": "Bit",
@@ -549,6 +550,7 @@
       "send-period-min": "Statistic send period can not be less then 60",
       "send-period-pattern": "Statistic send period is not valid",
       "check-connectors-configuration": "Check connectors configuration (in sec)",
+      "messages": "Messages",
       "max-payload-size-bytes": "Max payload size in bytes",
       "max-payload-size-bytes-required": "Max payload size in bytes is required",
       "max-payload-size-bytes-min": "Max payload size in bytes can not be less then 100",
@@ -745,7 +747,7 @@
       "poll-period-required": "Poll period is required.",
       "socket": {
         "attribute-on-platform-required": "Attribute on platform is required",
-        "attribute-requests-type": "The type of requested attribute can be “shared” or “client.",
+        "attribute-requests-type": "The type of requested attribute can be “shared” or “client.“",
         "with-response": "Boolean flag that specifies whether to send a response back to platform.",
         "key-telemetry": "Name for telemetry on platform.",
         "key-attribute": "Name for attribute on platform."

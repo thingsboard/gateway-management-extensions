@@ -65,14 +65,15 @@
     </div>
     <div class="tb-flex no-gap">
       <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
-        <input matInput type="number" name="value" min="0" formControlName="bufferSize"
+        <input matInput type="number" name="value" min="1" formControlName="bufferSize"
                placeholder="{{ 'gateway.set' | translate }}"/>
         <mat-icon matSuffix
                   matTooltipPosition="above"
                   matTooltipClass="tb-error-tooltip"
-                  [matTooltip]="('gateway.buffer-size-required') | translate"
+                  [matTooltip]="(socketConfigFormGroup.get('bufferSize').hasError('min') ? 'gateway.buffer-size-range' : 'gateway.buffer-size-required') | translate"
                   *ngIf="socketConfigFormGroup.get('bufferSize').hasError('required')
-                                           && socketConfigFormGroup.get('bufferSize').touched"
+                         || socketConfigFormGroup.get('bufferSize').hasError('min')
+                         && socketConfigFormGroup.get('bufferSize').touched"
                   class="tb-error">
           warning
         </mat-icon>

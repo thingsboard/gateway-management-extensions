@@ -89,6 +89,7 @@ export class MappingDataKeysPanelComponent extends PageComponent implements OnIn
 
   readonly MappingKeysType = MappingKeysType;
   readonly ReportStrategyDefaultValue = ReportStrategyDefaultValue;
+  readonly ConnectorType = ConnectorType;
 
   keysListFormArray: UntypedFormArray;
 

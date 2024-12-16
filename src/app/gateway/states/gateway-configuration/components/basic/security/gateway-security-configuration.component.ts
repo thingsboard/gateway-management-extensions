@@ -17,10 +17,8 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
-  DestroyRef,
   EventEmitter,
   forwardRef,
-  Input,
   Output
 } from '@angular/core';
 import {
@@ -33,15 +31,16 @@ import {
   Validators
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { DeviceCredentials, DeviceCredentialsType, EntityId, SharedModule } from '@shared/public-api';
+import { SharedModule } from '@shared/public-api';
 import {
   GatewayConfigSecurity,
   SecurityTypes,
   SecurityTypesTranslationsMap,
 } from '../../../models/public-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { DeviceService } from '@core/public-api';
 import { GatewayUsernameConfigurationComponent } from './gateway-username-configuration/gateway-username-configuration.component';
+import { GatewayDeviceCredentialsService } from '../../../services/gateway-device-credentials.service';
+import { generateSecret } from '@core/public-api';
 
 @Component({
   selector: 'tb-gateway-security-configuration',
@@ -67,8 +66,6 @@ import { GatewayUsernameConfigurationComponent } from './gateway-username-config
 })
 export class GatewaySecurityConfigurationComponent implements AfterViewInit, ControlValueAccessor, Validators {
 
-  @Input() device: EntityId;
-  @Output() initialCredentialsUpdated = new EventEmitter<DeviceCredentials>();
   @Output() initialized = new EventEmitter();
 
   securityFormGroup: FormGroup;
@@ -80,25 +77,23 @@ export class GatewaySecurityConfigurationComponent implements AfterViewInit, Con
   constructor(
     private fb: FormBuilder,
     private cd: ChangeDetectorRef,
-    private deviceService: DeviceService,
-    private destroyRef: DestroyRef,
+    private gatewayCredentialsService: GatewayDeviceCredentialsService,
   ) {
     this.securityFormGroup = this.createSecurityFormGroup();
     this.setupFormListeners();
   }
 
   ngAfterViewInit(): void {
-    this.checkAndFetchCredentials(this.securityFormGroup.value ?? {} as GatewayConfigSecurity);
+    const { usernamePassword, ...value } = this.securityFormGroup.value;
+    this.initialized.emit({ thingsboard: { security: usernamePassword ? { ...value, ...usernamePassword } : value } });
   }
 
   writeValue(value: GatewayConfigSecurity): void {
-    const { clientId, username, password, ...security } = value ?? {} as GatewayConfigSecurity;
-    if (security?.type === SecurityTypes.USERNAME_PASSWORD) {
-      this.securityFormGroup.patchValue({...security, usernamePassword: { clientId, username, password } }, { emitEvent: false });
+    if (value) {
+      this.updateFormBySecurityConfig(value);
     } else {
-      this.securityFormGroup.patchValue(security, { emitEvent: false });
+      this.updateFormBySecurityConfig(this.gatewayCredentialsService.credentialsToSecurityConfig(this.gatewayCredentialsService.initialCredentials));
     }
-    this.toggleBySecurityType(this.securityFormGroup.get('type').value);
   }
 
   registerOnChange(fn: (config: GatewayConfigSecurity) => {}): void {
@@ -113,6 +108,16 @@ export class GatewaySecurityConfigurationComponent implements AfterViewInit, Con
     };
   }
 
+  private updateFormBySecurityConfig(securityConfig: GatewayConfigSecurity): void {
+    const { clientId, username, password, ...security } = securityConfig ?? {} as GatewayConfigSecurity;
+    if (security?.type === SecurityTypes.USERNAME_PASSWORD) {
+      this.securityFormGroup.patchValue({...security, usernamePassword: { clientId, username, password } }, { emitEvent: false });
+    } else {
+      this.securityFormGroup.patchValue(security, { emitEvent: false });
+    }
+    this.toggleBySecurityType(this.securityFormGroup.get('type').value);
+  }
+
   private createSecurityFormGroup(): FormGroup {
     return this.fb.group({
       type: [SecurityTypes.ACCESS_TOKEN, [Validators.required]],
@@ -123,17 +128,13 @@ export class GatewaySecurityConfigurationComponent implements AfterViewInit, Con
   }
 
   private setupFormListeners(): void {
-    this.securityFormGroup.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(({ usernamePassword, ...value }) => {
+    this.securityFormGroup.valueChanges.pipe(takeUntilDestroyed()).subscribe(({ usernamePassword, ...value }) => {
       this.onChange(usernamePassword ? { ...value, ...usernamePassword } : value);
     });
-    this.listenToSecurityTypeChanges();
-    this.securityFormGroup.get('caCert').valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.cd.detectChanges());
-  }
-
-  private listenToSecurityTypeChanges(): void {
-    this.securityFormGroup.get('type').valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(type => {
+    this.securityFormGroup.get('type').valueChanges.pipe(takeUntilDestroyed()).subscribe(type => {
       this.toggleBySecurityType(type);
     });
+    this.securityFormGroup.get('caCert').valueChanges.pipe(takeUntilDestroyed()).subscribe(() => this.cd.detectChanges());
   }
 
   private toggleBySecurityType(type: SecurityTypes): void {
@@ -156,63 +157,7 @@ export class GatewaySecurityConfigurationComponent implements AfterViewInit, Con
     }
   }
 
-  private checkAndFetchCredentials(security: GatewayConfigSecurity): void {
-    if (security.type === SecurityTypes.TLS_PRIVATE_KEY) {
-      return;
-    }
-
-    this.deviceService.getDeviceCredentials(this.device.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(credentials => {
-      this.updateSecurityType(security, credentials);
-      this.updateCredentials(credentials, security);
-      this.initialCredentialsUpdated.emit({...credentials, version: null} as DeviceCredentials);
-      this.initialized.emit({ thingsboard: { security: this.securityFormGroup.value } });
-    });
-  }
-
-  private updateSecurityType(security: GatewayConfigSecurity, credentials: DeviceCredentials): void {
-    const securityType = this.determineSecurityType(security, credentials);
-    if (securityType) {
-      this.securityFormGroup.get('type').setValue(securityType, { emitEvent: false });
-      this.toggleBySecurityType(securityType);
-    }
-  }
-
-  private determineSecurityType(security: GatewayConfigSecurity, credentials: DeviceCredentials): SecurityTypes | null {
-    const isAccessToken = credentials.credentialsType === DeviceCredentialsType.ACCESS_TOKEN
-      || security.type === SecurityTypes.TLS_ACCESS_TOKEN;
-    if (isAccessToken) {
-      return security.type === SecurityTypes.TLS_ACCESS_TOKEN ? SecurityTypes.TLS_ACCESS_TOKEN : SecurityTypes.ACCESS_TOKEN;
-    }
-    return credentials.credentialsType === DeviceCredentialsType.MQTT_BASIC ? SecurityTypes.USERNAME_PASSWORD : null;
-  }
-
-  private updateCredentials(credentials: DeviceCredentials, security: GatewayConfigSecurity): void {
-    switch (credentials.credentialsType) {
-      case DeviceCredentialsType.ACCESS_TOKEN:
-        this.updateAccessTokenCredentials(credentials, security);
-        break;
-      case DeviceCredentialsType.MQTT_BASIC:
-        this.updateMqttBasicCredentials(credentials);
-        break;
-      case DeviceCredentialsType.X509_CERTIFICATE:
-        // Handle X509 certificate if needed
-        break;
-    }
-  }
-
-  private updateAccessTokenCredentials(credentials: DeviceCredentials, security: GatewayConfigSecurity): void {
-    this.securityFormGroup.get('accessToken').setValue(credentials.credentialsId, { emitEvent: false });
-    if (security.type === SecurityTypes.TLS_ACCESS_TOKEN) {
-      this.securityFormGroup.get('caCert').setValue(security.caCert, { emitEvent: false });
-    }
-  }
-
-  private updateMqttBasicCredentials(credentials: DeviceCredentials): void {
-    const parsedValue = JSON.parse(credentials.credentialsValue);
-    this.securityFormGroup.patchValue({
-      clientId: parsedValue.clientId,
-      username: parsedValue.userName,
-      password: parsedValue.password
-    }, { emitEvent: false });
+  public generateAccessToken(): void {
+    this.securityFormGroup.get('accessToken').patchValue(generateSecret(20));
   }
 }

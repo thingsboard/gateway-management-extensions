@@ -153,7 +153,7 @@ export class MappingDialogComponent extends DialogComponent<MappingDialogCompone
   }
 
   get converterType(): ConvertorType {
-    return this.mappingForm.get('converter').get('type').value;
+    return this.mappingForm.get('converter')?.get('type').value;
   }
 
   get customKeys(): Array<string> {

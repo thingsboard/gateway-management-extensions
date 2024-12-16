@@ -16,7 +16,6 @@
 
 import {
   AfterViewInit,
-  ChangeDetectorRef,
   Component,
   EventEmitter,
   forwardRef,
@@ -37,7 +36,7 @@ import {
   ValidationErrors,
   Validators
 } from '@angular/forms';
-import { coerceBoolean, DeviceCredentials, EntityId, SharedModule } from '@shared/public-api';
+import { coerceBoolean, EntityId, SharedModule } from '@shared/public-api';
 import { MatDialog } from '@angular/material/dialog';
 import {
   GatewayRemoteConfigurationDialogComponent,
@@ -64,6 +63,7 @@ import { GatewayStorageConfigurationComponent } from './storage/gateway-storage-
 import { GatewayGrpcConfigurationComponent } from './grpc/gateway-grpc-configuration.component';
 import { GatewayLogsConfigurationComponent } from './logs/gateway-logs-configuration.component';
 import { GatewaySecurityConfigurationComponent } from './security/gateway-security-configuration.component';
+import { GatewayDeviceCredentialsService } from '../../services/gateway-device-credentials.service';
 
 @Component({
   selector: 'tb-gateway-basic-configuration',
@@ -99,7 +99,6 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
   @Input() @coerceBoolean() dialogMode = false;
   @Input() @coerceBoolean() withReportStrategy = false;
 
-  @Output() initialCredentialsUpdated = new EventEmitter<DeviceCredentials>();
   @Output() initialized = new EventEmitter();
 
   @ViewChild('configGroup') configGroup: MatTabGroup;
@@ -108,13 +107,15 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
 
   basicFormGroup: FormGroup;
 
+  readonly initialCredentials$ = this.gatewayCredentialsService.initialCredentials$;
+
   private onChange: (value: GatewayConfigValue) => void = () => {};
 
   private destroy$ = new Subject<void>();
 
   constructor(private fb: FormBuilder,
               private deviceService: DeviceService,
-              private cd: ChangeDetectorRef,
+              private gatewayCredentialsService: GatewayDeviceCredentialsService,
               private dialog: MatDialog) {
     this.initBasicFormGroup();
     this.observeFormChanges();
@@ -236,7 +237,7 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
       handleDeviceRenaming: [true],
       checkingDeviceActivity: this.initCheckingDeviceActivityFormGroup(),
       security: [],
-      qos: [1, [Validators.required, Validators.min(0), Validators.max(1), Validators.pattern(/^[^.\s]+$/)]],
+      qos: ['1'],
       reportStrategy: [{
         value: { type: ReportStrategyType.OnReportPeriod, reportPeriod: ReportStrategyDefaultValue.Gateway },
         disabled: true

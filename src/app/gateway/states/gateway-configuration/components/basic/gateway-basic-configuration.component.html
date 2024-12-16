@@ -62,13 +62,13 @@
             </mat-form-field>
           </div>
         </div>
-        <tb-gateway-security-configuration formControlName="security" [device]="device" (initialCredentialsUpdated)="initialCredentialsUpdated.emit($event)" (initialized)="onInitialized($event)"/>
+        <tb-gateway-security-configuration *ngIf="initialCredentials$ | async" formControlName="security" (initialized)="onInitialized($event)"/>
         <tb-report-strategy *ngIf="withReportStrategy" [defaultValue]="ReportStrategyDefaultValue.Gateway" class="tb-form-panel" formControlName="reportStrategy"/>
       </div>
     </ng-template>
   </mat-tab>
   <mat-tab label="{{ 'gateway.logs.logs' | translate }}">
-    <tb-gateway-logs-configuration formControlName="logs" (initialized)="onInitialized($event)"/>
+    <tb-gateway-logs-configuration class="configuration-block" formControlName="logs" (initialized)="onInitialized($event)"/>
   </mat-tab>
   <mat-tab label="{{ 'gateway.storage' | translate }}">
     <tb-gateway-storage-configuration formControlName="storage" (initialized)="onInitialized($event)"/>
@@ -244,7 +244,10 @@
             </mat-form-field>
             <mat-form-field appearance="outline" class="flex">
               <mat-label translate>gateway.mqtt-qos</mat-label>
-              <input matInput formControlName="qos" type="number" min="0" max="1"/>
+              <mat-select formControlName="qos">
+                <mat-option value="0">0</mat-option>
+                <mat-option value="1">1</mat-option>
+              </mat-select>
               <mat-error *ngIf="basicFormGroup.get('thingsboard.qos').hasError('required')">
                 {{ 'gateway.mqtt-qos-required' | translate }}
               </mat-error>

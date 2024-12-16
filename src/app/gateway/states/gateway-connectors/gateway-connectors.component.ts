@@ -113,7 +113,6 @@ export class ForceErrorStateMatcher implements ErrorStateMatcher {
     SocketBasicConfigComponent,
     SocketLegacyBasicConfigComponent,
     ReportStrategyComponent,
-    AddConnectorDialogComponent,
     BacnetBasicConfigComponent,
     BacnetLegacyBasicConfigComponent
   ],
@@ -564,12 +563,13 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
   }
 
   private setInitialConnectorValues(connector: GatewayConnector): void {
-    const {basicConfig, mode, ...initialConnector} = connector;
+    const {basicConfig, mode, enableRemoteLogging, ...initialConnector} = connector;
     this.toggleReportStrategy(connector);
     this.connectorForm.get('mode').setValue(this.allowBasicConfig.has(connector.type)
       ? connector.mode ?? ConfigurationModes.BASIC
       : null, {emitEvent: false}
     );
+    this.connectorForm.get('enableRemoteLogging').setValue(enableRemoteLogging, {emitEvent: false});
     this.connectorForm.patchValue(initialConnector, {emitEvent: false});
   }
 
