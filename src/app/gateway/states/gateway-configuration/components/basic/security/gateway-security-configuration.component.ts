@@ -157,7 +157,7 @@ export class GatewaySecurityConfigurationComponent implements AfterViewInit, Con
     }
   }
 
-  public generateAccessToken(): void{
+  public generateAccessToken(): void {
     this.securityFormGroup.get('accessToken').patchValue(generateSecret(20));
   }
 }

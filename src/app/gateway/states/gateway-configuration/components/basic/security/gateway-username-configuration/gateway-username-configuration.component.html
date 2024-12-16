@@ -25,7 +25,6 @@
         <tb-copy-button
           matSuffix
           miniButton="false"
-          *ngIf="usernameFormGroup.get('clientId').value"
           [copyText]="usernameFormGroup.get('clientId').value"
           tooltipText="{{ 'gateway.copy-client-id' | translate }}"
           tooltipPosition="above"
@@ -56,7 +55,6 @@
         <tb-copy-button
           matSuffix
           miniButton="false"
-          *ngIf="usernameFormGroup.get('username').value"
           [copyText]="usernameFormGroup.get('username').value"
           tooltipText="{{ 'gateway.copy-username' | translate }}"
           tooltipPosition="above"
@@ -85,7 +83,6 @@
       <tb-copy-button
         matSuffix
         miniButton="false"
-        *ngIf="usernameFormGroup.get('password').value"
         [copyText]="usernameFormGroup.get('password').value"
         tooltipText="{{ 'gateway.copy-password' | translate }}"
         tooltipPosition="above"

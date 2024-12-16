@@ -113,7 +113,6 @@ export class ForceErrorStateMatcher implements ErrorStateMatcher {
     SocketBasicConfigComponent,
     SocketLegacyBasicConfigComponent,
     ReportStrategyComponent,
-    AddConnectorDialogComponent,
     BacnetBasicConfigComponent,
     BacnetLegacyBasicConfigComponent
   ],

@@ -202,7 +202,7 @@ export class GatewayConfigurationComponent implements AfterViewInit {
           stream: 'ext://sys.stdout'
         },
         databaseHandler: {
-          class: 'thingsboard_gateway.tb_utility.tb_handler.TimedRotatingFileHandler',
+          class: 'thingsboard_gateway.tb_utility.tb_rotating_file_handler.TimedRotatingFileHandler',
           formatter: 'LogFormatter',
           filename: './logs/database.log',
           backupCount: 1,
@@ -241,7 +241,7 @@ export class GatewayConfigurationComponent implements AfterViewInit {
 
   private createHandlerObj(logObj: LogConfig, key: string) {
     return {
-      class: 'thingsboard_gateway.tb_utility.tb_handler.TimedRotatingFileHandler',
+      class: 'thingsboard_gateway.tb_utility.tb_rotating_file_handler.TimedRotatingFileHandler',
       formatter: 'LogFormatter',
       filename: `${logObj.filePath}/${key}.log`,
       backupCount: logObj.backupCount,
