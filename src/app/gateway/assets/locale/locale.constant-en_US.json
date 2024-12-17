@@ -18,6 +18,7 @@
     "advanced-settings": "Advanced settings",
     "application": "Application",
     "bacnet": {
+      "alt-responses-address": "Alternative responses address",
       "apdu-length": "APDU Length",
       "object-name": "Object Name",
       "object-type": {
@@ -74,6 +75,7 @@
     "address-filter": "Address filter",
     "address-filter-required": "Address filter is required",
     "advanced-connection-settings": "Advanced connection settings",
+    "advanced-configuration-settings": "Advanced configuration settings",
     "attributes": "Attributes",
     "attribute-updates": "Attribute updates",
     "attribute-on-platform": "Attribute on platform",
@@ -611,7 +613,7 @@
       "on-change": "On value change",
       "on-report-period": "On report period",
       "on-change-or-report-period": "On value change or report period",
-      "report-period": "Report period",
+      "report-period": "Report period (ms)",
       "on-received": "On received"
     },
     "source-type": {

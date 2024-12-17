@@ -239,6 +239,8 @@ export class ModbusSlaveConfigComponent implements ControlValueAccessor, Validat
   }
 
   private updateSlaveConfig(slaveConfig: ModbusSlave): void {
+    const { vendorName = '', productCode = '', vendorUrl = '', productName = '', modelName = '' } = slaveConfig.identity ?? {};
+    const identity = { vendorName, productCode, vendorUrl, productName, modelName };
     const {
       type = ModbusProtocolType.TCP,
       method = ModbusMethodType.RTU,
@@ -250,13 +252,6 @@ export class ModbusSlaveConfigComponent implements ControlValueAccessor, Validat
       byteOrder = ModbusOrderType.BIG,
       wordOrder = ModbusOrderType.BIG,
       security = {},
-      identity = {
-        vendorName: '',
-        productCode: '',
-        vendorUrl: '',
-        productName: '',
-        modelName: '',
-      },
       values = {} as ModbusRegisterValues,
       baudrate = this.modbusBaudrates[0],
       host = '',

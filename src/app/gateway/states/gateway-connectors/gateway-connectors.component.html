@@ -95,6 +95,7 @@
               <button mat-icon-button
                       matTooltip="RPC"
                       matTooltipPosition="above"
+                      [disabled]="!attribute.value.configurationJson.id"
                       (click)="connectorRpc(attribute, $event)">
                 <mat-icon>private_connectivity</mat-icon>
               </button>
@@ -121,6 +122,7 @@
                 <button mat-icon-button
                         matTooltip="RPC"
                         matTooltipPosition="above"
+                        [disabled]="!attribute.value.configurationJson.id"
                         (click)="connectorRpc(attribute, $event)">
                   <mat-icon>private_connectivity</mat-icon>
                 </button>

@@ -51,10 +51,8 @@
       *ngIf="reportStrategyFormGroup.get('type').value !== ReportStrategyType.OnChange && reportStrategyFormGroup.get('type').value !== ReportStrategyType.OnReceived"
       class="tb-form-row column-xs"
     >
-      <div class="fixed-title-width tb-required">
-        <span tbTruncateWithTooltip translate>
-          gateway.report-strategy.report-period
-        </span>
+      <div class="fixed-title-width tb-required" tbTruncateWithTooltip>
+        {{ 'gateway.report-strategy.report-period' | translate }}
       </div>
       <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
         <input matInput type="number" min="0" name="value" formControlName="reportPeriod" placeholder="{{ 'gateway.set' | translate }}"/>

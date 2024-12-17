@@ -39,6 +39,8 @@ import {
   LogAttribute,
   LogConfig,
   LogSavingPeriod,
+  logsHandlerClass,
+  logsLegacyHandlerClass,
 } from './models/public-api';
 import {
   DeviceId,
@@ -52,6 +54,7 @@ import { CommonModule } from '@angular/common';
 import { GatewayBasicConfigurationComponent, GatewayAdvancedConfigurationComponent } from './components/public-api';
 import { GatewayDeviceCredentialsService } from './services/public-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { GatewayConnectorVersionMappingUtil } from '../gateway-connectors/utils/public-api';
 
 @Component({
   selector: 'tb-gateway-configuration',
@@ -202,7 +205,7 @@ export class GatewayConfigurationComponent implements AfterViewInit {
           stream: 'ext://sys.stdout'
         },
         databaseHandler: {
-          class: 'thingsboard_gateway.tb_utility.tb_rotating_file_handler.TimedRotatingFileHandler',
+          class: this.getLogsHandlerClass(this.gatewayVersion),
           formatter: 'LogFormatter',
           filename: './logs/database.log',
           backupCount: 1,
@@ -241,7 +244,7 @@ export class GatewayConfigurationComponent implements AfterViewInit {
 
   private createHandlerObj(logObj: LogConfig, key: string) {
     return {
-      class: 'thingsboard_gateway.tb_utility.tb_rotating_file_handler.TimedRotatingFileHandler',
+      class: this.getLogsHandlerClass(this.gatewayVersion),
       formatter: 'LogFormatter',
       filename: `${logObj.filePath}/${key}.log`,
       backupCount: logObj.backupCount,
@@ -351,5 +354,11 @@ export class GatewayConfigurationComponent implements AfterViewInit {
     }, {}) as LocalLogs;
 
     return { local: localLogs, logFormat, dateFormat };
+  }
+
+  private getLogsHandlerClass(gatewayVersion: GatewayVersion = GatewayVersion.Legacy): string {
+    return GatewayConnectorVersionMappingUtil.parseVersion(gatewayVersion) >= GatewayConnectorVersionMappingUtil.parseVersion(GatewayVersion.v3_6_3)
+      ? logsHandlerClass
+      : logsLegacyHandlerClass;
   }
 }

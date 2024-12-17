@@ -245,8 +245,8 @@
             <mat-form-field appearance="outline" class="flex">
               <mat-label translate>gateway.mqtt-qos</mat-label>
               <mat-select formControlName="qos">
-                <mat-option value="0">0</mat-option>
-                <mat-option value="1">1</mat-option>
+                <mat-option [value]="0">0</mat-option>
+                <mat-option [value]="1">1</mat-option>
               </mat-select>
               <mat-error *ngIf="basicFormGroup.get('thingsboard.qos').hasError('required')">
                 {{ 'gateway.mqtt-qos-required' | translate }}

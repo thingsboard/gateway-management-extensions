@@ -53,6 +53,8 @@ import { BacnetBasicConfig_v3_6_2, BacnetLegacyBasicConfig } from '../../../mode
 })
 export class BacnetLegacyBasicConfigComponent extends GatewayConnectorBasicConfigDirective<BacnetBasicConfig_v3_6_2, BacnetLegacyBasicConfig> {
 
+  isLegacy = true;
+
   protected initBasicFormGroup(): FormGroup {
     return this.fb.group({
       application: [],

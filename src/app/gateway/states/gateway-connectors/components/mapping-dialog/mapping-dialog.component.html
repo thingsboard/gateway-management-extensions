@@ -621,7 +621,7 @@
               </mat-form-field>
             </div>
           </div>
-          <tb-device-info-table formControlName="deviceInfo" [sourceTypes]="OPCUaSourceTypes" [deviceInfoType]="DeviceInfoType.FULL" required="true">
+          <tb-device-info-table formControlName="deviceInfo" [connectorType]="ConnectorType.OPCUA" [sourceTypes]="OPCUaSourceTypes" [deviceInfoType]="DeviceInfoType.FULL" required="true">
           </tb-device-info-table>
           <div class="tb-form-row space-between tb-flex">
             <div class="fixed-title-width" translate>gateway.attributes</div>

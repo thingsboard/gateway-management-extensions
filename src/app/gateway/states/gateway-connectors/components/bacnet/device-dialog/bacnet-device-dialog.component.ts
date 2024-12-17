@@ -43,10 +43,10 @@ import {
 } from '../../../../../shared/public-api';
 import {
   BacnetDeviceConfig,
+  BacnetDeviceConfigInfo,
   BacnetDeviceKey,
   DeviceInfoType,
   ExpressionType,
-  MappingInfo,
   PortLimits,
 } from '../../../models/public-api';
 import {
@@ -79,8 +79,9 @@ export class BacnetDeviceDialogComponent extends DialogComponent<BacnetDeviceDia
 
   deviceFormGroup = this.fb.group({
     host: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-    port: [null, [Validators.required, Validators.min(PortLimits.MIN), Validators.max(PortLimits.MAX)]],
+    port: ['', [Validators.required, Validators.min(PortLimits.MIN), Validators.max(PortLimits.MAX)]],
     deviceInfo: [],
+    altResponsesAddresses: [{ value: [] as string[], disabled: this.data.hideNewFields }],
     pollPeriod: [10000, [Validators.required, Validators.min(0)]],
     timeseries: [[] as BacnetDeviceKey[]],
     attributes: [[] as BacnetDeviceKey[]],
@@ -98,7 +99,7 @@ export class BacnetDeviceDialogComponent extends DialogComponent<BacnetDeviceDia
 
   constructor(protected store: Store<AppState>,
               protected router: Router,
-              @Inject(MAT_DIALOG_DATA) public data: MappingInfo,
+              @Inject(MAT_DIALOG_DATA) public data: BacnetDeviceConfigInfo,
               public dialogRef: MatDialogRef<BacnetDeviceDialogComponent, BacnetDeviceConfig>,
               private fb: FormBuilder,
               private popoverService: TbPopoverService,

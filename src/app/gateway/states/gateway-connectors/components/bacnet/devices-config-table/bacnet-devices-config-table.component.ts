@@ -13,10 +13,14 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-import { Component, ChangeDetectionStrategy, forwardRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, forwardRef, booleanAttribute, Input } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { DeviceConfigInfo, DevicesConfigMapping } from '../../../models/public-api';
+import {
+  BacnetDeviceConfig,
+  BacnetDeviceConfigInfo,
+  DevicesConfigMapping
+} from '../../../models/public-api';
 import { BacnetDeviceDialogComponent } from '../device-dialog/bacnet-device-dialog.component';
 import { take } from 'rxjs/operators';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -47,6 +51,8 @@ import { TruncateWithTooltipDirective } from '../../../../../shared/directives/p
   ]
 })
 export class BacnetDevicesConfigTableComponent extends AbstractDevicesConfigTableComponent<DevicesConfigMapping> {
+
+  @Input({ transform: booleanAttribute }) hideNewFields = false;
 
   protected getDatasource(): TbTableDatasource<DevicesConfigMapping> {
     return new DevicesDatasource();
@@ -91,16 +97,17 @@ export class BacnetDevicesConfigTableComponent extends AbstractDevicesConfigTabl
   }
 
   private getDeviceDialog(
-    value: DevicesConfigMapping,
+    value: BacnetDeviceConfig,
     buttonTitle: string
   ): MatDialogRef<BacnetDeviceDialogComponent> {
-    return this.dialog.open<BacnetDeviceDialogComponent, DeviceConfigInfo, DevicesConfigMapping>(BacnetDeviceDialogComponent, {
+    return this.dialog.open<BacnetDeviceDialogComponent, BacnetDeviceConfigInfo, BacnetDeviceConfig>(BacnetDeviceDialogComponent, {
       disableClose: true,
       panelClass: ['tb-dialog', 'tb-fullscreen-dialog'],
       data: {
         value,
         buttonTitle,
         withReportStrategy: this.withReportStrategy,
+        hideNewFields: this.hideNewFields,
       }
     });
   }

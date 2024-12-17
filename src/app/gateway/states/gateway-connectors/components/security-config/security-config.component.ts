@@ -35,6 +35,7 @@ import {
 } from '@angular/forms';
 import {
   noLeadTrailSpacesRegex,
+  TruncateWithTooltipDirective,
 } from '../../../../shared/public-api';
 import {
   SecurityType,
@@ -67,6 +68,7 @@ import { CommonModule } from '@angular/common';
   imports:[
     CommonModule,
     SharedModule,
+    TruncateWithTooltipDirective
   ]
 })
 export class SecurityConfigComponent implements ControlValueAccessor, OnInit, OnDestroy {

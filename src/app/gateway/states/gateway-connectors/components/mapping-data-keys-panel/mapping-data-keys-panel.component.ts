@@ -38,6 +38,7 @@ import {
   ConvertorType,
   MappingDataKey,
   MappingKeysType,
+  OPCUaSourceType,
   RpcMethodsMapping,
   SourceType,
 } from '../../models/public-api';
@@ -51,7 +52,6 @@ import {
 } from '../../../../shared/public-api';
 import { CommonModule } from '@angular/common';
 import { TypeValuePanelComponent } from '../type-value-panel/type-value-panel.component';
-import { TypeValueFieldComponent } from '../type-value-field/type-value-field.component';
 import { ConnectorMappingHelpLinkPipe } from '../../pipes/public-api';
 
 @Component({
@@ -64,7 +64,6 @@ import { ConnectorMappingHelpLinkPipe } from '../../pipes/public-api';
     SharedModule,
     ReportStrategyComponent,
     TypeValuePanelComponent,
-    TypeValueFieldComponent,
     ConnectorMappingHelpLinkPipe,
   ],
 })
@@ -80,7 +79,8 @@ export class MappingDataKeysPanelComponent extends PageComponent implements OnIn
   @Input() convertorType: ConvertorType;
   @Input() sourceType: SourceType;
   @Input() valueTypeEnum = MappingValueType;
-  @Input() valueTypes = mappingValueTypesMap;
+  @Input() valueTypes: Map<string, unknown> = mappingValueTypesMap;
+  @Input() valueTypeKeys: Array<MappingValueType | OPCUaSourceType> = Object.values(MappingValueType) as MappingValueType[];
   @Input() @coerceBoolean() rawData = false;
   @Input() @coerceBoolean() withReportStrategy = true;
   @Input() popover: TbPopoverComponent<MappingDataKeysPanelComponent>;
@@ -123,7 +123,8 @@ export class MappingDataKeysPanelComponent extends PageComponent implements OnIn
     } else {
       dataKeyFormGroup = this.fb.group({
         key: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-        typeValue: [],
+        type: [this.rawData ? 'raw' : this.valueTypeKeys[0]],
+        value: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
         reportStrategy: [{value: null, disabled: this.isReportStrategyDisabled()}]
       });
     }
@@ -143,10 +144,9 @@ export class MappingDataKeysPanelComponent extends PageComponent implements OnIn
   }
 
   applyKeysData(): void {
-    let keys = this.keysListFormArray.value.map(({ typeValue, reportStrategy, ...key }) => ({
+    let keys = this.keysListFormArray.value.map(({ reportStrategy, ...key }) => ({
       ...key,
       ...reportStrategy && { reportStrategy },
-      ...typeValue && { ...typeValue }
     }));
     if (this.keysType === MappingKeysType.CUSTOM) {
       keys = {};
@@ -182,7 +182,8 @@ export class MappingDataKeysPanelComponent extends PageComponent implements OnIn
           const { key, value, type, reportStrategy } = keyData;
           dataKeyFormGroup = this.fb.group({
             key: [key, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-            typeValue: [{type, value}],
+            type: [type],
+            value: [value, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
             reportStrategy: [{ value: reportStrategy, disabled: this.isReportStrategyDisabled()}]
           });
         }
@@ -193,18 +194,7 @@ export class MappingDataKeysPanelComponent extends PageComponent implements OnIn
   }
 
   valueTitle(keyControl: FormControl): string {
-    let value;
-    switch (this.keysType) {
-      case MappingKeysType.CUSTOM:
-        value = keyControl.get('value').value;
-        break;
-      case MappingKeysType.RPC_METHODS:
-        value = keyControl.get('method').value;
-        break;
-      default:
-        value = keyControl.get('typeValue').value?.value;
-        break;
-    }
+    const value = this.keysType === MappingKeysType.RPC_METHODS ? keyControl.get('method').value : keyControl.get('value').value;
     if (isDefinedAndNotNull(value)) {
       if (typeof value === 'object') {
         return JSON.stringify(value);
