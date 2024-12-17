@@ -608,12 +608,15 @@
       "memory-storage": "Memory storage",
       "sqlite": "SQLITE"
     },
+    "suffix": {
+      "ms": "ms"
+    },
     "report-strategy": {
       "label": "Report strategy",
       "on-change": "On value change",
       "on-report-period": "On report period",
       "on-change-or-report-period": "On value change or report period",
-      "report-period": "Report period (ms)",
+      "report-period": "Report period",
       "on-received": "On received"
     },
     "source-type": {
