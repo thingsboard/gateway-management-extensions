@@ -207,7 +207,7 @@ export interface BacnetApplicationConfig {
   vendorIdentifier?: number;
 }
 
-export interface BacnetApplicationLegacyConfig extends Omit<BacnetApplicationConfig, 'host' | 'port'> {
+export interface BacnetApplicationLegacyConfig extends Omit<BacnetApplicationConfig, 'host' | 'port' | 'altResponsesAddresses'> {
   address: string;
 }
 
@@ -220,6 +220,7 @@ export interface BacnetDeviceConfig {
   timeseries: BacnetKey[];
   attributeUpdates: AttributeUpdateBacnetKey[];
   serverSideRpc: ServerSideRpcBacnetKey[];
+  altResponsesAddresses: string[];
 }
 
 export interface BacnetKey {
@@ -259,4 +260,11 @@ export interface BacnetLegacyDeviceConfig {
   timeseries: BacnetLegacyKey[];
   attributeUpdates: AttributeUpdateBacnetLegacyKey[];
   serverSideRpc: ServerSideRpcBacnetLegacyKey[];
+}
+
+export interface BacnetDeviceConfigInfo {
+  value: BacnetDeviceConfig;
+  buttonTitle: string;
+  withReportStrategy?: boolean;
+  hideNewFields?: boolean;
 }

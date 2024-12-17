@@ -37,6 +37,8 @@ export abstract class GatewayConnectorBasicConfigDirective<InputBasicConfig, Out
 
   @Output() initialized = new EventEmitter<void>();
 
+  isLegacy = false;
+
   protected fb = inject(FormBuilder);
   protected onChange!: (value: OutputBasicConfig) => void;
 

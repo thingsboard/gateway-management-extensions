@@ -18,6 +18,7 @@
     "advanced-settings": "Advanced settings",
     "application": "Application",
     "bacnet": {
+      "alt-responses-address": "Alternative responses address",
       "apdu-length": "APDU Length",
       "object-name": "Object Name",
       "object-type": {
@@ -74,6 +75,7 @@
     "address-filter": "Address filter",
     "address-filter-required": "Address filter is required",
     "advanced-connection-settings": "Advanced connection settings",
+    "advanced-configuration-settings": "Advanced configuration settings",
     "attributes": "Attributes",
     "attribute-updates": "Attribute updates",
     "attribute-on-platform": "Attribute on platform",
@@ -605,6 +607,9 @@
       "file-storage": "File storage",
       "memory-storage": "Memory storage",
       "sqlite": "SQLITE"
+    },
+    "suffix": {
+      "ms": "ms"
     },
     "report-strategy": {
       "label": "Report strategy",

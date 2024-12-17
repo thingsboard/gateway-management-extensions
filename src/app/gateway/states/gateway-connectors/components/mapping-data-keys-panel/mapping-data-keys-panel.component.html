@@ -56,8 +56,8 @@
                         </mat-icon>
                         <div matSuffix
                              class="see-example"
-                             *ngIf="connectorType === ConnectorType.MQTT && connectorType | getConnectorMappingHelpLink : this.keysType : keyControl.get('typeValue').value?.type : convertorType"
-                             [tb-help-popup]="connectorType | getConnectorMappingHelpLink : this.keysType : keyControl.get('typeValue').value?.type : convertorType"
+                             *ngIf="connectorType === ConnectorType.MQTT && connectorType | getConnectorMappingHelpLink : this.keysType : keyControl.get('type').value : convertorType"
+                             [tb-help-popup]="connectorType | getConnectorMappingHelpLink : this.keysType : keyControl.get('type').value : convertorType"
                              tb-help-popup-placement="left"
                              [tb-help-popup-style]="{maxWidth: '970px'}">
                         </div>
@@ -66,11 +66,67 @@
                   </div>
                   <div class="tb-form-panel stroked">
                     <div class="tb-form-panel-title" translate>gateway.connector-side</div>
-                    <tb-type-value-field
-                      formControlName="typeValue"
-                      [rawData]="rawData"
-                      [helpLink]="connectorType | getConnectorMappingHelpLink : this.keysType : keyControl.get('typeValue').value?.type : convertorType"
-                    />
+                    <div class="tb-form-row">
+                      <div class="fixed-title-width tb-required" translate>gateway.type</div>
+                      <mat-form-field class="tb-flex no-gap fill-width" appearance="outline" subscriptSizing="dynamic">
+                        <mat-select formControlName="type">
+                          <mat-select-trigger *ngIf="!rawData">
+                            <div class="tb-flex align-center">
+                              <mat-icon *ngIf="valueTypes.get(keyControl.get('type').value)?.icon" class="tb-mat-18"
+                                        [svgIcon]="valueTypes.get(keyControl.get('type').value)?.icon">
+                              </mat-icon>
+                              <span *ngIf="!rawData; else rawText">
+                                {{ valueTypes.get(keyControl.get('type').value)?.name ?? valueTypes.get(keyControl.get('type').value) | translate }}
+                              </span>
+                              <ng-template #rawText>
+                                <span>{{ 'gateway.raw' | translate }}</span>
+                              </ng-template>
+                            </div>
+                          </mat-select-trigger>
+                          <ng-container *ngIf="!rawData; else rawOption">
+                            <mat-option *ngFor="let valueType of valueTypeKeys" [value]="valueType">
+                              <mat-icon *ngIf="valueTypes.get(valueType)?.icon" class="tb-mat-20"
+                                        svgIcon="{{ valueTypes.get(valueType).icon }}">
+                              </mat-icon>
+                              <span>
+                                {{ valueTypes.get(valueType)?.name ?? valueTypes.get(valueType) | translate }}
+                              </span>
+                            </mat-option>
+                          </ng-container>
+                          <ng-template #rawOption>
+                            <mat-option [value]="'raw'">
+                              <span>{{ 'gateway.raw' | translate }}</span>
+                            </mat-option>
+                          </ng-template>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="tb-form-row column-xs flex items-center justify-between">
+                      <div class="fixed-title-width tb-required"
+                           tb-hint-tooltip-icon="{{ 'gateway.JSONPath-hint' | translate }}">
+                        {{ 'gateway.value' | translate }}
+                      </div>
+                      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="no-gap flex flex-1">
+                        <input matInput required formControlName="value"
+                               placeholder="{{ 'gateway.set' | translate }}"/>
+                        <mat-icon matSuffix
+                                  matTooltipPosition="above"
+                                  matTooltipClass="tb-error-tooltip"
+                                  [matTooltip]="'gateway.value-required' | translate"
+                                  *ngIf="keyControl.get('value').hasError('required') &&
+                                         keyControl.get('value').touched"
+                                  class="tb-error">
+                          warning
+                        </mat-icon>
+                        <div matSuffix
+                             class="see-example"
+                             *ngIf="connectorType | getConnectorMappingHelpLink : this.keysType : keyControl.get('type').value : convertorType"
+                             [tb-help-popup]="connectorType | getConnectorMappingHelpLink : this.keysType : keyControl.get('type').value : convertorType"
+                             tb-help-popup-placement="left"
+                             [tb-help-popup-style]="{maxWidth: '970px'}">
+                        </div>
+                      </mat-form-field>
+                    </div>
                   </div>
                 </div>
                 <div class="tb-form-panel no-border no-padding" *ngIf="keysType === MappingKeysType.CUSTOM">
@@ -90,7 +146,7 @@
                   </div>
                   <div class="tb-form-row column-xs">
                     <div class="fixed-title-width tb-required" translate>gateway.value</div>
-                    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="tb-inline-field flex tb-suffix-absolute">
+                    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="tb-inline-field tb-suffix-absolute flex">
                       <input matInput required formControlName="value"
                              placeholder="{{ 'gateway.set' | translate }}"/>
                       <mat-icon matSuffix

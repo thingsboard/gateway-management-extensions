@@ -242,3 +242,6 @@ export const SecurityTypesTranslationsMap = new Map<SecurityTypes, string>(
 
 export const numberInputPattern = new RegExp(/^\d{1,15}$/);
 
+export const logsHandlerClass = 'thingsboard_gateway.tb_utility.tb_rotating_file_handler.TimedRotatingFileHandler';
+
+export const logsLegacyHandlerClass = 'thingsboard_gateway.tb_utility.tb_handler.TimedRotatingFileHandler';

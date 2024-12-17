@@ -80,15 +80,13 @@ export class GatewayDeviceCredentialsService {
   }
 
   credentialsToSecurityConfig(credentials: DeviceCredentials): GatewayConfigSecurity {
-    const securityConfig = {
-      type: credentials.credentialsType === DeviceCredentialsType.MQTT_BASIC ? SecurityTypes.USERNAME_PASSWORD : SecurityTypes.ACCESS_TOKEN,
-      accessToken: credentials.credentialsId,
-    }
-    if (credentials.credentialsValue) {
+    const type = credentials.credentialsType === DeviceCredentialsType.MQTT_BASIC ? SecurityTypes.USERNAME_PASSWORD : SecurityTypes.ACCESS_TOKEN;
+    if (credentials.credentialsType !== DeviceCredentialsType.MQTT_BASIC) {
+      return { type, accessToken: credentials.credentialsId };
+    } else if (credentials.credentialsValue) {
       const { clientId, userName, password } = JSON.parse(credentials.credentialsValue);
-      return { ...securityConfig, clientId, username: userName, password } as GatewayConfigSecurity;
+      return { type, clientId, username: userName, password } as GatewayConfigSecurity;
     }
-    return securityConfig;
   }
 
   private shouldUpdateCredentials(securityConfig: GatewayConfigSecurity): boolean {

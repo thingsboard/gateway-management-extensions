@@ -237,7 +237,7 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
       handleDeviceRenaming: [true],
       checkingDeviceActivity: this.initCheckingDeviceActivityFormGroup(),
       security: [],
-      qos: ['1'],
+      qos: [1],
       reportStrategy: [{
         value: { type: ReportStrategyType.OnReportPeriod, reportPeriod: ReportStrategyDefaultValue.Gateway },
         disabled: true

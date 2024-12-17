@@ -80,11 +80,11 @@ export enum PortLimits {
 }
 
 export const GatewayConnectorConfigVersionMap = new Map<ConnectorType, GatewayVersion>([
+  [ConnectorType.BACNET, GatewayVersion.v3_6_2],
   [ConnectorType.SOCKET, GatewayVersion.v3_6_0],
   [ConnectorType.MQTT, GatewayVersion.v3_5_2],
   [ConnectorType.OPCUA, GatewayVersion.v3_5_2],
   [ConnectorType.MODBUS, GatewayVersion.v3_5_2],
-  [ConnectorType.BACNET, GatewayVersion.Current],
 ]);
 
 export interface ConnectorDeviceInfo {

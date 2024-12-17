@@ -76,7 +76,6 @@ import { MappingDataKeysPanelComponent } from '../mapping-data-keys-panel/mappin
     ConnectorMappingHelpLinkPipe,
     EllipsisChipListDirective,
     DeviceInfoTableComponent,
-    MappingDataKeysPanelComponent,
   ]
 })
 export class MappingDialogComponent extends DialogComponent<MappingDialogComponent, ConnectorMapping> implements OnDestroy {
@@ -233,6 +232,7 @@ export class MappingDialogComponent extends DialogComponent<MappingDialogCompone
         convertorType: this.converterType,
       };
       if (this.data.mappingType === MappingType.OPCUA) {
+        ctx.valueTypeKeys = Object.values(OPCUaSourceType);
         ctx.valueTypeEnum = OPCUaSourceType;
         ctx.valueTypes = SourceTypeTranslationsMap;
         ctx.sourceType = this.mappingForm.get('deviceNodeSource').value;

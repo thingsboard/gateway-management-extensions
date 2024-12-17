@@ -61,6 +61,25 @@
           }
         </mat-form-field>
       </div>
+      @if (!data.hideNewFields) {
+        <div class="tb-form-row column-xs">
+          <mat-expansion-panel class="tb-settings chips-panel w-full">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <div class="tb-form-panel-title" translate>gateway.advanced-configuration-settings</div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <tb-string-items-list
+              class="chips-list"
+              editable
+              label="{{ 'gateway.bacnet.alt-responses-address' | translate }}"
+              placeholder="{{ !deviceFormGroup.get('altResponsesAddresses').value?.length ? ('gateway.address' | translate) : '' }}"
+              floatLabel="always"
+              formControlName="altResponsesAddresses"
+            />
+          </mat-expansion-panel>
+        </div>
+      }
       <tb-device-info-table formControlName="deviceInfo" [deviceInfoType]="DeviceInfoType.FULL" [sourceTypes]="sourceTypes" [connectorType]="ConnectorType.BACNET" required="true">
       </tb-device-info-table>
       <div class="tb-form-row column-xs">

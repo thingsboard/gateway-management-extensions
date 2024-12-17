@@ -143,7 +143,7 @@ export class GatewayServiceRPCComponent implements OnInit {
     const formValues = value || this.commandForm.value;
     const commandPrefix = this.isConnector ? `${this.connectorType}_` : 'gateway_';
     const command = !this.isConnector ? formValues.command.toLowerCase() : this.getCommandFromParamsByType(formValues.params);
-    const params = formValues.params;
+    const params = { ...formValues.params, connectorId: this.ctx.stateController.getStateParams().connector_rpc.value.configurationJson.id };
     this.ctx.controlApi.sendTwoWayCommand(commandPrefix + command, params, formValues.time).subscribe({
       next: resp => {
         this.resultTime = new Date().getTime();

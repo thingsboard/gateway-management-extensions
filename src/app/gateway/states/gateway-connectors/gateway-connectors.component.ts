@@ -877,6 +877,7 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
     if (this.allowBasicConfig.has(connector.type)) {
       this.updateBasicConfigConnector(connector);
     } else {
+      this.connectorForm.get('enableRemoteLogging').setValue(connector.enableRemoteLogging, {emitEvent: false});
       this.connectorForm.patchValue({...connector, mode: null});
       this.connectorForm.markAsPristine();
       this.createJsonConfigWatcher();
