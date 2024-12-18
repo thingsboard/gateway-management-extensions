@@ -28,7 +28,7 @@ import { CommonModule } from '@angular/common';
 import { ModbusValuesComponent } from '../modbus-values/modbus-values.component';
 import { ModbusSecurityConfigComponent } from '../modbus-security-config/modbus-security-config.component';
 import { Store } from '@ngrx/store';
-import { AppState } from '@core/public-api';
+import { AppState, deleteNullProperties } from '@core/public-api';
 import { Router } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
@@ -74,6 +74,7 @@ export class ModbusLegacySlaveDialogComponent extends ModbusSlaveDialogAbstract<
       slaveResult.port = serialPort;
     }
 
+    deleteNullProperties(slaveResult);
     return slaveResult;
   }
 

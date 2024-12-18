@@ -46,6 +46,7 @@ import {
 import { takeUntil } from 'rxjs/operators';
 import { coerceBoolean, SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
+import { deleteNullProperties } from '@core/public-api';
 
 @Component({
   selector: 'tb-security-config',
@@ -108,6 +109,7 @@ export class SecurityConfigComponent implements ControlValueAccessor, OnInit, On
     this.securityFormGroup.valueChanges.pipe(
       takeUntil(this.destroy$)
     ).subscribe((value) => {
+      deleteNullProperties(value);
       this.onChange(value);
       this.onTouched();
     });

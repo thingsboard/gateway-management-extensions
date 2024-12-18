@@ -479,7 +479,6 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
       if (this.initialConnector ? this.initialConnector.name === attribute.key : true) {
         this.clearOutConnectorForm();
         this.cd.detectChanges();
-        this.connectorForm.disable();
       }
       this.updateData(true);
     });
@@ -535,9 +534,6 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
   }
 
   private addConnector(connector: GatewayConnector): void {
-    if (this.connectorForm.disabled) {
-      this.connectorForm.enable();
-    }
     if (!connector.configurationJson) {
       connector.configurationJson = {} as ConnectorBaseConfig;
     }
@@ -625,7 +621,6 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
       configVersion: [''],
       reportStrategy: [{ value: {}, disabled: true }],
     });
-    this.connectorForm.disable();
   }
 
   private getSortingDataAccessor(): (data: GatewayAttributeData, sortHeaderId: string) => string | number {
@@ -877,8 +872,7 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
     if (this.allowBasicConfig.has(connector.type)) {
       this.updateBasicConfigConnector(connector);
     } else {
-      this.connectorForm.get('enableRemoteLogging').setValue(connector.enableRemoteLogging, {emitEvent: false});
-      this.connectorForm.patchValue({...connector, mode: null});
+      this.setInitialConnectorValues(connector);
       this.connectorForm.markAsPristine();
       this.createJsonConfigWatcher();
     }

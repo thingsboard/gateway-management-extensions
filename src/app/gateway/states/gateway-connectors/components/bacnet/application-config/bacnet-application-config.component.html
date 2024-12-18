@@ -88,9 +88,19 @@
     </mat-form-field>
   </div>
   <div class="tb-form-row column-xs">
-    <div class="fixed-title-width" tb-hint-tooltip-icon="{{ 'gateway.hints.bacnet.vendor-id' | translate }}" translate>gateway.vendor-id</div>
+    <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.bacnet.vendor-id' | translate }}" translate>gateway.vendor-id</div>
     <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
       <input matInput type="number" min="0" name="value" formControlName="vendorIdentifier" placeholder="{{ 'gateway.set' | translate }}"/>
+      @if (applicationConfigFormGroup.get('vendorIdentifier').hasError('required') &&
+      applicationConfigFormGroup.get('vendorIdentifier').touched) {
+        <mat-icon matSuffix
+                  matTooltipPosition="above"
+                  matTooltipClass="tb-error-tooltip"
+                  [matTooltip]="('gateway.hints.vendor-id-required') | translate"
+                  class="tb-error">
+          warning
+        </mat-icon>
+      }
     </mat-form-field>
   </div>
   <div class="tb-form-panel stroked">

@@ -90,7 +90,7 @@ export class ReportStrategyComponent implements ControlValueAccessor, OnDestroy 
 
     this.reportStrategyFormGroup = this.fb.group({
       type: [{ value: ReportStrategyType.OnReportPeriod, disabled: true }, []],
-      reportPeriod: [{ value: this.defaultValue, disabled: true }, [Validators.required]],
+      reportPeriod: [{ value: this.defaultValue, disabled: true }, [Validators.required, Validators.min(100)]],
     });
 
     this.observeStrategyFormChange();
