@@ -29,6 +29,7 @@ import {
 import { ControlValueAccessorBaseAbstract, noLeadTrailSpacesRegex } from '../../../../../shared/public-api';
 import { GatewayPortTooltipPipe } from '../../../pipes/public-api';
 import { SegmentationType, SegmentationTypeTranslationsMap } from '../../../models/public-api';
+import { deleteNullProperties } from '@core/public-api';
 
 @Component({
   selector: 'tb-bacnet-application-config',
@@ -68,12 +69,17 @@ export class BacnetApplicationConfigComponent extends ControlValueAccessorBaseAb
       objectName: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
       host: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
       port: [null, [Validators.required, Validators.min(PortLimits.MIN), Validators.max(PortLimits.MAX)]],
-      mask: [],
+      mask: [''],
       objectIdentifier: [null, [Validators.required]],
-      vendorIdentifier: [],
+      vendorIdentifier: [null, [Validators.required]],
       maxApduLengthAccepted: [],
       segmentationSupported: [SegmentationType.BOTH],
     });
+  }
+
+  protected override mapOnChangeValue(value: BacnetApplicationConfig): BacnetApplicationConfig {
+    deleteNullProperties(value);
+    return value;
   }
 
   protected override onWriteValue(applicationConfig: BacnetApplicationConfig): void {

@@ -121,7 +121,8 @@ export class BacnetDeviceDialogComponent extends DialogComponent<BacnetDeviceDia
 
   add(): void {
     if (this.deviceFormGroup.valid) {
-      this.dialogRef.close(this.deviceFormGroup.value as BacnetDeviceConfig);
+      const { altResponsesAddresses, ...value } = this.deviceFormGroup.value;
+      this.dialogRef.close({ altResponsesAddresses: altResponsesAddresses ?? [], ...value } as BacnetDeviceConfig);
     }
   }
 
