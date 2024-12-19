@@ -58,8 +58,10 @@ export class GatewayDeviceCredentialsService {
         break;
     }
 
+    this.initialCredentialsSubject.next({ ...this.initialCredentials, ...newCredentials } as DeviceCredentials);
+
     return Object.keys(newCredentials).length
-      ? this.deviceService.saveDeviceCredentials({ ...this.initialCredentials, ...newCredentials })
+      ? this.deviceService.saveDeviceCredentials(this.initialCredentials)
       : of(null);
   }
 

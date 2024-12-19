@@ -284,6 +284,7 @@ export class GatewayConfigurationComponent implements AfterViewInit {
 
   private updateConfigs(attributes: AttributeData[]): void {
     let formValue = {} as GatewayConfigValue;
+    let logLevel = GatewayLogLevel.NONE;
 
     this.gatewayCredentialsService.setInitialCredentials(this.device);
 
@@ -310,16 +311,17 @@ export class GatewayConfigurationComponent implements AfterViewInit {
           }
           break;
         case 'mode':
-          if (attr.value) {
-          }
           formValue = { ...formValue, mode: attr.value ?? ConfigurationModes.BASIC };
           break;
         case 'RemoteLoggingLevel':
-          if (attr.value && formValue.logs) {
-            formValue = { ...formValue, logs: {...formValue.logs, logLevel: attr.value} };
+          if (attr.value) {
+            logLevel = attr.value;
           }
       }
     });
+    if (formValue.logs) {
+      formValue = { ...formValue, logs: {...formValue.logs, logLevel } };
+    }
 
     if (formValue.thingsboard?.security) {
       this.gatewayCredentialsService.initialCredentials$.pipe(filter(Boolean), take(1), takeUntilDestroyed(this.destroyRef)).subscribe(credentials => {
