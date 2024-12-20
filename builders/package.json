@@ -1,6 +1,6 @@
 {
   "name": "@tb/custom-builder",
-  "version": "1.0.0",
+  "version": "3.9.0",
   "description": "Builder for Architect",
   "builders": "builders.json",
   "scripts": {
