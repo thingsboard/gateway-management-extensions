@@ -234,7 +234,7 @@
                             "functionCode": 5,
                             "objectsCount": 1,
                             "address": 31,
-                            "value": 22
+                            "value": 1
                         }
                     ]
                 },
@@ -458,7 +458,7 @@
                                 "functionCode": 5,
                                 "objectsCount": 1,
                                 "address": 31,
-                                "value": 22
+                                "value": 1
                             }
                         ]
                     }
