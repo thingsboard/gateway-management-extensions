@@ -66,8 +66,9 @@ export abstract class GatewayConnectorVersionProcessor<BasicConfig> {
   }
 
   private isVersionDowngradeNeeded(): boolean {
-    return this.configVersion && this.configVersion >= GatewayConnectorVersionMappingUtil.parseVersion(GatewayConnectorConfigVersionMap.get(this.connector.type))
-      && (this.configVersion > this.gatewayVersion);
+    const connectorExpectedVersion = GatewayConnectorVersionMappingUtil.parseVersion(GatewayConnectorConfigVersionMap.get(this.connector.type));
+    return this.configVersion && this.configVersion >= connectorExpectedVersion
+      && (connectorExpectedVersion > this.gatewayVersion);
   }
 
   protected abstract getDowngradedVersion(): GatewayConnector<BasicConfig>;
