@@ -19,6 +19,7 @@ import {
   GatewayConnector,
   ReportStrategyConfig,
   GatewayLogLevel,
+  GatewayConfigCommand,
 } from '../../../shared/public-api';
 
 export interface GatewayConfigValue {
@@ -63,6 +64,7 @@ export interface GatewayGeneralConfig {
   statistics: {
     enable: boolean;
     statsSendPeriodInSeconds: number;
+    customStatsSendPeriodInSeconds: number;
     commands: GatewayConfigCommand[];
   };
   maxPayloadSizeBytes: number;
@@ -99,12 +101,6 @@ export interface GatewayUsernamePasswordConfig {
   clientId?: string;
   username?: string;
   password?: string;
-}
-
-export interface GatewayConfigCommand {
-  attributeOnGateway: string;
-  command: string;
-  timeout: number;
 }
 
 export interface LogConfig {

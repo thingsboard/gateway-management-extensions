@@ -99,6 +99,22 @@
               {{ 'gateway.statistics.send-period-pattern' | translate }}
             </mat-error>
           </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label translate>gateway.statistics.custom-send-period</mat-label>
+            <input matInput formControlName="customStatsSendPeriodInSeconds" type="number" min="60"/>
+            <mat-error
+              *ngIf="basicFormGroup.get('thingsboard.statistics.customStatsSendPeriodInSeconds').hasError('required')">
+              {{ 'gateway.statistics.custom-send-period-required' | translate }}
+            </mat-error>
+            <mat-error
+              *ngIf="basicFormGroup.get('thingsboard.statistics.customStatsSendPeriodInSeconds').hasError('min')">
+              {{ 'gateway.statistics.custom-send-period-min' | translate }}
+            </mat-error>
+            <mat-error
+              *ngIf="basicFormGroup.get('thingsboard.statistics.customStatsSendPeriodInSeconds').hasError('pattern')">
+              {{ 'gateway.statistics.custom-send-period-pattern' | translate }}
+            </mat-error>
+          </mat-form-field>
         </div>
         <div class="tb-form-panel">
           <div class="tb-form-panel-title" translate>gateway.statistics.commands</div>
@@ -114,6 +130,9 @@
                     <mat-error *ngIf="commandControl.get('attributeOnGateway').hasError('required')">
                       {{ 'gateway.statistics.attribute-name-required' | translate }}
                     </mat-error>
+                  <mat-error *ngIf="commandControl.get('attributeOnGateway').hasError('duplicateName')">
+                      {{ 'gateway.statistics.name-already-exists' | translate }}
+                  </mat-error>
                     <mat-icon matIconSuffix style="cursor:pointer;"
                               matTooltip="{{ 'gateway.hints.attribute' | translate }}">info_outlined
                     </mat-icon>
@@ -135,19 +154,37 @@
                     </mat-icon>
                   </mat-form-field>
                 </section>
-                <mat-form-field appearance="outline" class="mat-block">
-                  <mat-label translate>gateway.statistics.command</mat-label>
-                  <input matInput formControlName="command"/>
-                  <mat-error *ngIf="commandControl.get('command').hasError('required')">
-                    {{ 'gateway.statistics.command-required' | translate }}
-                  </mat-error>
-                  <mat-error *ngIf="commandControl.get('command').hasError('pattern')">
-                    {{ 'gateway.statistics.command-pattern' | translate }}
-                  </mat-error>
-                  <mat-icon matIconSuffix style="cursor:pointer;"
-                            matTooltip="{{ 'gateway.hints.command' | translate }}">info_outlined
-                  </mat-icon>
-                </mat-form-field>
+                <section>
+                  <mat-form-field appearance="outline" class="mat-block">
+                    <mat-label translate>gateway.statistics.command</mat-label>
+                    <input matInput formControlName="command"/>
+                    <mat-error *ngIf="commandControl.get('command').hasError('required')">
+                      {{ 'gateway.statistics.command-required' | translate }}
+                    </mat-error>
+                    <mat-error *ngIf="commandControl.get('command').hasError('pattern')">
+                      {{ 'gateway.statistics.command-pattern' | translate }}
+                    </mat-error>
+                    <mat-icon matIconSuffix style="cursor:pointer;"
+                              matTooltip="{{ 'gateway.hints.command' | translate }}">info_outlined
+                    </mat-icon>
+                  </mat-form-field>
+                </section>
+                <section>
+                  <mat-expansion-panel class="tb-settings pb-4">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        <div class="tb-form-panel-title" translate>gateway.advanced-settings</div>
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <mat-form-field appearance="outline" class="flex">
+                      <mat-label translate>gateway.statistics.install-cmd</mat-label>
+                      <input matInput formControlName="installCmd"/>
+                      <mat-icon matIconSuffix class="cursor-pointer"
+                                matTooltip="{{ 'gateway.hints.install-cmd' | translate }}">info_outlined
+                      </mat-icon>
+                    </mat-form-field>
+                  </mat-expansion-panel>
+                </section>
               </section>
               <button mat-icon-button (click)="removeCommandControl($index, $event)"
                       class="tb-box-button"

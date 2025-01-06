@@ -59,6 +59,7 @@ export class GatewayServiceRPCConnectorTemplatesComponent {
   public readonly isObject = (value: unknown) => isLiteralObject(value);
   public readonly isArray = (value: unknown) => Array.isArray(value);
   public readonly SNMPMethodsTranslations = SNMPMethodsTranslations;
+  readonly ConnectorType = ConnectorType;
 
   constructor(private attributeService: AttributeService) {
   }

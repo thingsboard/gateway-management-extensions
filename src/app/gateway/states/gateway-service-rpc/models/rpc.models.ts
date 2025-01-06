@@ -13,7 +13,7 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-import { MappingValueType, ModbusDataType, ValueType } from '../../../shared/models/public-api';
+import { ConnectorType, MappingValueType, ModbusDataType, ValueType } from '../../../shared/models/public-api';
 
 export interface RPCCommand {
   command: string;
@@ -120,6 +120,7 @@ export enum SocketEncodings {
 export interface RPCTemplate {
   name?: string;
   config: RPCTemplateConfig;
+  type: ConnectorType;
 }
 
 export interface RPCTemplateConfig {

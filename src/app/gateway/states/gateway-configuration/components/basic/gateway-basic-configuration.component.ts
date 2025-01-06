@@ -33,7 +33,9 @@ import {
   FormGroup,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
+  UntypedFormControl,
   ValidationErrors,
+  ValidatorFn,
   Validators
 } from '@angular/forms';
 import { coerceBoolean, EntityId, SharedModule } from '@shared/public-api';
@@ -46,6 +48,8 @@ import { DeviceService } from '@core/public-api';
 import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import {
+  GatewayConfigCommand,
+  noLeadTrailSpacesRegex,
   ReportStrategyComponent,
   ReportStrategyDefaultValue,
   ReportStrategyType
@@ -54,7 +58,6 @@ import { CommonModule } from '@angular/common';
 import {
   GatewayBasicConfigTab,
   GatewayBasicConfigTabKey,
-  GatewayConfigCommand,
   GatewayConfigValue,
   numberInputPattern,
 } from '../../models/public-api';
@@ -152,6 +155,7 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
   writeValue(basicConfig: GatewayConfigValue): void {
     this.basicFormGroup.patchValue(basicConfig, {emitEvent: false});
     const commands = basicConfig?.thingsboard?.statistics?.commands ?? [];
+    this.commandFormArray().clear({emitEvent: false});
     commands.forEach((command: GatewayConfigCommand) => this.addCommand(command, false));
   }
 
@@ -193,15 +197,25 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
   }
 
   addCommand(command?: GatewayConfigCommand, emitEvent: boolean = true): void {
-    const { attributeOnGateway = null, command: cmd = null, timeout = null } = command || {};
+    const { attributeOnGateway = null, command: cmd = null, timeout = null, installCmd = '' } = command || {};
 
     const commandFormGroup = this.fb.group({
-      attributeOnGateway: [attributeOnGateway, [Validators.required, Validators.pattern(/^[^.\s]+$/)]],
+      attributeOnGateway: [attributeOnGateway, [Validators.required, Validators.pattern(/^[^.\s]+$/), this.uniqNameRequired()]],
       command: [cmd, [Validators.required, Validators.pattern(/^(?=\S).*\S$/)]],
-      timeout: [timeout, [Validators.required, Validators.min(1), Validators.pattern(numberInputPattern), Validators.pattern(/^[^.\s]+$/)]]
+      timeout: [timeout, [Validators.required, Validators.min(1), Validators.pattern(numberInputPattern), Validators.pattern(/^[^.\s]+$/)]],
+      installCmd: [installCmd, Validators.pattern(noLeadTrailSpacesRegex)]
     });
 
     this.commandFormArray().push(commandFormGroup, { emitEvent });
+  }
+
+  private uniqNameRequired(): ValidatorFn {
+    return (control: UntypedFormControl) => {
+      const newName = control.value?.trim().toLowerCase();
+      const isDuplicate = newName && this.commandFormArray().value.some(command => command.attributeOnGateway?.toLowerCase() === newName)
+
+      return isDuplicate ? { duplicateName: { valid: false } } : null;
+    };
   }
 
   onInitialized(value: GatewayConfigValue): void {
@@ -229,6 +243,7 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
       statistics: this.fb.group({
         enable: [true],
         statsSendPeriodInSeconds: [3600, [Validators.required, Validators.min(60), Validators.pattern(numberInputPattern)]],
+        customStatsSendPeriodInSeconds: [3600, [Validators.required, Validators.min(60), Validators.pattern(numberInputPattern)]],
         commands: this.fb.array([])
       }),
       maxPayloadSizeBytes: [8196, [Validators.required, Validators.min(100), Validators.pattern(numberInputPattern)]],

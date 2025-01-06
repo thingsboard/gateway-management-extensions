@@ -1,0 +1,27 @@
+:host {
+  .edit-command-container {
+    min-width: 40vw;
+    width: 50vw;
+  }
+}
+:host ::ng-deep {
+  .pointer-event {
+    pointer-events: all;
+  }
+
+  .toggle-group span {
+    padding: 0 25px;
+  }
+
+  .mat-mdc-form-field-icon-suffix {
+    color: #E0E0E0;
+    &:hover {
+      color: #9E9E9E;
+    }
+  }
+
+  .mat-mdc-form-field-icon-suffix {
+    display: flex;
+    align-items: center;
+  }
+}

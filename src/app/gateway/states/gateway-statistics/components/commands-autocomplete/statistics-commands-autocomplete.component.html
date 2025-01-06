@@ -1,0 +1,87 @@
+<!--
+
+    Copyright © 2016-2024 The Thingsboard Authors
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<mat-form-field [formGroup]="selectStatisticsCommandGroup" class="mat-block" appearance="outline">
+  <mat-label translate>gateway.statistics.name</mat-label>
+  <input matInput type="text"
+         #commandInput
+         formControlName="command"
+         [matAutocomplete]="commandAutocomplete"
+         [attr.aria-label]="'gateway.statistics.commands' | translate"
+  >
+  @if (selectStatisticsCommandGroup.get('command').value) {
+    <button type="button"
+            matTooltip="{{ 'action.clear' | translate }}"
+            matTooltipPosition="above"
+            class="action-button"
+            matSuffix mat-icon-button aria-label="Clear"
+            (click)="clear()">
+      <mat-icon class="material-icons">close</mat-icon>
+    </button>
+    @if (selectStatisticsCommandGroup.get('command').value?.attributeOnGateway) {
+      <button type="button"
+              matSuffix mat-icon-button aria-label="Edit"
+              matTooltip="{{ 'action.edit' | translate }}"
+              class="action-button"
+              matTooltipPosition="above"
+              (click)="onEditClick($event)"
+      >
+        <mat-icon class="material-icons">edit</mat-icon>
+      </button>
+      <button type="button"
+              matSuffix mat-icon-button aria-label="Edit"
+              matTooltip="{{ 'action.delete' | translate }}"
+              class="action-button"
+              matTooltipPosition="above"
+              (click)="onDeleteClick($event)"
+      >
+        <mat-icon class="material-icons">delete</mat-icon>
+      </button>
+    }
+  } @else {
+    <button mat-button color="primary" matSuffix (click)="onCreateNewClick($event)">
+      <span class="whitespace-nowrap">{{ 'notification.create-new' | translate }}</span>
+    </button>
+  }
+  <mat-autocomplete
+    class="tb-autocomplete"
+    #commandAutocomplete="matAutocomplete"
+    [displayWith]="displayCommandFn">
+    @for (command of filteredCommands$ | async; track command.attributeOnGateway) {
+      <mat-option [value]="command">
+        <span [innerHTML]="command.attributeOnGateway | highlight: (searchText$ | async)"></span>
+      </mat-option>
+    }
+    @if (!(filteredCommands$ | async)?.length) {
+      <mat-option [value]="null" class="tb-not-found">
+        <div class="tb-not-found-content" (click)="$event.stopPropagation()">
+          @if (searchText$ | async) {
+            <span>
+            {{ translate.get('gateway.statistics.no-commands-matching',
+              { command: truncate.transform((searchText$ | async), true, 6, &apos;...&apos;)}) | async }}
+          </span>
+          } @else {
+            <span translate>gateway.statistics.no-command-found</span>
+          }
+          <span>
+          <a (click)="onCreateNewClick($event)" translate>gateway.create-new-one</a>
+        </span>
+        </div>
+      </mat-option>
+    }
+  </mat-autocomplete>
+</mat-form-field>
