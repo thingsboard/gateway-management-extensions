@@ -13,15 +13,15 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<mat-form-field [formGroup]="selectStatisticsCommandGroup" class="mat-block" appearance="outline">
+<mat-form-field class="mat-block" appearance="outline">
   <mat-label translate>gateway.statistics.name</mat-label>
   <input matInput type="text"
          #commandInput
-         formControlName="command"
+         [formControl]="selectStatisticsCommandControl"
          [matAutocomplete]="commandAutocomplete"
          [attr.aria-label]="'gateway.statistics.commands' | translate"
   >
-  @if (selectStatisticsCommandGroup.get('command').value) {
+  @if (selectStatisticsCommandControl.value) {
     <button type="button"
             matTooltip="{{ 'action.clear' | translate }}"
             matTooltipPosition="above"
@@ -30,7 +30,7 @@
             (click)="clear()">
       <mat-icon class="material-icons">close</mat-icon>
     </button>
-    @if (selectStatisticsCommandGroup.get('command').value?.attributeOnGateway) {
+    @if (selectStatisticsCommandControl.value?.attributeOnGateway) {
       <button type="button"
               matSuffix mat-icon-button aria-label="Edit"
               matTooltip="{{ 'action.edit' | translate }}"

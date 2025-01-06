@@ -54,24 +54,22 @@ export class StatisticsCommandsAutocompleteComponent implements ControlValueAcce
   onEditClicked = output<GatewayConfigCommand>();
   onDeleteClicked = output<GatewayConfigCommand>();
 
-  selectStatisticsCommandGroup = this.fb.group({
-    command: []
-  });
+  selectStatisticsCommandControl = this.fb.control({});
 
-  searchText$: Observable<string> = this.selectStatisticsCommandGroup.get('command').valueChanges
+  searchText$: Observable<string> = this.selectStatisticsCommandControl.valueChanges
       .pipe(
           map(value => value ? (typeof value === 'string' ? value : value?.attributeOnGateway) : ''),
           distinctUntilChanged(),
           shareReplay(1)
       );
 
-  filteredCommands$: Observable<GatewayConfigCommand[]> = combineLatest([this.selectStatisticsCommandGroup.get('command').valueChanges, toObservable(this.commands)])
+  filteredCommands$: Observable<GatewayConfigCommand[]> = combineLatest([this.selectStatisticsCommandControl.valueChanges, toObservable(this.commands)])
       .pipe(
           debounceTime(150),
           tap(([value, commands]: [GatewayConfigCommand | string, GatewayConfigCommand[]]) => {
             const newValue = commands.find(command => command.attributeOnGateway === value || command.attributeOnGateway === (value as GatewayConfigCommand)?.attributeOnGateway) ?? null;
             if (typeof value !== 'string' || newValue?.attributeOnGateway === value) {
-              this.selectStatisticsCommandGroup.get('command').patchValue(newValue, { emitEvent: !isEqual(newValue, value) });
+              this.selectStatisticsCommandControl.patchValue(newValue, { emitEvent: !isEqual(newValue, value) });
             }
           }),
           map(([_, commands]) => commands),
@@ -85,7 +83,7 @@ export class StatisticsCommandsAutocompleteComponent implements ControlValueAcce
   constructor(public translate: TranslateService,
               public truncate: TruncatePipe,
               private fb: UntypedFormBuilder) {
-    this.selectStatisticsCommandGroup.get('command').valueChanges
+    this.selectStatisticsCommandControl.valueChanges
       .pipe(takeUntilDestroyed())
       .subscribe(value => this.onChanges(value));
   }
@@ -97,7 +95,7 @@ export class StatisticsCommandsAutocompleteComponent implements ControlValueAcce
   registerOnTouched(_: () => {}): void {}
 
   writeValue(value: GatewayConfigCommand | null): void {
-    this.selectStatisticsCommandGroup.get('command').patchValue(value);
+    this.selectStatisticsCommandControl.patchValue(value);
   }
 
   displayCommandFn(command?: GatewayConfigCommand): string | null {
@@ -105,7 +103,7 @@ export class StatisticsCommandsAutocompleteComponent implements ControlValueAcce
   }
 
   clear(): void {
-    this.selectStatisticsCommandGroup.get('command').patchValue(null, { emitEvent: true });
+    this.selectStatisticsCommandControl.patchValue(null, { emitEvent: true });
     setTimeout(() => {
       this.commandInput.nativeElement.blur();
       this.commandInput.nativeElement.focus();
@@ -114,16 +112,16 @@ export class StatisticsCommandsAutocompleteComponent implements ControlValueAcce
 
   onEditClick(event: MouseEvent): void {
     event.stopPropagation();
-    this.onEditClicked.emit(this.selectStatisticsCommandGroup.get('command').value);
+    this.onEditClicked.emit(this.selectStatisticsCommandControl.value);
   }
 
   onDeleteClick(event: MouseEvent): void {
     event.stopPropagation();
-    this.onDeleteClicked.emit(this.selectStatisticsCommandGroup.get('command').value);
+    this.onDeleteClicked.emit(this.selectStatisticsCommandControl.value);
   }
 
   onCreateNewClick(event: MouseEvent): void {
     event.stopPropagation();
-    this.onCreateNewClicked.emit({ attributeOnGateway: this.selectStatisticsCommandGroup.get('command').value } as GatewayConfigCommand);
+    this.onCreateNewClicked.emit({ attributeOnGateway: this.selectStatisticsCommandControl.value } as GatewayConfigCommand);
   }
 }
