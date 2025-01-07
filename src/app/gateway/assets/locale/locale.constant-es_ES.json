@@ -125,7 +125,6 @@
     "statistic": "Estadística",
     "statistics": "Estadísticas",
     "statistic-commands-empty": "No hay estadísticas",
-    "commands": "Comandos",
     "send-period": "Periodo de envío de estadísticas (en segundos)",
     "send-period-required": "Se requiere periodo de envío",
     "send-period-min": "El periodo de envío no puede ser menor de 60",

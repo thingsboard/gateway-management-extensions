@@ -66,9 +66,13 @@ import { EditCustomCommandDialogData } from './models/gateway-statistics.model';
     :host {
       width: 100%;
       height: 100%;
-      padding: 0;
+      padding: 4px;
       display: flex;
       flex-direction: column;
+
+      .action-button {
+        opacity: .7;
+      }
     }
   `]
 })
@@ -138,37 +142,38 @@ export class GatewayStatisticsComponent implements AfterViewInit {
     }
   }
 
-  openEditCommandDialog(command: GatewayConfigCommand): void {
-    this.ctx.ngZone.run(() =>
-      this.dialog.open<EditCustomCommandDialogComponent, EditCustomCommandDialogData>(EditCustomCommandDialogComponent, {
-        disableClose: true,
-        panelClass: ['tb-dialog', 'tb-fullscreen-dialog'],
-        data: {
-          command,
-          existingCommands: this.commands.map(item => item.attributeOnGateway),
+  openEditCommandDialog(): void {
+    const value = this.statisticForm.get('command').value;
+    const command = typeof value === 'string' ? { attributeOnGateway: value } : value;
+    this.dialog.open<EditCustomCommandDialogComponent, EditCustomCommandDialogData>(EditCustomCommandDialogComponent, {
+      disableClose: true,
+      panelClass: ['tb-dialog', 'tb-fullscreen-dialog'],
+      data: {
+        command,
+        existingCommands: this.commands.map(item => item.attributeOnGateway),
+      }
+    }).afterClosed().pipe(
+      take(1),
+      switchMap(result => zip(this.getGatewayGeneralConfig(), of(result))),
+      switchMap(([generalConfig, result]) => {
+        this.commands = [
+          ...generalConfig.statistics.commands.filter(item => item.attributeOnGateway !== result?.prev?.attributeOnGateway),
+          ...(result?.current ? [{ ...result.current }] : []),
+        ];
+        if (result?.current) {
+          this.statisticForm.get('command').patchValue(result.current);
         }
-      }).afterClosed().pipe(
-        take(1),
-        switchMap(result => zip(this.getGatewayGeneralConfig(), of(result))),
-        switchMap(([generalConfig, result]) => {
-          this.commands = [
-            ...generalConfig.statistics.commands.filter(item => item.attributeOnGateway !== result?.prev?.attributeOnGateway),
-            ...(result?.current ? [{ ...result.current }] : []),
-          ];
-          if (result?.current) {
-            this.statisticForm.get('command').patchValue(result.current);
-          }
-          this.ctx.detectChanges();
-          return this.updateStatisticsCommands(generalConfig, this.commands);
-        }),
-        takeUntilDestroyed(this.destroyRef),
-      ).subscribe()
-    );
+        this.ctx.detectChanges();
+        return this.updateStatisticsCommands(generalConfig, this.commands);
+      }),
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe();
   }
 
-  onDeleteClick(deletedCommand: GatewayConfigCommand): void {
+  onDeleteClick(): void {
+    const deletedCommand = this.statisticForm.get('command').value.attributeOnGateway;
     this.dialogService.confirm(
-      this.ctx.translate.instant('gateway.statistics.delete-command', { command: deletedCommand.attributeOnGateway }),
+      this.ctx.translate.instant('gateway.statistics.delete-command', { command: deletedCommand }),
       this.ctx.translate.instant('gateway.statistics.delete-command-data'),
       this.ctx.translate.instant('action.cancel'),
       this.ctx.translate.instant('action.confirm'),
@@ -179,7 +184,7 @@ export class GatewayStatisticsComponent implements AfterViewInit {
         switchMap(() => this.getGatewayGeneralConfig()),
         switchMap((generalConfig) => {
           this.commands = [
-            ...generalConfig.statistics.commands.filter(item => item.attributeOnGateway !== deletedCommand?.attributeOnGateway),
+            ...generalConfig.statistics.commands.filter(item => item.attributeOnGateway !== deletedCommand),
           ];
           this.ctx.detectChanges();
           return this.updateStatisticsCommands(generalConfig, this.commands);

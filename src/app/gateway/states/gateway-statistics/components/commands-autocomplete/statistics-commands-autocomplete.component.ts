@@ -49,10 +49,7 @@ export class StatisticsCommandsAutocompleteComponent implements ControlValueAcce
   @ViewChild('commandInput', { static: true }) commandInput: ElementRef;
 
   commands = input<GatewayConfigCommand[]>();
-
   onCreateNewClicked = output<GatewayConfigCommand>();
-  onEditClicked = output<GatewayConfigCommand>();
-  onDeleteClicked = output<GatewayConfigCommand>();
 
   selectStatisticsCommandControl = this.fb.control({});
 
@@ -62,7 +59,6 @@ export class StatisticsCommandsAutocompleteComponent implements ControlValueAcce
           distinctUntilChanged(),
           shareReplay(1)
       );
-
   filteredCommands$: Observable<GatewayConfigCommand[]> = combineLatest([this.selectStatisticsCommandControl.valueChanges, toObservable(this.commands)])
       .pipe(
           debounceTime(150),
@@ -108,16 +104,6 @@ export class StatisticsCommandsAutocompleteComponent implements ControlValueAcce
       this.commandInput.nativeElement.blur();
       this.commandInput.nativeElement.focus();
     }, 0);
-  }
-
-  onEditClick(event: MouseEvent): void {
-    event.stopPropagation();
-    this.onEditClicked.emit(this.selectStatisticsCommandControl.value);
-  }
-
-  onDeleteClick(event: MouseEvent): void {
-    event.stopPropagation();
-    this.onDeleteClicked.emit(this.selectStatisticsCommandControl.value);
   }
 
   onCreateNewClick(event: MouseEvent): void {

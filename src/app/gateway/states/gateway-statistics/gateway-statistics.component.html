@@ -14,25 +14,47 @@
   limitations under the License.
 -->
 <div class="lt-md:flex-col max-h-100% flex flex-1 flex-col">
-  <div class="tb-form-panel" [formGroup]="statisticForm">
-    <div class="tb-form-panel-title" translate>gateway.statistics.commands</div>
-    <div class="flex w-full gap-2">
-      <tb-statistics-commands-autocomplete
-        class="flex-1"
-        formControlName="command"
-        [commands]="commands"
-        (onEditClicked)="openEditCommandDialog($event)"
-        (onCreateNewClicked)="openEditCommandDialog($event)"
-        (onDeleteClicked)="onDeleteClick($event)"
-      />
-      <mat-form-field class="flex-1" appearance="outline">
-        <mat-label>{{ 'gateway.statistics.command' | translate }}</mat-label>
-        <input [tbTruncateWithTooltip]="statisticForm.get('command').value?.command ?? ('gateway.statistics.no-config-commands-found' | translate)"
-               matInput
-               [value]="statisticForm.get('command').value?.command"
-               disabled
+  <div class="flex items-center">
+    <div class="tb-form-panel stroked flex-1" [formGroup]="statisticForm">
+      <div class="tb-form-panel-title" translate>gateway.statistics.entry</div>
+      <div class="flex w-full gap-2">
+        <tb-statistics-commands-autocomplete
+          class="flex-1"
+          formControlName="command"
+          [commands]="commands"
+          (onCreateNewClicked)="openEditCommandDialog()"
+        />
+        <mat-form-field class="flex-1" appearance="outline">
+          <mat-label>{{ 'gateway.statistics.command' | translate }}</mat-label>
+          <input [tbTruncateWithTooltip]="statisticForm.get('command').value?.command ?? ('gateway.statistics.no-config-commands-found' | translate)"
+                 matInput
+                 [value]="statisticForm.get('command').value?.command ?? ('gateway.statistics.no-config-commands-found' | translate)"
+                 disabled
+          >
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="flex min-w-16 flex-col p-2">
+      @if (statisticForm.get('command').value?.attributeOnGateway) {
+        <button type="button"
+                matSuffix mat-icon-button aria-label="Edit"
+                matTooltip="{{ 'action.edit' | translate }}"
+                class="action-button"
+                matTooltipPosition="above"
+                (click)="openEditCommandDialog()"
         >
-      </mat-form-field>
+          <mat-icon class="material-icons">edit</mat-icon>
+        </button>
+        <button type="button"
+                matSuffix mat-icon-button aria-label="Edit"
+                matTooltip="{{ 'action.delete' | translate }}"
+                class="action-button"
+                matTooltipPosition="above"
+                (click)="onDeleteClick()"
+        >
+          <mat-icon class="material-icons">delete</mat-icon>
+        </button>
+      }
     </div>
   </div>
   @if (statisticForm.get('command').value?.attributeOnGateway && subscriptionData.length && subscribed) {

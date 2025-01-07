@@ -131,7 +131,6 @@
     "statistic": "إحصائية",
     "statistics": "الإحصائيات",
     "statistic-commands-empty": "لا تتوفر إحصائيات",
-    "commands": "الأوامر",
     "send-period": "فترة إرسال الإحصائيات (بالثواني)",
     "send-period-required": "فترة إرسال الإحصائيات مطلوبة",
     "send-period-min": "لا يمكن أن تكون فترة إرسال الإحصائيات أقل من 60",

@@ -19,7 +19,7 @@
          #commandInput
          [formControl]="selectStatisticsCommandControl"
          [matAutocomplete]="commandAutocomplete"
-         [attr.aria-label]="'gateway.statistics.commands' | translate"
+         [attr.aria-label]="'gateway.statistics.command' | translate"
   >
   @if (selectStatisticsCommandControl.value) {
     <button type="button"
@@ -30,28 +30,8 @@
             (click)="clear()">
       <mat-icon class="material-icons">close</mat-icon>
     </button>
-    @if (selectStatisticsCommandControl.value?.attributeOnGateway) {
-      <button type="button"
-              matSuffix mat-icon-button aria-label="Edit"
-              matTooltip="{{ 'action.edit' | translate }}"
-              class="action-button"
-              matTooltipPosition="above"
-              (click)="onEditClick($event)"
-      >
-        <mat-icon class="material-icons">edit</mat-icon>
-      </button>
-      <button type="button"
-              matSuffix mat-icon-button aria-label="Edit"
-              matTooltip="{{ 'action.delete' | translate }}"
-              class="action-button"
-              matTooltipPosition="above"
-              (click)="onDeleteClick($event)"
-      >
-        <mat-icon class="material-icons">delete</mat-icon>
-      </button>
-    }
   } @else {
-    <button mat-button color="primary" matSuffix (click)="onCreateNewClick($event)">
+    <button mat-button color="primary" class="mr-2" matSuffix (click)="onCreateNewClick($event)">
       <span class="whitespace-nowrap">{{ 'notification.create-new' | translate }}</span>
     </button>
   }
