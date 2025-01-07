@@ -62,19 +62,7 @@ import { EditCustomCommandDialogData } from './models/gateway-statistics.model';
     WidgetComponentsModule,
     CustomStatisticsTableComponent,
   ],
-  styles: [`
-    :host {
-      width: 100%;
-      height: 100%;
-      padding: 4px;
-      display: flex;
-      flex-direction: column;
-
-      .action-button {
-        opacity: .7;
-      }
-    }
-  `]
+  styleUrls: ['./gateway-statistics.component.scss']
 })
 export class GatewayStatisticsComponent implements AfterViewInit {
 
