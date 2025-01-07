@@ -536,6 +536,7 @@
       "custom-send-period-pattern": "Custom send period is not valid",
       "custom-send-period-min": "Custom send period can not be less then 60",
       "custom-send-period-required": "Custom send period is required",
+      "create-command": "Create command",
       "attributes": "Attributes",
       "telemetry": "Telemetry",
       "storage-message-count": "Storage message count",

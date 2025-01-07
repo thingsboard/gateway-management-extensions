@@ -15,7 +15,7 @@
 -->
 <div [formGroup]="editCommandFormGroup" class="edit-command-container">
   <mat-toolbar color="primary">
-    <h2>{{ "gateway.statistics.edit-command" | translate}}</h2>
+    <h2>{{ data.titleText | translate}}</h2>
     <span class="flex-1"></span>
     <div [tb-help]="commandHelpLink"></div>
     <button mat-icon-button
@@ -116,7 +116,7 @@
     <button mat-raised-button color="primary"
             (click)="apply()"
             [disabled]="editCommandFormGroup.invalid || !editCommandFormGroup.dirty">
-      {{ 'action.apply' | translate }}
+      {{ data.buttonText | translate }}
     </button>
   </div>
 </div>

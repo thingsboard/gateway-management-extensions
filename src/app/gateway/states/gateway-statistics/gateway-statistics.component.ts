@@ -132,11 +132,14 @@ export class GatewayStatisticsComponent implements AfterViewInit {
 
   openEditCommandDialog(): void {
     const value = this.statisticForm.get('command').value;
+    const isCreate = typeof value === 'string' || !value;
     const command = typeof value === 'string' ? { attributeOnGateway: value } : value;
     this.dialog.open<EditCustomCommandDialogComponent, EditCustomCommandDialogData>(EditCustomCommandDialogComponent, {
       disableClose: true,
       panelClass: ['tb-dialog', 'tb-fullscreen-dialog'],
       data: {
+        titleText: isCreate ? 'gateway.statistics.create-command' : 'gateway.statistics.edit-command',
+        buttonText: isCreate ? 'action.add' : 'action.apply',
         command,
         existingCommands: this.commands.map(item => item.attributeOnGateway),
       }

@@ -18,6 +18,8 @@ import { GatewayConfigCommand } from '../../../shared/models/public-api';
 export interface EditCustomCommandDialogData {
   command: GatewayConfigCommand;
   existingCommands: string[];
+  titleText: string;
+  buttonText: string;
 }
 
 export interface EditCustomCommandDialogResult {
