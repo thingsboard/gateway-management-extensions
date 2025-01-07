@@ -35,8 +35,8 @@
     </div>
     <mat-paginator
     [class.!hidden]="!dataSource.data.length"
-    [length]="dataSource?.data?.length || 0"
-    [pageSize]="10"
+    [length]="dataSource?.data?.length ?? 0"
+    [pageSize]="defaultPageSizes[0]"
     [pageSizeOptions]="defaultPageSizes"
     showFirstLastButtons
     />
