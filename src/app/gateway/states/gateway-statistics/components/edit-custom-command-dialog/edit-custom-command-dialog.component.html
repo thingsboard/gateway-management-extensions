@@ -31,12 +31,19 @@
           <mat-form-field appearance="outline" class="flex">
             <mat-label translate>gateway.statistics.attribute-name</mat-label>
             <input matInput formControlName="attributeOnGateway"/>
-            <mat-error *ngIf="editCommandFormGroup.get('attributeOnGateway').hasError('required')">
-              {{ 'gateway.statistics.attribute-name-required' | translate }}
-            </mat-error>
-            <mat-error *ngIf="editCommandFormGroup.get('attributeOnGateway').hasError('duplicateName')">
-              {{ 'gateway.statistics.name-already-exists' | translate }}
-            </mat-error>
+            @if (editCommandFormGroup.get('attributeOnGateway').hasError('required')) {
+              <mat-error>
+                {{ 'gateway.statistics.attribute-name-required' | translate }}
+              </mat-error>
+            } @else if (editCommandFormGroup.get('attributeOnGateway').hasError('pattern')) {
+              <mat-error>
+                {{ 'gateway.statistics.attribute-name-pattern' | translate }}
+              </mat-error>
+            } @else if (editCommandFormGroup.get('attributeOnGateway').hasError('duplicateName')) {
+              <mat-error>
+                {{ 'gateway.statistics.name-already-exists' | translate }}
+              </mat-error>
+            }
             <mat-icon matIconSuffix class="cursor-pointer"
                       matTooltip="{{ 'gateway.hints.attribute' | translate }}">info_outlined
             </mat-icon>
@@ -44,15 +51,19 @@
           <mat-form-field appearance="outline" class="flex">
             <mat-label translate>gateway.statistics.timeout</mat-label>
             <input matInput formControlName="timeout" type="number" min="0"/>
-            <mat-error *ngIf="editCommandFormGroup.get('timeout').hasError('required')">
-              {{ 'gateway.statistics.timeout-required' | translate }}
-            </mat-error>
-            <mat-error *ngIf="editCommandFormGroup.get('timeout').hasError('min')">
-              {{ 'gateway.statistics.timeout-min' | translate }}
-            </mat-error>
-            <mat-error *ngIf="editCommandFormGroup.get('timeout').hasError('pattern')">
-              {{ 'gateway.statistics.timeout-pattern' | translate }}
-            </mat-error>
+            @if (editCommandFormGroup.get('timeout').hasError('required')) {
+              <mat-error>
+                {{ 'gateway.statistics.timeout-required' | translate }}
+              </mat-error>
+            } @else if (editCommandFormGroup.get('timeout').hasError('pattern')) {
+              <mat-error>
+                {{ 'gateway.statistics.timeout-pattern' | translate }}
+              </mat-error>
+            } @else if (editCommandFormGroup.get('timeout').hasError('min')) {
+              <mat-error>
+                {{ 'gateway.statistics.timeout-min' | translate }}
+              </mat-error>
+            }
             <mat-icon matIconSuffix class="cursor-pointer"
                       matTooltip="{{ 'gateway.hints.timeout' | translate }}">info_outlined
             </mat-icon>
@@ -62,12 +73,15 @@
           <mat-form-field appearance="outline" class="mat-block">
             <mat-label translate>gateway.statistics.command</mat-label>
             <input matInput formControlName="command"/>
-            <mat-error *ngIf="editCommandFormGroup.get('command').hasError('required')">
-              {{ 'gateway.statistics.command-required' | translate }}
-            </mat-error>
-            <mat-error *ngIf="editCommandFormGroup.get('command').hasError('pattern')">
-              {{ 'gateway.statistics.command-pattern' | translate }}
-            </mat-error>
+            @if (editCommandFormGroup.get('command').hasError('required')) {
+              <mat-error>
+                {{ 'gateway.statistics.command-required' | translate }}
+              </mat-error>
+            } @else if (editCommandFormGroup.get('command').hasError('pattern')) {
+              <mat-error>
+                {{ 'gateway.statistics.command-pattern' | translate }}
+              </mat-error>
+            }
             <mat-icon matIconSuffix class="cursor-pointer"
                       matTooltip="{{ 'gateway.hints.command' | translate }}">info_outlined
             </mat-icon>

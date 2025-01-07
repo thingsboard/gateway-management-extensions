@@ -587,6 +587,7 @@
       "timeout-pattern": "Timeout is not valid",
       "attribute-name": "Attribute name",
       "attribute-name-required": "Attribute name is required",
+      "attribute-name-pattern": "Attribute name is not valid",
       "command": "Command",
       "command-required": "Command is required",
       "command-pattern": "Command is not valid",
