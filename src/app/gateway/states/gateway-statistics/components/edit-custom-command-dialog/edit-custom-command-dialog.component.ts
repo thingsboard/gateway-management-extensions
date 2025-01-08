@@ -14,7 +14,7 @@
 /// limitations under the License.
 ///
 
-import { Component, Inject } from '@angular/core';
+import { Component, DestroyRef, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { FormBuilder, UntypedFormControl, ValidatorFn, Validators } from '@angular/forms';
@@ -27,7 +27,8 @@ import { numberInputPattern } from '../../../gateway-configuration/models/public
 import { EditCustomCommandDialogData, EditCustomCommandDialogResult } from '../../models/public-api';
 import { Observable, of } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
-import { take, takeWhile } from 'rxjs/operators';
+import { takeWhile } from 'rxjs/operators';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tb-edit-custom-command-dialog',
@@ -56,14 +57,17 @@ export class EditCustomCommandDialogComponent extends DialogComponent<EditCustom
               public dialogRef: MatDialogRef<EditCustomCommandDialogComponent, EditCustomCommandDialogResult>,
               private fb: FormBuilder,
               private dialogService: DialogService,
-              private translate: TranslateService
+              private translate: TranslateService,
+              private destroyRef: DestroyRef,
   ) {
     super(store, router, dialogRef);
     this.editCommandFormGroup.patchValue(this.data.command, { emitEvent: false });
   }
 
   cancel(): void {
-    this.confirmConnectorChange().pipe(take(1), takeWhile(Boolean)).subscribe(() => this.dialogRef.close(null));
+    this.confirmConnectorChange()
+      .pipe(takeWhile(Boolean), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.dialogRef.close(null));
   }
 
   apply(): void {

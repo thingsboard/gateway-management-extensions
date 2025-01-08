@@ -24,7 +24,7 @@
                 <mat-cell *matCellDef="let row">{{ row[0]| date:'yyyy-MM-dd HH:mm:ss' }}</mat-cell>
             </ng-container>
             <ng-container matColumnDef="message">
-                <mat-header-cell *matHeaderCellDef mat-sort-header style="width: 70%">
+                <mat-header-cell *matHeaderCellDef mat-sort-header class="w-70">
                     {{ 'widgets.gateway.message' | translate }}
                 </mat-header-cell>
                 <mat-cell *matCellDef="let row">{{ row[1] }}</mat-cell>

@@ -20,9 +20,8 @@ import {
   UntypedFormBuilder,
   NG_VALUE_ACCESSOR,
 } from '@angular/forms';
-import { combineLatest, Observable, of, shareReplay, withLatestFrom } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators';
-import { TranslateService } from '@ngx-translate/core';
+import { combineLatest, Observable, shareReplay } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { SharedModule, TruncatePipe } from '@shared/public-api';
 import { GatewayConfigCommand } from '../../../../shared/models/public-api';
@@ -49,7 +48,7 @@ export class StatisticsCommandsAutocompleteComponent implements ControlValueAcce
   @ViewChild('commandInput', { static: true }) commandInput: ElementRef;
 
   commands = input<GatewayConfigCommand[]>();
-  onCreateNewClicked = output<GatewayConfigCommand>();
+  onCreateNewClicked = output<void>();
 
   selectStatisticsCommandControl = this.fb.control({});
 
@@ -59,25 +58,23 @@ export class StatisticsCommandsAutocompleteComponent implements ControlValueAcce
           distinctUntilChanged(),
           shareReplay(1)
       );
-  filteredCommands$: Observable<GatewayConfigCommand[]> = combineLatest([this.selectStatisticsCommandControl.valueChanges, toObservable(this.commands)])
+  filteredCommands$: Observable<GatewayConfigCommand[]> = combineLatest([this.searchText$, toObservable(this.commands)])
       .pipe(
           debounceTime(150),
-          tap(([value, commands]: [GatewayConfigCommand | string, GatewayConfigCommand[]]) => {
-            const newValue = commands.find(command => command.attributeOnGateway === value || command.attributeOnGateway === (value as GatewayConfigCommand)?.attributeOnGateway) ?? null;
-            if (typeof value !== 'string' || newValue?.attributeOnGateway === value) {
-              this.selectStatisticsCommandControl.patchValue(newValue, { emitEvent: !isEqual(newValue, value) });
+          map(([value, commands]: [string, GatewayConfigCommand[]]) => {
+            const newValue = commands.find(command => command.attributeOnGateway === value) ?? null;
+            const prevValue = this.selectStatisticsCommandControl.value;
+            if (typeof prevValue !== 'string' || newValue?.attributeOnGateway === value) {
+              this.selectStatisticsCommandControl.patchValue(newValue, { emitEvent: !isEqual(newValue, prevValue) });
             }
+            return commands.filter(command => command.attributeOnGateway.toLowerCase().includes(value?.toLowerCase() ?? ''))
           }),
-          map(([_, commands]) => commands),
-          withLatestFrom(this.searchText$),
-          switchMap(([commands, value]) => of(commands.filter(command => command.attributeOnGateway.toLowerCase().includes(value?.toLowerCase() ?? '')))),
           shareReplay(1)
       );
 
   private onChanges = (_: GatewayConfigCommand | string) => {};
 
-  constructor(public translate: TranslateService,
-              public truncate: TruncatePipe,
+  constructor(public truncate: TruncatePipe,
               private fb: UntypedFormBuilder) {
     this.selectStatisticsCommandControl.valueChanges
       .pipe(takeUntilDestroyed())
@@ -108,6 +105,6 @@ export class StatisticsCommandsAutocompleteComponent implements ControlValueAcce
 
   onCreateNewClick(event: MouseEvent): void {
     event.stopPropagation();
-    this.onCreateNewClicked.emit({ attributeOnGateway: this.selectStatisticsCommandControl.value } as GatewayConfigCommand);
+    this.onCreateNewClicked.emit();
   }
 }

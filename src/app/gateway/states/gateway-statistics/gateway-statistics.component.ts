@@ -44,7 +44,7 @@ import {
   StatisticsCommandsAutocompleteComponent
 } from './components/public-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { map, switchMap, take, takeWhile } from 'rxjs/operators';
+import { map, switchMap, takeWhile } from 'rxjs/operators';
 import { GatewayConfigCommand } from '../../shared/models/public-api';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, of, zip } from 'rxjs';
@@ -134,6 +134,7 @@ export class GatewayStatisticsComponent implements AfterViewInit {
     const value = this.statisticForm.get('command').value;
     const isCreate = typeof value === 'string' || !value;
     const command = typeof value === 'string' ? { attributeOnGateway: value } : value;
+    let newValue: GatewayConfigCommand;
     this.dialog.open<EditCustomCommandDialogComponent, EditCustomCommandDialogData>(EditCustomCommandDialogComponent, {
       disableClose: true,
       panelClass: ['tb-dialog', 'tb-fullscreen-dialog'],
@@ -144,21 +145,21 @@ export class GatewayStatisticsComponent implements AfterViewInit {
         existingCommands: this.commands.map(item => item.attributeOnGateway),
       }
     }).afterClosed().pipe(
-      take(1),
       switchMap(result => zip(this.getGatewayGeneralConfig(), of(result))),
       switchMap(([generalConfig, result]) => {
         this.commands = [
           ...generalConfig.statistics.commands.filter(item => item.attributeOnGateway !== result?.prev?.attributeOnGateway),
           ...(result?.current ? [{ ...result.current }] : []),
         ];
-        if (result?.current) {
-          this.statisticForm.get('command').patchValue(result.current);
-        }
-        this.ctx.detectChanges();
+        newValue = result?.current;
         return this.updateStatisticsCommands(generalConfig, this.commands);
       }),
       takeUntilDestroyed(this.destroyRef),
-    ).subscribe();
+    ).subscribe(() => {
+      if (newValue) {
+        this.statisticForm.get('command').patchValue(newValue);
+      }
+    });
   }
 
   onDeleteClick(): void {
@@ -170,14 +171,12 @@ export class GatewayStatisticsComponent implements AfterViewInit {
       this.ctx.translate.instant('action.confirm'),
     )
       .pipe(
-        take(1),
         takeWhile(Boolean),
         switchMap(() => this.getGatewayGeneralConfig()),
         switchMap((generalConfig) => {
           this.commands = [
             ...generalConfig.statistics.commands.filter(item => item.attributeOnGateway !== deletedCommand),
           ];
-          this.ctx.detectChanges();
           return this.updateStatisticsCommands(generalConfig, this.commands);
         }),
         takeUntilDestroyed(this.destroyRef),
@@ -190,7 +189,7 @@ export class GatewayStatisticsComponent implements AfterViewInit {
       return of(null);
     }
     return this.attributeService.getEntityAttributes(gateway.id, AttributeScope.SHARED_SCOPE, ['general_configuration'])
-      .pipe(take(1), map(resp => resp[0].value))
+      .pipe(map(resp => resp[0]?.value))
   }
 
   private updateStatisticsCommands(generalConfig: GatewayGeneralConfig, commands: GatewayConfigCommand[]): Observable<GatewayGeneralConfig> {
@@ -238,8 +237,8 @@ export class GatewayStatisticsComponent implements AfterViewInit {
     if (this.subscriptionData.length && !this.dataTypeDefined) {
       this.isNumericData = this.subscriptionData.every(data => !isNaN(+data[1]));
       this.dataTypeDefined = true;
-      this.ctx.detectChanges();
     }
+    this.ctx.detectChanges();
   }
 
   private changeSubscription(subscriptionInfo: SubscriptionInfo[]): void {
@@ -247,7 +246,7 @@ export class GatewayStatisticsComponent implements AfterViewInit {
 
     if (this.ctx.datasources[0].entity) {
       this.ctx.subscriptionApi.createSubscriptionFromInfo(widgetType.timeseries, subscriptionInfo, this.subscriptionOptions,
-        false, true).pipe(take(1), takeUntilDestroyed(this.destroyRef)).subscribe(subscription => {
+        false, true).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(subscription => {
         this.dataTypeDefined = false;
         this.ctx.defaultSubscription = subscription;
         this.ctx.settings.showLegend = false;

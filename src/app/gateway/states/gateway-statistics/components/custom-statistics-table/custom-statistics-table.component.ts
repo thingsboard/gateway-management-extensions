@@ -52,7 +52,7 @@ export class CustomStatisticsTableComponent implements AfterViewInit {
   };
 
   constructor() {
-    this.pageLink = new PageLink(Number.POSITIVE_INFINITY, 0, null, this.defaultSortOrder);
+    this.pageLink = new PageLink(this.defaultPageSizes[0], 0, null, this.defaultSortOrder);
     this.dataSource = new MatTableDataSource<string[]>([]);
     effect(() => {
       this.dataSource.data = this.data();

@@ -125,6 +125,7 @@
     "statistic": "统计信息",
     "statistics": "统计信息",
     "statistic-commands-empty": "无可用统计信息",
+    "commands": "命令",
     "send-period": "统计信息发送周期（秒）",
     "send-period-required": "统计信息发送周期是必需的",
     "send-period-min": "统计信息发送周期不能小于60",
