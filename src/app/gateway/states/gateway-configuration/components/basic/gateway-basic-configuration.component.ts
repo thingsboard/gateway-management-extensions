@@ -212,7 +212,7 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
   private uniqNameRequired(): ValidatorFn {
     return (control: UntypedFormControl) => {
       const newName = control.value?.trim().toLowerCase();
-      const isDuplicate = newName && this.commandFormArray().value.some(command => command.attributeOnGateway?.toLowerCase() === newName)
+      const isDuplicate = control.dirty && newName && this.commandFormArray().value.some(command => command.attributeOnGateway?.toLowerCase() === newName)
 
       return isDuplicate ? { duplicateName: { valid: false } } : null;
     };
