@@ -121,7 +121,7 @@ export class GatewayStatisticsComponent implements AfterViewInit {
       this.getGatewayGeneralConfig()
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe((gatewayConfig) => {
-          this.commands = gatewayConfig.statistics.commands.reverse();
+          this.commands = gatewayConfig?.statistics.commands.reverse() ?? [];
           if (this.commands.length) {
             this.statisticForm.get('command').setValue(this.commands[0]);
             this.createSubscription(gateway, this.commands[0].attributeOnGateway);
@@ -148,7 +148,7 @@ export class GatewayStatisticsComponent implements AfterViewInit {
       switchMap(result => zip(this.getGatewayGeneralConfig(), of(result))),
       switchMap(([generalConfig, result]) => {
         this.commands = [
-          ...generalConfig.statistics.commands.filter(item => item.attributeOnGateway !== result?.prev?.attributeOnGateway),
+          ...generalConfig?.statistics.commands.filter(item => item.attributeOnGateway !== result?.prev?.attributeOnGateway) ?? [],
           ...(result?.current ? [{ ...result.current }] : []),
         ];
         newValue = result?.current;
@@ -194,7 +194,7 @@ export class GatewayStatisticsComponent implements AfterViewInit {
 
   private updateStatisticsCommands(generalConfig: GatewayGeneralConfig, commands: GatewayConfigCommand[]): Observable<GatewayGeneralConfig> {
     const gateway = this.ctx.defaultSubscription.datasources[0].entity;
-    if (gateway.id.id === NULL_UUID) {
+    if (gateway.id.id === NULL_UUID || !generalConfig) {
       return of(null);
     }
     return this.attributeService.saveEntityAttributes(gateway.id, AttributeScope.SHARED_SCOPE, [{
