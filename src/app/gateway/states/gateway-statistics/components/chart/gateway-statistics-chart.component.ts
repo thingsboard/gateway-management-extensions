@@ -44,7 +44,6 @@ import { CallbackDataParams, XAXisOption, YAXisOption } from 'echarts/types/dist
 import { WidgetComponent } from '@home/components/widget/widget.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { formatValue, isDefinedAndNotNull } from '@core/public-api';
-// @ts-ignore
 import { calculateAxisSize, measureAxisNameSize } from '@home/components/public-api';
 import { ECharts } from '@home/components/widget/lib/chart/echarts-widget.models';
 import { CommonModule } from '@angular/common';
@@ -86,7 +85,6 @@ export class GatewayStatisticsChartComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.ctx.$scope.echartExampleWidget = this;
     this.initEchart();
     this.initLegend();
   }
