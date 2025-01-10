@@ -13,26 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@use '../../styles/constants' as constants;
-
 :host {
-  width: 100%;
-  height: 100%;
-  padding: 4px;
-  display: flex;
-  flex-direction: column;
+  .mat-mdc-icon-button a {
+    border-bottom: none;
+    color: inherit;
+  }
 
   .action-button {
     opacity: .7;
-  }
-
-  @media #{constants.$mat-xs} {
-    .entry-container {
-      flex-direction: column;
-    }
-
-    .actions-container {
-      flex-direction: row;
-    }
   }
 }

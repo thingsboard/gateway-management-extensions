@@ -13,16 +13,4 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-
-import { Pipe, PipeTransform } from '@angular/core';
-
-@Pipe({
-  name: 'getRpcTemplateArrayView',
-  standalone: true,
-})
-export class RpcTemplateArrayViewPipe implements PipeTransform {
-
-  transform(values: {value: string | boolean | number}[] | string[]): string {
-    return values.map((item) => (item?.value ?? item).toString()).join(', ');
-  }
-}
+export * from './gateway-statistics.model';

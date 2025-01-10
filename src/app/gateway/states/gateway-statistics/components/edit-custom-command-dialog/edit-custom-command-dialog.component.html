@@ -1,0 +1,122 @@
+<!--
+  Copyright © 2016-2024 The Thingsboard Authors
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<div [formGroup]="editCommandFormGroup" class="edit-command-container">
+  <mat-toolbar color="primary">
+    <h2>{{ data.titleText | translate}}</h2>
+    <span class="flex-1"></span>
+    <div [tb-help]="commandHelpLink"></div>
+    <button mat-icon-button
+            (click)="cancel()"
+            type="button">
+      <mat-icon class="material-icons">close</mat-icon>
+    </button>
+  </mat-toolbar>
+  <div mat-dialog-content>
+    <div class="tb-form-panel no-border no-padding">
+      <section class="tb-form-panel stroked no-padding-bottom no-gap command-container">
+        <section class="tb-form-row no-border no-padding tb-standard-fields column-xs">
+          <mat-form-field appearance="outline" class="flex">
+            <mat-label translate>gateway.statistics.attribute-name</mat-label>
+            <input matInput formControlName="attributeOnGateway"/>
+            @if (editCommandFormGroup.get('attributeOnGateway').hasError('required')) {
+              <mat-error>
+                {{ 'gateway.statistics.attribute-name-required' | translate }}
+              </mat-error>
+            } @else if (editCommandFormGroup.get('attributeOnGateway').hasError('pattern')) {
+              <mat-error>
+                {{ 'gateway.statistics.attribute-name-pattern' | translate }}
+              </mat-error>
+            } @else if (editCommandFormGroup.get('attributeOnGateway').hasError('duplicateName')) {
+              <mat-error>
+                {{ 'gateway.statistics.name-already-exists' | translate }}
+              </mat-error>
+            }
+            <mat-icon matIconSuffix class="cursor-pointer"
+                      matTooltip="{{ 'gateway.hints.attribute' | translate }}">info_outlined
+            </mat-icon>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="flex">
+            <mat-label translate>gateway.statistics.timeout</mat-label>
+            <input matInput formControlName="timeout" type="number" min="0"/>
+            @if (editCommandFormGroup.get('timeout').hasError('required')) {
+              <mat-error>
+                {{ 'gateway.statistics.timeout-required' | translate }}
+              </mat-error>
+            } @else if (editCommandFormGroup.get('timeout').hasError('pattern')) {
+              <mat-error>
+                {{ 'gateway.statistics.timeout-pattern' | translate }}
+              </mat-error>
+            } @else if (editCommandFormGroup.get('timeout').hasError('min')) {
+              <mat-error>
+                {{ 'gateway.statistics.timeout-min' | translate }}
+              </mat-error>
+            }
+            <mat-icon matIconSuffix class="cursor-pointer"
+                      matTooltip="{{ 'gateway.hints.timeout' | translate }}">info_outlined
+            </mat-icon>
+          </mat-form-field>
+        </section>
+        <section>
+          <mat-form-field appearance="outline" class="mat-block">
+            <mat-label translate>gateway.statistics.command</mat-label>
+            <input matInput formControlName="command"/>
+            @if (editCommandFormGroup.get('command').hasError('required')) {
+              <mat-error>
+                {{ 'gateway.statistics.command-required' | translate }}
+              </mat-error>
+            } @else if (editCommandFormGroup.get('command').hasError('pattern')) {
+              <mat-error>
+                {{ 'gateway.statistics.command-pattern' | translate }}
+              </mat-error>
+            }
+            <mat-icon matIconSuffix class="cursor-pointer"
+                      matTooltip="{{ 'gateway.hints.command' | translate }}">info_outlined
+            </mat-icon>
+          </mat-form-field>
+        </section>
+        <section>
+          <mat-expansion-panel class="tb-settings pb-4">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <div class="tb-form-panel-title" translate>gateway.advanced-settings</div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-form-field appearance="outline" class="flex">
+              <mat-label translate>gateway.statistics.install-cmd</mat-label>
+              <input matInput formControlName="installCmd"/>
+              <mat-icon matIconSuffix class="cursor-pointer"
+                        matTooltip="{{ 'gateway.hints.install-cmd' | translate }}">info_outlined
+              </mat-icon>
+            </mat-form-field>
+          </mat-expansion-panel>
+        </section>
+      </section>
+    </div>
+  </div>
+  <div mat-dialog-actions class="justify-end">
+    <button mat-button color="primary"
+            type="button"
+            cdkFocusInitial
+            (click)="cancel()">
+      {{ 'action.cancel' | translate }}
+    </button>
+    <button mat-raised-button color="primary"
+            (click)="apply()"
+            [disabled]="editCommandFormGroup.invalid || !editCommandFormGroup.dirty">
+      {{ data.buttonText | translate }}
+    </button>
+  </div>
+</div>

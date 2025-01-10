@@ -291,8 +291,12 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
     }
 
     if (this.withReportStrategy.transform(value.configVersion, value.type)) {
+      (value.configurationJson as ConnectorBaseInfo).reportStrategy = value.reportStrategy;
       if (isUndefinedOrNull(value.reportStrategy)) {
         delete value.reportStrategy;
+      }
+      if (isUndefinedOrNull((value.configurationJson as ConnectorBaseInfo).reportStrategy)) {
+        delete (value.configurationJson as ConnectorBaseInfo).reportStrategy;
       }
     }
 

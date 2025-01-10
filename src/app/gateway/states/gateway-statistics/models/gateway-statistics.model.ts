@@ -13,16 +13,16 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
+import { GatewayConfigCommand } from '../../../shared/models/public-api';
 
-import { Pipe, PipeTransform } from '@angular/core';
+export interface EditCustomCommandDialogData {
+  command: GatewayConfigCommand;
+  existingCommands: string[];
+  titleText: string;
+  buttonText: string;
+}
 
-@Pipe({
-  name: 'getRpcTemplateArrayView',
-  standalone: true,
-})
-export class RpcTemplateArrayViewPipe implements PipeTransform {
-
-  transform(values: {value: string | boolean | number}[] | string[]): string {
-    return values.map((item) => (item?.value ?? item).toString()).join(', ');
-  }
+export interface EditCustomCommandDialogResult {
+  current: GatewayConfigCommand;
+  prev: GatewayConfigCommand;
 }

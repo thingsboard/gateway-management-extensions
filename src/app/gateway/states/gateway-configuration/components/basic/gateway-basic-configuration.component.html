@@ -37,25 +37,22 @@
               <mat-icon matIconSuffix style="cursor:pointer;"
                         matTooltip="{{ 'gateway.hints.host' | translate }}">info_outlined
               </mat-icon>
-              <mat-error *ngIf="basicFormGroup.get('thingsboard.host').hasError('required')">
-                {{ 'gateway.thingsboard-host-required' | translate }}
-              </mat-error>
+              @if (basicFormGroup.get('thingsboard.host').hasError('required')) {
+                <mat-error>{{ 'gateway.thingsboard-host-required' | translate }}</mat-error>
+              }
             </mat-form-field>
             <mat-form-field appearance="outline" class="flex">
               <mat-label translate>gateway.thingsboard-port</mat-label>
               <input matInput formControlName="port" type="number" min="0"/>
-              <mat-error *ngIf="basicFormGroup.get('thingsboard.port').hasError('required')">
-                {{ 'gateway.thingsboard-port-required' | translate }}
-              </mat-error>
-              <mat-error *ngIf="basicFormGroup.get('thingsboard.port').hasError('min')">
-                {{ 'gateway.thingsboard-port-min' | translate }}
-              </mat-error>
-              <mat-error *ngIf="basicFormGroup.get('thingsboard.port').hasError('max')">
-                {{ 'gateway.thingsboard-port-max' | translate }}
-              </mat-error>
-              <mat-error *ngIf="basicFormGroup.get('thingsboard.port').hasError('pattern')">
-                {{ 'gateway.thingsboard-port-pattern' | translate }}
-              </mat-error>
+              @if (basicFormGroup.get('thingsboard.port').hasError('required')) {
+                <mat-error>{{ 'gateway.thingsboard-port-required' | translate }}</mat-error>
+              } @else if (basicFormGroup.get('thingsboard.port').hasError('min')) {
+                <mat-error>{{ 'gateway.thingsboard-port-min' | translate }}</mat-error>
+              } @else if (basicFormGroup.get('thingsboard.port').hasError('max')) {
+                <mat-error>{{ 'gateway.thingsboard-port-max' | translate }}</mat-error>
+              } @else if (basicFormGroup.get('thingsboard.port').hasError('pattern')) {
+                <mat-error>{{ 'gateway.thingsboard-port-pattern' | translate }}</mat-error>
+              }
               <mat-icon matIconSuffix style="cursor:pointer;"
                         matTooltip="{{ 'gateway.hints.port' | translate }}">info_outlined
               </mat-icon>
@@ -86,18 +83,24 @@
           <mat-form-field appearance="outline">
             <mat-label translate>gateway.statistics.send-period</mat-label>
             <input matInput formControlName="statsSendPeriodInSeconds" type="number" min="60"/>
-            <mat-error
-              *ngIf="basicFormGroup.get('thingsboard.statistics.statsSendPeriodInSeconds').hasError('required')">
-              {{ 'gateway.statistics.send-period-required' | translate }}
-            </mat-error>
-            <mat-error
-              *ngIf="basicFormGroup.get('thingsboard.statistics.statsSendPeriodInSeconds').hasError('min')">
-              {{ 'gateway.statistics.send-period-min' | translate }}
-            </mat-error>
-            <mat-error
-              *ngIf="basicFormGroup.get('thingsboard.statistics.statsSendPeriodInSeconds').hasError('pattern')">
-              {{ 'gateway.statistics.send-period-pattern' | translate }}
-            </mat-error>
+            @if (basicFormGroup.get('thingsboard.statistics.statsSendPeriodInSeconds').hasError('required')) {
+              <mat-error>{{ 'gateway.statistics.send-period-required' | translate }}</mat-error>
+            } @else if (basicFormGroup.get('thingsboard.statistics.statsSendPeriodInSeconds').hasError('min')) {
+              <mat-error>{{ 'gateway.statistics.send-period-min' | translate }}</mat-error>
+            } @else if (basicFormGroup.get('thingsboard.statistics.statsSendPeriodInSeconds').hasError('pattern')) {
+              <mat-error>{{ 'gateway.statistics.send-period-pattern' | translate }}</mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label translate>gateway.statistics.custom-send-period</mat-label>
+            <input matInput formControlName="customStatsSendPeriodInSeconds" type="number" min="60"/>
+            @if (basicFormGroup.get('thingsboard.statistics.customStatsSendPeriodInSeconds').hasError('required')) {
+              <mat-error>{{ 'gateway.statistics.custom-send-period-required' | translate }}</mat-error>
+            } @else if (basicFormGroup.get('thingsboard.statistics.customStatsSendPeriodInSeconds').hasError('min')) {
+              <mat-error>{{ 'gateway.statistics.custom-send-period-min' | translate }}</mat-error>
+            } @else if (basicFormGroup.get('thingsboard.statistics.customStatsSendPeriodInSeconds').hasError('pattern')) {
+              <mat-error>{{ 'gateway.statistics.custom-send-period-pattern' | translate }}</mat-error>
+            }
           </mat-form-field>
         </div>
         <div class="tb-form-panel">
@@ -111,9 +114,11 @@
                   <mat-form-field appearance="outline" class="flex">
                     <mat-label translate>gateway.statistics.attribute-name</mat-label>
                     <input matInput formControlName="attributeOnGateway"/>
-                    <mat-error *ngIf="commandControl.get('attributeOnGateway').hasError('required')">
-                      {{ 'gateway.statistics.attribute-name-required' | translate }}
-                    </mat-error>
+                    @if (commandControl.get('attributeOnGateway').hasError('required')) {
+                      <mat-error>{{ 'gateway.statistics.attribute-name-required' | translate }}</mat-error>
+                    } @else if (commandControl.get('attributeOnGateway').hasError('duplicateName')) {
+                      <mat-error>{{ 'gateway.statistics.name-already-exists' | translate }}</mat-error>
+                    }
                     <mat-icon matIconSuffix style="cursor:pointer;"
                               matTooltip="{{ 'gateway.hints.attribute' | translate }}">info_outlined
                     </mat-icon>
@@ -121,33 +126,48 @@
                   <mat-form-field appearance="outline" class="flex">
                     <mat-label translate>gateway.statistics.timeout</mat-label>
                     <input matInput formControlName="timeout" type="number" min="0"/>
-                    <mat-error *ngIf="commandControl.get('timeout').hasError('required')">
-                      {{ 'gateway.statistics.timeout-required' | translate }}
-                    </mat-error>
-                    <mat-error *ngIf="commandControl.get('timeout').hasError('min')">
-                      {{ 'gateway.statistics.timeout-min' | translate }}
-                    </mat-error>
-                    <mat-error *ngIf="commandControl.get('timeout').hasError('pattern')">
-                      {{ 'gateway.statistics.timeout-pattern' | translate }}
-                    </mat-error>
+                    @if (commandControl.get('timeout').hasError('required')) {
+                      <mat-error>{{ 'gateway.statistics.timeout-required' | translate }}</mat-error>
+                    } @else if (commandControl.get('timeout').hasError('min')) {
+                      <mat-error>{{ 'gateway.statistics.timeout-min' | translate }}</mat-error>
+                    } @else if (commandControl.get('timeout').hasError('pattern')) {
+                      <mat-error>{{ 'gateway.statistics.timeout-pattern' | translate }}</mat-error>
+                    }
                     <mat-icon matIconSuffix style="cursor:pointer;"
                               matTooltip="{{ 'gateway.hints.timeout' | translate }}">info_outlined
                     </mat-icon>
                   </mat-form-field>
                 </section>
-                <mat-form-field appearance="outline" class="mat-block">
-                  <mat-label translate>gateway.statistics.command</mat-label>
-                  <input matInput formControlName="command"/>
-                  <mat-error *ngIf="commandControl.get('command').hasError('required')">
-                    {{ 'gateway.statistics.command-required' | translate }}
-                  </mat-error>
-                  <mat-error *ngIf="commandControl.get('command').hasError('pattern')">
-                    {{ 'gateway.statistics.command-pattern' | translate }}
-                  </mat-error>
-                  <mat-icon matIconSuffix style="cursor:pointer;"
-                            matTooltip="{{ 'gateway.hints.command' | translate }}">info_outlined
-                  </mat-icon>
-                </mat-form-field>
+                <section>
+                  <mat-form-field appearance="outline" class="mat-block">
+                    <mat-label translate>gateway.statistics.command</mat-label>
+                    <input matInput formControlName="command"/>
+                    @if (commandControl.get('command').hasError('required')) {
+                      <mat-error>{{ 'gateway.statistics.command-required' | translate }}</mat-error>
+                    } @else if (commandControl.get('command').hasError('pattern')) {
+                      <mat-error>{{ 'gateway.statistics.command-pattern' | translate }}</mat-error>
+                    }
+                    <mat-icon matIconSuffix style="cursor:pointer;"
+                              matTooltip="{{ 'gateway.hints.command' | translate }}">info_outlined
+                    </mat-icon>
+                  </mat-form-field>
+                </section>
+                <section>
+                  <mat-expansion-panel class="tb-settings pb-4">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        <div class="tb-form-panel-title" translate>gateway.advanced-settings</div>
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <mat-form-field appearance="outline" class="flex">
+                      <mat-label translate>gateway.statistics.install-cmd</mat-label>
+                      <input matInput formControlName="installCmd"/>
+                      <mat-icon matIconSuffix class="cursor-pointer"
+                                matTooltip="{{ 'gateway.hints.install-cmd' | translate }}">info_outlined
+                      </mat-icon>
+                    </mat-form-field>
+                  </mat-expansion-panel>
+                </section>
               </section>
               <button mat-icon-button (click)="removeCommandControl($index, $event)"
                       class="tb-box-button"
@@ -185,18 +205,13 @@
             <mat-form-field appearance="outline" class="flex">
               <mat-label translate>gateway.inactivity-timeout-seconds</mat-label>
               <input matInput formControlName="inactivityTimeoutSeconds" type="number" min="0"/>
-              <mat-error
-                *ngIf="basicFormGroup.get('thingsboard.checkingDeviceActivity.inactivityTimeoutSeconds').hasError('required')">
-                {{ 'gateway.inactivity-timeout-seconds-required' | translate }}
-              </mat-error>
-              <mat-error
-                *ngIf="basicFormGroup.get('thingsboard.checkingDeviceActivity.inactivityTimeoutSeconds').hasError('min')">
-                {{ 'gateway.inactivity-timeout-seconds-min' | translate }}
-              </mat-error>
-              <mat-error
-                *ngIf="basicFormGroup.get('thingsboard.checkingDeviceActivity.inactivityTimeoutSeconds').hasError('pattern')">
-                {{ 'gateway.inactivity-timeout-seconds-pattern' | translate }}
-              </mat-error>
+              @if (basicFormGroup.get('thingsboard.checkingDeviceActivity.inactivityTimeoutSeconds').hasError('required')) {
+                <mat-error>{{ 'gateway.inactivity-timeout-seconds-required' | translate }}</mat-error>
+              } @else if (basicFormGroup.get('thingsboard.checkingDeviceActivity.inactivityTimeoutSeconds').hasError('min')) {
+                <mat-error>{{ 'gateway.inactivity-timeout-seconds-min' | translate }}</mat-error>
+              } @else if (basicFormGroup.get('thingsboard.checkingDeviceActivity.inactivityTimeoutSeconds').hasError('pattern')) {
+                <mat-error>{{ 'gateway.inactivity-timeout-seconds-pattern' | translate }}</mat-error>
+              }
               <mat-icon matIconSuffix style="cursor:pointer;"
                         matTooltip="{{ 'gateway.hints.inactivity-timeout' | translate }}">info_outlined
               </mat-icon>
@@ -204,18 +219,13 @@
             <mat-form-field appearance="outline" class="flex">
               <mat-label translate>gateway.inactivity-check-period-seconds</mat-label>
               <input matInput type="number" min="0" formControlName="inactivityCheckPeriodSeconds"/>
-              <mat-error
-                *ngIf="basicFormGroup.get('thingsboard.checkingDeviceActivity.inactivityCheckPeriodSeconds').hasError('required')">
-                {{ 'gateway.inactivity-check-period-seconds-required' | translate }}
-              </mat-error>
-              <mat-error
-                *ngIf="basicFormGroup.get('thingsboard.checkingDeviceActivity.inactivityCheckPeriodSeconds').hasError('min')">
-                {{ 'gateway.inactivity-check-period-seconds-min' | translate }}
-              </mat-error>
-              <mat-error
-                *ngIf="basicFormGroup.get('thingsboard.checkingDeviceActivity.inactivityCheckPeriodSeconds').hasError('pattern')">
-                {{ 'gateway.inactivity-check-period-seconds-pattern' | translate }}
-              </mat-error>
+              @if (basicFormGroup.get('thingsboard.checkingDeviceActivity.inactivityCheckPeriodSeconds').hasError('required')) {
+                <mat-error>{{ 'gateway.inactivity-check-period-seconds-required' | translate }}</mat-error>
+              } @else if (basicFormGroup.get('thingsboard.checkingDeviceActivity.inactivityCheckPeriodSeconds').hasError('min')) {
+                <mat-error>{{ 'gateway.inactivity-check-period-seconds-min' | translate }}</mat-error>
+              } @else if (basicFormGroup.get('thingsboard.checkingDeviceActivity.inactivityCheckPeriodSeconds').hasError('pattern')) {
+                <mat-error>{{ 'gateway.inactivity-check-period-seconds-pattern' | translate }}</mat-error>
+              }
               <mat-icon matIconSuffix style="cursor:pointer;"
                         matTooltip="{{ 'gateway.hints.inactivity-period' | translate }}">info_outlined
               </mat-icon>
@@ -228,16 +238,13 @@
             <mat-form-field appearance="outline" class="flex">
               <mat-label translate>gateway.min-pack-send-delay</mat-label>
               <input matInput formControlName="minPackSendDelayMS" type="number" min="0"/>
-              <mat-error *ngIf="basicFormGroup.get('thingsboard.minPackSendDelayMS').hasError('required')">
-                {{ 'gateway.min-pack-send-delay-required' | translate }}
-              </mat-error>
-              <mat-error *ngIf="basicFormGroup.get('thingsboard.minPackSendDelayMS').hasError('min')">
-                {{ 'gateway.min-pack-send-delay-min' | translate }}
-              </mat-error>
-              <mat-error
-                *ngIf="basicFormGroup.get('thingsboard.minPackSendDelayMS').hasError('pattern')">
-                {{ 'gateway.min-pack-send-delay-pattern' | translate }}
-              </mat-error>
+              @if (basicFormGroup.get('thingsboard.minPackSendDelayMS').hasError('required')) {
+                <mat-error>{{ 'gateway.min-pack-send-delay-required' | translate }}</mat-error>
+              } @else if (basicFormGroup.get('thingsboard.minPackSendDelayMS').hasError('min')) {
+                <mat-error>{{ 'gateway.min-pack-send-delay-min' | translate }}</mat-error>
+              } @else if (basicFormGroup.get('thingsboard.minPackSendDelayMS').hasError('pattern')) {
+                <mat-error>{{ 'gateway.min-pack-send-delay-pattern' | translate }}</mat-error>
+              }
               <mat-icon matIconSuffix style="cursor:pointer;"
                         matTooltip="{{ 'gateway.hints.minimal-pack-delay' | translate }}">info_outlined
               </mat-icon>
@@ -248,15 +255,13 @@
                 <mat-option [value]="0">0</mat-option>
                 <mat-option [value]="1">1</mat-option>
               </mat-select>
-              <mat-error *ngIf="basicFormGroup.get('thingsboard.qos').hasError('required')">
-                {{ 'gateway.mqtt-qos-required' | translate }}
-              </mat-error>
-              <mat-error *ngIf="basicFormGroup.get('thingsboard.qos').hasError('min')">
-                {{ 'gateway.mqtt-qos-range' | translate }}
-              </mat-error>
-              <mat-error *ngIf="basicFormGroup.get('thingsboard.qos').hasError('max')">
-                {{ 'gateway.mqtt-qos-range' | translate }}
-              </mat-error>
+              @if (basicFormGroup.get('thingsboard.qos').hasError('required')) {
+                <mat-error>{{ 'gateway.mqtt-qos-required' | translate }}</mat-error>
+              } @else if (basicFormGroup.get('thingsboard.qos').hasError('min')) {
+                <mat-error>{{ 'gateway.mqtt-qos-range' | translate }}</mat-error>
+              } @else if (basicFormGroup.get('thingsboard.qos').hasError('max')) {
+                <mat-error>{{ 'gateway.mqtt-qos-range' | translate }}</mat-error>
+              }
               <mat-icon matIconSuffix style="cursor:pointer;"
                         matTooltip="{{ 'gateway.hints.qos' | translate }}">info_outlined
               </mat-icon>
@@ -266,34 +271,24 @@
             <mat-form-field appearance="outline" class="flex">
               <mat-label translate>gateway.statistics.check-connectors-configuration</mat-label>
               <input matInput formControlName="checkConnectorsConfigurationInSeconds" type="number" min="0"/>
-              <mat-error
-                *ngIf="basicFormGroup.get('thingsboard.checkConnectorsConfigurationInSeconds').hasError('required')">
-                {{ 'gateway.statistics.check-connectors-configuration-required' | translate }}
-              </mat-error>
-              <mat-error
-                *ngIf="basicFormGroup.get('thingsboard.checkConnectorsConfigurationInSeconds').hasError('min')">
-                {{ 'gateway.statistics.check-connectors-configuration-min' | translate }}
-              </mat-error>
-              <mat-error
-                *ngIf="basicFormGroup.get('thingsboard.checkConnectorsConfigurationInSeconds').hasError('pattern')">
-                {{ 'gateway.statistics.check-connectors-configuration-pattern' | translate }}
-              </mat-error>
+              @if (basicFormGroup.get('thingsboard.checkConnectorsConfigurationInSeconds').hasError('required')) {
+                <mat-error>{{ 'gateway.statistics.check-connectors-configuration-required' | translate }}</mat-error>
+              } @else if (basicFormGroup.get('thingsboard.checkConnectorsConfigurationInSeconds').hasError('min')) {
+                <mat-error>{{ 'gateway.statistics.check-connectors-configuration-min' | translate }}</mat-error>
+              } @else if (basicFormGroup.get('thingsboard.checkConnectorsConfigurationInSeconds').hasError('pattern')) {
+                <mat-error>{{ 'gateway.statistics.check-connectors-configuration-pattern' | translate }}</mat-error>
+              }
             </mat-form-field>
             <mat-form-field appearance="outline" class="flex">
               <mat-label translate>gateway.statistics.max-payload-size-bytes</mat-label>
               <input matInput formControlName="maxPayloadSizeBytes" type="number" min="0"/>
-              <mat-error
-                *ngIf="basicFormGroup.get('thingsboard.maxPayloadSizeBytes').hasError('required')">
-                {{ 'gateway.statistics.max-payload-size-bytes-required' | translate }}
-              </mat-error>
-              <mat-error
-                *ngIf="basicFormGroup.get('thingsboard.maxPayloadSizeBytes').hasError('min')">
-                {{ 'gateway.statistics.max-payload-size-bytes-min' | translate }}
-              </mat-error>
-              <mat-error
-                *ngIf="basicFormGroup.get('thingsboard.maxPayloadSizeBytes').hasError('pattern')">
-                {{ 'gateway.statistics.max-payload-size-bytes-pattern' | translate }}
-              </mat-error>
+              @if (basicFormGroup.get('thingsboard.maxPayloadSizeBytes').hasError('required')) {
+                <mat-error>{{ 'gateway.statistics.max-payload-size-bytes-required' | translate }}</mat-error>
+              } @else if (basicFormGroup.get('thingsboard.maxPayloadSizeBytes').hasError('min')) {
+                <mat-error>{{ 'gateway.statistics.max-payload-size-bytes-min' | translate }}</mat-error>
+              } @else if (basicFormGroup.get('thingsboard.maxPayloadSizeBytes').hasError('pattern')) {
+                <mat-error>{{ 'gateway.statistics.max-payload-size-bytes-pattern' | translate }}</mat-error>
+              }
               <mat-icon matIconSuffix style="cursor:pointer;"
                         matTooltip="{{ 'gateway.hints.max-payload-size-bytes' | translate }}">info_outlined
               </mat-icon>
@@ -303,18 +298,13 @@
             <mat-form-field appearance="outline" class="flex">
               <mat-label translate>gateway.statistics.min-pack-size-to-send</mat-label>
               <input matInput formControlName="minPackSizeToSend" type="number" min="0"/>
-              <mat-error
-                *ngIf="basicFormGroup.get('thingsboard.minPackSizeToSend').hasError('required')">
-                {{ 'gateway.statistics.min-pack-size-to-send-required' | translate }}
-              </mat-error>
-              <mat-error
-                *ngIf="basicFormGroup.get('thingsboard.minPackSizeToSend').hasError('min')">
-                {{ 'gateway.statistics.min-pack-size-to-send-min' | translate }}
-              </mat-error>
-              <mat-error
-                *ngIf="basicFormGroup.get('thingsboard.minPackSizeToSend').hasError('pattern')">
-                {{ 'gateway.statistics.min-pack-size-to-send-pattern' | translate }}
-              </mat-error>
+              @if (basicFormGroup.get('thingsboard.minPackSizeToSend').hasError('required')) {
+                <mat-error>{{ 'gateway.statistics.min-pack-size-to-send-required' | translate }}</mat-error>
+              } @else if (basicFormGroup.get('thingsboard.minPackSizeToSend').hasError('min')) {
+                <mat-error>{{ 'gateway.statistics.min-pack-size-to-send-min' | translate }}</mat-error>
+              } @else if (basicFormGroup.get('thingsboard.minPackSizeToSend').hasError('pattern')) {
+                <mat-error>{{ 'gateway.statistics.min-pack-size-to-send-pattern' | translate }}</mat-error>
+              }
               <mat-icon matIconSuffix style="cursor:pointer;"
                         matTooltip="{{ 'gateway.hints.min-pack-size-to-send' | translate }}">info_outlined
               </mat-icon>

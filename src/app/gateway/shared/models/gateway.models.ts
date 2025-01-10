@@ -136,3 +136,10 @@ export enum SocketEncoding {
   UTF32BE = 'utf-32-be',
   UTF32LE = 'utf-32-le',
 }
+
+export interface GatewayConfigCommand {
+  attributeOnGateway: string;
+  command: string;
+  timeout: number;
+  installCmd?: string;
+}
