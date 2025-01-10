@@ -20,8 +20,7 @@
     "npm": "Please use yarn instead of NPM to install dependencies"
   },
   "dependencies": {
-    "primeicons": "~7.0.0",
-    "primeng": "~17.18.11"
+    "echarts": "https://github.com/thingsboard/echarts/archive/5.5.0-TB.tar.gz"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "18.2.7",
