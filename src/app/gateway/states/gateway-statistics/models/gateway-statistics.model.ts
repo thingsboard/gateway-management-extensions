@@ -14,6 +14,10 @@
 /// limitations under the License.
 ///
 import { GatewayConfigCommand } from '../../../shared/models/public-api';
+import * as echarts from 'echarts/core';
+// TODO: remove after 4.0 typing update
+// @ts-ignore
+import { EChartsModule } from '@home/components/public-api';
 
 export interface EditCustomCommandDialogData {
   command: GatewayConfigCommand;
@@ -26,3 +30,5 @@ export interface EditCustomCommandDialogResult {
   current: GatewayConfigCommand;
   prev: GatewayConfigCommand;
 }
+
+export const gatewayEchartsModule = new EChartsModule(echarts);
