@@ -37,11 +37,11 @@ import {
   DialogService,
 } from '@core/public-api';
 import { CommonModule } from '@angular/common';
-import { TimeSeriesChartWidgetComponent, WidgetComponentsModule } from '@home/components/public-api';
 import {
   CustomStatisticsTableComponent,
   EditCustomCommandDialogComponent,
-  StatisticsCommandsAutocompleteComponent
+  StatisticsCommandsAutocompleteComponent,
+  GatewayStatisticsChartComponent
 } from './components/public-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { map, switchMap, takeWhile } from 'rxjs/operators';
@@ -59,14 +59,14 @@ import { EditCustomCommandDialogData } from './models/gateway-statistics.model';
     CommonModule,
     SharedModule,
     StatisticsCommandsAutocompleteComponent,
-    WidgetComponentsModule,
     CustomStatisticsTableComponent,
+    GatewayStatisticsChartComponent,
   ],
   styleUrls: ['./gateway-statistics.component.scss']
 })
 export class GatewayStatisticsComponent implements AfterViewInit {
 
-  @ViewChild('statisticChart') statisticChart: TimeSeriesChartWidgetComponent;
+  @ViewChild('statisticChart') statisticChart: GatewayStatisticsChartComponent;
 
   @Input() ctx: WidgetContext;
 

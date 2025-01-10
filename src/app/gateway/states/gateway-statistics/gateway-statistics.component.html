@@ -60,7 +60,7 @@
   @if (statisticForm.get('command').value?.attributeOnGateway && subscriptionData.length && subscribed) {
     <div class="chart-box flex flex-1 flex-col overflow-auto">
       @if (isNumericData) {
-        <tb-time-series-chart-widget #statisticChart [ctx]="ctx" class="flex-1"/>
+        <tb-gateway-statistics-chart [ctx]="ctx" #statisticChart class="flex-1"/>
       } @else {
         <tb-custom-statistics-table [data]="subscriptionData" class="h-full flex-1"/>
       }
