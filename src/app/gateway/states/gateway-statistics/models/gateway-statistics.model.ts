@@ -14,6 +14,19 @@
 /// limitations under the License.
 ///
 import { GatewayConfigCommand } from '../../../shared/models/public-api';
+import * as echarts from 'echarts/core';
+import {
+  DataZoomComponent,
+  GridComponent,
+  MarkLineComponent,
+  PolarComponent,
+  RadarComponent,
+  TooltipComponent,
+  VisualMapComponent
+} from 'echarts/components';
+import { BarChart, CustomChart, LineChart, PieChart, RadarChart } from 'echarts/charts';
+import { LabelLayout } from 'echarts/features';
+import { CanvasRenderer, SVGRenderer } from 'echarts/renderers';
 
 export interface EditCustomCommandDialogData {
   command: GatewayConfigCommand;
@@ -26,3 +39,32 @@ export interface EditCustomCommandDialogResult {
   current: GatewayConfigCommand;
   prev: GatewayConfigCommand;
 }
+
+class EChartsModule {
+  private initialized = false;
+
+  init() {
+    if (!this.initialized) {
+      echarts.use([
+        TooltipComponent,
+        GridComponent,
+        VisualMapComponent,
+        DataZoomComponent,
+        MarkLineComponent,
+        PolarComponent,
+        RadarComponent,
+        LineChart,
+        BarChart,
+        PieChart,
+        RadarChart,
+        CustomChart,
+        LabelLayout,
+        CanvasRenderer,
+        SVGRenderer
+      ]);
+      this.initialized = true;
+    }
+  }
+}
+
+export const gatewayEchartsModule = new EChartsModule();
