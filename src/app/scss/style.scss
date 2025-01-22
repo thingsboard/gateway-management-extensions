@@ -13,8 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-.tb-gateway {
+.gw-delete-icon-button {
+  color: rgba(0, 0, 0, 0.54);
+}
 
+.gw-connector-table {
+  .mat-mdc-table {
+    table-layout: fixed;
+  }
+}
+
+.gw-chip-list {
+  .mdc-evolution-chip-set__chips {
+    justify-content: flex-end;
+    align-items: center;
+  }
 }
 
 /***************

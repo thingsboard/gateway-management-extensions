@@ -35,7 +35,7 @@ import { Store } from '@ngrx/store';
 import { PageComponent } from '@shared/public-api';
 import { isDefinedAndNotNull, AppState } from '@core/public-api';
 import {
-  ConvertorType,
+  MqttConverterType,
   MappingDataKey,
   MappingKeysType,
   OPCUaSourceType,
@@ -76,7 +76,7 @@ export class MappingDataKeysPanelComponent extends PageComponent implements OnIn
   @Input() keys: Array<MappingDataKey> | {[key: string]: any};
   @Input() keysType: MappingKeysType;
   @Input() connectorType: ConnectorType;
-  @Input() convertorType: ConvertorType;
+  @Input() convertorType: MqttConverterType;
   @Input() sourceType: SourceType;
   @Input() valueTypeEnum = MappingValueType;
   @Input() valueTypes: Map<string, unknown> = mappingValueTypesMap;

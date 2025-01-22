@@ -1,0 +1,78 @@
+<!--
+  Copyright © 2016-2024 The Thingsboard Authors
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<div class="tb-form-row space-between same-padding tb-flex column size-full" [formGroup]="responseConfigFormGroup">
+  <div class="tb-flex row space-between align-center no-gap fill-width">
+    <div class="fixed-title-width tb-required">{{ 'gateway.response' | translate }}</div>
+    <tb-toggle-select formControlName="type" appearance="fill">
+      @for (type of responseTypes; track type) {
+        <tb-toggle-option [value]="type">{{ ResponseTypeTranslationsMap.get(type) | translate }}</tb-toggle-option>
+      }
+    </tb-toggle-select>
+  </div>
+  <ng-container [ngSwitch]="responseConfigFormGroup.get('type').value">
+    <ng-template [ngSwitchCase]="ResponseType.CONST">
+        <ng-container [formGroup]="responseConfigFormGroup.get(ResponseType.CONST)">
+            <div class="tb-form-row">
+                <div class="fixed-title-width">{{ 'gateway.rest.on-success' | translate }}</div>
+                <div class="tb-flex no-gap">
+                    <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+                        <mat-select formControlName="successResponse">
+                          @for (status of responseStatuses; track status) {
+                            <mat-option [value]="status">{{ status }}</mat-option>
+                          }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="tb-form-row">
+                <div class="fixed-title-width">{{ 'gateway.rest.on-error' | translate }}</div>
+                <div class="tb-flex no-gap">
+                    <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+                        <mat-select formControlName="unsuccessfulResponse">
+                          @for (status of responseStatuses; track status) {
+                            <mat-option [value]="status">{{ status }}</mat-option>
+                          }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+        </ng-container>
+    </ng-template>
+    <ng-template [ngSwitchCase]="ResponseType.ADVANCED">
+        <ng-container [formGroup]="responseConfigFormGroup.get(ResponseType.ADVANCED)">
+            <div class="tb-form-row">
+                <mat-slide-toggle class="mat-slide" formControlName="responseExpected">
+                    <mat-label>
+                        {{ 'gateway.rest.response-expected' | translate }}
+                    </mat-label>
+                </mat-slide-toggle>
+            </div>
+            <div class="tb-form-row">
+                <div class="fixed-title-width" translate>gateway.timeout</div>
+                <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+                    <input matInput type="number" min="0" name="value" formControlName="timeout" placeholder="{{ 'gateway.set' | translate }}"/>
+                </mat-form-field>
+            </div>
+            <div class="tb-form-row">
+                <div class="fixed-title-width" translate>gateway.rest.response-attribute</div>
+                <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+                    <input matInput type="text" name="value" formControlName="responseAttribute" placeholder="{{ 'gateway.set' | translate }}"/>
+                </mat-form-field>
+            </div>
+        </ng-container>
+    </ng-template>
+  </ng-container>
+</div>

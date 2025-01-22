@@ -26,11 +26,13 @@ import {
   Validators
 } from '@angular/forms';
 import {
+  SecurityMode,
   SecurityPolicy,
   SecurityPolicyTypes,
   ServerConfig,
 } from '../../../models/public-api';
 import {
+  ErrorTooltipIconComponent,
   noLeadTrailSpacesRegex,
   TruncateWithTooltipDirective
 } from '../../../../../shared/public-api';
@@ -65,6 +67,7 @@ import {
     SharedModule,
     SecurityConfigComponent,
     TruncateWithTooltipDirective,
+    ErrorTooltipIconComponent,
   ]
 })
 export class OpcServerConfigComponent implements ControlValueAccessor, Validator, AfterViewInit, OnDestroy {
@@ -74,6 +77,7 @@ export class OpcServerConfigComponent implements ControlValueAccessor, Validator
   hideNewFields: boolean = false;
 
   securityPolicyTypes = SecurityPolicyTypes;
+  SecurityMode = SecurityMode;
   serverConfigFormGroup: UntypedFormGroup;
 
   onChange!: (value: ServerConfig) => void;

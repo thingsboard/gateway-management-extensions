@@ -1,0 +1,73 @@
+<!--
+  Copyright © 2016-2024 The Thingsboard Authors
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<div class="tb-form-panel no-border no-padding padding-top" [formGroup]="serverConfigFormGroup">
+  <div class="tb-form-row">
+    <div class="fixed-title-width tb-required" translate>gateway.host</div>
+    <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+      <input matInput name="value" formControlName="host" placeholder="{{ 'gateway.set' | translate }}"/>
+      @if (serverConfigFormGroup.get('host').hasError('required') && serverConfigFormGroup.get('host').touched) {
+        <mat-icon matSuffix
+                  matTooltipPosition="above"
+                  matTooltipClass="tb-error-tooltip"
+                  [matTooltip]="('gateway.host-required') | translate"
+                  class="tb-error">
+          warning
+        </mat-icon>
+      }
+    </mat-form-field>
+  </div>
+  <div class="tb-form-row column-xs">
+    <div class="fixed-title-width tb-required" translate>gateway.port</div>
+    <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+      <input matInput type="number" min="{{portLimits.MIN}}" max="{{portLimits.MAX}}"
+             name="value" formControlName="port" placeholder="{{ 'gateway.set' | translate }}"/>
+      @if ((serverConfigFormGroup.get('port').hasError('required')
+        || serverConfigFormGroup.get('port').hasError('min')
+        || serverConfigFormGroup.get('port').hasError('max'))
+        && serverConfigFormGroup.get('port').touched) {
+        <tb-error-icon matSuffix [tooltipText]="(serverConfigFormGroup.get('port') | getGatewayPortTooltip) | translate"/>
+      }
+    </mat-form-field>
+  </div>
+  <div class="tb-form-panel stroked">
+    <div class="tb-form-panel-title" translate>gateway.security</div>
+    <div class="tb-form-row space-between tb-flex fill-width">
+      <mat-slide-toggle class="mat-slide" formControlName="SSL">
+        <mat-label>
+          {{ 'gateway.rest.ssl-verify' | translate }}
+        </mat-label>
+      </mat-slide-toggle>
+    </div>
+    <ng-container [formGroup]="serverConfigFormGroup.get('security')">
+      <div class="tb-form-row space-between tb-flex fill-width">
+        <div class="fixed-title-width" tbTruncateWithTooltip>{{ 'gateway.certificate' | translate }}</div>
+        <div class="tb-flex no-gap">
+          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+            <input matInput name="value" formControlName="cert" placeholder="{{ 'gateway.set' | translate }}"/>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="tb-form-row space-between tb-flex fill-width">
+        <div class="fixed-title-width" tbTruncateWithTooltip>{{ 'gateway.key' | translate }}</div>
+        <div class="tb-flex no-gap">
+          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+            <input matInput name="value" formControlName="key" placeholder="{{ 'gateway.set' | translate }}"/>
+          </mat-form-field>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

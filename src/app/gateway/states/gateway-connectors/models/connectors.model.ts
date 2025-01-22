@@ -32,7 +32,8 @@ import {
   RequestMappingFormValue,
   RequestMappingValue,
   RequestsMapping,
-  MQTTSourceType
+  MQTTSourceType,
+  MqttConverterType
 } from './mqtt.models';
 import { DeviceConnectorMapping, OPCBasicConfig_v3_5_2, OPCLegacyBasicConfig, OpcUaMapping } from './opc.models';
 import { ModbusBasicConfig_v3_5_2, ModbusLegacyBasicConfig } from './modbus.models';
@@ -46,6 +47,7 @@ import {
   SocketLegacyBasicConfig
 } from './socket.models';
 import { BacnetBasicConfig_v3_6_2, BacnetLegacyBasicConfig } from './bacnet.models';
+import { RestBasicConfig_v3_7, RestConverterType, RestLegacyBasicConfig, RestSourceType } from './rest.models';
 
 export interface ConnectorBaseInfo {
   name: string;
@@ -80,6 +82,7 @@ export enum PortLimits {
 }
 
 export const GatewayConnectorConfigVersionMap = new Map<ConnectorType, GatewayVersion>([
+  [ConnectorType.REST, GatewayVersion.v3_7_0],
   [ConnectorType.BACNET, GatewayVersion.v3_6_2],
   [ConnectorType.SOCKET, GatewayVersion.v3_6_0],
   [ConnectorType.MQTT, GatewayVersion.v3_5_2],
@@ -183,7 +186,7 @@ export interface MappingDataKey {
   type: MappingValueType;
 }
 
-export type SourceType = MQTTSourceType | OPCUaSourceType | ExpressionType;
+export type SourceType = MQTTSourceType | OPCUaSourceType | RestSourceType | ExpressionType;
 
 export const SourceTypeTranslationsMap = new Map<SourceType, string>(
   [
@@ -193,7 +196,8 @@ export const SourceTypeTranslationsMap = new Map<SourceType, string>(
     [OPCUaSourceType.PATH, 'gateway.source-type.path'],
     [OPCUaSourceType.IDENTIFIER, 'gateway.source-type.identifier'],
     [OPCUaSourceType.CONST, 'gateway.source-type.const'],
-    [ExpressionType.Expression, 'gateway.source-type.expression']
+    [ExpressionType.Expression, 'gateway.source-type.expression'],
+    [RestSourceType.REQUEST, 'gateway.source-type.request']
   ]
 );
 
@@ -306,13 +310,21 @@ export interface ServerSideRpc {
   valueExpression: string;
 }
 
-export type ConnectorLegacyConfig = ConnectorBaseInfo | MQTTLegacyBasicConfig | OPCLegacyBasicConfig | ModbusLegacyBasicConfig | SocketLegacyBasicConfig | BacnetLegacyBasicConfig;
+export type ConnectorLegacyConfig = ConnectorBaseInfo
+  | MQTTLegacyBasicConfig
+  | OPCLegacyBasicConfig
+  | ModbusLegacyBasicConfig
+  | SocketLegacyBasicConfig
+  | BacnetLegacyBasicConfig
+  | RestLegacyBasicConfig;
 
 export type ConnectorBaseConfig_v3_5_2 = ConnectorBaseInfo | MQTTBasicConfig_v3_5_2 | OPCBasicConfig_v3_5_2 | ModbusBasicConfig_v3_5_2;
 
 export type ConnectorBaseConfig_v3_6 = ConnectorBaseInfo | SocketBasicConfig_v3_6;
 
 export type ConnectorBaseConfig_v3_6_2 = ConnectorBaseInfo | BacnetBasicConfig_v3_6_2;
+
+export type ConnectorBaseConfig_v3_7_0 = ConnectorBaseInfo | RestBasicConfig_v3_7;
 
 export interface DevicesConfigMapping {
   address: string;
@@ -331,5 +343,13 @@ export interface DeviceConfigInfo {
   buttonTitle: string;
   withReportStrategy?: boolean;
 }
+
+export enum SecurityMode {
+  basic = 'basic',
+  certificates = 'certificates',
+  extendedCertificates = 'extendedCertificates'
+}
+
+export type ConverterType = MqttConverterType | RestConverterType;
 
 
