@@ -210,5 +210,6 @@ export interface RestMappingInfo<Mapping = RestMapping> {
   value: Mapping;
   buttonTitle: string;
   withReportStrategy: boolean;
+  defaultRequestUrl?: string;
 }
 

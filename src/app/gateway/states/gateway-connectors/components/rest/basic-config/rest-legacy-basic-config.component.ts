@@ -67,7 +67,8 @@ export class RestLegacyBasicConfigComponent extends RestBasicConfigAbstract<Rest
     };
   }
 
-  protected getMappedValue({ requestsMapping, mapping = [], server }: RestBasicConfig_v3_7): RestLegacyBasicConfig {
+  protected getMappedValue({ requestsMapping, mapping = [], server = {} as RestServerConfig }: RestBasicConfig_v3_7): RestLegacyBasicConfig {
+    this.updateDefaultUrl(server);
     const { attributeRequests = [], attributeUpdates = [], serverSideRpc = [] } = this.getRequestDataObject(requestsMapping as RestRequestMappingValue[]) as RestRequestsMapping;
     return {
       ...server,

@@ -24,6 +24,6 @@
     <tb-rest-mapping-table formControlName="mapping"/>
   </mat-tab>
   <mat-tab label="{{ 'gateway.requests-mapping' | translate }}">
-    <tb-rest-request-mapping-table formControlName="requestsMapping"/>
+    <tb-rest-request-mapping-table [defaultRequestUrl]="defaultRequestUrl" formControlName="requestsMapping"/>
   </mat-tab>
 </mat-tab-group>

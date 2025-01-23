@@ -13,7 +13,7 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-import { Component, ChangeDetectionStrategy, forwardRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, forwardRef, Input } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
@@ -52,6 +52,8 @@ import { RestRequestsMappingDialogComponent } from '../requests-mapping-dialog/r
   ]
 })
 export class RestRequestMappingTableComponent extends AbstractDevicesConfigTableComponent<RestRequestMappingValue> {
+
+  @Input() defaultRequestUrl: string;
 
   readonly Object = Object;
 
@@ -134,6 +136,7 @@ export class RestRequestMappingTableComponent extends AbstractDevicesConfigTable
       data: {
         value,
         buttonTitle,
+        defaultRequestUrl: this.defaultRequestUrl,
         withReportStrategy: this.withReportStrategy,
       }
     });

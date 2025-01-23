@@ -90,7 +90,7 @@ export class RestRequestsMappingDialogComponent extends DialogComponent<RestRequ
     deviceNameFilter: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
     methodFilter: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
     attributeFilter: ['', [Validators.pattern(noLeadTrailSpacesRegex)]],
-    requestUrlExpression: ['', [Validators.pattern(noLeadTrailSpacesRegex)]],
+    requestUrlExpression: [this.data.defaultRequestUrl, [Validators.pattern(noLeadTrailSpacesRegex)]],
     valueExpression: ['', [Validators.pattern(noLeadTrailSpacesRegex)]],
     responseTimeout: [],
     tries: [],

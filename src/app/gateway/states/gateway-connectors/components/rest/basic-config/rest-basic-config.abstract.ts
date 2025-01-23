@@ -20,6 +20,7 @@ import {
   RestBasicConfig_v3_7,
   RestRequestMappingValue,
   RestRequestsMapping,
+  RestServerConfig,
 } from '../../../models/public-api';
 import { isObject } from '@core/public-api';
 import { GatewayConnectorBasicConfigDirective } from '../../../abstract/public-api';
@@ -27,6 +28,8 @@ import { GatewayConnectorBasicConfigDirective } from '../../../abstract/public-a
 @Directive()
 export abstract class RestBasicConfigAbstract<BasicConfig>
   extends GatewayConnectorBasicConfigDirective<RestBasicConfig_v3_7, BasicConfig> {
+
+  defaultRequestUrl: string;
 
   protected override initBasicFormGroup(): FormGroup {
     return this.fb.group({
@@ -62,6 +65,10 @@ export abstract class RestBasicConfigAbstract<BasicConfig>
       attributeUpdates: [],
       serverSideRpc: [],
     });
+  }
+
+  protected updateDefaultUrl({ host, port, SSL }: RestServerConfig): void {
+    this.defaultRequestUrl = host && port ? `${SSL ? 'https' : 'http'}//${host}:${port}/` : document.location.origin;
   }
 
   writeValue(basicConfig: BasicConfig): void {

@@ -64,6 +64,7 @@ export class RestBasicConfigComponent extends RestBasicConfigAbstract<RestBasicC
   }
 
   protected getMappedValue(value: RestBasicConfig_v3_7): RestBasicConfig_v3_7 {
+    this.updateDefaultUrl(value?.server ?? {} as RestServerConfig);
     return {
       server: value.server ?? {} as RestServerConfig,
       mapping: value.mapping ?? [],
