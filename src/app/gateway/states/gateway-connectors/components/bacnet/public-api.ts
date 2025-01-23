@@ -16,6 +16,7 @@
 export * from './application-config/bacnet-application-config.component';
 export * from './device-data-keys-pannel/bacnet-device-data-keys-panel.component';
 export * from './basic-config/bacnet-basic-config.component';
+export * from './basic-config/bacnet-legacy-basic-config.component';
 export * from './device-data-key/bacnet-device-data-key.component';
 export * from './device-dialog/bacnet-device-dialog.component';
 export * from './devices-config-table/bacnet-devices-config-table.component';

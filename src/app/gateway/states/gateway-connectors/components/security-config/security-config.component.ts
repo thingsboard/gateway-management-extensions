@@ -18,7 +18,9 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  effect,
   forwardRef,
+  input,
   Input,
   OnDestroy,
   OnInit,
@@ -33,18 +35,16 @@ import {
   ValidationErrors,
   Validators
 } from '@angular/forms';
+import { noLeadTrailSpacesRegex, TruncateWithTooltipDirective, } from '../../../../shared/public-api';
 import {
-  noLeadTrailSpacesRegex,
-  TruncateWithTooltipDirective,
-} from '../../../../shared/public-api';
-import {
-  SecurityType,
-  SecurityTypeTranslationsMap,
+  ConnectorSecurity,
   ModeType,
-  ConnectorSecurity
+  SecurityMode,
+  SecurityType,
+  SecurityTypeTranslationsMap
 } from '../../models/public-api';
 import { takeUntil } from 'rxjs/operators';
-import { coerceBoolean, SharedModule } from '@shared/public-api';
+import { SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
 import { deleteNullProperties } from '@core/public-api';
 
@@ -77,11 +77,10 @@ export class SecurityConfigComponent implements ControlValueAccessor, OnInit, On
   @Input()
   title = 'gateway.security';
 
-  @Input()
-  @coerceBoolean()
-  extendCertificatesModel = false;
+  mode = input(SecurityMode.certificates);
 
   BrokerSecurityType = SecurityType;
+  SecurityMode = SecurityMode;
   securityTypes = Object.values(SecurityType) as SecurityType[];
   modeTypes = Object.values(ModeType);
   SecurityTypeTranslationsMap = SecurityTypeTranslationsMap;
@@ -92,7 +91,13 @@ export class SecurityConfigComponent implements ControlValueAccessor, OnInit, On
 
   private destroy$ = new Subject<void>();
 
-  constructor(private fb: FormBuilder, private cdr: ChangeDetectorRef) {}
+  constructor(private fb: FormBuilder, private cdr: ChangeDetectorRef) {
+    effect(() => {
+      if (this.mode() === SecurityMode.basic) {
+        this.securityTypes = this.securityTypes.filter(type => type !== SecurityType.CERTIFICATES);
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.securityFormGroup = this.fb.group({
@@ -103,7 +108,7 @@ export class SecurityConfigComponent implements ControlValueAccessor, OnInit, On
       pathToPrivateKey: ['', [Validators.pattern(noLeadTrailSpacesRegex)]],
       pathToClientCert: ['', [Validators.pattern(noLeadTrailSpacesRegex)]]
     });
-    if (this.extendCertificatesModel) {
+    if (this.mode() === SecurityMode.extendedCertificates) {
       this.securityFormGroup.addControl('mode', this.fb.control(ModeType.NONE, []));
     }
     this.securityFormGroup.valueChanges.pipe(
@@ -166,7 +171,7 @@ export class SecurityConfigComponent implements ControlValueAccessor, OnInit, On
         this.securityFormGroup.get('pathToCACert').enable({emitEvent: false});
         this.securityFormGroup.get('pathToPrivateKey').enable({emitEvent: false});
         this.securityFormGroup.get('pathToClientCert').enable({emitEvent: false});
-        if (this.extendCertificatesModel) {
+        if (this.mode() === SecurityMode.extendedCertificates) {
           const modeControl = this.securityFormGroup.get('mode');
           if (modeControl && !modeControl.value) {
             modeControl.setValue(ModeType.NONE, {emitEvent: false});

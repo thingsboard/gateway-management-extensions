@@ -99,6 +99,7 @@
         "certificates": "Certificates"
       }
     },
+    "certificate": "Certificate",
     "CA-certificate-path": "Path to CA certificate file",
     "path-to-CA-cert-required": "Path to CA certificate file is required.",
     "change-connector-title": "Confirm connector change",
@@ -185,7 +186,7 @@
     "payload-type": "Payload type",
     "platform-side": "Platform side",
     "JSON": "JSON",
-    "JSON-hint": "Converter for this payload type processes MQTT messages in JSON format. It uses JSON Path expressions to extract vital details such as device names, device profile names, attributes, and time series from the message. And regular expressions to get device details from topics.",
+    "JSON-hint": "Converter for this payload type processes messages in JSON format. It uses JSON Path expressions to extract vital details such as device names, device profile names, attributes, and time series from the message. And regular expressions to get device details from topics.",
     "byte": "Byte",
     "bytes": "Bytes",
     "bytes-hint": "Converter for this payload type designed for binary MQTT payloads, this converter directly interprets binary data to retrieve device names and device profile names, along with attributes and time series, using specific byte positions for data extraction.",
@@ -373,6 +374,28 @@
     "retries": "Retries",
     "retries-on-empty": "Retries on empty",
     "retries-on-invalid": "Retries on invalid",
+    "response": "Response",
+    "rest": {
+      "add-http-header": "Add HTTP header",
+      "no-http-headers": "No HTTP headers",
+      "delete-http-header": "Delete HTTP header",
+      "ssl-verify": "SSLVerify",
+      "endpoint": "Endpoint",
+      "http-methods": "HTTP methods",
+      "on-error": "On error",
+      "on-success": "On success",
+      "tries": "Tries",
+      "http-headers": "HTTP headers",
+      "allow-redirects": "Allow redirects",
+      "request-url-expression": "Request URL expression",
+      "response-attribute": "Response attribute",
+      "response-expected": "Expected",
+      "response-type": {
+        "default": "Default",
+        "const": "Constant",
+        "advanced": "Advanced"
+      }
+    },
     "rpc": {
       "title": "{{type}} Connector RPC parameters",
       "templates-title": "Connector RPC Templates",
@@ -476,7 +499,7 @@
     "request-topic-expression": "Request topic expression",
     "request-client-certificate": "Request client certificate",
     "request-topic-expression-required": "Request topic expression is required.",
-    "response-timeout": "Response timeout (ms)",
+    "response-timeout": "Response timeout",
     "response-timeout-required": "Response timeout is required.",
     "response-timeout-limits-error": "Timeout must be more then {{min}} ms.",
     "response-topic-Qos": "Response topic QoS",
@@ -628,6 +651,7 @@
       "sqlite": "SQLITE"
     },
     "suffix": {
+      "s": "s",
       "ms": "ms"
     },
     "report-strategy": {
@@ -644,7 +668,8 @@
       "const": "Constant",
       "identifier": "Identifier",
       "path": "Path",
-      "expression": "Expression"
+      "expression": "Expression",
+      "request": "From request"
     },
     "workers-settings": "Workers settings",
     "thingsboard": "ThingsBoard",
@@ -662,7 +687,7 @@
     "thingsboard-port-required": "Port is required.",
     "tidy": "Tidy",
     "tidy-tip": "Tidy config JSON",
-    "timeout": "Timeout (ms)",
+    "timeout": "Timeout",
     "timeout-error": "Timeout should be at least {{min}} (ms).",
     "title-connectors-json": "Connector {{typeName}} configuration",
     "type": "Type",
@@ -773,6 +798,10 @@
       "poll-period-required": "Poll period is required.",
       "report-period-required": "Report period is required.",
       "report-period-range": "Report period must be greater than 100.",
+      "rest": {
+        "endpoint-required": "Endpoint is required.",
+        "http-methods-required": "HTTP methods are required."
+      },
       "socket": {
         "attribute-on-platform-required": "Attribute on platform is required",
         "attribute-requests-type": "The type of requested attribute can be “shared” or “client.“",

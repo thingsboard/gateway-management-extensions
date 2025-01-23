@@ -20,7 +20,7 @@ import {
   ConnectorDeviceInfo,
   Converter,
   ConverterConnectorMapping,
-  ConvertorType,
+  MqttConverterType,
   LegacyConverter,
   LegacyConverterConnectorMapping,
   LegacyRequestMappingData,
@@ -124,7 +124,7 @@ export class MqttVersionMappingUtil {
   private static mapConverterToDowngradedVersion(converter: Converter): LegacyConverter {
     const { deviceInfo, ...restConverter } = converter;
 
-    return converter.type !== ConvertorType.BYTES ? {
+    return converter.type !== MqttConverterType.BYTES ? {
       ...restConverter,
       deviceNameJsonExpression: deviceInfo?.deviceNameExpressionSource === MQTTSourceType.MSG ? deviceInfo.deviceNameExpression : null,
       deviceTypeJsonExpression:

@@ -15,3 +15,4 @@
 ///
 export * from './report-strategy/report-strategy.component';
 export * from './gateway-status/gateway-status.component';
+export * from './error-icon/error-icon.component';

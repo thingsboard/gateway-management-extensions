@@ -39,7 +39,7 @@ export interface DataMapping {
 }
 
 export interface Converter {
-  type: ConvertorType;
+  type: MqttConverterType;
   deviceInfo?: ConnectorDeviceInfo;
   sendDataOnlyOnChange: boolean;
   timeout: number;
@@ -50,7 +50,7 @@ export interface Converter {
   extensionConfig?: Record<string, number>;
 }
 
-export enum ConvertorType {
+export enum MqttConverterType {
   JSON = 'json',
   BYTES = 'bytes',
   CUSTOM = 'custom'
@@ -102,11 +102,11 @@ export interface ConverterConnectorMapping {
   converter: Converter;
 }
 
-export const ConvertorTypeTranslationsMap = new Map<ConvertorType, string>(
+export const ConvertorTypeTranslationsMap = new Map<MqttConverterType, string>(
   [
-    [ConvertorType.JSON, 'gateway.JSON'],
-    [ConvertorType.BYTES, 'gateway.bytes'],
-    [ConvertorType.CUSTOM, 'gateway.custom']
+    [MqttConverterType.JSON, 'gateway.JSON'],
+    [MqttConverterType.BYTES, 'gateway.bytes'],
+    [MqttConverterType.CUSTOM, 'gateway.custom']
   ]
 );
 
@@ -240,14 +240,14 @@ export const RequestTypesTranslationsMap = new Map<RequestType, string>(
 
 export type ConverterMappingFormValue = Omit<ConverterConnectorMapping, 'converter'> & {
   converter: {
-    type: ConvertorType;
-  } & Record<ConvertorType, Converter>;
+    type: MqttConverterType;
+  } & Record<MqttConverterType, Converter>;
 };
 
-export const DataConversionTranslationsMap = new Map<ConvertorType, string>(
+export const DataConversionTranslationsMap = new Map<MqttConverterType, string>(
   [
-    [ConvertorType.JSON, 'gateway.JSON-hint'],
-    [ConvertorType.BYTES, 'gateway.bytes-hint'],
-    [ConvertorType.CUSTOM, 'gateway.custom-hint']
+    [MqttConverterType.JSON, 'gateway.JSON-hint'],
+    [MqttConverterType.BYTES, 'gateway.bytes-hint'],
+    [MqttConverterType.CUSTOM, 'gateway.custom-hint']
   ]
 );

@@ -30,9 +30,6 @@ import {
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/public-api';
 import {
-  SecurityConfigComponent
-} from '../../security-config/security-config.component';
-import {
   WorkersConfigControlComponent
 } from '../workers-config-control/workers-config-control.component';
 import {
@@ -63,7 +60,6 @@ import {
   imports: [
     CommonModule,
     SharedModule,
-    SecurityConfigComponent,
     WorkersConfigControlComponent,
     BrokerConfigControlComponent,
     MappingTableComponent,

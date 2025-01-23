@@ -100,19 +100,6 @@ export const SNMPMethodsTranslations = new Map<SNMPMethods, string>([
   [SNMPMethods.WALKS, 'gateway.rpc.walk']
 ]);
 
-export enum HTTPMethods {
-  CONNECT = 'CONNECT',
-  DELETE = 'DELETE',
-  GET = 'GET',
-  HEAD = 'HEAD',
-  OPTIONS = 'OPTIONS',
-  PATCH = 'PATCH',
-  POST = 'POST',
-  PUT = 'PUT',
-  TRACE = 'TRACE'
-
-}
-
 export enum SocketEncodings {
   UTF_8 = 'utf-8'
 }

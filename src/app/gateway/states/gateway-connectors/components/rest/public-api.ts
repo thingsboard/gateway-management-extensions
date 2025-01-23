@@ -13,13 +13,11 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-
-export * from './mqtt-version-processor.abstract';
-export * from './gateway-connector-version-processor.abstract';
-export * from './modbus-version-processor.abstract';
-export * from './opc-version-processor.abstract';
-export * from './gateway-connector-basic-config.abstract';
-export * from './socket-version-processor.abstract';
-export * from './bacnet-version-processor.abstract';
-export * from './basic-config-entity-table.abstract';
-export * from './rest-version-processor.abstract';
+export * from './basic-config/rest-basic-config.component';
+export * from './basic-config/rest-legacy-basic-config.component';
+export * from './basic-config/rest-basic-config.abstract';
+export * from './request-mapping-table/rest-request-mapping-table.component';
+export * from './mapping-table/rest-mapping-table.component';
+export * from './mapping-dialog/rest-mapping-dialog.component';
+export * from './response-config/rest-response-config.component';
+export * from './server-config/rest-server-config.component';
