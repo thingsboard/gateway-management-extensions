@@ -27,7 +27,8 @@ import {
   GatewayVersion,
   noLeadTrailSpacesRegex,
   getDefaultConfig,
-  ReportStrategyVersionPipe
+  ReportStrategyVersionPipe,
+  ConnectorsTypesByVersion
 } from '../../../../shared/public-api';
 import {
   AddConnectorConfigData,
@@ -39,6 +40,7 @@ import { AppState } from '@core/public-api';
 import { takeUntil, tap } from 'rxjs/operators';
 import { LatestVersionConfigPipe } from '../../pipes/public-api';
 import { CommonModule } from '@angular/common';
+import { GatewayConnectorVersionMappingUtil } from '../../utils/public-api';
 
 @Component({
   selector: 'tb-add-connector-dialog',
@@ -58,6 +60,7 @@ export class AddConnectorDialogComponent
   connectorForm: UntypedFormGroup;
 
   connectorType = ConnectorType;
+  connectorTypes: ConnectorType[];
 
   gatewayConnectorDefaultTypesTranslatesMap = GatewayConnectorDefaultTypesTranslatesMap;
   gatewayLogLevel = Object.values(GatewayLogLevel);
@@ -74,6 +77,7 @@ export class AddConnectorDialogComponent
               private isLatestVersionConfig: LatestVersionConfigPipe
   ) {
     super(store, router, dialogRef);
+    this.updateConnectorTypesByVersion();
     this.connectorForm = this.fb.group({
       type: [ConnectorType.MQTT, []],
       name: ['', [Validators.required, this.uniqNameRequired(), Validators.pattern(noLeadTrailSpacesRegex)]],
@@ -133,6 +137,17 @@ export class AddConnectorDialogComponent
 
       return isDuplicate ? { duplicateName: { valid: false } } : null;
     };
+  }
+
+  private updateConnectorTypesByVersion(): void {
+    const connectorVersions = ConnectorsTypesByVersion.keys();
+    for (let version of connectorVersions) {
+     if (version === GatewayVersion.Legacy || GatewayConnectorVersionMappingUtil.parseVersion(this.data.gatewayVersion)
+       >= GatewayConnectorVersionMappingUtil.parseVersion(version)) {
+       this.connectorTypes = ConnectorsTypesByVersion.get(version);
+       break;
+     }
+    }
   }
 
   private observeTypeChange(): void {

@@ -27,6 +27,7 @@ import snmp from '../../assets/connector-default-configs/snmp.json';
 import ftp from '../../assets/connector-default-configs/ftp.json';
 import xmpp from '../../assets/connector-default-configs/xmpp.json';
 import ocpp from '../../assets/connector-default-configs/ocpp.json';
+import knx from '../../assets/connector-default-configs/knx.json';
 
 import { ConnectorType, GatewayConnector, GatewayVersionedDefaultConfig } from './public-api';
 
@@ -45,6 +46,7 @@ export const connectorConfigs = {
   [ConnectorType.SOCKET]: socket,
   [ConnectorType.XMPP]: xmpp,
   [ConnectorType.OCPP]: ocpp,
+  [ConnectorType.KNX]: knx
 };
 
 export function getDefaultConfig(type: ConnectorType): GatewayVersionedDefaultConfig | GatewayConnector {
