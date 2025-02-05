@@ -40,6 +40,7 @@ export enum GatewayLogLevel {
 }
 
 export enum GatewayVersion {
+  v3_7_0 = '3.7',
   v3_6_3 = '3.6.3',
   v3_6_2 = '3.6.2',
   v3_6_0 = '3.6',
@@ -63,7 +64,8 @@ export enum ConnectorType {
   SOCKET = 'socket',
   XMPP = 'xmpp',
   OCPP = 'ocpp',
-  CUSTOM = 'custom'
+  CUSTOM = 'custom',
+  KNX = 'knx',
 }
 
 export const GatewayConnectorDefaultTypesTranslatesMap = new Map<ConnectorType, string>([
@@ -82,7 +84,13 @@ export const GatewayConnectorDefaultTypesTranslatesMap = new Map<ConnectorType, 
   [ConnectorType.SOCKET, 'SOCKET'],
   [ConnectorType.XMPP, 'XMPP'],
   [ConnectorType.OCPP, 'OCPP'],
-  [ConnectorType.CUSTOM, 'CUSTOM']
+  [ConnectorType.CUSTOM, 'CUSTOM'],
+  [ConnectorType.KNX, 'KNX'],
+]);
+
+export const ConnectorsTypesByVersion = new Map<GatewayVersion, ConnectorType[]>([
+  [GatewayVersion.v3_7_0, Object.values(ConnectorType)],
+  [GatewayVersion.Legacy, Object.values(ConnectorType).filter(type => type!== ConnectorType.KNX)],
 ]);
 
 export type ConnectorBaseConfig = ConnectorBaseConfig_v3_6_2 | ConnectorBaseConfig_v3_6 | ConnectorBaseConfig_v3_5_2 | ConnectorLegacyConfig;
