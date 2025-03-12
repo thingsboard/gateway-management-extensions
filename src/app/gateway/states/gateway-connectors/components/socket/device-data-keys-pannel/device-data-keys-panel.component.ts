@@ -130,7 +130,11 @@ export class DeviceDataKeysPanelComponent extends PageComponent implements OnIni
   }
 
   applyKeysData(): void {
-    this.keysDataApplied.emit(this.keysListFormArray.value);
+    let keys = this.keysListFormArray.value.map(({ reportStrategy, ...key }) => ({
+      ...key,
+      ...reportStrategy && { reportStrategy },
+    }));
+    this.keysDataApplied.emit(keys);
   }
 
   private prepareKeysFormArray(keys: Array<SocketDeviceKeys>): UntypedFormArray {

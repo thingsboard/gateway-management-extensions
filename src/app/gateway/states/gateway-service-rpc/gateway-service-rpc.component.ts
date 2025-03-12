@@ -193,7 +193,8 @@ export class GatewayServiceRPCComponent implements OnInit {
         if (res) {
           const templateAttribute: RPCTemplate = {
             name: res,
-            config: this.commandForm.value.params
+            config: this.commandForm.value.params,
+            type: this.connectorType
           }
           const templatesArray = this.templates;
           const existingIndex = templatesArray.findIndex(template => {
