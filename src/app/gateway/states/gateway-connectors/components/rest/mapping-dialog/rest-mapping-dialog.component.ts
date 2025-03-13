@@ -30,7 +30,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatButton } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { AppState } from '@core/public-api';
+import { AppState, deleteNullProperties } from '@core/public-api';
 import { DialogComponent, helpBaseUrl, SharedModule } from '@shared/public-api';
 import { TbPopoverService } from '@shared/components/popover.service';
 import {
@@ -51,7 +51,8 @@ import {
   MappingKeysType,
   RestConvertorTypeTranslationsMap,
   RestDataConversionTranslationsMap,
-  RestMapping, RestMappingInfo,
+  RestMapping,
+  RestMappingInfo,
   SecurityMode,
   SecurityType,
 } from '../../../models/public-api';
@@ -153,7 +154,9 @@ export class RestMappingDialogComponent extends DialogComponent<RestMappingDialo
 
   add(): void {
     if (this.mappingFormGroup.valid) {
-      this.dialogRef.close(this.mappingFormGroup.value as RestMapping);
+      const value = this.mappingFormGroup.value;
+      deleteNullProperties(value);
+      this.dialogRef.close(value as RestMapping);
     }
   }
 

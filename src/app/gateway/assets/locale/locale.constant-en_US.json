@@ -811,7 +811,7 @@
         "method-filter-required": "Method filter is required.",
         "method-filter-pattern": "Method filter is not valid.",
         "scope-type": "Request scope type.",
-        "tries-min": "Request tries cannot be negative.",
+        "tries-min": "Request tries number should be greater than 0.",
         "tries-pattern": "Request tries is invalid.",
         "http-methods-required": "HTTP methods are required.",
         "host": "Domain or IP address of the server.",

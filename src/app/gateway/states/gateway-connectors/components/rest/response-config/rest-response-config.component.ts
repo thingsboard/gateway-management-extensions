@@ -85,4 +85,9 @@ export class RestResponseConfigComponent extends ControlValueAccessorBaseAbstrac
   protected override mapOnChangeValue({ type, ...config }: { type: ResponseType }): RestResponse {
     return { type, ...(config[type] ?? {}) };
   }
+
+  protected override onWriteValue(value: RestResponse): { type: ResponseType } {
+    const { type = ResponseType.DEFAULT, ...config } = value ?? {};
+    return { type, [type]: config };
+  }
 }

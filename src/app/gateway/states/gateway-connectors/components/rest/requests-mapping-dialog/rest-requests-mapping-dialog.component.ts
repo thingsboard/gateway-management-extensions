@@ -43,7 +43,9 @@ import {
   numberInputPattern,
 } from '../../../../../shared/public-api';
 import {
-  RestMappingInfo, RestRequestMappingData, RestRequestMappingValue,
+  RestMappingInfo,
+  RestRequestMappingData,
+  RestRequestMappingValue,
   RestRequestsScopeType,
   RestRequestType,
   RestRequestTypeFieldsMap,

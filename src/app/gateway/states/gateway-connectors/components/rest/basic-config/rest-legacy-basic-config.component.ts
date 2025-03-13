@@ -22,7 +22,7 @@ import { RestMappingTableComponent } from '../mapping-table/rest-mapping-table.c
 import { RestRequestMappingTableComponent } from '../request-mapping-table/rest-request-mapping-table.component';
 import { RestBasicConfigAbstract } from './rest-basic-config.abstract';
 import {
-  RestBasicConfig_v3_7,
+  RestBasicConfig_v3_7_2,
   RestLegacyBasicConfig,
   RestRequestMappingValue,
   RestRequestsMapping,
@@ -59,7 +59,7 @@ export class RestLegacyBasicConfigComponent extends RestBasicConfigAbstract<Rest
 
   protected mapConfigToFormValue(
     { attributeRequests = [], attributeUpdates = [], serverSideRpc = [], mapping = [], ...config }: RestLegacyBasicConfig
-  ): RestBasicConfig_v3_7 {
+  ): RestBasicConfig_v3_7_2 {
     return {
       server: {...(config ?? {})} as RestServerConfig,
       mapping: RestVersionMappingUtil.mapMappingToUpgradedVersion(mapping),
@@ -67,7 +67,7 @@ export class RestLegacyBasicConfigComponent extends RestBasicConfigAbstract<Rest
     };
   }
 
-  protected getMappedValue({ requestsMapping, mapping = [], server = {} as RestServerConfig }: RestBasicConfig_v3_7): RestLegacyBasicConfig {
+  protected getMappedValue({ requestsMapping, mapping = [], server = {} as RestServerConfig }: RestBasicConfig_v3_7_2): RestLegacyBasicConfig {
     this.updateDefaultUrl(server);
     const { attributeRequests = [], attributeUpdates = [], serverSideRpc = [] } = this.getRequestDataObject(requestsMapping as RestRequestMappingValue[]) as RestRequestsMapping;
     return {

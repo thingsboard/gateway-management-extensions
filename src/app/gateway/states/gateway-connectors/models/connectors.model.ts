@@ -47,7 +47,7 @@ import {
   SocketLegacyBasicConfig
 } from './socket.models';
 import { BacnetBasicConfig_v3_6_2, BacnetLegacyBasicConfig } from './bacnet.models';
-import { RestBasicConfig_v3_7, RestConverterType, RestLegacyBasicConfig, RestSourceType } from './rest.models';
+import { RestBasicConfig_v3_7_2, RestConverterType, RestLegacyBasicConfig, RestSourceType } from './rest.models';
 
 export interface ConnectorBaseInfo {
   name: string;
@@ -82,7 +82,7 @@ export enum PortLimits {
 }
 
 export const GatewayConnectorConfigVersionMap = new Map<ConnectorType, GatewayVersion>([
-  [ConnectorType.REST, GatewayVersion.v3_7_0],
+  [ConnectorType.REST, GatewayVersion.v3_7_2],
   [ConnectorType.BACNET, GatewayVersion.v3_6_2],
   [ConnectorType.SOCKET, GatewayVersion.v3_6_0],
   [ConnectorType.MQTT, GatewayVersion.v3_5_2],
@@ -324,7 +324,7 @@ export type ConnectorBaseConfig_v3_6 = ConnectorBaseInfo | SocketBasicConfig_v3_
 
 export type ConnectorBaseConfig_v3_6_2 = ConnectorBaseInfo | BacnetBasicConfig_v3_6_2;
 
-export type ConnectorBaseConfig_v3_7_0 = ConnectorBaseInfo | RestBasicConfig_v3_7;
+export type ConnectorBaseConfig_v3_7_2 = ConnectorBaseInfo | RestBasicConfig_v3_7_2;
 
 export interface DevicesConfigMapping {
   address: string;

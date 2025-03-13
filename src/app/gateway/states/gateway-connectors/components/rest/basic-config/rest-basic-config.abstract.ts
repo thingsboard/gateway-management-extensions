@@ -17,7 +17,7 @@
 import { Directive } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import {
-  RestBasicConfig_v3_7,
+  RestBasicConfig_v3_7_2,
   RestRequestMappingValue,
   RestRequestsMapping,
   RestServerConfig,
@@ -27,7 +27,7 @@ import { GatewayConnectorBasicConfigDirective } from '../../../abstract/public-a
 
 @Directive()
 export abstract class RestBasicConfigAbstract<BasicConfig>
-  extends GatewayConnectorBasicConfigDirective<RestBasicConfig_v3_7, BasicConfig> {
+  extends GatewayConnectorBasicConfigDirective<RestBasicConfig_v3_7_2, BasicConfig> {
 
   defaultRequestUrl: string;
 

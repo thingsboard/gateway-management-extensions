@@ -22,7 +22,7 @@ import { RestMappingTableComponent } from '../mapping-table/rest-mapping-table.c
 import { RestRequestMappingTableComponent } from '../request-mapping-table/rest-request-mapping-table.component';
 import { RestBasicConfigAbstract } from './rest-basic-config.abstract';
 import {
-  RestBasicConfig_v3_7,
+  RestBasicConfig_v3_7_2,
   RestRequestMappingValue,
   RestRequestsMapping,
   RestServerConfig
@@ -53,9 +53,9 @@ import {
     RestRequestMappingTableComponent,
   ],
 })
-export class RestBasicConfigComponent extends RestBasicConfigAbstract<RestBasicConfig_v3_7> {
+export class RestBasicConfigComponent extends RestBasicConfigAbstract<RestBasicConfig_v3_7_2> {
 
-  protected mapConfigToFormValue(config: RestBasicConfig_v3_7): RestBasicConfig_v3_7 {
+  protected mapConfigToFormValue(config: RestBasicConfig_v3_7_2): RestBasicConfig_v3_7_2 {
     return {
       server: config.server ?? {} as RestServerConfig,
       mapping: config.mapping ?? [],
@@ -63,7 +63,7 @@ export class RestBasicConfigComponent extends RestBasicConfigAbstract<RestBasicC
     };
   }
 
-  protected getMappedValue(value: RestBasicConfig_v3_7): RestBasicConfig_v3_7 {
+  protected getMappedValue(value: RestBasicConfig_v3_7_2): RestBasicConfig_v3_7_2 {
     this.updateDefaultUrl(value?.server ?? {} as RestServerConfig);
     return {
       server: value.server ?? {} as RestServerConfig,

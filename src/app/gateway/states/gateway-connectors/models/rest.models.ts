@@ -80,9 +80,9 @@ export const RestRequestTypeFieldsMap = new Map<RestRequestType | 'all', string[
   ]
 );
 
-export type RestBasicConfig = RestBasicConfig_v3_7 | RestLegacyBasicConfig;
+export type RestBasicConfig = RestBasicConfig_v3_7_2 | RestLegacyBasicConfig;
 
-export interface RestBasicConfig_v3_7 {
+export interface RestBasicConfig_v3_7_2 {
   server: RestServerConfig;
   mapping: RestMapping[];
   requestsMapping: RestRequestsMapping | RestRequestMappingValue[];

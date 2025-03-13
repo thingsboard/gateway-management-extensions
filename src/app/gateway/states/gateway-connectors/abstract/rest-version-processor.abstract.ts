@@ -16,7 +16,7 @@
 
 import {
   RestBasicConfig,
-  RestBasicConfig_v3_7,
+  RestBasicConfig_v3_7_2,
   RestLegacyBasicConfig,
   RestRequestsMapping,
   RestRequestType,
@@ -36,7 +36,7 @@ export class RestVersionProcessor extends GatewayConnectorVersionProcessor<RestB
     super(gatewayVersionIn, connector);
   }
 
-  getUpgradedVersion(): GatewayConnector<RestBasicConfig_v3_7> {
+  getUpgradedVersion(): GatewayConnector<RestBasicConfig_v3_7_2> {
     const {
       attributeRequests = [],
       attributeUpdates = [],
@@ -51,7 +51,7 @@ export class RestVersionProcessor extends GatewayConnectorVersionProcessor<RestB
     };
 
     this.restRequestTypeKeys.forEach((key: RestRequestType) => {
-      const { [key]: removedValue, ...rest } = configurationJson as RestBasicConfig_v3_7 & RestLegacyBasicConfig;
+      const { [key]: removedValue, ...rest } = configurationJson as RestBasicConfig_v3_7_2 & RestLegacyBasicConfig;
       configurationJson = { ...rest } as any;
     });
 
@@ -59,11 +59,11 @@ export class RestVersionProcessor extends GatewayConnectorVersionProcessor<RestB
       ...this.connector,
       configurationJson,
       configVersion: this.gatewayVersionIn
-    } as GatewayConnector<RestBasicConfig_v3_7>;
+    } as GatewayConnector<RestBasicConfig_v3_7_2>;
   }
 
   getDowngradedVersion(): GatewayConnector<RestLegacyBasicConfig> {
-    const { requestsMapping, mapping, server, ...restConfig } = this.connector.configurationJson as RestBasicConfig_v3_7;
+    const { requestsMapping, mapping, server, ...restConfig } = this.connector.configurationJson as RestBasicConfig_v3_7_2;
     const { attributeRequests = [], attributeUpdates = [], serverSideRpc = [] } = requestsMapping as RestRequestsMapping;
 
     return {
