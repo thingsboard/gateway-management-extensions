@@ -24,11 +24,14 @@ import {
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   UntypedFormGroup,
+  Validators,
 } from '@angular/forms';
 import { SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessorBaseAbstract } from '../../../../../shared/abstract/public-api';
 import { ResponseStatus, ResponseType, ResponseTypeTranslationsMap, RestResponse } from '../../../models/public-api';
+import { numberInputPattern } from '../../../../../shared/models/public-api';
+import { ErrorTooltipIconComponent } from '../../../../../shared/components/error-icon/error-icon.component';
 
 @Component({
   selector: 'tb-rest-response-config',
@@ -47,9 +50,10 @@ import { ResponseStatus, ResponseType, ResponseTypeTranslationsMap, RestResponse
     }
   ],
   standalone: true,
-  imports:[
+  imports: [
     CommonModule,
     SharedModule,
+    ErrorTooltipIconComponent,
   ]
 })
 export class RestResponseConfigComponent extends ControlValueAccessorBaseAbstract<RestResponse> {
@@ -72,7 +76,7 @@ export class RestResponseConfigComponent extends ControlValueAccessorBaseAbstrac
       }),
       [ResponseType.ADVANCED]: this.fb.group({
         responseExpected: [true],
-        timeout: [],
+        timeout: [null, [Validators.min(1), Validators.pattern(numberInputPattern)]],
         responseAttribute: ['']
       })
     });

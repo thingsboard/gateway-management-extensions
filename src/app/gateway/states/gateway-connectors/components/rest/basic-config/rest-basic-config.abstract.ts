@@ -58,7 +58,7 @@ export abstract class RestBasicConfigAbstract<BasicConfig>
 
   protected getRequestDataObject(array: RestRequestMappingValue[]): RestRequestsMapping {
     return array.reduce((result, { requestType, requestValue }) => {
-      result[requestType].push(requestValue);
+      result[requestType]?.push(requestValue);
       return result;
     }, {
       attributeRequests: [],

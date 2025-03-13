@@ -14,10 +14,10 @@
 /// limitations under the License.
 ///
 
-export * from './gateway.models';
-export * from './gateway-locale.constant';
-export * from './connectors-default-config.constant';
-export * from './modbus.models';
-export * from './mapping.models';
-export * from './report-strategy.models';
-export * from './regex.models';
+export const numberInputPattern = new RegExp(/^\d{1,15}$/);
+
+export const noLeadTrailSpacesRegex = /^\S+(?: \S+)*$/;
+
+export const integerRegex = /^[-+]?\d+$/;
+
+export const nonZeroFloat = /^-?(?!0(\.0+)?$)\d+(\.\d+)?$/;

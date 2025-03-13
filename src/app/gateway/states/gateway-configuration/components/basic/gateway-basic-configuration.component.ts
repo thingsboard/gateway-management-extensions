@@ -50,6 +50,7 @@ import { take, takeUntil } from 'rxjs/operators';
 import {
   GatewayConfigCommand,
   noLeadTrailSpacesRegex,
+  numberInputPattern,
   ReportStrategyComponent,
   ReportStrategyDefaultValue,
   ReportStrategyType
@@ -59,7 +60,6 @@ import {
   GatewayBasicConfigTab,
   GatewayBasicConfigTabKey,
   GatewayConfigValue,
-  numberInputPattern,
 } from '../../models/public-api';
 import { MatTabGroup } from '@angular/material/tabs';
 import { GatewayStorageConfigurationComponent } from './storage/gateway-storage-configuration.component';

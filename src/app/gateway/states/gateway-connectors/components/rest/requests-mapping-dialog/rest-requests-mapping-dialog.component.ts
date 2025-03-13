@@ -40,6 +40,7 @@ import {
   ErrorTooltipIconComponent,
   HTTPMethods,
   noLeadTrailSpacesRegex,
+  numberInputPattern,
 } from '../../../../../shared/public-api';
 import {
   RestMappingInfo, RestRequestMappingData, RestRequestMappingValue,
@@ -83,17 +84,17 @@ export class RestRequestsMappingDialogComponent extends DialogComponent<RestRequ
     HTTPMethods: [[HTTPMethods.POST], [Validators.required]],
     type: [RestRequestsScopeType.Shared],
     security: [{ type: SecurityType.ANONYMOUS }],
-    timeout: [],
+    timeout: [null, [Validators.min(1), Validators.pattern(numberInputPattern)]],
     deviceNameExpression: ['', [Validators.pattern(noLeadTrailSpacesRegex)]],
     attributeNameExpression: ['', [Validators.pattern(noLeadTrailSpacesRegex)]],
     SSLVerify: [false],
     deviceNameFilter: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
     methodFilter: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
     attributeFilter: ['', [Validators.pattern(noLeadTrailSpacesRegex)]],
-    requestUrlExpression: [this.data.defaultRequestUrl, [Validators.pattern(noLeadTrailSpacesRegex)]],
-    valueExpression: ['', [Validators.pattern(noLeadTrailSpacesRegex)]],
-    responseTimeout: [],
-    tries: [],
+    requestUrlExpression: [this.data.defaultRequestUrl, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
+    valueExpression: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
+    responseTimeout: [null, [Validators.min(1), Validators.pattern(numberInputPattern)]],
+    tries: [null, [Validators.min(1), Validators.pattern(numberInputPattern)]],
     allowRedirects: [false],
     httpHeaders: [{}]
   });

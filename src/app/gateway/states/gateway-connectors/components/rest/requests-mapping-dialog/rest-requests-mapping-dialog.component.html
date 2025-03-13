@@ -39,13 +39,18 @@
       </div>
       @if (requestType === RestRequestType.ATTRIBUTE_REQUEST) {
         <div class="tb-form-row">
-          <div class="fixed-title-width tb-required" translate>gateway.rest.endpoint</div>
+          <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.rest.endpoint' | translate }}" translate>gateway.rest.endpoint</div>
           <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
             <input matInput type="text" name="value" formControlName="endpoint" placeholder="{{ 'gateway.set' | translate }}"/>
+            @if (mappingFormGroup.get('endpoint').hasError('required') && mappingFormGroup.get('endpoint').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.endpoint-required' | translate"/>
+            } @else if (mappingFormGroup.get('endpoint').hasError('pattern') && mappingFormGroup.get('endpoint').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.endpoint-pattern' | translate"/>
+            }
           </mat-form-field>
         </div>
         <div class="tb-form-row">
-          <div class="fixed-title-width" tb-hint-tooltip-icon="{{'gateway.type' | translate}}" translate>gateway.type</div>
+          <div class="fixed-title-width" tb-hint-tooltip-icon="{{'gateway.hints.rest.scope-type' | translate}}" translate>gateway.type</div>
           <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
             <mat-select formControlName="type">
               @for (type of requestsScopeType; track type) {
@@ -56,7 +61,7 @@
         </div>
       }
       <div class="tb-form-row">
-        <div class="fixed-title-width tb-required" translate>gateway.rest.http-methods</div>
+        <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.rest.http-methods' | translate }}" translate>gateway.rest.http-methods</div>
         <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
           <mat-select formControlName="HTTPMethods" multiple>
             @for (method of httpMethods; track method) {
@@ -83,6 +88,11 @@
           <div class="fixed-title-width tb-required" translate>gateway.device-name-filter</div>
           <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
             <input matInput type="text" name="value" formControlName="deviceNameFilter" placeholder="{{ 'gateway.set' | translate }}"/>
+            @if (mappingFormGroup.get('deviceNameFilter').hasError('required') && mappingFormGroup.get('deviceNameFilter').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.device-name-filter-required' | translate"/>
+            } @else if (mappingFormGroup.get('deviceNameFilter').hasError('pattern') && mappingFormGroup.get('deviceNameFilter').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.device-name-filter-pattern' | translate"/>
+            }
           </mat-form-field>
         </div>
       }
@@ -91,6 +101,11 @@
           <div class="fixed-title-width tb-required" translate>gateway.method-filter</div>
           <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
             <input matInput type="text" name="value" formControlName="methodFilter" placeholder="{{ 'gateway.set' | translate }}"/>
+            @if (mappingFormGroup.get('methodFilter').hasError('required') && mappingFormGroup.get('methodFilter').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.method-filter-required' | translate"/>
+            } @else if (mappingFormGroup.get('methodFilter').hasError('pattern') && mappingFormGroup.get('methodFilter').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.method-filter-pattern' | translate"/>
+            }
           </mat-form-field>
         </div>
       }
@@ -107,12 +122,29 @@
           <div class="fixed-title-width tb-required" translate>gateway.rest.request-url-expression</div>
           <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
             <input matInput type="text" name="value" formControlName="requestUrlExpression" placeholder="{{ 'gateway.set' | translate }}"/>
+            @if (mappingFormGroup.get('requestUrlExpression').hasError('required') && mappingFormGroup.get('requestUrlExpression').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.request-url-expression-required' | translate"/>
+            } @else if (mappingFormGroup.get('requestUrlExpression').hasError('pattern') && mappingFormGroup.get('requestUrlExpression').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.request-url-expression-pattern' | translate"/>
+            } @else {
+              <div matSuffix
+                   class="see-example p-1"
+                   [tb-help-popup]="'widget/lib/gateway/rest-url_fn'"
+                   tb-help-popup-placement="left"
+                   [tb-help-popup-style]="{maxWidth: '970px'}">
+              </div>
+            }
           </mat-form-field>
         </div>
         <div class="tb-form-row">
           <div class="fixed-title-width tb-required" translate>gateway.value-expression</div>
           <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
             <input matInput type="text" name="value" formControlName="valueExpression" placeholder="{{ 'gateway.set' | translate }}"/>
+            @if (mappingFormGroup.get('valueExpression').hasError('required') && mappingFormGroup.get('valueExpression').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.value-expression-required' | translate"/>
+            } @else if (mappingFormGroup.get('valueExpression').hasError('pattern') && mappingFormGroup.get('valueExpression').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.value-expression-pattern' | translate"/>
+            }
           </mat-form-field>
         </div>
       }
@@ -121,16 +153,28 @@
           <div class="fixed-title-width" translate>gateway.response-timeout</div>
           <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
             <input matInput type="number" min="0" name="value" formControlName="responseTimeout" placeholder="{{ 'gateway.set' | translate }}"/>
-            <span translate class="block pr-2" matSuffix>gateway.suffix.s</span>
+            @if (mappingFormGroup.get('responseTimeout').hasError('min') && mappingFormGroup.get('responseTimeout').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.response-timeout-limits-error' | translate: { min: 1 }"/>
+            } @else if (mappingFormGroup.get('responseTimeout').hasError('pattern') && mappingFormGroup.get('responseTimeout').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.timeout-pattern' | translate"/>
+            } @else {
+              <span translate class="block pr-2" matSuffix>gateway.suffix.s</span>
+            }
           </mat-form-field>
         </div>
       }
       @if (requestType === RestRequestType.ATTRIBUTE_REQUEST) {
         <div class="tb-form-row">
-          <div class="fixed-title-width" translate>gateway.timeout</div>
+          <div class="fixed-title-width" tb-hint-tooltip-icon="{{ 'gateway.hints.rest.request-timeout' | translate }}" translate>gateway.timeout</div>
           <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
             <input matInput type="number" min="0" name="value" formControlName="timeout" placeholder="{{ 'gateway.set' | translate }}"/>
-            <span translate class="block pr-2" matSuffix>gateway.suffix.s</span>
+            @if (mappingFormGroup.get('timeout').hasError('min') && mappingFormGroup.get('timeout').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.response-timeout-limits-error' | translate: { min: 1 }"/>
+            } @else if (mappingFormGroup.get('timeout').hasError('pattern') && mappingFormGroup.get('timeout').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.timeout-pattern' | translate"/>
+            } @else {
+              <span translate class="block pr-2" matSuffix>gateway.suffix.s</span>
+            }
           </mat-form-field>
         </div>
       }
@@ -146,9 +190,9 @@
               <div class="fixed-title-width" translate>gateway.rest.http-headers</div>
               <div class="tb-flex gw-chip-list">
                 <mat-chip-listbox [tbEllipsisChipList]="mappingFormGroup.get('httpHeaders').value | keyvalue" class="tb-flex">
-                  <mat-chip *ngFor="let header of mappingFormGroup.get('httpHeaders').value | keyvalue">
-                    {{ header.value }}
-                  </mat-chip>
+                  @for (header of mappingFormGroup.get('httpHeaders').value | keyvalue; track header) {
+                    <mat-chip><div tbTruncateWithTooltip>{{ header.value }}</div></mat-chip>
+                  }
                   <mat-chip class="mat-mdc-chip ellipsis-chip">
                     <label class="ellipsis-text"></label>
                   </mat-chip>
@@ -165,16 +209,27 @@
               </div>
             </div>
             <div class="tb-form-row">
-              <div class="fixed-title-width" translate>gateway.timeout</div>
+              <div class="fixed-title-width" tb-hint-tooltip-icon="{{ 'gateway.hints.rest.request-timeout' | translate }}" translate>gateway.timeout</div>
               <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
                 <input matInput type="number" min="0" name="value" formControlName="timeout" placeholder="{{ 'gateway.set' | translate }}"/>
-                <span translate class="block pr-2" matSuffix>gateway.suffix.s</span>
+                @if (mappingFormGroup.get('timeout').hasError('min') && mappingFormGroup.get('timeout').touched) {
+                  <tb-error-icon matSuffix [tooltipText]="'gateway.response-timeout-limits-error' | translate: { min: 1 }"/>
+                } @else if (mappingFormGroup.get('timeout').hasError('pattern') && mappingFormGroup.get('timeout').touched) {
+                  <tb-error-icon matSuffix [tooltipText]="'gateway.hints.timeout-pattern' | translate"/>
+                } @else {
+                  <span translate class="block pr-2" matSuffix>gateway.suffix.s</span>
+                }
               </mat-form-field>
             </div>
             <div class="tb-form-row">
               <div class="fixed-title-width" translate>gateway.rest.tries</div>
               <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
                 <input matInput type="number" min="0" name="value" formControlName="tries" placeholder="{{ 'gateway.set' | translate }}"/>
+                @if (mappingFormGroup.get('tries').hasError('min') && mappingFormGroup.get('tries').touched) {
+                  <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.tries-min' | translate"/>
+                } @else if (mappingFormGroup.get('tries').hasError('pattern') && mappingFormGroup.get('tries').touched) {
+                  <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.tries-pattern' | translate"/>
+                }
               </mat-form-field>
             </div>
             @if (requestType === RestRequestType.ATTRIBUTE_UPDATE) {

@@ -35,6 +35,7 @@ import { DialogComponent, helpBaseUrl, SharedModule } from '@shared/public-api';
 import { TbPopoverService } from '@shared/components/popover.service';
 import {
   Attribute,
+  ConnectorType,
   EllipsisChipListDirective,
   ErrorTooltipIconComponent,
   HTTPMethods,
@@ -63,6 +64,7 @@ import { RestResponseConfigComponent } from '../response-config/rest-response-co
 @Component({
   selector: 'tb-rest-mapping-dialog',
   templateUrl: './rest-mapping-dialog.component.html',
+  styleUrls: ['./rest-mapping-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
@@ -102,6 +104,8 @@ export class RestMappingDialogComponent extends DialogComponent<RestMappingDialo
   readonly DeviceInfoType = DeviceInfoType;
   readonly RestConvertorTypeTranslationsMap = RestConvertorTypeTranslationsMap;
   readonly RestDataConversionTranslationsMap = RestDataConversionTranslationsMap;
+  readonly RestConverterType = RestConverterType;
+  readonly ConnectorType = ConnectorType;
 
   constructor(protected store: Store<AppState>,
               protected router: Router,
@@ -138,7 +142,7 @@ export class RestMappingDialogComponent extends DialogComponent<RestMappingDialo
   }
 
   get customKeys(): Array<string> {
-    return Object.keys(this.mappingFormGroup.get('converter').value.extensionConfig);
+    return Object.keys(this.mappingFormGroup.get('converter').value.extensionConfig ?? {});
   }
 
   cancel(): void {
@@ -171,6 +175,7 @@ export class RestMappingDialogComponent extends DialogComponent<RestMappingDialo
         noKeysText: MappingKeysNoKeysTextTranslationsMap.get(keysType),
         withReportStrategy: this.data.withReportStrategy,
         convertorType: this.converterType,
+        connectorType: ConnectorType.REST
       };
       this.keysPopupClosed = false;
       const dataKeysPanelPopover = this.popoverService.displayPopover(trigger, this.renderer,
@@ -207,6 +212,4 @@ export class RestMappingDialogComponent extends DialogComponent<RestMappingDialo
     this.mappingFormGroup.get('converter').get('extension')[isJson ? 'disable' : 'enable']({emitEvent: false});
     this.mappingFormGroup.get('converter').get('extensionConfig')[isJson ? 'disable' : 'enable']({emitEvent: false});
   }
-
-  protected readonly RestConverterType = RestConverterType;
 }

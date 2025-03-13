@@ -24,10 +24,6 @@ import {
 } from '../../states/gateway-connectors/models/public-api';
 import { ConfigurationModes, ReportStrategyConfig } from './report-strategy.models';
 
-export const noLeadTrailSpacesRegex = /^\S+(?: \S+)*$/;
-export const integerRegex = /^[-+]?\d+$/;
-export const nonZeroFloat = /^-?(?!0(\.0+)?$)\d+(\.\d+)?$/;
-
 export const jsonRequired = (control: AbstractControl): ValidationErrors | null => !control.value ? {required: true} : null;
 
 export enum GatewayLogLevel {

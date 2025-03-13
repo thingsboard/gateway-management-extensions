@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<div class="flex max-h-full flex-1 flex-col">
+<div class="flex flex-1 flex-col max-h-full">
   <div class="entry-container flex items-center">
     <div class="tb-form-panel stroked w-full flex-1" [formGroup]="statisticForm">
       <div class="tb-form-panel-title" translate>gateway.statistics.entry</div>
@@ -34,7 +34,7 @@
         </mat-form-field>
       </div>
     </div>
-    <div class="actions-container flex min-w-16 flex-col p-2">
+    <div class="actions-container flex flex-col p-2 min-w-16">
       @if (statisticForm.get('command').value?.attributeOnGateway) {
         <button type="button"
                 matSuffix mat-icon-button aria-label="Edit"

@@ -27,7 +27,7 @@
   <div mat-dialog-content>
     <div class="tb-form-panel no-border no-padding">
       <div class="tb-form-row">
-        <div class="fixed-title-width tb-required">{{ 'gateway.rest.endpoint' | translate }}</div>
+        <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.rest.endpoint' | translate }}">{{ 'gateway.rest.endpoint' | translate }}</div>
         <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
           <input matInput name="value" formControlName="endpoint" placeholder="{{ 'gateway.set' | translate }}"/>
           @if (mappingFormGroup.get('endpoint').hasError('required') && mappingFormGroup.get('endpoint').touched) {
@@ -36,7 +36,7 @@
         </mat-form-field>
       </div>
       <div class="tb-form-row">
-        <div class="fixed-title-width tb-required">{{ 'gateway.rest.http-methods' | translate }}</div>
+        <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.rest.http-methods' | translate }}">{{ 'gateway.rest.http-methods' | translate }}</div>
         <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
           <mat-select formControlName="HTTPMethods" multiple>
             @for (method of httpMethods; track method) {
@@ -65,9 +65,11 @@
           </div>
           <tb-device-info-table
             formControlName="deviceInfo"
+            class="device-info"
             [sourceTypes]="restSourceTypes"
             [convertorType]="RestConverterType.JSON"
             [deviceInfoType]="DeviceInfoType.FULL"
+            [connectorType]="ConnectorType.REST"
             required="true"
           />
           @if (converterType === RestConverterType.JSON) {
@@ -77,7 +79,7 @@
                 <div class="tb-flex max-w-70%">
                   <mat-chip-listbox [tbEllipsisChipList]="converterAttributes" class="tb-flex gw-chip-list">
                     @for (attribute of converterAttributes; track attribute) {
-                      <mat-chip>{{ attribute }}</mat-chip>
+                      <mat-chip><div tbTruncateWithTooltip>{{ attribute }}</div></mat-chip>
                     }
                     <mat-chip class="mat-mdc-chip ellipsis-chip">
                       <label class="ellipsis-text"></label>
@@ -98,9 +100,9 @@
                 <div class="fixed-title-width" translate>gateway.timeseries</div>
                 <div class="tb-flex max-w-70%">
                   <mat-chip-listbox class="tb-flex gw-chip-list" [tbEllipsisChipList]="converterTelemetry">
-                    <mat-chip *ngFor="let telemetry of converterTelemetry">
-                      {{ telemetry }}
-                    </mat-chip>
+                    @for (telemetry of converterTelemetry; track telemetry) {
+                      <mat-chip><div tbTruncateWithTooltip>{{ telemetry }}</div></mat-chip>
+                    }
                     <mat-chip class="mat-mdc-chip ellipsis-chip">
                       <label class="ellipsis-text"></label>
                     </mat-chip>
@@ -139,8 +141,8 @@
                   <div class="fixed-title-width">{{ 'gateway.keys' | translate }}</div>
                   <div class="tb-flex ellipsis-chips-container">
                     <mat-chip-listbox [tbEllipsisChipList]="customKeys" class="tb-flex gw-chip-list">
-                      <mat-chip *ngFor="let telemetry of customKeys">
-                        {{ telemetry }}
+                      <mat-chip *ngFor="let key of customKeys">
+                        <div tbTruncateWithTooltip>{{ key }}</div>
                       </mat-chip>
                       <mat-chip class="mat-mdc-chip ellipsis-chip">
                         <label class="ellipsis-text"></label>

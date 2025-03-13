@@ -27,11 +27,11 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/public-api';
 import {
   GatewayStorageConfig,
-  numberInputPattern,
   StorageTypes,
   StorageTypesTranslationMap
 } from '../../../models/public-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { numberInputPattern } from '../../../../../shared/models/public-api';
 
 @Component({
   selector: 'tb-gateway-storage-configuration',

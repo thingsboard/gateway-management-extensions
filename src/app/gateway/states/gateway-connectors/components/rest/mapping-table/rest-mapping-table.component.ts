@@ -46,7 +46,12 @@ import { RestMappingDialogComponent } from '../mapping-dialog/rest-mapping-dialo
       useExisting: forwardRef(() => RestMappingTableComponent),
       multi: true
     }
-  ]
+  ],
+  styles: [`
+    .http-method-label {
+      font-size: 12px;
+    }
+  `]
 })
 export class RestMappingTableComponent extends AbstractDevicesConfigTableComponent<RestMapping> {
 

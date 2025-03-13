@@ -15,7 +15,7 @@
 -->
 <div class="tb-absolute-fill size-full">
   <div class="flex size-full flex-col">
-    <mat-toolbar class="mat-mdc-table-toolbar" [class.!hidden]="textSearchMode">
+    <mat-toolbar class="gw-table-toolbar mat-mdc-table-toolbar" [class.!hidden]="textSearchMode">
       @if ((dataSource.isEmpty() | async) === false) {
         <div class="mat-toolbar-tools">
           <div class="title-container">
@@ -37,7 +37,7 @@
         </div>
       }
     </mat-toolbar>
-    <mat-toolbar class="mat-mdc-table-toolbar" [class.!hidden]="!textSearchMode">
+    <mat-toolbar class="gw-table-toolbar mat-mdc-table-toolbar" [class.!hidden]="!textSearchMode">
       <button mat-icon-button
               matTooltip="{{ 'action.search' | translate }}"
               matTooltipPosition="above">
@@ -66,16 +66,16 @@
           </mat-cell>
         </ng-container>
         <ng-container [matColumnDef]="'httpMethods'">
-          <mat-header-cell *matHeaderCellDef class="w-1/3">
+          <mat-header-cell *matHeaderCellDef class="w-1/3 !pl-0">
             {{ 'gateway.rest.http-methods' | translate }}
           </mat-header-cell>
           <mat-cell *matCellDef="let mapping" class="w-1/3">
             <mat-chip-listbox [tbEllipsisChipList]="mapping.HTTPMethods" class="tb-flex">
               @for (method of mapping.HTTPMethods; track method) {
-                <mat-chip><span class="text-[12px] font-medium">{{ method }}</span></mat-chip>
+                <mat-chip><div tbTruncateWithTooltip class="http-method-label font-medium">{{ method }}</div></mat-chip>
               }
               <mat-chip class="mat-mdc-chip ellipsis-chip">
-                <label class="ellipsis-text text-[12px] font-medium"></label>
+                <label class="ellipsis-text http-method-label font-medium"></label>
               </mat-chip>
             </mat-chip-listbox>
           </mat-cell>

@@ -21,6 +21,7 @@ import {
   RestMappingInfo,
   RestRequestMappingValue,
   RestRequestType,
+  RestRequestTypesTranslationsMap,
   RestServerSideRpc
 } from '../../../models/public-api';
 import { take } from 'rxjs/operators';
@@ -28,7 +29,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { SharedModule, TbTableDatasource } from '@shared/public-api';
 import { AbstractDevicesConfigTableComponent } from '../../../abstract/public-api';
 import { CommonModule } from '@angular/common';
-import { isDefinedAndNotNull } from '@core/public-api';
+import { isDefinedAndNotNull, isString } from '@core/public-api';
 import { TruncateWithTooltipDirective } from '../../../../../shared/directives/public-api';
 import { RestRequestsMappingDialogComponent } from '../requests-mapping-dialog/rest-requests-mapping-dialog.component';
 
@@ -56,6 +57,7 @@ export class RestRequestMappingTableComponent extends AbstractDevicesConfigTable
   @Input() defaultRequestUrl: string;
 
   readonly Object = Object;
+  readonly RestRequestTypesTranslationsMap = RestRequestTypesTranslationsMap;
 
   protected getDatasource(): TbTableDatasource<RestRequestMappingValue> {
     return new MappingDatasource();
@@ -115,7 +117,7 @@ export class RestRequestMappingTableComponent extends AbstractDevicesConfigTable
             break;
         }
         return Object.values(item).some(value =>
-          value.toString().toLowerCase().includes(textSearch.toLowerCase())
+          isString(value) && this.translate.instant(RestRequestTypesTranslationsMap.get(value)).toLowerCase().includes(textSearch.toLowerCase())
           || details?.toLowerCase().includes(textSearch.toLowerCase()));
       });
     }

@@ -64,6 +64,13 @@
                 <div class="fixed-title-width" translate>gateway.timeout</div>
                 <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
                     <input matInput type="number" min="0" name="value" formControlName="timeout" placeholder="{{ 'gateway.set' | translate }}"/>
+                    @if (responseConfigFormGroup.get(ResponseType.ADVANCED).get('timeout').hasError('min')
+                    && responseConfigFormGroup.get(ResponseType.ADVANCED).get('timeout').touched) {
+                      <tb-error-icon matSuffix [tooltipText]="'gateway.response-timeout-limits-error' | translate: { min: 1 }"/>
+                    } @else if (responseConfigFormGroup.get(ResponseType.ADVANCED).get('timeout').hasError('pattern')
+                    && responseConfigFormGroup.get(ResponseType.ADVANCED).get('timeout').touched) {
+                      <tb-error-icon matSuffix [tooltipText]="'gateway.hints.timeout-pattern' | translate"/>
+                    }
                 </mat-form-field>
             </div>
             <div class="tb-form-row">
