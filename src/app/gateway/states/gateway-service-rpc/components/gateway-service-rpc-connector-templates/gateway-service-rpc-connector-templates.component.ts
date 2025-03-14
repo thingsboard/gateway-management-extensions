@@ -55,6 +55,8 @@ export class GatewayServiceRPCConnectorTemplatesComponent {
   @Input()
   rpcTemplates: Array<RPCTemplate>;
 
+  readonly ConnectorType = ConnectorType;
+
   public readonly originalOrder = (): number => 0;
   public readonly isObject = (value: unknown) => isLiteralObject(value);
   public readonly isArray = (value: unknown) => Array.isArray(value);

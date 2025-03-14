@@ -531,6 +531,7 @@
     "show-map": "Show map",
     "statistics": {
       "attributes": "Attributes",
+      "name-already-exists": "Attribute name already exists.",
       "telemetry": "Telemetry",
       "storage-message-count": "Storage message count",
       "messages-from-platform": "Messages from platform",

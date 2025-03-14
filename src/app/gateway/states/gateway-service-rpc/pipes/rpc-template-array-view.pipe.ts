@@ -22,7 +22,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class RpcTemplateArrayViewPipe implements PipeTransform {
 
-  transform(values: {value: string | boolean | number}[]): string {
-    return values.map(({value}) => value.toString()).join(', ');
+  transform(values: {value: string | boolean | number}[] | string[]): string {
+    return values.map((item) => (item?.value ?? item).toString()).join(', ');
   }
 }
