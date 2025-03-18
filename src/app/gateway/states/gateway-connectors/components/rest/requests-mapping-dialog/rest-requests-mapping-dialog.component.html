@@ -60,19 +60,32 @@
           </mat-form-field>
         </div>
       }
-      <div class="tb-form-row">
-        <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.rest.http-methods' | translate }}" translate>gateway.rest.http-methods</div>
-        <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
-          <mat-select formControlName="HTTPMethods" multiple>
-            @for (method of httpMethods; track method) {
-              <mat-option [value]="method">{{ method }}</mat-option>
+      @if (requestType === RestRequestType.ATTRIBUTE_REQUEST) {
+        <div class="tb-form-row">
+          <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.rest.http-methods' | translate }}" translate>gateway.rest.http-methods</div>
+          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+            <mat-select formControlName="HTTPMethods" multiple>
+              @for (method of httpMethods; track method) {
+                <mat-option [value]="method">{{ method }}</mat-option>
+              }
+            </mat-select>
+            @if (mappingFormGroup.get('HTTPMethods').hasError('required') && mappingFormGroup.get('HTTPMethods').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.http-methods-required' | translate"/>
             }
-          </mat-select>
-          @if (mappingFormGroup.get('HTTPMethods').hasError('required') && mappingFormGroup.get('HTTPMethods').touched) {
-            <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.http-methods-required' | translate"/>
-          }
-        </mat-form-field>
-      </div>
+          </mat-form-field>
+        </div>
+      } @else {
+        <div class="tb-form-row">
+          <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.rest.http-method' | translate }}" translate>gateway.rest.http-method</div>
+          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+            <mat-select formControlName="HTTPMethod">
+              @for (method of httpMethods; track method) {
+                <mat-option [value]="method">{{ method }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      }
       @if (requestType === RestRequestType.ATTRIBUTE_UPDATE) {
         <div class="tb-form-row tb-flex fill-width">
           <mat-slide-toggle class="mat-slide" formControlName="SSLVerify">

@@ -16,6 +16,7 @@
 
 import {
   BacnetBasicConfig,
+  ConnectorBaseInfo,
   ModbusBasicConfig,
   MQTTBasicConfig,
   OPCBasicConfig,
@@ -23,6 +24,7 @@ import {
   SocketBasicConfig,
 } from '../models/public-api';
 import {
+  ConnectorBaseConfig,
   ConnectorType,
   GatewayConnector,
 } from '../../../shared/models/public-api';
@@ -66,5 +68,10 @@ export abstract class GatewayConnectorVersionMappingUtil {
     }
 
     return 0;
+  }
+
+  static cleanUpConfigBaseInfo(config: ConnectorBaseConfig): ConnectorBaseConfig {
+    const { name, id, enableRemoteLogging, logLevel, reportStrategy, configVersion, ...restConfig } = config as ConnectorBaseInfo;
+    return restConfig as ConnectorBaseConfig;
   }
 }

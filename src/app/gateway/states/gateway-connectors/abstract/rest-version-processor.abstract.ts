@@ -20,10 +20,11 @@ import {
   RestLegacyBasicConfig,
   RestRequestsMapping,
   RestRequestType,
+  RestServerConfig,
 } from '../models/public-api';
-import { RestVersionMappingUtil } from '../utils/public-api';
+import { GatewayConnectorVersionMappingUtil, RestVersionMappingUtil } from '../utils/public-api';
 import { GatewayConnectorVersionProcessor } from './gateway-connector-version-processor.abstract';
-import { GatewayConnector } from '../../../shared/models/public-api';
+import { ConnectorBaseConfig, GatewayConnector } from '../../../shared/models/public-api';
 
 export class RestVersionProcessor extends GatewayConnectorVersionProcessor<RestBasicConfig> {
 
@@ -42,10 +43,10 @@ export class RestVersionProcessor extends GatewayConnectorVersionProcessor<RestB
       attributeUpdates = [],
       serverSideRpc = [],
       mapping = [],
-      ...server
+      ...restConfig
     } = this.connector.configurationJson as RestLegacyBasicConfig;
     let configurationJson = {
-      server,
+      server: GatewayConnectorVersionMappingUtil.cleanUpConfigBaseInfo(restConfig as ConnectorBaseConfig) as RestServerConfig,
       requestsMapping: { attributeRequests, attributeUpdates, serverSideRpc },
       mapping: RestVersionMappingUtil.mapMappingToUpgradedVersion(mapping),
     };

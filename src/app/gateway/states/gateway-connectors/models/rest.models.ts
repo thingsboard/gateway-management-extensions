@@ -67,16 +67,16 @@ export enum RestRequestsScopeType {
 
 export const RestRequestTypeFieldsMap = new Map<RestRequestType | 'all', string[]>(
   [
-    [RestRequestType.ATTRIBUTE_REQUEST, ['endpoint', 'type', 'deviceNameExpression', 'attributeNameExpression']],
+    [RestRequestType.ATTRIBUTE_REQUEST, ['HTTPMethods', 'endpoint', 'type', 'deviceNameExpression', 'attributeNameExpression']],
     [
       RestRequestType.ATTRIBUTE_UPDATE,
-      ['SSLVerify', 'deviceNameFilter', 'attributeFilter', 'requestUrlExpression', 'valueExpression', 'httpHeaders', 'tries', 'allowRedirects']
+      ['HTTPMethod', 'SSLVerify', 'deviceNameFilter', 'attributeFilter', 'requestUrlExpression', 'valueExpression', 'httpHeaders', 'tries', 'allowRedirects']
     ],
     [
       RestRequestType.SERVER_SIDE_RPC,
-      ['deviceNameFilter', 'methodFilter', 'requestUrlExpression', 'valueExpression', 'responseTimeout', 'httpHeaders', 'tries']
+      ['HTTPMethod', 'deviceNameFilter', 'methodFilter', 'requestUrlExpression', 'valueExpression', 'responseTimeout', 'httpHeaders', 'tries']
     ],
-    ['all', ['requestType', 'HTTPMethods', 'timeout', 'security']]
+    ['all', ['requestType', 'timeout', 'security']]
   ]
 );
 

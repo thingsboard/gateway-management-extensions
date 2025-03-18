@@ -33,6 +33,7 @@ import { ResponseStatus, ResponseType, ResponseTypeTranslationsMap, RestResponse
 import { noLeadTrailSpacesRegex, numberInputPattern } from '../../../../../shared/models/public-api';
 import { ErrorTooltipIconComponent } from '../../../../../shared/components/public-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { merge } from 'rxjs';
 
 @Component({
   selector: 'tb-rest-response-config',
@@ -70,9 +71,7 @@ export class RestResponseConfigComponent extends ControlValueAccessorBaseAbstrac
 
   constructor() {
     super();
-    this.responseConfigFormGroup.get(ResponseType.ADVANCED).get('responseExpected').valueChanges
-      .pipe(takeUntilDestroyed())
-      .subscribe(isExpected => this.toggleIsExpected(isExpected));
+    this.observeIsExpected();
   }
 
   protected initFormGroup(): FormGroup {
@@ -96,14 +95,21 @@ export class RestResponseConfigComponent extends ControlValueAccessorBaseAbstrac
 
   protected override onWriteValue(value: RestResponse): void {
     const { type = ResponseType.DEFAULT, ...config } = value ?? {} as RestResponse;
+    this.toggleIsExpected(config.responseExpected);
     this.responseConfigFormGroup.patchValue({ type, [type]: config }, { emitEvent: false });
-    if (type === ResponseType.ADVANCED) {
-      this.toggleIsExpected(config.responseExpected);
-    }
   }
 
   private toggleIsExpected(isExpected: boolean): void {
     this.responseConfigFormGroup.get(ResponseType.ADVANCED).get('timeout')[isExpected ? 'enable' : 'disable']({emitEvent: false});
     this.responseConfigFormGroup.get(ResponseType.ADVANCED).get('responseAttribute')[isExpected ? 'enable' : 'disable']({emitEvent: false});
+  }
+
+  private observeIsExpected(): void {
+    merge(
+      this.responseConfigFormGroup.get('type').valueChanges,
+      this.responseConfigFormGroup.get(ResponseType.ADVANCED).get('responseExpected').valueChanges
+    )
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => this.toggleIsExpected(this.responseConfigFormGroup.get(ResponseType.ADVANCED).get('responseExpected').value));
   }
 }

@@ -84,6 +84,7 @@ export class RestRequestsMappingDialogComponent extends DialogComponent<RestRequ
     requestType: [RestRequestType.ATTRIBUTE_REQUEST],
     endpoint: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
     HTTPMethods: [[HTTPMethods.POST], [Validators.required]],
+    HTTPMethod: [HTTPMethods.POST, [Validators.required]],
     type: [RestRequestsScopeType.Shared],
     security: [{ type: SecurityType.ANONYMOUS }],
     timeout: [null, [Validators.min(0.001), Validators.pattern(numberInputPattern)]],
