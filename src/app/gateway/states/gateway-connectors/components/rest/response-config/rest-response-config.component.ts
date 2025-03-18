@@ -95,13 +95,14 @@ export class RestResponseConfigComponent extends ControlValueAccessorBaseAbstrac
 
   protected override onWriteValue(value: RestResponse): void {
     const { type = ResponseType.DEFAULT, ...config } = value ?? {} as RestResponse;
-    this.toggleIsExpected(config.responseExpected);
+    this.toggleIsExpected(config.responseExpected, type);
     this.responseConfigFormGroup.patchValue({ type, [type]: config }, { emitEvent: false });
   }
 
-  private toggleIsExpected(isExpected: boolean): void {
-    this.responseConfigFormGroup.get(ResponseType.ADVANCED).get('timeout')[isExpected ? 'enable' : 'disable']({emitEvent: false});
-    this.responseConfigFormGroup.get(ResponseType.ADVANCED).get('responseAttribute')[isExpected ? 'enable' : 'disable']({emitEvent: false});
+  private toggleIsExpected(isExpected: boolean, type: ResponseType): void {
+    const shouldEnable = isExpected && type === ResponseType.ADVANCED;
+    this.responseConfigFormGroup.get(ResponseType.ADVANCED).get('timeout')[shouldEnable ? 'enable' : 'disable']({emitEvent: false});
+    this.responseConfigFormGroup.get(ResponseType.ADVANCED).get('responseAttribute')[shouldEnable ? 'enable' : 'disable']({emitEvent: false});
   }
 
   private observeIsExpected(): void {
@@ -110,6 +111,6 @@ export class RestResponseConfigComponent extends ControlValueAccessorBaseAbstrac
       this.responseConfigFormGroup.get(ResponseType.ADVANCED).get('responseExpected').valueChanges
     )
       .pipe(takeUntilDestroyed())
-      .subscribe(() => this.toggleIsExpected(this.responseConfigFormGroup.get(ResponseType.ADVANCED).get('responseExpected').value));
+      .subscribe(() => this.toggleIsExpected(this.responseConfigFormGroup.get(ResponseType.ADVANCED).get('responseExpected').value, this.responseConfigFormGroup.get('type').value));
   }
 }
