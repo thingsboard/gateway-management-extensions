@@ -22,7 +22,7 @@
           "type": "json",
           "deviceInfo": {
             "deviceNameExpressionSource": "request",
-            "deviceNameExpression": "${sensorType}",
+            "deviceNameExpression": "${sensorName}",
             "deviceProfileExpressionSource": "request",
             "deviceProfileExpression": "${sensorType}"
           },
