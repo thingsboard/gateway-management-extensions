@@ -186,7 +186,7 @@
     "payload-type": "Payload type",
     "platform-side": "Platform side",
     "JSON": "JSON",
-    "JSON-hint": "Converter for this payload type processes messages in JSON format. It uses JSON Path expressions to extract vital details such as device names, device profile names, attributes, and time series from the message. And regular expressions to get device details from topics.",
+    "JSON-hint": "Converter for this payload type processes MQTT messages in JSON format. It uses JSON Path expressions to extract vital details such as device names, device profile names, attributes, and time series from the message. And regular expressions to get device details from topics.",
     "byte": "Byte",
     "bytes": "Bytes",
     "bytes-hint": "Converter for this payload type designed for binary MQTT payloads, this converter directly interprets binary data to retrieve device names and device profile names, along with attributes and time series, using specific byte positions for data extraction.",
@@ -821,7 +821,15 @@
         "key": "Path to the private key file",
         "endpoint": "Url address of the endpoint.",
         "http-methods": "HTTP methods allowed for endpoint.",
-        "request-timeout": "Timeout for the request."
+        "request-timeout": "Timeout for the request.",
+        "JSON": "Converter for this payload type processes REST messages in JSON format. It uses JSON Path expressions to extract vital details such as device names, device profile names, attributes, and time series from the message.",
+        "extension": "Put your converter classname in the field. Custom converter with such class should be in extension/rest folder.",
+        "response-attribute-required": "Response attribute is required.",
+        "response-attribute-pattern": "Response attribute is not valid.",
+        "device-name-filter": "Filter for incoming data by device name, supports Regular expression.",
+        "attribute-filter": "Filter for incoming attribute name from platform, support regular expression.",
+        "value-expression": "JSON-path expression, is used for creating data for sending to broker.",
+        "method-filter": "Filter for incoming method name from platform, support regular expression."
       },
       "socket": {
         "attribute-on-platform-required": "Attribute on platform is required",

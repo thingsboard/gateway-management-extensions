@@ -86,7 +86,7 @@ export class RestRequestsMappingDialogComponent extends DialogComponent<RestRequ
     HTTPMethods: [[HTTPMethods.POST], [Validators.required]],
     type: [RestRequestsScopeType.Shared],
     security: [{ type: SecurityType.ANONYMOUS }],
-    timeout: [null, [Validators.min(1), Validators.pattern(numberInputPattern)]],
+    timeout: [null, [Validators.min(0.001), Validators.pattern(numberInputPattern)]],
     deviceNameExpression: ['', [Validators.pattern(noLeadTrailSpacesRegex)]],
     attributeNameExpression: ['', [Validators.pattern(noLeadTrailSpacesRegex)]],
     SSLVerify: [false],
@@ -95,7 +95,7 @@ export class RestRequestsMappingDialogComponent extends DialogComponent<RestRequ
     attributeFilter: ['', [Validators.pattern(noLeadTrailSpacesRegex)]],
     requestUrlExpression: [this.data.defaultRequestUrl, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
     valueExpression: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-    responseTimeout: [null, [Validators.min(1), Validators.pattern(numberInputPattern)]],
+    responseTimeout: [null, [Validators.min(0.001), Validators.pattern(numberInputPattern)]],
     tries: [null, [Validators.min(1), Validators.pattern(numberInputPattern)]],
     allowRedirects: [false],
     httpHeaders: [{}]

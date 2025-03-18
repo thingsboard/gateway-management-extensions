@@ -201,7 +201,7 @@ export const RestConvertorTypeTranslationsMap = new Map<RestConverterType, strin
 
 export const RestDataConversionTranslationsMap = new Map<RestConverterType, string>(
   [
-    [RestConverterType.JSON, 'gateway.JSON-hint'],
+    [RestConverterType.JSON, 'gateway.hints.rest.JSON'],
     [RestConverterType.CUSTOM, 'gateway.custom-hint']
   ]
 );

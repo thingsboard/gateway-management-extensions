@@ -14,7 +14,7 @@
 /// limitations under the License.
 ///
 
-export const numberInputPattern = new RegExp(/^\d{1,15}$/);
+export const numberInputPattern = new RegExp(/^\d{1,15}(\.\d{1,15})?$/);
 
 export const noLeadTrailSpacesRegex = /^\S+(?: \S+)*$/;
 

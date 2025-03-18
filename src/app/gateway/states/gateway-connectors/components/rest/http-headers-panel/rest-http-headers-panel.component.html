@@ -27,8 +27,13 @@
                   <mat-expansion-panel-header>
                     <mat-panel-title>
                       <div tbTruncateWithTooltip class="max-w-[11vw]">
-                        {{ keyControl.value?.value }}
+                        {{ keyControl.value?.key }}
                       </div>
+                      @if (keyControl.value?.value) {
+                        <div tbTruncateWithTooltip class="max-w-[11vw]">
+                          : {{ keyControl.value.value }}
+                        </div>
+                      }
                     </mat-panel-title>
                   </mat-expansion-panel-header>
                   <ng-template matExpansionPanelContent>

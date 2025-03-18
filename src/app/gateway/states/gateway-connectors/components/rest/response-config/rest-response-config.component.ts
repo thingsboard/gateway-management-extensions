@@ -30,8 +30,9 @@ import { SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessorBaseAbstract } from '../../../../../shared/abstract/public-api';
 import { ResponseStatus, ResponseType, ResponseTypeTranslationsMap, RestResponse } from '../../../models/public-api';
-import { numberInputPattern } from '../../../../../shared/models/public-api';
-import { ErrorTooltipIconComponent } from '../../../../../shared/components/error-icon/error-icon.component';
+import { noLeadTrailSpacesRegex, numberInputPattern } from '../../../../../shared/models/public-api';
+import { ErrorTooltipIconComponent } from '../../../../../shared/components/public-api';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tb-rest-response-config',
@@ -67,6 +68,13 @@ export class RestResponseConfigComponent extends ControlValueAccessorBaseAbstrac
     return this.formGroup;
   }
 
+  constructor() {
+    super();
+    this.responseConfigFormGroup.get(ResponseType.ADVANCED).get('responseExpected').valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe(isExpected => this.toggleIsExpected(isExpected));
+  }
+
   protected initFormGroup(): FormGroup {
     return this.fb.group({
       type: [ResponseType.DEFAULT],
@@ -76,8 +84,8 @@ export class RestResponseConfigComponent extends ControlValueAccessorBaseAbstrac
       }),
       [ResponseType.ADVANCED]: this.fb.group({
         responseExpected: [true],
-        timeout: [null, [Validators.min(1), Validators.pattern(numberInputPattern)]],
-        responseAttribute: ['']
+        timeout: [null, [Validators.required, Validators.min(0.001), Validators.pattern(numberInputPattern)]],
+        responseAttribute: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]]
       })
     });
   }
@@ -86,8 +94,16 @@ export class RestResponseConfigComponent extends ControlValueAccessorBaseAbstrac
     return { type, ...(config[type] ?? {}) };
   }
 
-  protected override onWriteValue(value: RestResponse): { type: ResponseType } {
-    const { type = ResponseType.DEFAULT, ...config } = value ?? {};
-    return { type, [type]: config };
+  protected override onWriteValue(value: RestResponse): void {
+    const { type = ResponseType.DEFAULT, ...config } = value ?? {} as RestResponse;
+    this.responseConfigFormGroup.patchValue({ type, [type]: config }, { emitEvent: false });
+    if (type === ResponseType.ADVANCED) {
+      this.toggleIsExpected(config.responseExpected);
+    }
+  }
+
+  private toggleIsExpected(isExpected: boolean): void {
+    this.responseConfigFormGroup.get(ResponseType.ADVANCED).get('timeout')[isExpected ? 'enable' : 'disable']({emitEvent: false});
+    this.responseConfigFormGroup.get(ResponseType.ADVANCED).get('responseAttribute')[isExpected ? 'enable' : 'disable']({emitEvent: false});
   }
 }
