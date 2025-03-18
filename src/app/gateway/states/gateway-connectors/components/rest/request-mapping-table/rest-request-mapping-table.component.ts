@@ -24,7 +24,6 @@ import {
   RestRequestTypesTranslationsMap,
   RestServerSideRpc
 } from '../../../models/public-api';
-import { take } from 'rxjs/operators';
 import { MatDialogRef } from '@angular/material/dialog';
 import { SharedModule, TbTableDatasource } from '@shared/public-api';
 import { AbstractDevicesConfigTableComponent } from '../../../abstract/public-api';
@@ -70,7 +69,7 @@ export class RestRequestMappingTableComponent extends AbstractDevicesConfigTable
     const withIndex = isDefinedAndNotNull(index);
     const { requestType = RestRequestType.ATTRIBUTE_REQUEST, requestValue = {} } = withIndex ? this.entityFormArray.at(index).value : {};
     this.getMappingDialog({ requestType, ...requestValue }, withIndex ? 'action.apply' : 'action.add').afterClosed()
-      .pipe(take(1), takeUntilDestroyed(this.destroyRef))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(res => {
         if (res) {
           if (withIndex) {
@@ -93,7 +92,7 @@ export class RestRequestMappingTableComponent extends AbstractDevicesConfigTable
       this.translate.instant('action.no'),
       this.translate.instant('action.yes'),
       true
-    ).pipe(take(1), takeUntilDestroyed(this.destroyRef)).subscribe((result) => {
+    ).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result) => {
       if (result) {
         this.entityFormArray.removeAt(index);
         this.entityFormArray.markAsDirty();

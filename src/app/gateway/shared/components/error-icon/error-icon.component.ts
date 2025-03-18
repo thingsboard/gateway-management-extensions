@@ -24,7 +24,8 @@ import { CommonModule } from '@angular/common';
       matTooltipPosition="above"
       matTooltipClass="tb-error-tooltip"
       [matTooltip]="tooltipText"
-      class="tb-error">
+      class="tb-error"
+    >
       warning
     </mat-icon>
   `,

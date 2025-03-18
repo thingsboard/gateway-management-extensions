@@ -84,10 +84,10 @@ export const GatewayConnectorDefaultTypesTranslatesMap = new Map<ConnectorType, 
 ]);
 
 export type ConnectorBaseConfig = ConnectorLegacyConfig
+  | ConnectorBaseConfig_v3_7_2
   | ConnectorBaseConfig_v3_6_2
   | ConnectorBaseConfig_v3_6
-  | ConnectorBaseConfig_v3_5_2
-  | ConnectorBaseConfig_v3_7_2;
+  | ConnectorBaseConfig_v3_5_2;
 
 export interface GatewayConnector<BaseConfig = ConnectorBaseConfig> extends GatewayConnectorBase {
   configurationJson: BaseConfig;

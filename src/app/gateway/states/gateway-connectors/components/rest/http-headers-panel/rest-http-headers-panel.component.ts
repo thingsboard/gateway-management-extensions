@@ -14,7 +14,7 @@
 /// limitations under the License.
 ///
 import { booleanAttribute, ChangeDetectionStrategy, Component, Input, OnInit, output } from '@angular/core';
-import { AbstractControl, UntypedFormArray, UntypedFormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, UntypedFormBuilder, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { AppState } from '@core/public-api';
@@ -40,7 +40,7 @@ export class RestHttpHeadersPanelComponent extends PageComponent implements OnIn
 
   keysDataApplied = output<Record<string, unknown>>();
 
-  keysListFormArray: UntypedFormArray;
+  keysListFormArray: FormArray;
 
   readonly ReportStrategyDefaultValue = ReportStrategyDefaultValue;
 
@@ -78,7 +78,7 @@ export class RestHttpHeadersPanelComponent extends PageComponent implements OnIn
     );
   }
 
-  private prepareKeysFormArray(keys: Record<string, unknown>): UntypedFormArray {
+  private prepareKeysFormArray(keys: Record<string, unknown>): FormArray {
     const keysControlGroups: Array<AbstractControl> = [];
     Object.keys(keys)?.forEach((key) => {
       keysControlGroups.push(this.fb.group({

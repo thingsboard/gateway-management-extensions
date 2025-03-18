@@ -23,10 +23,10 @@ import {
 } from '@angular/core';
 import {
   AbstractControl,
+  FormArray,
   FormControl,
   FormGroup,
-  UntypedFormArray,
-  UntypedFormBuilder,
+  FormBuilder,
   Validators
 } from '@angular/forms';
 import { coerceBoolean, SharedModule } from '@shared/public-api';
@@ -91,11 +91,11 @@ export class MappingDataKeysPanelComponent extends PageComponent implements OnIn
   readonly ReportStrategyDefaultValue = ReportStrategyDefaultValue;
   readonly ConnectorType = ConnectorType;
 
-  keysListFormArray: UntypedFormArray;
+  keysListFormArray: FormArray;
 
   errorText = '';
 
-  constructor(private fb: UntypedFormBuilder,
+  constructor(private fb: FormBuilder,
               protected store: Store<AppState>) {
     super(store);
   }
@@ -157,7 +157,7 @@ export class MappingDataKeysPanelComponent extends PageComponent implements OnIn
     this.keysDataApplied.emit(keys);
   }
 
-  private prepareKeysFormArray(keys: Array<MappingDataKey | RpcMethodsMapping> | {[key: string]: any}): UntypedFormArray {
+  private prepareKeysFormArray(keys: Array<MappingDataKey | RpcMethodsMapping> | {[key: string]: any}): FormArray {
     const keysControlGroups: Array<AbstractControl> = [];
     if (keys) {
       if (this.keysType === MappingKeysType.CUSTOM) {

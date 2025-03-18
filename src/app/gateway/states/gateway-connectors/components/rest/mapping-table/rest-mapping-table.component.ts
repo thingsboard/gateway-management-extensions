@@ -16,11 +16,7 @@
 import { Component, ChangeDetectionStrategy, forwardRef } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {
-  RestMapping,
-  RestMappingInfo
-} from '../../../models/public-api';
-import { take } from 'rxjs/operators';
+import { RestMapping, RestMappingInfo } from '../../../models/public-api';
 import { MatDialogRef } from '@angular/material/dialog';
 import { SharedModule, TbTableDatasource } from '@shared/public-api';
 import { AbstractDevicesConfigTableComponent } from '../../../abstract/public-api';
@@ -66,7 +62,7 @@ export class RestMappingTableComponent extends AbstractDevicesConfigTableCompone
     const withIndex = isDefinedAndNotNull(index);
     const value = withIndex ? this.entityFormArray.at(index).value : {};
     this.getMappingDialog(value, withIndex ? 'action.apply' : 'action.add').afterClosed()
-      .pipe(take(1), takeUntilDestroyed(this.destroyRef))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(res => {
         if (res) {
           if (withIndex) {
@@ -89,7 +85,7 @@ export class RestMappingTableComponent extends AbstractDevicesConfigTableCompone
       this.translate.instant('action.no'),
       this.translate.instant('action.yes'),
       true
-    ).pipe(take(1), takeUntilDestroyed(this.destroyRef)).subscribe((result) => {
+    ).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result) => {
       if (result) {
         this.entityFormArray.removeAt(index);
         this.entityFormArray.markAsDirty();

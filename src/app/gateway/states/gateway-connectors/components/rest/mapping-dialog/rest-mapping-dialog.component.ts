@@ -187,7 +187,7 @@ export class RestMappingDialogComponent extends DialogComponent<RestMappingDialo
         {},
         {}, {}, true);
       dataKeysPanelPopover.tbComponentRef.instance.popover = dataKeysPanelPopover;
-      dataKeysPanelPopover.tbComponentRef.instance.keysDataApplied.subscribe(keysData => {
+      dataKeysPanelPopover.tbComponentRef.instance.keysDataApplied.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(keysData => {
         dataKeysPanelPopover.hide();
         keysControl.patchValue(keysData);
         keysControl.markAsDirty();
@@ -208,7 +208,6 @@ export class RestMappingDialogComponent extends DialogComponent<RestMappingDialo
   private toggleConverterFieldsByType(type: RestConverterType): void {
     const isJson = type === RestConverterType.JSON;
 
-    this.mappingFormGroup.get('converter').get('deviceInfo')[isJson ? 'enable' : 'disable']({emitEvent: false});
     this.mappingFormGroup.get('converter').get('attributes')[isJson ? 'enable' : 'disable']({emitEvent: false});
     this.mappingFormGroup.get('converter').get('timeseries')[isJson ? 'enable' : 'disable']({emitEvent: false});
 

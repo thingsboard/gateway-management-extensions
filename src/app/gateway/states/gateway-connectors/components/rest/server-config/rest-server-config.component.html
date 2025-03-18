@@ -34,11 +34,9 @@
     <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
       <input matInput type="number" min="{{portLimits.MIN}}" max="{{portLimits.MAX}}"
              name="value" formControlName="port" placeholder="{{ 'gateway.set' | translate }}"/>
-      @if ((serverConfigFormGroup.get('port').hasError('required')
-        || serverConfigFormGroup.get('port').hasError('min')
-        || serverConfigFormGroup.get('port').hasError('max'))
-        && serverConfigFormGroup.get('port').touched) {
-        <tb-error-icon matSuffix [tooltipText]="(serverConfigFormGroup.get('port') | getGatewayPortTooltip) | translate"/>
+      @let portControl = serverConfigFormGroup.get('port');
+      @if ((portControl.hasError('required') || portControl.hasError('min') || portControl.hasError('max')) && portControl.touched) {
+        <tb-error-icon matSuffix [tooltipText]="(portControl | getGatewayPortTooltip) | translate"/>
       }
     </mat-form-field>
   </div>

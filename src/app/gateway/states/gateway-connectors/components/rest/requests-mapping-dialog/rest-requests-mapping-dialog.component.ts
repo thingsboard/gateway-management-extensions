@@ -31,7 +31,7 @@ import { MatButton } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
-import { AppState } from '@core/public-api';
+import { AppState, deleteNullProperties } from '@core/public-api';
 import { DialogComponent, helpBaseUrl, SharedModule } from '@shared/public-api';
 import { TbPopoverService } from '@shared/components/popover.service';
 
@@ -134,6 +134,7 @@ export class RestRequestsMappingDialogComponent extends DialogComponent<RestRequ
   add(): void {
     if (this.mappingFormGroup.valid) {
       const { requestType, ...requestValue } = this.mappingFormGroup.value as RestRequestMappingData;
+      deleteNullProperties(requestValue);
       this.dialogRef.close({ requestType, requestValue });
     }
   }
@@ -182,9 +183,7 @@ export class RestRequestsMappingDialogComponent extends DialogComponent<RestRequ
   private observeRequestTypeChange(): void {
     this.mappingFormGroup.get('requestType').valueChanges
      .pipe(distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
-     .subscribe((requestType: RestRequestType) => {
-        this.toggleFieldsByRequestType(requestType);
-      });
+     .subscribe((requestType: RestRequestType) => this.toggleFieldsByRequestType(requestType));
   }
 
   private toggleFieldsByRequestType(requestType: RestRequestType): void {

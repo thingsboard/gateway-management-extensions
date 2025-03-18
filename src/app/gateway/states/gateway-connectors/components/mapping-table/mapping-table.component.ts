@@ -229,7 +229,6 @@ export class MappingTableComponent implements ControlValueAccessor, Validator, A
         )
       );
     }
-    // @ts-ignore
     this.dataSource.loadData(tableValue);
   }
 
