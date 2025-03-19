@@ -68,7 +68,14 @@ import { distinctUntilChanged } from 'rxjs/operators';
     EllipsisChipListDirective,
     SecurityConfigComponent,
     ErrorTooltipIconComponent,
-  ]
+  ],
+  styles: [`
+    :host {
+      .tb-form-row.request-url-row {
+        gap: 6px;
+      }
+    }
+  `]
 })
 export class RestRequestsMappingDialogComponent extends DialogComponent<RestRequestsMappingDialogComponent, RestRequestMappingValue> {
 
@@ -88,12 +95,12 @@ export class RestRequestsMappingDialogComponent extends DialogComponent<RestRequ
     type: [RestRequestsScopeType.Shared],
     security: [{ type: SecurityType.ANONYMOUS }],
     timeout: [null, [Validators.min(0.001), Validators.pattern(numberInputPattern)]],
-    deviceNameExpression: ['', [Validators.pattern(noLeadTrailSpacesRegex)]],
-    attributeNameExpression: ['', [Validators.pattern(noLeadTrailSpacesRegex)]],
+    deviceNameExpression: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
+    attributeNameExpression: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
     SSLVerify: [false],
     deviceNameFilter: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
     methodFilter: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-    attributeFilter: ['', [Validators.pattern(noLeadTrailSpacesRegex)]],
+    attributeFilter: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
     requestUrlExpression: [this.data.defaultRequestUrl, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
     valueExpression: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
     responseTimeout: [null, [Validators.min(0.001), Validators.pattern(numberInputPattern)]],

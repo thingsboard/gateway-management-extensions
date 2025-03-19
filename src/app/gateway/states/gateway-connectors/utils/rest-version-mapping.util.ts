@@ -49,8 +49,8 @@ export class RestVersionMappingUtil {
 
       return {
         converter: {
-          deviceNameExpression: deviceInfo.deviceNameExpression,
-          deviceTypeExpression: deviceInfo.deviceProfileExpression,
+          deviceNameExpression: deviceInfo?.deviceNameExpression,
+          deviceTypeExpression: deviceInfo?.deviceProfileExpression,
           ...restConverter
         },
         ...config

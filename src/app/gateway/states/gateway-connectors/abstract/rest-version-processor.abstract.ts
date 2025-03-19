@@ -64,7 +64,7 @@ export class RestVersionProcessor extends GatewayConnectorVersionProcessor<RestB
   }
 
   getDowngradedVersion(): GatewayConnector<RestLegacyBasicConfig> {
-    const { requestsMapping, mapping, server, ...restConfig } = this.connector.configurationJson as RestBasicConfig_v3_7_2;
+    const { requestsMapping = {}, mapping, server, ...restConfig } = this.connector.configurationJson as RestBasicConfig_v3_7_2;
     const { attributeRequests = [], attributeUpdates = [], serverSideRpc = [] } = requestsMapping as RestRequestsMapping;
 
     return {

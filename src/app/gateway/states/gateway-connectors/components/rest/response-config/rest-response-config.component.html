@@ -72,6 +72,8 @@
                       <tb-error-icon matSuffix [tooltipText]="'gateway.response-timeout-limits-error' | translate: { min: 1 }"/>
                     } @else if (advancedFormGroup.get('timeout').hasError('pattern') && timeoutTouched) {
                       <tb-error-icon matSuffix [tooltipText]="'gateway.hints.timeout-pattern' | translate"/>
+                    } @else {
+                      <span translate class="block pr-2" matSuffix>gateway.suffix.s</span>
                     }
                 </mat-form-field>
             </div>
