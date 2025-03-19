@@ -1,0 +1,301 @@
+<!--
+  Copyright © 2016-2024 The Thingsboard Authors
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<div [formGroup]="mappingFormGroup" class="h-full w-[77vw] max-w-3xl">
+  <mat-toolbar color="primary">
+    <h2>{{ 'gateway.requests-mapping' | translate }}</h2>
+    <span class="flex-1"></span>
+    <div [tb-help]="helpLink"></div>
+    <button mat-icon-button
+            (click)="cancel()"
+            type="button">
+      <mat-icon class="material-icons">close</mat-icon>
+    </button>
+  </mat-toolbar>
+  <div mat-dialog-content>
+    <div class="tb-form-panel no-border no-padding">
+      <div class="tb-form-row">
+        <div class="fixed-title-width" translate>gateway.request-type</div>
+        <mat-form-field class="tb-flex" appearance="outline" subscriptSizing="dynamic">
+          <mat-select formControlName="requestType">
+            @for (type of requestTypes; track type) {
+              <mat-option [value]="type">{{ RestRequestTypesTranslationsMap.get(type) | translate }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+      @if (requestType === RestRequestType.ATTRIBUTE_REQUEST) {
+        <div class="tb-form-row">
+          <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.rest.endpoint' | translate }}" translate>gateway.rest.endpoint</div>
+          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+            <input matInput type="text" name="value" formControlName="endpoint" placeholder="{{ 'gateway.set' | translate }}"/>
+            @if (mappingFormGroup.get('endpoint').hasError('required') && mappingFormGroup.get('endpoint').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.endpoint-required' | translate"/>
+            } @else if (mappingFormGroup.get('endpoint').hasError('pattern') && mappingFormGroup.get('endpoint').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.endpoint-pattern' | translate"/>
+            }
+          </mat-form-field>
+        </div>
+        <div class="tb-form-row">
+          <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.rest.http-methods' | translate }}" translate>gateway.rest.http-methods</div>
+          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+            <mat-select formControlName="HTTPMethods" multiple>
+              @for (method of httpMethods; track method) {
+                <mat-option [value]="method">{{ method }}</mat-option>
+              }
+            </mat-select>
+            @if (mappingFormGroup.get('HTTPMethods').hasError('required') && mappingFormGroup.get('HTTPMethods').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.http-methods-required' | translate"/>
+            }
+          </mat-form-field>
+        </div>
+        <div class="tb-form-row">
+          <div class="fixed-title-width" tb-hint-tooltip-icon="{{'gateway.hints.rest.scope-type' | translate}}" translate>gateway.type</div>
+          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+            <mat-select formControlName="type">
+              @for (type of requestsScopeType; track type) {
+                <mat-option [value]="type">{{ type | titlecase }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      }
+      @if (requestType !== RestRequestType.ATTRIBUTE_REQUEST) {
+        <div class="tb-form-row">
+          <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.device-name-filter-hint' | translate }}" translate>gateway.device-name-filter</div>
+          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+            <input matInput type="text" name="value" formControlName="deviceNameFilter" placeholder="{{ 'gateway.set' | translate }}"/>
+            @if (mappingFormGroup.get('deviceNameFilter').hasError('required') && mappingFormGroup.get('deviceNameFilter').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.device-name-filter-required' | translate"/>
+            } @else if (mappingFormGroup.get('deviceNameFilter').hasError('pattern') && mappingFormGroup.get('deviceNameFilter').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.device-name-filter-pattern' | translate"/>
+            }
+          </mat-form-field>
+        </div>
+      }
+      @if (requestType === RestRequestType.SERVER_SIDE_RPC) {
+        <div class="tb-form-row">
+          <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.rest.method-filter' | translate }}" translate>gateway.method-filter</div>
+          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+            <input matInput type="text" name="value" formControlName="methodFilter" placeholder="{{ 'gateway.set' | translate }}"/>
+            @if (mappingFormGroup.get('methodFilter').hasError('required') && mappingFormGroup.get('methodFilter').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.method-filter-required' | translate"/>
+            } @else if (mappingFormGroup.get('methodFilter').hasError('pattern') && mappingFormGroup.get('methodFilter').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.method-filter-pattern' | translate"/>
+            }
+          </mat-form-field>
+        </div>
+      }
+      @if (requestType === RestRequestType.ATTRIBUTE_UPDATE) {
+        <div class="tb-form-row">
+          <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.rest.attribute-filter' | translate }}" translate>gateway.attribute-filter</div>
+          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+            <input matInput type="text" name="value" formControlName="attributeFilter" placeholder="{{ 'gateway.set' | translate }}"/>
+            @if (mappingFormGroup.get('attributeFilter').hasError('required') && mappingFormGroup.get('attributeFilter').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.attribute-filter-required' | translate"/>
+            } @else if (mappingFormGroup.get('attributeFilter').hasError('pattern') && mappingFormGroup.get('attributeFilter').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.attribute-filter-pattern' | translate"/>
+            }
+          </mat-form-field>
+        </div>
+      }
+      @if (requestType !== RestRequestType.ATTRIBUTE_REQUEST) {
+        <div class="tb-form-row request-url-row">
+          <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.rest.attribute-url-expression' | translate }}" translate>gateway.rest.request-url-expression</div>
+          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+            <input matInput type="text" name="value" formControlName="requestUrlExpression" placeholder="{{ 'gateway.set' | translate }}"/>
+            @if (mappingFormGroup.get('requestUrlExpression').hasError('required') && mappingFormGroup.get('requestUrlExpression').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.request-url-expression-required' | translate"/>
+            } @else if (mappingFormGroup.get('requestUrlExpression').hasError('pattern') && mappingFormGroup.get('requestUrlExpression').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.request-url-expression-pattern' | translate"/>
+            }
+          </mat-form-field>
+        </div>
+        <div class="tb-form-row">
+          <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.rest.http-method' | translate }}" translate>gateway.rest.http-method</div>
+          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+            <mat-select formControlName="HTTPMethod">
+              @for (method of httpMethods; track method) {
+                <mat-option [value]="method">{{ method }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="tb-form-row">
+          <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.rest.value-expression' | translate }}" translate>gateway.value-expression</div>
+          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+            <input matInput type="text" name="value" formControlName="valueExpression" placeholder="{{ 'gateway.set' | translate }}"/>
+            @if (mappingFormGroup.get('valueExpression').hasError('required') && mappingFormGroup.get('valueExpression').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.value-expression-required' | translate"/>
+            } @else if (mappingFormGroup.get('valueExpression').hasError('pattern') && mappingFormGroup.get('valueExpression').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.value-expression-pattern' | translate"/>
+            }
+          </mat-form-field>
+        </div>
+      }
+      @if (requestType === RestRequestType.SERVER_SIDE_RPC) {
+        <div class="tb-form-row">
+          <div class="fixed-title-width" translate>gateway.response-timeout</div>
+          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+            <input matInput type="number" min="0" name="value" formControlName="responseTimeout" placeholder="{{ 'gateway.set' | translate }}"/>
+            @if (mappingFormGroup.get('responseTimeout').hasError('min') && mappingFormGroup.get('responseTimeout').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.response-timeout-limits-error' | translate: { min: 1 }"/>
+            } @else if (mappingFormGroup.get('responseTimeout').hasError('pattern') && mappingFormGroup.get('responseTimeout').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.timeout-pattern' | translate"/>
+            } @else {
+              <span translate class="block pr-2" matSuffix>gateway.suffix.s</span>
+            }
+          </mat-form-field>
+        </div>
+      }
+      @if (requestType === RestRequestType.ATTRIBUTE_REQUEST) {
+        <div class="tb-form-row">
+          <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.device-name-filter-hint' | translate }}" translate>gateway.device-name-filter</div>
+          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+            <input matInput type="text" name="value" formControlName="deviceNameExpression" placeholder="{{ 'gateway.set' | translate }}"/>
+            @if (mappingFormGroup.get('deviceNameExpression').hasError('required') && mappingFormGroup.get('deviceNameExpression').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.device-name-filter-required' | translate"/>
+            } @else if (mappingFormGroup.get('deviceNameExpression').hasError('pattern') && mappingFormGroup.get('deviceNameExpression').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.device-name-filter-pattern' | translate"/>
+            }
+          </mat-form-field>
+        </div>
+        <div class="tb-form-row">
+          <div class="fixed-title-width tb-required" translate>gateway.attribute-name-expression</div>
+          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+            <input matInput type="text" name="value" formControlName="attributeNameExpression" placeholder="{{ 'gateway.set' | translate }}"/>
+            @if (mappingFormGroup.get('attributeNameExpression').hasError('required') && mappingFormGroup.get('attributeNameExpression').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.attribute-name-expression-required' | translate"/>
+            } @else if (mappingFormGroup.get('attributeNameExpression').hasError('pattern') && mappingFormGroup.get('attributeNameExpression').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.attribute-name-expression-pattern' | translate"/>
+            } @else {
+              <div matSuffix
+                   class="see-example p-1"
+                   [tb-help-popup]="'widget/lib/gateway/rest-json_fn'"
+                   tb-help-popup-placement="left"
+                   [tb-help-popup-style]="{maxWidth: '970px'}">
+              </div>
+            }
+          </mat-form-field>
+        </div>
+      }
+      @if (requestType === RestRequestType.ATTRIBUTE_REQUEST) {
+        <div class="tb-form-row">
+          <div class="fixed-title-width" translate>gateway.timeout</div>
+          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+            <input matInput type="number" min="0" name="value" formControlName="timeout" placeholder="{{ 'gateway.set' | translate }}"/>
+            @if (mappingFormGroup.get('timeout').hasError('min') && mappingFormGroup.get('timeout').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.response-timeout-limits-error' | translate: { min: 1 }"/>
+            } @else if (mappingFormGroup.get('timeout').hasError('pattern') && mappingFormGroup.get('timeout').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.timeout-pattern' | translate"/>
+            } @else {
+              <span translate class="block pr-2" matSuffix>gateway.suffix.s</span>
+            }
+          </mat-form-field>
+        </div>
+      }
+      @if (requestType === RestRequestType.ATTRIBUTE_UPDATE) {
+        <div class="tb-form-row tb-flex fill-width">
+          <mat-slide-toggle class="mat-slide" formControlName="SSLVerify">
+            <mat-label tb-hint-tooltip-icon="{{ 'gateway.hints.rest.update-ssl' | translate }}">
+              {{ 'gateway.rest.ssl-verify' | translate }}
+            </mat-label>
+          </mat-slide-toggle>
+        </div>
+      }
+      <tb-security-config formControlName="security" [mode]="SecurityMode.basic"/>
+      @if (requestType !== RestRequestType.ATTRIBUTE_REQUEST) {
+        <div class="tb-form-panel no-border no-padding">
+          <mat-expansion-panel class="tb-settings">
+            <mat-expansion-panel-header>
+              <mat-panel-title class="justify-end">
+                <div class="tb-form-panel-title" translate>gateway.advanced-settings</div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="tb-form-row space-between tb-flex">
+              <div class="fixed-title-width" translate>gateway.rest.http-headers</div>
+              <div class="tb-flex gw-chip-list">
+                <mat-chip-listbox [tbEllipsisChipList]="mappingFormGroup.get('httpHeaders').value | keyvalue" class="tb-flex">
+                  @for (header of mappingFormGroup.get('httpHeaders').value | keyvalue; track header) {
+                    <mat-chip><div tbTruncateWithTooltip>{{ header.value }}</div></mat-chip>
+                  }
+                  <mat-chip class="mat-mdc-chip ellipsis-chip">
+                    <label class="ellipsis-text"></label>
+                  </mat-chip>
+                </mat-chip-listbox>
+                <button type="button"
+                        mat-icon-button
+                        color="primary"
+                        matTooltip="{{ 'action.edit' | translate }}"
+                        matTooltipPosition="above"
+                        #button
+                        (click)="manageKeys($event, button)">
+                  <tb-icon matButtonIcon>edit</tb-icon>
+                </button>
+              </div>
+            </div>
+            <div class="tb-form-row">
+              <div class="fixed-title-width" translate>gateway.timeout</div>
+              <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+                <input matInput type="number" min="0" name="value" formControlName="timeout" placeholder="{{ 'gateway.set' | translate }}"/>
+                @if (mappingFormGroup.get('timeout').hasError('min') && mappingFormGroup.get('timeout').touched) {
+                  <tb-error-icon matSuffix [tooltipText]="'gateway.response-timeout-limits-error' | translate: { min: 1 }"/>
+                } @else if (mappingFormGroup.get('timeout').hasError('pattern') && mappingFormGroup.get('timeout').touched) {
+                  <tb-error-icon matSuffix [tooltipText]="'gateway.hints.timeout-pattern' | translate"/>
+                } @else {
+                  <span translate class="block pr-2" matSuffix>gateway.suffix.s</span>
+                }
+              </mat-form-field>
+            </div>
+            <div class="tb-form-row">
+              <div class="fixed-title-width" translate>gateway.rest.tries</div>
+              <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+                <input matInput type="number" min="0" name="value" formControlName="tries" placeholder="{{ 'gateway.set' | translate }}"/>
+                @if (mappingFormGroup.get('tries').hasError('min') && mappingFormGroup.get('tries').touched) {
+                  <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.tries-min' | translate"/>
+                } @else if (mappingFormGroup.get('tries').hasError('pattern') && mappingFormGroup.get('tries').touched) {
+                  <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.tries-pattern' | translate"/>
+                }
+              </mat-form-field>
+            </div>
+            @if (requestType === RestRequestType.ATTRIBUTE_UPDATE) {
+              <div class="tb-form-row tb-flex fill-width">
+                <mat-slide-toggle class="mat-slide" formControlName="allowRedirects">
+                  <mat-label>
+                    {{ 'gateway.rest.allow-redirects' | translate }}
+                  </mat-label>
+                </mat-slide-toggle>
+              </div>
+            }
+          </mat-expansion-panel>
+        </div>
+      }
+    </div>
+  </div>
+  <div mat-dialog-actions class="justify-end">
+    <button mat-button color="primary"
+            type="button"
+            cdkFocusInitial
+            (click)="cancel()">
+      {{ 'action.cancel' | translate }}
+    </button>
+    <button mat-raised-button color="primary"
+            (click)="add()"
+            [disabled]="mappingFormGroup.invalid || !mappingFormGroup.dirty || !keysPopupClosed">
+      {{ data.buttonTitle | translate }}
+    </button>
+  </div>
+</div>

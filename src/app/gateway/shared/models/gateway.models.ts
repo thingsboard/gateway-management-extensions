@@ -19,13 +19,10 @@ import {
   ConnectorBaseConfig_v3_5_2,
   ConnectorBaseConfig_v3_6,
   ConnectorBaseConfig_v3_6_2,
+  ConnectorBaseConfig_v3_7_2,
   ConnectorLegacyConfig
 } from '../../states/gateway-connectors/models/public-api';
 import { ConfigurationModes, ReportStrategyConfig } from './report-strategy.models';
-
-export const noLeadTrailSpacesRegex = /^\S+(?: \S+)*$/;
-export const integerRegex = /^[-+]?\d+$/;
-export const nonZeroFloat = /^-?(?!0(\.0+)?$)\d+(\.\d+)?$/;
 
 export const jsonRequired = (control: AbstractControl): ValidationErrors | null => !control.value ? {required: true} : null;
 
@@ -40,6 +37,7 @@ export enum GatewayLogLevel {
 }
 
 export enum GatewayVersion {
+  v3_7_2 = '3.7.2',
   v3_6_3 = '3.6.3',
   v3_6_2 = '3.6.2',
   v3_6_0 = '3.6',
@@ -85,7 +83,11 @@ export const GatewayConnectorDefaultTypesTranslatesMap = new Map<ConnectorType, 
   [ConnectorType.CUSTOM, 'CUSTOM']
 ]);
 
-export type ConnectorBaseConfig = ConnectorBaseConfig_v3_6_2 | ConnectorBaseConfig_v3_6 | ConnectorBaseConfig_v3_5_2 | ConnectorLegacyConfig;
+export type ConnectorBaseConfig = ConnectorLegacyConfig
+  | ConnectorBaseConfig_v3_7_2
+  | ConnectorBaseConfig_v3_6_2
+  | ConnectorBaseConfig_v3_6
+  | ConnectorBaseConfig_v3_5_2;
 
 export interface GatewayConnector<BaseConfig = ConnectorBaseConfig> extends GatewayConnectorBase {
   configurationJson: BaseConfig;
@@ -142,4 +144,16 @@ export interface GatewayConfigCommand {
   command: string;
   timeout: number;
   installCmd?: string;
+}
+
+export enum HTTPMethods {
+  CONNECT = 'CONNECT',
+  DELETE = 'DELETE',
+  GET = 'GET',
+  HEAD = 'HEAD',
+  OPTIONS = 'OPTIONS',
+  PATCH = 'PATCH',
+  POST = 'POST',
+  PUT = 'PUT',
+  TRACE = 'TRACE'
 }

@@ -22,12 +22,13 @@ import {
   SocketConfig,
   SocketLegacyBasicConfig,
 } from '../models/public-api';
+import { GatewayConnectorVersionMappingUtil } from './gateway-connector-version-mapping.util';
 
 export class SocketVersionMappingUtil {
 
   static mapSocketToUpgradedVersion(config: SocketLegacyBasicConfig): SocketConfig {
-    const { devices, ...socket } = config ?? {} as SocketLegacyBasicConfig;
-    return socket;
+    const { devices, ...restConfig } = config ?? {} as SocketLegacyBasicConfig;
+    return GatewayConnectorVersionMappingUtil.cleanUpConfigBaseInfo(restConfig as SocketLegacyBasicConfig) as SocketConfig;
   }
 
   static mapSocketToDowngradedVersion(config: SocketBasicConfig_v3_6): SocketLegacyBasicConfig {

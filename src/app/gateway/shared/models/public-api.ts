@@ -20,3 +20,4 @@ export * from './connectors-default-config.constant';
 export * from './modbus.models';
 export * from './mapping.models';
 export * from './report-strategy.models';
+export * from './regex.models';

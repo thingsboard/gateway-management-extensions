@@ -50,7 +50,6 @@ import { isDefinedAndNotNull, DialogService } from '@core/public-api';
 import { CommonModule } from '@angular/common';
 import { ModbusSlaveDialogComponent } from '../modbus-slave-dialog/modbus-slave-dialog.component';
 import {
-  // @ts-ignore
   TbTableDatasource,
   SharedModule
 } from '@shared/public-api';

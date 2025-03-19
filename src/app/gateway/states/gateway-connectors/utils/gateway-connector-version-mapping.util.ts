@@ -16,12 +16,15 @@
 
 import {
   BacnetBasicConfig,
+  ConnectorBaseInfo,
   ModbusBasicConfig,
   MQTTBasicConfig,
   OPCBasicConfig,
+  RestBasicConfig,
   SocketBasicConfig,
 } from '../models/public-api';
 import {
+  ConnectorBaseConfig,
   ConnectorType,
   GatewayConnector,
 } from '../../../shared/models/public-api';
@@ -30,7 +33,8 @@ import {
   OpcVersionProcessor,
   ModbusVersionProcessor,
   SocketVersionProcessor,
-  BacnetVersionProcessor
+  BacnetVersionProcessor,
+  RestVersionProcessor
 } from '../abstract/public-api';
 import { isNumber, isString } from '@core/public-api';
 
@@ -48,6 +52,8 @@ export abstract class GatewayConnectorVersionMappingUtil {
         return new SocketVersionProcessor(gatewayVersion, connector as GatewayConnector<SocketBasicConfig>).getProcessedByVersion();
       case ConnectorType.BACNET:
         return new BacnetVersionProcessor(gatewayVersion, connector as GatewayConnector<BacnetBasicConfig>).getProcessedByVersion();
+      case ConnectorType.REST:
+        return new RestVersionProcessor(gatewayVersion, connector as GatewayConnector<RestBasicConfig>).getProcessedByVersion();
       default:
         return connector;
     }
@@ -62,5 +68,10 @@ export abstract class GatewayConnectorVersionMappingUtil {
     }
 
     return 0;
+  }
+
+  static cleanUpConfigBaseInfo(config: ConnectorBaseConfig): ConnectorBaseConfig {
+    const { name, id, enableRemoteLogging, logLevel, reportStrategy, configVersion, ...restConfig } = config as ConnectorBaseInfo;
+    return restConfig as ConnectorBaseConfig;
   }
 }

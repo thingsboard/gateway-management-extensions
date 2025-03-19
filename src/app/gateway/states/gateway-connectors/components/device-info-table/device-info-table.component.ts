@@ -47,7 +47,7 @@ import {
   MQTTSourceType,
   SourceTypeTranslationsMap,
   SourceType,
-  ConvertorType
+  ConverterType
 } from '../../models/public-api';
 import { coerceBoolean, PageComponent, SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
@@ -93,7 +93,7 @@ export class DeviceInfoTableComponent extends PageComponent implements ControlVa
 
   @Input() connectorType: ConnectorType = ConnectorType.MQTT;
 
-  @Input() convertorType: ConvertorType;
+  @Input() convertorType: ConverterType;
 
   @Input()
   sourceTypes: Array<SourceType> = Object.values(MQTTSourceType) as Array<SourceType>;

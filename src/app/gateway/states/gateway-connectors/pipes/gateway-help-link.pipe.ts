@@ -15,7 +15,14 @@
 ///
 
 import { Pipe, PipeTransform } from '@angular/core';
-import { ConvertorType, MappingKeysType, MQTTSourceType, OPCUaSourceType, SourceType } from '../models/public-api';
+import {
+  MappingKeysType,
+  MqttConverterType,
+  MQTTSourceType,
+  OPCUaSourceType,
+  RestSourceType,
+  SourceType
+} from '../models/public-api';
 import { ConnectorType } from '../../../shared/models/public-api';
 
 @Pipe({
@@ -23,7 +30,7 @@ import { ConnectorType } from '../../../shared/models/public-api';
   standalone: true,
 })
 export class ConnectorMappingHelpLinkPipe implements PipeTransform {
-  transform(connectorType: ConnectorType, field: string, sourceType: SourceType, convertorType?: ConvertorType): string {
+  transform(connectorType: ConnectorType, field: string, sourceType: SourceType, convertorType?: MqttConverterType): string {
     switch (connectorType) {
       case ConnectorType.OPCUA:
         return this.getOpcConnectorHelpLink(field, sourceType);
@@ -31,6 +38,9 @@ export class ConnectorMappingHelpLinkPipe implements PipeTransform {
         return this.getMqttConnectorHelpLink(field, sourceType, convertorType);
       case ConnectorType.BACNET:
         return this.getBacnetConnectorHelpLink(field, sourceType);
+      case ConnectorType.REST:
+        return this.getRestConnectorHelpLink(sourceType);
+      default:
     }
   }
 
@@ -41,14 +51,14 @@ export class ConnectorMappingHelpLinkPipe implements PipeTransform {
     return;
   }
 
-  private getMqttConnectorHelpLink(field: string, sourceType: SourceType, convertorType: ConvertorType): string {
+  private getMqttConnectorHelpLink(field: string, sourceType: SourceType, convertorType: MqttConverterType): string {
     if (sourceType === MQTTSourceType.CONST) {
       return;
     }
     if (!convertorType) {
       return `widget/lib/gateway/mqtt-expression_fn`;
     }
-    if ((field === MappingKeysType.ATTRIBUTES || field === MappingKeysType.TIMESERIES) && convertorType === ConvertorType.JSON) {
+    if ((field === MappingKeysType.ATTRIBUTES || field === MappingKeysType.TIMESERIES) && convertorType === MqttConverterType.JSON) {
       return 'widget/lib/gateway/mqtt-json-key-expression_fn';
     }
     return `widget/lib/gateway/mqtt-${convertorType}-expression_fn`;
@@ -59,5 +69,12 @@ export class ConnectorMappingHelpLinkPipe implements PipeTransform {
       return `widget/lib/gateway/bacnet-device-${field}-${sourceType}_fn`;
     }
     return;
+  }
+
+  private getRestConnectorHelpLink(sourceType: SourceType): string {
+    if (sourceType === RestSourceType.CONST) {
+      return;
+    }
+    return `widget/lib/gateway/rest-json_fn`;
   }
 }

@@ -25,11 +25,9 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/public-api';
-import {
-  GatewayGRPCConfig,
-  numberInputPattern,
-} from '../../../models/public-api';
+import { GatewayGRPCConfig } from '../../../models/public-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { numberInputPattern } from '../../../../../shared/models/public-api';
 
 @Component({
   selector: 'tb-gateway-grpc-configuration',

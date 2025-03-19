@@ -75,7 +75,7 @@
                       <div class="fixed-title-width tb-flex align-center">
                         <span class="tb-required">{{ 'gateway.byte' | translate }}</span>
                         <div  matSuffix
-                              class="see-example"
+                              class="see-example p-1"
                               [tb-help-popup]="'widget/lib/gateway/byte_fn'"
                               tb-help-popup-placement="left"
                               [tb-help-popup-style]="{maxWidth: '970px'}">
@@ -200,7 +200,7 @@
                         </mat-icon>
                         <div  matSuffix
                               *ngIf="keyControl.get('requestExpressionSource').value === ExpressionType.Expression"
-                              class="see-example"
+                              class="see-example p-1"
                               [tb-help-popup]="'widget/lib/gateway/request-expression_fn'"
                               tb-help-popup-placement="left"
                               [tb-help-popup-style]="{maxWidth: '970px'}">
@@ -232,7 +232,7 @@
                         </mat-icon>
                         <div  matSuffix
                               *ngIf="keyControl.get('attributeNameExpressionSource').value === ExpressionType.Expression"
-                              class="see-example"
+                              class="see-example p-1"
                               [tb-help-popup]="'widget/lib/gateway/attribute-name-expression_fn'"
                               tb-help-popup-placement="left"
                               [tb-help-popup-style]="{maxWidth: '970px'}">
