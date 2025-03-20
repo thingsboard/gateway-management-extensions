@@ -530,6 +530,7 @@
     "set": "Set",
     "show-map": "Show map",
     "statistics": {
+      "custom-send-period": "Custom send period (in sec)",
       "attributes": "Attributes",
       "name-already-exists": "Attribute name already exists.",
       "telemetry": "Telemetry",
