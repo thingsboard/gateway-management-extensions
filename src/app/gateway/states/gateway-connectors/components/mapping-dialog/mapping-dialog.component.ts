@@ -26,7 +26,7 @@ import {
   ConnectorMapping,
   ConnectorMappingFormValue,
   ConverterMappingFormValue,
-  ConvertorType,
+  MqttConverterType,
   ConvertorTypeTranslationsMap,
   DataConversionTranslationsMap,
   DeviceConnectorMapping,
@@ -64,6 +64,7 @@ import { EllipsisChipListDirective } from '../../../../shared/directives/public-
 import { ConnectorMappingHelpLinkPipe } from '../../pipes/public-api';
 import { DeviceInfoTableComponent } from '../device-info-table/device-info-table.component';
 import { MappingDataKeysPanelComponent } from '../mapping-data-keys-panel/mapping-data-keys-panel.component';
+import { ErrorTooltipIconComponent } from '../../../../shared/components/error-icon/error-icon.component';
 
 @Component({
   selector: 'tb-mapping-dialog',
@@ -76,6 +77,7 @@ import { MappingDataKeysPanelComponent } from '../mapping-data-keys-panel/mappin
     ConnectorMappingHelpLinkPipe,
     EllipsisChipListDirective,
     DeviceInfoTableComponent,
+    ErrorTooltipIconComponent,
   ]
 })
 export class MappingDialogComponent extends DialogComponent<MappingDialogComponent, ConnectorMapping> implements OnDestroy {
@@ -85,8 +87,8 @@ export class MappingDialogComponent extends DialogComponent<MappingDialogCompone
   readonly MappingType = MappingType;
   readonly qualityTypes = QualityTypes;
   readonly QualityTranslationsMap = QualityTypeTranslationsMap;
-  readonly convertorTypes: ConvertorType[] = Object.values(ConvertorType) as ConvertorType[];
-  readonly ConvertorTypeEnum = ConvertorType;
+  readonly convertorTypes: MqttConverterType[] = Object.values(MqttConverterType) as MqttConverterType[];
+  readonly ConvertorTypeEnum = MqttConverterType;
   readonly ConvertorTypeTranslationsMap = ConvertorTypeTranslationsMap;
   readonly sourceTypes: SourceType[] = Object.values(MQTTSourceType) as MQTTSourceType[];
   readonly OPCUaSourceTypes = Object.values(OPCUaSourceType) as Array<OPCUaSourceType>;
@@ -151,7 +153,7 @@ export class MappingDialogComponent extends DialogComponent<MappingDialogCompone
     return this.mappingForm.get('attributes_updates')?.value?.map((value: AttributesUpdate) => value.key) || [];
   }
 
-  get converterType(): ConvertorType {
+  get converterType(): MqttConverterType {
     return this.mappingForm.get('converter')?.get('type').value;
   }
 
@@ -222,7 +224,7 @@ export class MappingDialogComponent extends DialogComponent<MappingDialogCompone
       const ctx: { [key: string]: any } = {
         keys: keysControl.value,
         keysType,
-        rawData: this.mappingForm.get('converter.type')?.value === ConvertorType.BYTES,
+        rawData: this.mappingForm.get('converter.type')?.value === MqttConverterType.BYTES,
         panelTitle: MappingKeysPanelTitleTranslationsMap.get(keysType),
         addKeyTitle: MappingKeysAddKeyTranslationsMap.get(keysType),
         deleteKeyTitle: MappingKeysDeleteKeyTranslationsMap.get(keysType),
@@ -309,7 +311,7 @@ export class MappingDialogComponent extends DialogComponent<MappingDialogCompone
       this.fb.control('', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]));
     this.mappingForm.addControl('subscriptionQos', this.fb.control(0));
     this.mappingForm.addControl('converter', this.fb.group({
-      type: [ConvertorType.JSON, []],
+      type: [MqttConverterType.JSON, []],
       json: this.fb.group({
         deviceInfo: [{}, []],
         attributes: [[], []],

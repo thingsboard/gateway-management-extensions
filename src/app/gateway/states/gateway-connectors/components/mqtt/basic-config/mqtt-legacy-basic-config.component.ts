@@ -31,9 +31,6 @@ import {
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/public-api';
 import {
-  SecurityConfigComponent
-} from '../../security-config/security-config.component';
-import {
   WorkersConfigControlComponent
 } from '../workers-config-control/workers-config-control.component';
 import {
@@ -65,7 +62,6 @@ import { MqttVersionMappingUtil } from '../../../utils/public-api';
   imports: [
     CommonModule,
     SharedModule,
-    SecurityConfigComponent,
     WorkersConfigControlComponent,
     BrokerConfigControlComponent,
     MappingTableComponent,

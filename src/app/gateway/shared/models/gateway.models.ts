@@ -23,10 +23,6 @@ import {
 } from '../../states/gateway-connectors/models/public-api';
 import { ConfigurationModes, ReportStrategyConfig } from './report-strategy.models';
 
-export const noLeadTrailSpacesRegex = /^\S+(?: \S+)*$/;
-export const integerRegex = /^[-+]?\d+$/;
-export const nonZeroFloat = /^-?(?!0(\.0+)?$)\d+(\.\d+)?$/;
-
 export const jsonRequired = (control: AbstractControl): ValidationErrors | null => !control.value ? {required: true} : null;
 
 export enum GatewayLogLevel {
@@ -150,4 +146,16 @@ export interface GatewayConfigCommand {
   command: string;
   timeout: number;
   installCmd?: string;
+}
+
+export enum HTTPMethods {
+  CONNECT = 'CONNECT',
+  DELETE = 'DELETE',
+  GET = 'GET',
+  HEAD = 'HEAD',
+  OPTIONS = 'OPTIONS',
+  PATCH = 'PATCH',
+  POST = 'POST',
+  PUT = 'PUT',
+  TRACE = 'TRACE'
 }

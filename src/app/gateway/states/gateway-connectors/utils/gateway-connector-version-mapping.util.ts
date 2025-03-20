@@ -16,12 +16,14 @@
 
 import {
   BacnetBasicConfig,
+  ConnectorBaseInfo,
   ModbusBasicConfig,
   MQTTBasicConfig,
   OPCBasicConfig,
   SocketBasicConfig,
 } from '../models/public-api';
 import {
+  ConnectorBaseConfig,
   ConnectorType,
   GatewayConnector,
 } from '../../../shared/models/public-api';
@@ -30,7 +32,7 @@ import {
   OpcVersionProcessor,
   ModbusVersionProcessor,
   SocketVersionProcessor,
-  BacnetVersionProcessor
+  BacnetVersionProcessor,
 } from '../abstract/public-api';
 import { isNumber, isString } from '@core/public-api';
 
@@ -62,5 +64,10 @@ export abstract class GatewayConnectorVersionMappingUtil {
     }
 
     return 0;
+  }
+
+  static cleanUpConfigBaseInfo(config: ConnectorBaseConfig): ConnectorBaseConfig {
+    const { name, id, enableRemoteLogging, logLevel, reportStrategy, configVersion, ...restConfig } = config as ConnectorBaseInfo;
+    return restConfig as ConnectorBaseConfig;
   }
 }
