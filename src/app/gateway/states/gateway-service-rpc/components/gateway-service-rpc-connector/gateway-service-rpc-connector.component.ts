@@ -32,7 +32,6 @@ import {
   BLEMethods,
   BLEMethodsTranslates,
   CANByteOrders,
-  HTTPMethods,
   RPCCommand,
   RPCTemplateConfig,
   SNMPMethods,
@@ -42,7 +41,8 @@ import {
   ConnectorType,
   GatewayConnectorDefaultTypesTranslatesMap,
   noLeadTrailSpacesRegex,
-  jsonRequired
+  jsonRequired,
+  HTTPMethods,
 } from '../../../../shared/public-api';
 import { MatDialog } from '@angular/material/dialog';
 import {

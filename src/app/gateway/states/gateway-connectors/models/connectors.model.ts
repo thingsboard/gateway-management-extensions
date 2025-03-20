@@ -32,7 +32,8 @@ import {
   RequestMappingFormValue,
   RequestMappingValue,
   RequestsMapping,
-  MQTTSourceType
+  MQTTSourceType,
+  MqttConverterType
 } from './mqtt.models';
 import { DeviceConnectorMapping, OPCBasicConfig_v3_5_2, OPCLegacyBasicConfig, OpcUaMapping } from './opc.models';
 import { ModbusBasicConfig_v3_5_2, ModbusLegacyBasicConfig } from './modbus.models';
@@ -332,5 +333,13 @@ export interface DeviceConfigInfo {
   buttonTitle: string;
   withReportStrategy?: boolean;
 }
+
+export enum SecurityMode {
+  basic = 'basic',
+  certificates = 'certificates',
+  extendedCertificates = 'extendedCertificates'
+}
+
+export type ConverterType = MqttConverterType;
 
 

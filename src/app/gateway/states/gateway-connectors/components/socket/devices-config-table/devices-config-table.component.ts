@@ -43,7 +43,6 @@ import { TruncateWithTooltipDirective } from '../../../../../shared/directives/p
 import { isDefinedAndNotNull, DialogService } from '@core/public-api';
 import { CommonModule } from '@angular/common';
 import {
-  // @ts-ignore
   TbTableDatasource,
   SharedModule,
   coerceBoolean

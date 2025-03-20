@@ -156,7 +156,7 @@
       "device-profile-expression-required": "Device profile expression is required."
     },
     "device-name-filter": "Device name filter",
-    "device-name-filter-hint": "This field supports Regular expressions to filter incoming data by device name.",
+    "device-name-filter-hint": "This field supports regular expressions to filter incoming data by device name.",
     "device-name-filter-required": "Device name filter is required.",
     "details": "Details",
     "delete-mapping-title": "Delete mapping?",
@@ -218,7 +218,7 @@
     "extension-hint": "Put your converter classname in the field. Custom converter with such class should be in extension/mqtt folder.",
     "extension-required": "Extension is required.",
     "extension-configuration": "Extension configuration",
-    "extension-configuration-hint": "Configuration for convertor",
+    "extension-configuration-hint": "Configuration for converter. These arguments will be passed as a config to convert function.",
     "fill-connector-defaults": "Fill configuration with default values",
     "fill-connector-defaults-hint": "This property allows to fill connector configuration with default values on it's creation.",
     "from-device-request-settings": "Input request parsing",
@@ -283,7 +283,7 @@
     "discrete_inputs": "Discrete inputs",
     "json-parse": "Not valid JSON.",
     "json-required": "Field cannot be empty.",
-    "JSONPath-hint": "This field supports constants and JSONPath expressions.",
+    "JSONPath-hint": "Supports constants and JSONPath expressions to extract data.",
     "logs": {
       "logs": "Logs",
       "days": "days",
@@ -475,7 +475,7 @@
     "request-topic-expression": "Request topic expression",
     "request-client-certificate": "Request client certificate",
     "request-topic-expression-required": "Request topic expression is required.",
-    "response-timeout": "Response timeout (ms)",
+    "response-timeout": "Response timeout",
     "response-timeout-required": "Response timeout is required.",
     "response-timeout-limits-error": "Timeout must be more then {{min}} ms.",
     "response-topic-Qos": "Response topic QoS",
@@ -530,6 +530,7 @@
     "set": "Set",
     "show-map": "Show map",
     "statistics": {
+      "custom-send-period": "Custom send period (in sec)",
       "attributes": "Attributes",
       "name-already-exists": "Attribute name already exists.",
       "telemetry": "Telemetry",
@@ -610,6 +611,7 @@
       "sqlite": "SQLITE"
     },
     "suffix": {
+      "s": "s",
       "ms": "ms"
     },
     "report-strategy": {
@@ -626,7 +628,8 @@
       "const": "Constant",
       "identifier": "Identifier",
       "path": "Path",
-      "expression": "Expression"
+      "expression": "Expression",
+      "request": "From request"
     },
     "workers-settings": "Workers settings",
     "thingsboard": "ThingsBoard",
@@ -644,7 +647,7 @@
     "thingsboard-port-required": "Port is required.",
     "tidy": "Tidy",
     "tidy-tip": "Tidy config JSON",
-    "timeout": "Timeout (ms)",
+    "timeout": "Timeout",
     "timeout-error": "Timeout should be at least {{min}} (ms).",
     "title-connectors-json": "Connector {{typeName}} configuration",
     "type": "Type",

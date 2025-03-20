@@ -78,14 +78,11 @@ import {
 import { AttributeDatasource, } from '../../shared/datasources/public-api';
 import { GatewayConnectorVersionMappingUtil } from './utils/public-api';
 import { ReportStrategyVersionPipe } from '../../shared/pipes/public-api';
-import { ConnectorBaseInfo, AddConnectorConfigData, GatewayAttributeData } from './models/public-api';
+import { AddConnectorConfigData, ConnectorBaseInfo, GatewayAttributeData } from './models/public-api';
 import { CommonModule } from '@angular/common';
 import { LatestVersionConfigPipe } from './pipes/public-api';
 import { ReportStrategyComponent } from '../../shared/components/public-api';
-import { BacnetBasicConfigComponent } from './components/bacnet/basic-config/bacnet-basic-config.component';
-import {
-  BacnetLegacyBasicConfigComponent
-} from './components/bacnet/basic-config/bacnet-legacy-basic-config.component';
+import { BacnetBasicConfigComponent, BacnetLegacyBasicConfigComponent } from './components/bacnet/public-api';
 
 export class ForceErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null): boolean {
@@ -114,7 +111,7 @@ export class ForceErrorStateMatcher implements ErrorStateMatcher {
     SocketLegacyBasicConfigComponent,
     ReportStrategyComponent,
     BacnetBasicConfigComponent,
-    BacnetLegacyBasicConfigComponent
+    BacnetLegacyBasicConfigComponent,
   ],
 })
 export class GatewayConnectorComponent extends PageComponent implements AfterViewInit, OnDestroy {

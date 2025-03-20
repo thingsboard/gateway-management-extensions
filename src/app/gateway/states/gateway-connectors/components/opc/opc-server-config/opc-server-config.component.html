@@ -35,16 +35,13 @@
     </div>
     <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
       <input matInput type="number" min="1000" name="value" formControlName="timeoutInMillis" placeholder="{{ 'gateway.set' | translate }}"/>
-      <mat-icon matSuffix
-                matTooltipPosition="above"
-                matTooltipClass="tb-error-tooltip"
-                [matTooltip]="'gateway.timeout-error' | translate: {min: 1000}"
-                *ngIf="(serverConfigFormGroup.get('timeoutInMillis').hasError('required') ||
-                       serverConfigFormGroup.get('timeoutInMillis').hasError('min')) &&
-                       serverConfigFormGroup.get('timeoutInMillis').touched"
-                class="tb-error">
-        warning
-      </mat-icon>
+      @if ((serverConfigFormGroup.get('timeoutInMillis').hasError('required')
+        || serverConfigFormGroup.get('timeoutInMillis').hasError('min'))
+      && serverConfigFormGroup.get('timeoutInMillis').touched) {
+        <tb-error-icon matSuffix [tooltipText]="'gateway.timeout-error' | translate: {min: 1000}"/>
+      } @else {
+        <span translate class="block pr-2" matSuffix>gateway.suffix.ms</span>
+      }
     </mat-form-field>
   </div>
   <div class="tb-form-row column-xs">
@@ -128,7 +125,5 @@
       </mat-label>
     </mat-slide-toggle>
   </div>
-  <tb-security-config formControlName="identity"
-                      [extendCertificatesModel]="true">
-  </tb-security-config>
+  <tb-security-config formControlName="identity" [mode]="SecurityMode.extendedCertificates"/>
 </div>

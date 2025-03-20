@@ -178,7 +178,7 @@
               *ngIf="connectorForm.get('configVersion').value | isLatestVersionConfig : ConnectorType.MQTT else legacy"
               formControlName="basicConfig"
               [generalTabContent]="generalTabContent"
-              [withReportStrategy]="connectorForm.get('configVersion').value | withReportStrategy : ConnectorType.MQTT"
+              [withReportStrategy]="connectorForm.get('configVersion').value | withReportStrategy"
               (initialized)="basicConfigInitSubject.next()"
             />
             <ng-template #legacy>
@@ -186,7 +186,7 @@
                 (initialized)="basicConfigInitSubject.next()"
                 formControlName="basicConfig"
                 [generalTabContent]="generalTabContent"
-                [withReportStrategy]="connectorForm.get('configVersion').value | withReportStrategy : ConnectorType.MQTT"
+                [withReportStrategy]="connectorForm.get('configVersion').value | withReportStrategy"
               />
             </ng-template>
           </ng-container>
@@ -195,7 +195,7 @@
               *ngIf="connectorForm.get('configVersion').value | isLatestVersionConfig : ConnectorType.OPCUA else legacy"
               formControlName="basicConfig"
               [generalTabContent]="generalTabContent"
-              [withReportStrategy]="connectorForm.get('configVersion').value | withReportStrategy : ConnectorType.OPCUA"
+              [withReportStrategy]="connectorForm.get('configVersion').value | withReportStrategy"
               (initialized)="basicConfigInitSubject.next()"
             />
             <ng-template #legacy>
@@ -203,7 +203,7 @@
                 (initialized)="basicConfigInitSubject.next()"
                 formControlName="basicConfig"
                 [generalTabContent]="generalTabContent"
-                [withReportStrategy]="connectorForm.get('configVersion').value | withReportStrategy : ConnectorType.OPCUA"
+                [withReportStrategy]="connectorForm.get('configVersion').value | withReportStrategy"
               />
             </ng-template>
           </ng-container>
@@ -243,7 +243,7 @@
               formControlName="basicConfig"
               [generalTabContent]="generalTabContent"
               (initialized)="basicConfigInitSubject.next()"
-              [withReportStrategy]="connectorForm.get('configVersion').value | withReportStrategy : ConnectorType.BACNET"
+              [withReportStrategy]="connectorForm.get('configVersion').value | withReportStrategy"
             />
             <ng-template #legacy>
               <tb-bacnet-legacy-basic-config

@@ -51,7 +51,7 @@
             </mat-icon>
             <div *ngIf="connectorType | getConnectorMappingHelpLink : 'name-field' : mappingFormGroup.get('deviceNameExpressionSource').value : convertorType"
                  matSuffix
-                 class="see-example"
+                 class="see-example p-1"
                  [tb-help-popup]="connectorType | getConnectorMappingHelpLink : 'name-field' : mappingFormGroup.get('deviceNameExpressionSource').value : convertorType"
                  tb-help-popup-placement="left"
                  [tb-help-popup-style]="{maxWidth: '970px'}">
@@ -85,7 +85,7 @@
             </mat-icon>
             <div *ngIf="connectorType | getConnectorMappingHelpLink: 'profile-name' : mappingFormGroup.get('deviceProfileExpressionSource').value : convertorType"
                  matSuffix
-                 class="see-example"
+                 class="see-example p-1"
                  [tb-help-popup]="connectorType | getConnectorMappingHelpLink:'profile-name' : mappingFormGroup.get('deviceProfileExpressionSource').value : convertorType"
                  tb-help-popup-placement="left"
                  [tb-help-popup-style]="{maxWidth: '970px'}">

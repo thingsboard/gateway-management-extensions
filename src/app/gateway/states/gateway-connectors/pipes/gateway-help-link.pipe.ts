@@ -15,7 +15,14 @@
 ///
 
 import { Pipe, PipeTransform } from '@angular/core';
-import { ConvertorType, MappingKeysType, MQTTSourceType, OPCUaSourceType, SourceType } from '../models/public-api';
+import {
+  MappingKeysType,
+  MqttConverterType,
+  MQTTSourceType,
+  OPCUaSourceType,
+  SourceType,
+  ConverterType
+} from '../models/public-api';
 import { ConnectorType } from '../../../shared/models/public-api';
 
 @Pipe({
@@ -23,12 +30,12 @@ import { ConnectorType } from '../../../shared/models/public-api';
   standalone: true,
 })
 export class ConnectorMappingHelpLinkPipe implements PipeTransform {
-  transform(connectorType: ConnectorType, field: string, sourceType: SourceType, convertorType?: ConvertorType): string {
+  transform(connectorType: ConnectorType, field: string, sourceType: SourceType, converterType?: ConverterType): string {
     switch (connectorType) {
       case ConnectorType.OPCUA:
         return this.getOpcConnectorHelpLink(field, sourceType);
       case ConnectorType.MQTT:
-        return this.getMqttConnectorHelpLink(field, sourceType, convertorType);
+        return this.getMqttConnectorHelpLink(field, sourceType, converterType);
       case ConnectorType.BACNET:
         return this.getBacnetConnectorHelpLink(field, sourceType);
     }
@@ -41,14 +48,14 @@ export class ConnectorMappingHelpLinkPipe implements PipeTransform {
     return;
   }
 
-  private getMqttConnectorHelpLink(field: string, sourceType: SourceType, convertorType: ConvertorType): string {
+  private getMqttConnectorHelpLink(field: string, sourceType: SourceType, convertorType: MqttConverterType): string {
     if (sourceType === MQTTSourceType.CONST) {
       return;
     }
     if (!convertorType) {
       return `widget/lib/gateway/mqtt-expression_fn`;
     }
-    if ((field === MappingKeysType.ATTRIBUTES || field === MappingKeysType.TIMESERIES) && convertorType === ConvertorType.JSON) {
+    if ((field === MappingKeysType.ATTRIBUTES || field === MappingKeysType.TIMESERIES) && convertorType === MqttConverterType.JSON) {
       return 'widget/lib/gateway/mqtt-json-key-expression_fn';
     }
     return `widget/lib/gateway/mqtt-${convertorType}-expression_fn`;
