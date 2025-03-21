@@ -47,7 +47,7 @@
       <div *ngIf="!isObject(config.value) && !isArray(config.value)"
            [class]="{'boolean-true': config.value === true,
                    'boolean-false': config.value === false  }">
-        <ng-container *ngIf="template.type === ConnectorType.SNMP else value" [ngTemplateOutlet]="SNMPMethod"></ng-container>
+        <ng-container *ngIf="template.type === ConnectorType.SNMP && config.key === 'method' else value" [ngTemplateOutlet]="SNMPMethod"></ng-container>
       </div>
       <ng-template #value>{{ config.value }}</ng-template>
       <ng-template #SNMPMethod>{{ SNMPMethodsTranslations.get(config.value) | translate }}</ng-template>

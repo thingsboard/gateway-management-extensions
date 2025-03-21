@@ -34,7 +34,7 @@ import {
   ModbusVersionProcessor,
   SocketVersionProcessor,
   BacnetVersionProcessor,
-  RestVersionProcessor
+  RestVersionProcessor,
 } from '../abstract/public-api';
 import { isNumber, isString } from '@core/public-api';
 
