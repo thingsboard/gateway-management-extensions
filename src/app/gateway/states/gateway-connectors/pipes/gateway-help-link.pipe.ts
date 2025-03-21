@@ -16,12 +16,13 @@
 
 import { Pipe, PipeTransform } from '@angular/core';
 import {
+  ConverterType,
   MappingKeysType,
   MqttConverterType,
   MQTTSourceType,
   OPCUaSourceType,
   RestSourceType,
-  SourceType
+  SourceType,
 } from '../models/public-api';
 import { ConnectorType } from '../../../shared/models/public-api';
 
@@ -30,12 +31,12 @@ import { ConnectorType } from '../../../shared/models/public-api';
   standalone: true,
 })
 export class ConnectorMappingHelpLinkPipe implements PipeTransform {
-  transform(connectorType: ConnectorType, field: string, sourceType: SourceType, convertorType?: MqttConverterType): string {
+  transform(connectorType: ConnectorType, field: string, sourceType: SourceType, converterType?: ConverterType): string {
     switch (connectorType) {
       case ConnectorType.OPCUA:
         return this.getOpcConnectorHelpLink(field, sourceType);
       case ConnectorType.MQTT:
-        return this.getMqttConnectorHelpLink(field, sourceType, convertorType);
+        return this.getMqttConnectorHelpLink(field, sourceType, converterType as MqttConverterType);
       case ConnectorType.BACNET:
         return this.getBacnetConnectorHelpLink(field, sourceType);
       case ConnectorType.REST:
