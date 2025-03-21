@@ -20,24 +20,35 @@
                [matSortDirection]="pageLink.sortDirection()"
                matSortDisableClear>
             <ng-container matColumnDef="createdTime">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'widgets.gateway.created-time' | translate }}</mat-header-cell>
-                <mat-cell *matCellDef="let row">{{ row[0]| date:'yyyy-MM-dd HH:mm:ss' }}</mat-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header class="w-1/5">{{ 'widgets.gateway.created-time' | translate }}</mat-header-cell>
+                <mat-cell *matCellDef="let row" class="!w-1/5">{{ row[0]| date:'yyyy-MM-dd HH:mm:ss' }}</mat-cell>
             </ng-container>
             <ng-container matColumnDef="message">
-                <mat-header-cell *matHeaderCellDef mat-sort-header class="w-70">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
                     {{ 'widgets.gateway.message' | translate }}
                 </mat-header-cell>
-                <mat-cell *matCellDef="let row">{{ row[1] }}</mat-cell>
+                <mat-cell *matCellDef="let row">
+                  <div class="flex items-center justify-between">
+                    {{ row[1] }}
+                    <tb-copy-button
+                      class="copy-content"
+                      [copyText]="row[1]"
+                      tooltipText="{{ 'gateway.statistics.copy-message' | translate }}"
+                      tooltipPosition="above"
+                      icon="content_copy"
+                    />
+                  </div>
+                </mat-cell>
             </ng-container>
             <mat-header-row class="mat-row-select" *matHeaderRowDef="['createdTime', 'message']; sticky: true"></mat-header-row>
             <mat-row class="mat-row-select" *matRowDef="let row; columns: ['createdTime', 'message'];"></mat-row>
         </table>
     </div>
     <mat-paginator
-    [class.!hidden]="!dataSource.data.length"
-    [length]="dataSource?.data?.length ?? 0"
-    [pageSize]="defaultPageSizes[0]"
-    [pageSizeOptions]="defaultPageSizes"
-    showFirstLastButtons
+      [class.!hidden]="!dataSource.data.length"
+      [length]="dataSource?.data?.length ?? 0"
+      [pageSize]="defaultPageSizes[0]"
+      [pageSizeOptions]="defaultPageSizes"
+      showFirstLastButtons
     />
 </div>
