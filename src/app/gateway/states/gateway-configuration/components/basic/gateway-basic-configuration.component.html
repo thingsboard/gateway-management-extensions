@@ -77,12 +77,22 @@
     <ng-template matTabContent>
       <div formGroupName="thingsboard" class="mat-content mat-padding configuration-block">
         <div class="tb-form-panel no-padding-bottom" formGroupName="statistics">
-          <mat-slide-toggle color="primary" class="mat-slide" formControlName="enable">
-            {{ (hasUpdatedStatistics ? 'gateway.statistics.general-statistics' : 'gateway.statistics.statistics') | translate }}
-          </mat-slide-toggle>
+          @if (hasUpdatedStatistics) {
+            <mat-slide-toggle color="primary" class="mat-slide" formControlName="enable">
+              <mat-label tb-hint-tooltip-icon="{{ 'gateway.hints.enable-general-statistics' | translate }}">
+                {{ 'gateway.statistics.general-statistics' | translate }}
+              </mat-label>
+            </mat-slide-toggle>
+          } @else {
+            <mat-slide-toggle color="primary" class="mat-slide" formControlName="enable">
+              {{ 'gateway.statistics.statistics' | translate }}
+            </mat-slide-toggle>
+          }
           @if (hasUpdatedStatistics) {
             <mat-slide-toggle color="primary" class="mat-slide" formControlName="enableCustom">
-              {{ 'gateway.statistics.custom-statistics' | translate }}
+              <mat-label tb-hint-tooltip-icon="{{ 'gateway.hints.enable-custom-statistics' | translate }}">
+                {{ 'gateway.statistics.custom-statistics' | translate }}
+              </mat-label>
             </mat-slide-toggle>
           }
           <mat-form-field appearance="outline">

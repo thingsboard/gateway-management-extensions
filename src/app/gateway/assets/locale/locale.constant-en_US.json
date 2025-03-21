@@ -736,6 +736,8 @@
     "write-register": "Write Register",
     "write-registers": "Write Registers",
     "hints": {
+      "enable-general-statistics": "Enables gateway statistics (machine, storage, connectors).",
+      "enable-custom-statistics": "Enables collecting statistics using custom commands.",
       "buffer-size": "Buffer size for received data blocks.",
       "encoding": "Encoding used for writing received string data to storage.",
       "method": "Name for method on a platform.",
