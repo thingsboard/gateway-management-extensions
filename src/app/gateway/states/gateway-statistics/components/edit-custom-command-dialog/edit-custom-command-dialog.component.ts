@@ -44,7 +44,7 @@ export class EditCustomCommandDialogComponent extends DialogComponent<EditCustom
   readonly commandHelpLink = helpBaseUrl + '/docs/iot-gateway/configuration/#subsection-statistics';
 
   editCommandFormGroup = this.fb.group({
-    attributeOnGateway: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex), this.uniqNameRequired(), Validators.pattern(/^[^.\s]+$/)]],
+    attributeOnGateway: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex), this.uniqNameRequired()]],
     command: ['', [Validators.required, Validators.pattern(/^(?=\S).*\S$/)]],
     timeout: [10, [Validators.required, Validators.min(1), Validators.pattern(numberInputPattern), Validators.pattern(/^[^.\s]+$/)]],
     installCmd: ['', Validators.pattern(noLeadTrailSpacesRegex)]
