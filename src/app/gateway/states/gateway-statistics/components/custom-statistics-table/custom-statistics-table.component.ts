@@ -33,7 +33,8 @@ import { MatTableDataSource } from '@angular/material/table';
   imports: [
     CommonModule,
     SharedModule,
-  ]
+  ],
+  styleUrls: ['./custom-statistics-table.component.scss']
 })
 export class CustomStatisticsTableComponent implements AfterViewInit {
 
