@@ -83,16 +83,14 @@
                 {{ 'gateway.statistics.general-statistics' | translate }}
               </mat-label>
             </mat-slide-toggle>
-          } @else {
-            <mat-slide-toggle color="primary" class="mat-slide" formControlName="enable">
-              {{ 'gateway.statistics.statistics' | translate }}
-            </mat-slide-toggle>
-          }
-          @if (hasUpdatedStatistics) {
             <mat-slide-toggle color="primary" class="mat-slide" formControlName="enableCustom">
               <mat-label tb-hint-tooltip-icon="{{ 'gateway.hints.enable-custom-statistics' | translate }}">
                 {{ 'gateway.statistics.custom-statistics' | translate }}
               </mat-label>
+            </mat-slide-toggle>
+          } @else {
+            <mat-slide-toggle color="primary" class="mat-slide" formControlName="enable">
+              {{ 'gateway.statistics.statistics' | translate }}
             </mat-slide-toggle>
           }
           <mat-form-field appearance="outline">
