@@ -18,17 +18,17 @@
   <div class="tb-form-panel-title" [class.tb-required]="required" translate>device.device</div>
   <div class="tb-form-table no-padding no-gap">
     <div class="tb-form-table-header">
-      <div class="tb-form-table-header-cell table-name-column" translate>gateway.device-info.entity-field</div>
-      <div *ngIf="useSource" class="tb-form-table-header-cell table-source-column" translate>gateway.device-info.source</div>
-      <div class="tb-form-table-header-cell table-column" translate>
+      <div class="tb-form-table-header-cell w-1/5" translate>gateway.device-info.entity-field</div>
+      <div *ngIf="useSource" class="tb-form-table-header-cell w-1/5" translate>gateway.device-info.source</div>
+      <div class="tb-form-table-header-cell w-1/2" translate>
         gateway.device-info.expression
       </div>
     </div>
     <div class="tb-form-table-body no-gap">
-      <div class="tb-form-table-row tb-form-row no-border same-padding top-same-padding"
-           [class.bottom-same-padding]="deviceInfoType !== DeviceInfoType.FULL">
-        <div class="fixed-title-width tb-required" translate>gateway.device-info.name</div>
-        <div class="no-gap raw-value-option" *ngIf="useSource">
+      <div class="tb-form-table-row tb-form-row no-border same-padding pt-4"
+           [class.pb-4]="deviceInfoType !== DeviceInfoType.FULL">
+        <div class="tb-required w-1/5" translate>gateway.device-info.name</div>
+        <div class="no-gap w-1/5" *ngIf="useSource">
           <mat-form-field class="tb-flex no-gap !w-full" appearance="outline" subscriptSizing="dynamic">
             <mat-select formControlName="deviceNameExpressionSource">
               <mat-option *ngFor="let type of sourceTypes" [value]="type">
@@ -59,10 +59,10 @@
           </mat-form-field>
         </div>
       </div>
-      <div class="tb-form-table-row tb-form-row no-border same-padding bottom-same-padding"
+      <div class="tb-form-table-row tb-form-row no-border same-padding pb-4"
            *ngIf="deviceInfoType === DeviceInfoType.FULL">
-        <div class="fixed-title-width tb-required" translate>gateway.device-info.profile-name</div>
-        <div class="no-gap raw-value-option" *ngIf="useSource">
+        <div class="tb-required w-1/5" translate>gateway.device-info.profile-name</div>
+        <div class="no-gap w-1/5" *ngIf="useSource">
           <mat-form-field class="tb-flex no-gap !w-full" appearance="outline" subscriptSizing="dynamic">
             <mat-select formControlName="deviceProfileExpressionSource">
               <mat-option *ngFor="let type of sourceTypes" [value]="type">

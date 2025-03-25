@@ -18,37 +18,6 @@
   width: 100%;
   height: 100%;
   display: block;
-
-  .tb-form-row {
-    &.bottom-same-padding {
-      padding-bottom: 16px;
-    }
-
-    &.top-same-padding {
-      padding-top: 16px;
-    }
-
-    .fixed-title-width {
-      width: 19%;
-    }
-  }
-
-  .table-column {
-    width: 40%;
-  }
-
-  .table-name-column, .table-source-column {
-    width: 20%;
-  }
-
-  .raw-value-option {
-    width: 21%;
-  }
-
-  .raw-name {
-    width: 19%;
-  }
-
 }
 
 :host ::ng-deep {
