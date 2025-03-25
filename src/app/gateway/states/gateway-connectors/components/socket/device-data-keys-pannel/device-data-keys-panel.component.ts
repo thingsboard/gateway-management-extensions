@@ -15,7 +15,13 @@
 ///
 
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AbstractControl, FormGroup, UntypedFormArray, UntypedFormBuilder, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  UntypedFormArray,
+  Validators
+} from '@angular/forms';
 import { coerceBoolean, PageComponent, SharedModule } from '@shared/public-api';
 import { TbPopoverComponent } from '@shared/components/popover.component';
 import { Store } from '@ngrx/store';
@@ -58,7 +64,6 @@ export class DeviceDataKeysPanelComponent extends PageComponent implements OnIni
   @Input() noKeysText: string;
   @Input() keys: Array<SocketDeviceKeys>;
   @Input() keysType: SocketValueKey;
-  @Input() popover: TbPopoverComponent<DeviceDataKeysPanelComponent>;
   @Input() @coerceBoolean() withReportStrategy = true;
 
   @Output() keysDataApplied = new EventEmitter<Array<SocketDeviceKeys>>();
@@ -72,7 +77,8 @@ export class DeviceDataKeysPanelComponent extends PageComponent implements OnIni
 
   keysListFormArray: UntypedFormArray;
 
-  constructor(private fb: UntypedFormBuilder,
+  constructor(private fb: FormBuilder,
+              private popover: TbPopoverComponent<DeviceDataKeysPanelComponent>,
               protected store: Store<AppState>) {
     super(store);
   }

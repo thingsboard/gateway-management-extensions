@@ -14,8 +14,8 @@
   limitations under the License.
 -->
 <section [formGroup]="usernameFormGroup">
-  <div class="tb-form-row no-border no-padding tb-standard-fields">
-    <mat-form-field appearance="outline" class="flex">
+  <div class="xs:flex-col no-border no-padding tb-standard-fields flex gap-2">
+    <mat-form-field appearance="outline" class="flex flex-1">
       <mat-label translate>security.clientId</mat-label>
       <input matInput formControlName="clientId"/>
       <mat-error *ngIf="usernameFormGroup.get('clientId').hasError('required')">
@@ -45,7 +45,7 @@
                 matTooltip="{{ 'gateway.hints.client-id' | translate }}">info_outlined
       </mat-icon>
     </mat-form-field>
-    <mat-form-field appearance="outline" class="flex">
+    <mat-form-field appearance="outline" class="flex flex-1">
       <mat-label translate>security.username</mat-label>
       <input matInput formControlName="username"/>
       <mat-error *ngIf="usernameFormGroup.get('username').hasError('required')">

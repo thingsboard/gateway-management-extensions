@@ -18,9 +18,9 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  DestroyRef,
   forwardRef,
   Input,
-  OnDestroy,
   OnInit,
   Renderer2,
   ViewContainerRef
@@ -49,12 +49,12 @@ import {
 } from '../../../models/public-api';
 import { EllipsisChipListDirective } from '../../../../../shared/directives/public-api';
 import { CommonModule } from '@angular/common';
-import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
 import { MatButton } from '@angular/material/button';
 import { TbPopoverService } from '@shared/components/popover.service';
 import { ModbusDataKeysPanelComponent } from '../modbus-data-keys-panel/modbus-data-keys-panel.component';
 import { coerceBoolean, SharedModule } from '@shared/public-api';
+import { TbPopoverComponent } from '@shared/components/popover.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tb-modbus-values',
@@ -81,7 +81,7 @@ import { coerceBoolean, SharedModule } from '@shared/public-api';
   styleUrls: ['./modbus-values.component.scss']
 })
 
-export class ModbusValuesComponent implements ControlValueAccessor, Validator, OnInit, OnDestroy {
+export class ModbusValuesComponent implements ControlValueAccessor, Validator, OnInit {
 
   @coerceBoolean()
   @Input() singleMode = false;
@@ -99,23 +99,19 @@ export class ModbusValuesComponent implements ControlValueAccessor, Validator, O
   private onChange: (value: ModbusValuesState) => void;
   private onTouched: () => void;
 
-  private destroy$ = new Subject<void>();
+  private popoverComponent: TbPopoverComponent<ModbusDataKeysPanelComponent>;
 
   constructor(private fb: FormBuilder,
               private popoverService: TbPopoverService,
               private renderer: Renderer2,
               private viewContainerRef: ViewContainerRef,
               private cdr: ChangeDetectorRef,
+              private destroyRef: DestroyRef,
   ) {}
 
   ngOnInit() {
     this.initializeValuesFormGroup();
     this.observeValuesChanges();
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   registerOnChange(fn: (value: ModbusValuesState) => void): void {
@@ -159,7 +155,10 @@ export class ModbusValuesComponent implements ControlValueAccessor, Validator, O
   }
 
   manageKeys($event: Event, matButton: MatButton, keysType: ModbusValueKey, register?: ModbusRegisterType): void {
-    $event.stopPropagation();
+    $event?.stopPropagation();
+    if (this.popoverComponent && !this.popoverComponent.tbHidden) {
+      this.popoverComponent.hide();
+    }
     const trigger = matButton._elementRef.nativeElement;
     if (this.popoverService.hasPopover(trigger)) {
       this.popoverService.hidePopover(trigger);
@@ -177,7 +176,7 @@ export class ModbusValuesComponent implements ControlValueAccessor, Validator, O
       noKeysText: ModbusKeysNoKeysTextTranslationsMap.get(keysType),
       hideNewFields: this.hideNewFields,
     };
-    const dataKeysPanelPopover = this.popoverService.displayPopover(
+    this.popoverComponent = this.popoverService.displayPopover(
       trigger,
       this.renderer,
       this.viewContainerRef,
@@ -191,9 +190,8 @@ export class ModbusValuesComponent implements ControlValueAccessor, Validator, O
       {},
       true
     );
-    dataKeysPanelPopover.tbComponentRef.instance.popover = dataKeysPanelPopover;
-    dataKeysPanelPopover.tbComponentRef.instance.keysDataApplied.pipe(takeUntil(this.destroy$)).subscribe((keysData: ModbusValue[]) => {
-      dataKeysPanelPopover.hide();
+    this.popoverComponent.tbComponentRef.instance.keysDataApplied.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((keysData: ModbusValue[]) => {
+      this.popoverComponent.hide();
       keysControl.patchValue(keysData);
       keysControl.markAsDirty();
       this.cdr.markForCheck();
@@ -221,7 +219,7 @@ export class ModbusValuesComponent implements ControlValueAccessor, Validator, O
 
   private observeValuesChanges(): void {
     this.valuesFormGroup.valueChanges
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(value => {
         this.onChange(value);
         this.onTouched();

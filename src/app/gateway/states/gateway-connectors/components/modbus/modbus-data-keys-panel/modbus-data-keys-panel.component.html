@@ -55,15 +55,15 @@
                 <div class="tb-form-panel stroked">
                   <div class="tb-form-panel-title" translate>gateway.platform-side</div>
                   <div class="tb-form-row column-xs">
-                    <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.modbus.key' | translate }}" translate>
-                      gateway.key
+                    <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ (keysType === ModbusValueKey.RPC_REQUESTS ? 'gateway.hints.modbus.method' : 'gateway.hints.modbus.key') | translate }}">
+                      {{ (keysType === ModbusValueKey.RPC_REQUESTS ? 'gateway.method-name' : 'gateway.key') | translate }}
                     </div>
                     <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
                       <input matInput name="value" formControlName="tag" placeholder="{{ 'gateway.set' | translate }}"/>
                       <mat-icon matSuffix
                                 matTooltipPosition="above"
                                 matTooltipClass="tb-error-tooltip"
-                                [matTooltip]="('gateway.key-required') | translate"
+                                [matTooltip]="(keysType === ModbusValueKey.RPC_REQUESTS ? 'gateway.method-required' : 'gateway.key-required') | translate"
                                 *ngIf="keyControl.get('tag').hasError('required') &&
                                          keyControl.get('tag').touched"
                                 class="tb-error">
@@ -121,7 +121,7 @@
                       </mat-icon>
                     </mat-form-field>
                   </div>
-                  <ng-container *ngIf="keyControl.get('type').value === ModbusDataType.BITS && !isMaster">
+                  <ng-container *ngIf="keyControl.get('type').value === ModbusDataType.BITS">
                     <div *ngIf="keyControl.get('objectsCount').value > 1" class="tb-form-row column-xs">
                       <div class="fixed-title-width" tb-hint-tooltip-icon="{{ 'gateway.hints.modbus.bit' | translate }}" translate>gateway.bit</div>
                       <mat-form-field appearance="outline" subscriptSizing="dynamic" class="tb-inline-field tb-suffix-absolute flex">

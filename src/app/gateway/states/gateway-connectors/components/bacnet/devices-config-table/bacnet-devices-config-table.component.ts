@@ -83,8 +83,8 @@ export class BacnetDevicesConfigTableComponent extends AbstractDevicesConfigTabl
       $event.stopPropagation();
     }
     this.dialogService.confirm(
-      this.translate.instant('gateway.delete-device-title'),
-      '',
+      this.translate.instant('gateway.delete-device-title', { name: this.entityFormArray.controls[index].value.deviceName }),
+      this.translate.instant('gateway.delete-device-description'),
       this.translate.instant('action.no'),
       this.translate.instant('action.yes'),
       true

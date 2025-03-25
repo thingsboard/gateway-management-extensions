@@ -39,6 +39,8 @@ import {
   ConnectorType,
   EllipsisChipListDirective,
   noLeadTrailSpacesRegex,
+  ReportStrategyComponent,
+  ReportStrategyDefaultValue,
   TruncateWithTooltipDirective,
 } from '../../../../../shared/public-api';
 import {
@@ -59,6 +61,7 @@ import {
 import { GatewayPortTooltipPipe } from '../../../pipes/public-api';
 import { DeviceInfoTableComponent } from '../../device-info-table/device-info-table.component';
 import { BacnetDeviceDataKeysPanelComponent } from '../device-data-keys-pannel/bacnet-device-data-keys-panel.component';
+import { TbPopoverComponent } from '@shared/components/popover.component';
 
 @Component({
   selector: 'tb-bacnet-device-dialog',
@@ -73,6 +76,7 @@ import { BacnetDeviceDataKeysPanelComponent } from '../device-data-keys-pannel/b
     TruncateWithTooltipDirective,
     GatewayPortTooltipPipe,
     DeviceInfoTableComponent,
+    ReportStrategyComponent,
   ]
 })
 export class BacnetDeviceDialogComponent extends DialogComponent<BacnetDeviceDialogComponent, BacnetDeviceConfig> {
@@ -87,6 +91,7 @@ export class BacnetDeviceDialogComponent extends DialogComponent<BacnetDeviceDia
     attributes: [[] as BacnetDeviceKey[]],
     attributeUpdates: [[] as BacnetDeviceKey[]],
     serverSideRpc: [[] as BacnetDeviceKey[]],
+    reportStrategy: [{value: null, disabled: !this.data.withReportStrategy}],
   });
   keysPopupClosed = true;
 
@@ -96,6 +101,9 @@ export class BacnetDeviceDialogComponent extends DialogComponent<BacnetDeviceDia
   readonly deviceHelpLink = helpBaseUrl + '/docs/iot-gateway/config/bacnet/#device-object-settings';
   readonly sourceTypes = Object.values(ExpressionType) as ExpressionType[];
   readonly ConnectorType = ConnectorType;
+  readonly ReportStrategyDefaultValue = ReportStrategyDefaultValue;
+
+  private popoverComponent: TbPopoverComponent<BacnetDeviceDataKeysPanelComponent>;
 
   constructor(protected store: Store<AppState>,
               protected router: Router,
@@ -121,14 +129,20 @@ export class BacnetDeviceDialogComponent extends DialogComponent<BacnetDeviceDia
 
   add(): void {
     if (this.deviceFormGroup.valid) {
-      const { altResponsesAddresses, ...value } = this.deviceFormGroup.value;
-      this.dialogRef.close({ altResponsesAddresses: altResponsesAddresses ?? [], ...value } as BacnetDeviceConfig);
+      const { altResponsesAddresses, reportStrategy, ...value } = this.deviceFormGroup.value;
+      this.dialogRef.close({
+        altResponsesAddresses: altResponsesAddresses ?? [],
+        ...(reportStrategy ? { reportStrategy } : {}),
+        ...value
+      } as BacnetDeviceConfig);
     }
   }
 
   manageKeys($event: Event, matButton: MatButton, keysType: BacnetDeviceKeysType): void {
     $event?.stopPropagation();
-
+    if (this.popoverComponent && !this.popoverComponent.tbHidden) {
+      this.popoverComponent.hide();
+    }
     const trigger = matButton._elementRef.nativeElement;
     if (this.popoverService.hasPopover(trigger)) {
       this.popoverService.hidePopover(trigger);
@@ -146,7 +160,7 @@ export class BacnetDeviceDialogComponent extends DialogComponent<BacnetDeviceDia
       withReportStrategy: this.data.withReportStrategy,
     };
     this.keysPopupClosed = false;
-    const dataKeysPanelPopover = this.popoverService.displayPopover(
+    this.popoverComponent = this.popoverService.displayPopover(
       trigger,
       this.renderer,
       this.viewContainerRef,
@@ -160,14 +174,13 @@ export class BacnetDeviceDialogComponent extends DialogComponent<BacnetDeviceDia
       {},
       true
     );
-    dataKeysPanelPopover.tbComponentRef.instance.popover = dataKeysPanelPopover;
-    dataKeysPanelPopover.tbComponentRef.instance.keysDataApplied.subscribe((keysData: BacnetDeviceKey[]) => {
-      dataKeysPanelPopover.hide();
+    this.popoverComponent.tbComponentRef.instance.keysDataApplied.subscribe((keysData: BacnetDeviceKey[]) => {
+      this.popoverComponent.hide();
       keysControl.patchValue(keysData);
       keysControl.markAsDirty();
       this.cdr.markForCheck();
     });
-    dataKeysPanelPopover.tbHideStart.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+    this.popoverComponent.tbHideStart.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.keysPopupClosed = true;
     });
   }

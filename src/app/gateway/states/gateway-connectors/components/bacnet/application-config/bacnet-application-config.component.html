@@ -129,6 +129,19 @@
             </mat-select>
           </mat-form-field>
         </div>
+        <div class="tb-form-row column-xs">
+          <div class="fixed-title-width" tb-hint-tooltip-icon="{{ 'gateway.hints.bacnet.network-number' | translate }}" translate>gateway.bacnet.network-number</div>
+          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+            <input matInput type="number" min="0" name="value" formControlName="networkNumber" placeholder="{{ 'gateway.set' | translate }}"/>
+          </mat-form-field>
+        </div>
+        <div class="tb-form-row column-xs">
+          <div class="fixed-title-width" tb-hint-tooltip-icon="{{ 'gateway.hints.bacnet.device-timeout' | translate }}" translate>gateway.bacnet.device-timeout</div>
+          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+            <input matInput type="number" min="0" name="value" formControlName="deviceDiscoveryTimeoutInSec" placeholder="{{ 'gateway.set' | translate }}"/>
+            <span translate class="block pr-2" matSuffix>gateway.suffix.s</span>
+          </mat-form-field>
+        </div>
       </div>
     </mat-expansion-panel>
   </div>

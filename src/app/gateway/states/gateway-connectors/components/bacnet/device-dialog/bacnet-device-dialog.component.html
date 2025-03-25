@@ -82,6 +82,14 @@
       }
       <tb-device-info-table formControlName="deviceInfo" [deviceInfoType]="DeviceInfoType.FULL" [sourceTypes]="sourceTypes" [connectorType]="ConnectorType.BACNET" required="true">
       </tb-device-info-table>
+      @if (data.withReportStrategy) {
+        <tb-report-strategy
+          class="stroked tb-form-panel"
+          [isExpansionMode]="true"
+          [defaultValue]="ReportStrategyDefaultValue.Device"
+          formControlName="reportStrategy"
+        />
+      }
       <div class="tb-form-row column-xs">
         <div class="fixed-title-width tb-required">
           <span tbTruncateWithTooltip translate>gateway.poll-period</span>

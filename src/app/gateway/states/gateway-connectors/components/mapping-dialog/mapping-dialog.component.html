@@ -89,6 +89,14 @@
                                         [sourceTypes]="[sourceTypesEnum.MSG, sourceTypesEnum.CONST]" required="true">
                   </tb-device-info-table>
                 </ng-template>
+                @if (data.withReportStrategy) {
+                  <tb-report-strategy
+                    class="stroked tb-form-panel"
+                    [isExpansionMode]="true"
+                    [defaultValue]="ReportStrategyDefaultValue.Device"
+                    formControlName="reportStrategy"
+                  />
+                }
                 <div class="tb-form-panel no-border no-padding"
                      *ngIf="converterType === ConvertorTypeEnum.BYTES || converterType === ConvertorTypeEnum.JSON">
                   <div class="tb-form-row space-between tb-flex">
@@ -263,7 +271,7 @@
                             </mat-icon>
                             <div matSuffix
                                  class="see-example p-1"
-                                 [tb-help-popup]="'widget/lib/gateway/expressions_fn'"
+                                 [tb-help-popup]="'widget/lib/gateway/mqtt-expression_fn'"
                                  tb-help-popup-placement="left"
                                  [tb-help-popup-style]="{maxWidth: '970px'}">
                             </div>
@@ -293,7 +301,7 @@
                           </mat-icon>
                           <div matSuffix
                                class="see-example p-1"
-                               [tb-help-popup]="'widget/lib/gateway/expressions_fn'"
+                               [tb-help-popup]="'widget/lib/gateway/mqtt-expression_fn'"
                                tb-help-popup-placement="left"
                                [tb-help-popup-style]="{maxWidth: '970px'}">
                           </div>
@@ -321,7 +329,7 @@
                           </mat-icon>
                           <div matSuffix
                                class="see-example p-1"
-                               [tb-help-popup]="'widget/lib/gateway/expressions_fn'"
+                               [tb-help-popup]="'widget/lib/gateway/mqtt-expression_fn'"
                                tb-help-popup-placement="left"
                                [tb-help-popup-style]="{maxWidth: '970px'}">
                           </div>
@@ -342,7 +350,7 @@
                           </mat-icon>
                           <div matSuffix
                                class="see-example p-1"
-                               [tb-help-popup]="'widget/lib/gateway/expressions_fn'"
+                               [tb-help-popup]="'widget/lib/gateway/mqtt-expression_fn'"
                                tb-help-popup-placement="left"
                                [tb-help-popup-style]="{maxWidth: '970px'}">
                           </div>
@@ -408,7 +416,7 @@
                         </mat-icon>
                         <div matSuffix
                              class="see-example p-1"
-                             [tb-help-popup]="'widget/lib/gateway/expressions_fn'"
+                             [tb-help-popup]="'widget/lib/gateway/mqtt-expression_fn'"
                              tb-help-popup-placement="left"
                              [tb-help-popup-style]="{maxWidth: '970px'}">
                         </div>
@@ -429,7 +437,7 @@
                         </mat-icon>
                         <div matSuffix
                              class="see-example p-1"
-                             [tb-help-popup]="'widget/lib/gateway/expressions_fn'"
+                             [tb-help-popup]="'widget/lib/gateway/mqtt-expression_fn'"
                              tb-help-popup-placement="left"
                              [tb-help-popup-style]="{maxWidth: '970px'}">
                         </div>
@@ -503,7 +511,7 @@
                         </mat-icon>
                         <div matSuffix
                              class="see-example p-1"
-                             [tb-help-popup]="'widget/lib/gateway/expressions_fn'"
+                             [tb-help-popup]="'widget/lib/gateway/mqtt-expression_fn'"
                              tb-help-popup-placement="left"
                              [tb-help-popup-style]="{maxWidth: '970px'}">
                         </div>
@@ -524,7 +532,7 @@
                         </mat-icon>
                         <div matSuffix
                              class="see-example p-1"
-                             [tb-help-popup]="'widget/lib/gateway/expressions_fn'"
+                             [tb-help-popup]="'widget/lib/gateway/mqtt-expression_fn'"
                              tb-help-popup-placement="left"
                              [tb-help-popup-style]="{maxWidth: '970px'}">
                         </div>
@@ -546,7 +554,7 @@
                           </mat-icon>
                           <div matSuffix
                                class="see-example p-1"
-                               [tb-help-popup]="'widget/lib/gateway/expressions_fn'"
+                               [tb-help-popup]="'widget/lib/gateway/mqtt-expression_fn'"
                                tb-help-popup-placement="left"
                                [tb-help-popup-style]="{maxWidth: '970px'}">
                           </div>
@@ -620,6 +628,14 @@
           </div>
           <tb-device-info-table formControlName="deviceInfo" [connectorType]="ConnectorType.OPCUA" [sourceTypes]="OPCUaSourceTypes" [deviceInfoType]="DeviceInfoType.FULL" required="true">
           </tb-device-info-table>
+          @if (data.withReportStrategy) {
+            <tb-report-strategy
+              class="stroked tb-form-panel"
+              [isExpansionMode]="true"
+              [defaultValue]="ReportStrategyDefaultValue.Device"
+              formControlName="reportStrategy"
+            />
+          }
           <div class="tb-form-row space-between tb-flex">
             <div class="fixed-title-width" translate>gateway.attributes</div>
             <div class="tb-flex ellipsis-chips-container">
