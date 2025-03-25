@@ -28,8 +28,8 @@
       <div class="tb-form-table-row tb-form-row no-border same-padding top-same-padding"
            [class.bottom-same-padding]="deviceInfoType !== DeviceInfoType.FULL">
         <div class="fixed-title-width tb-required" translate>gateway.device-info.name</div>
-        <div class="tb-flex no-gap raw-value-option" *ngIf="useSource">
-          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+        <div class="no-gap raw-value-option" *ngIf="useSource">
+          <mat-form-field class="tb-flex no-gap !w-full" appearance="outline" subscriptSizing="dynamic">
             <mat-select formControlName="deviceNameExpressionSource">
               <mat-option *ngFor="let type of sourceTypes" [value]="type">
                 {{ SourceTypeTranslationsMap.get(type) | translate }}
@@ -62,8 +62,8 @@
       <div class="tb-form-table-row tb-form-row no-border same-padding bottom-same-padding"
            *ngIf="deviceInfoType === DeviceInfoType.FULL">
         <div class="fixed-title-width tb-required" translate>gateway.device-info.profile-name</div>
-        <div class="tb-flex no-gap raw-value-option" *ngIf="useSource">
-          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+        <div class="no-gap raw-value-option" *ngIf="useSource">
+          <mat-form-field class="tb-flex no-gap !w-full" appearance="outline" subscriptSizing="dynamic">
             <mat-select formControlName="deviceProfileExpressionSource">
               <mat-option *ngFor="let type of sourceTypes" [value]="type">
                 {{ SourceTypeTranslationsMap.get(type) | translate }}

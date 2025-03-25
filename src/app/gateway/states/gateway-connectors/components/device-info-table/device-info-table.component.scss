@@ -37,8 +37,12 @@
     width: 40%;
   }
 
-  .table-name-column, .table-source-column, .raw-value-option {
+  .table-name-column, .table-source-column {
     width: 20%;
+  }
+
+  .raw-value-option {
+    width: 21%;
   }
 
   .raw-name {
