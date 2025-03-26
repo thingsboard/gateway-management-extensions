@@ -29,7 +29,7 @@
                   </div>
                   <ng-template #tagName>
                     <div class="tb-flex">
-                      <div class="title-container tb-flex">{{ 'gateway.key' | translate }}:
+                      <div class="title-container tb-flex">{{ (keysType === ModbusValueKey.RPC_REQUESTS ? 'gateway.method' : 'gateway.key') | translate }}:
                         <span class="key-label" tbTruncateWithTooltip>{{ keyControl.get('tag').value }}</span>
                       </div>
                       <div class="title-container">{{ 'gateway.address' | translate }}:

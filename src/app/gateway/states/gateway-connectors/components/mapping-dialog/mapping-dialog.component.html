@@ -251,13 +251,15 @@
                         <div class="tb-required" translate>gateway.device-info.device-name-expression</div>
                       </div>
                       <div class="flex flex-1 gap-2">
-                        <mat-form-field class="tb-flex" appearance="outline" subscriptSizing="dynamic">
-                          <mat-select formControlName="deviceNameExpressionSource">
-                            <mat-option *ngFor="let type of sourceTypes" [value]="type">
-                              {{ SourceTypeTranslationsMap.get(type) | translate }}
-                            </mat-option>
-                          </mat-select>
-                        </mat-form-field>
+                        <div class="flex w-1/4">
+                          <mat-form-field class="tb-flex" appearance="outline" subscriptSizing="dynamic">
+                            <mat-select formControlName="deviceNameExpressionSource">
+                              <mat-option *ngFor="let type of sourceTypes" [value]="type">
+                                {{ SourceTypeTranslationsMap.get(type) | translate }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
                         <mat-form-field class="tb-flex" appearance="outline" subscriptSizing="dynamic">
                           <input matInput name="value" formControlName="deviceNameExpression" placeholder="{{ 'gateway.set' | translate }}"/>
                             <mat-icon matSuffix
@@ -281,13 +283,15 @@
                     <div class="tb-form-row column-xs">
                       <div class="fixed-title-width tb-required" translate>gateway.attribute-name-expression</div>
                       <div class="flex flex-1 gap-2">
-                        <mat-form-field class="tb-flex" appearance="outline" subscriptSizing="dynamic">
-                          <mat-select formControlName="attributeNameExpressionSource">
-                            <mat-option *ngFor="let type of sourceTypes" [value]="type">
-                              {{ SourceTypeTranslationsMap.get(type) | translate }}
-                            </mat-option>
-                          </mat-select>
-                        </mat-form-field>
+                        <div class="flex w-1/4">
+                          <mat-form-field class="tb-flex" appearance="outline" subscriptSizing="dynamic">
+                            <mat-select formControlName="attributeNameExpressionSource">
+                              <mat-option *ngFor="let type of sourceTypes" [value]="type">
+                                {{ SourceTypeTranslationsMap.get(type) | translate }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
                         <mat-form-field class="tb-flex" appearance="outline" subscriptSizing="dynamic">
                           <input matInput name="value" formControlName="attributeNameExpression" placeholder="{{ 'gateway.set' | translate }}"/>
                           <mat-icon matSuffix
@@ -592,39 +596,39 @@
             </ng-container>
         </ng-template>
         <ng-template [ngSwitchCase]="MappingType.OPCUA">
-          <div class="tb-form-row column-xs">
-            <div class="tb-flex no-flex align-center" translate>
+          <div class="device-node-row tb-form-row column-xs pr-4">
+            <div class="tb-flex no-flex align-center w-1/5" translate>
               <div class="tb-required" tb-hint-tooltip-icon="{{ 'gateway.device-node-hint' | translate }}">
                 {{ 'gateway.device-node' | translate }}
               </div>
             </div>
-            <div class="tb-flex device-config">
-              <mat-form-field class="tb-flex" appearance="outline" subscriptSizing="dynamic">
+            <div class="flex w-1/5">
+              <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
                 <mat-select formControlName="deviceNodeSource">
                   <mat-option *ngFor="let type of [OPCUaSourceTypesEnum.PATH, OPCUaSourceTypesEnum.IDENTIFIER]" [value]="type">
                     {{ SourceTypeTranslationsMap.get(type) | translate }}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-              <mat-form-field class="tb-flex device-node-pattern-field" appearance="outline" subscriptSizing="dynamic">
-                <input matInput name="value" formControlName="deviceNodePattern" placeholder="{{ 'gateway.set' | translate }}"/>
-                <mat-icon matSuffix
-                          matTooltipPosition="above"
-                          matTooltipClass="tb-error-tooltip"
-                          [matTooltip]="('gateway.device-node-required') | translate"
-                          *ngIf="(mappingForm.get('deviceNodePattern').hasError('required') &&
-                                  mappingForm.get('deviceNodePattern').touched)"
-                          class="tb-error">
-                  warning
-                </mat-icon>
-                <div matSuffix
-                     class="see-example p-1"
-                     [tb-help-popup]="ConnectorType.OPCUA | getConnectorMappingHelpLink: 'device-node' : mappingForm.get('deviceNodeSource').value"
-                     tb-help-popup-placement="left"
-                     [tb-help-popup-style]="{maxWidth: '970px'}">
-                </div>
-              </mat-form-field>
             </div>
+            <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+              <input matInput name="value" formControlName="deviceNodePattern" placeholder="{{ 'gateway.set' | translate }}"/>
+              <mat-icon matSuffix
+                        matTooltipPosition="above"
+                        matTooltipClass="tb-error-tooltip"
+                        [matTooltip]="('gateway.device-node-required') | translate"
+                        *ngIf="(mappingForm.get('deviceNodePattern').hasError('required') &&
+                                  mappingForm.get('deviceNodePattern').touched)"
+                        class="tb-error">
+                warning
+              </mat-icon>
+              <div matSuffix
+                   class="see-example p-1"
+                   [tb-help-popup]="ConnectorType.OPCUA | getConnectorMappingHelpLink: 'device-node' : mappingForm.get('deviceNodeSource').value"
+                   tb-help-popup-placement="left"
+                   [tb-help-popup-style]="{maxWidth: '970px'}">
+              </div>
+            </mat-form-field>
           </div>
           <tb-device-info-table formControlName="deviceInfo" [connectorType]="ConnectorType.OPCUA" [sourceTypes]="OPCUaSourceTypes" [deviceInfoType]="DeviceInfoType.FULL" required="true">
           </tb-device-info-table>
