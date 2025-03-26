@@ -264,25 +264,25 @@
                   </span>
                 </div>
                   <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
-                    <input matInput type="number" min="0" name="value" formControlName="pollPeriod" placeholder="{{ 'gateway.set' | translate }}"/>
+                    <input matInput type="number" min="100" name="value" formControlName="pollPeriod" placeholder="{{ 'gateway.set' | translate }}"/>
                   </mat-form-field>
               </div>
               <div class="tb-form-row column-xs">
                 <div class="fixed-title-width-260 tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.modbus.connect-attempt-time' | translate }}" translate>gateway.connect-attempt-time</div>
                   <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
-                    <input matInput type="number" min="0" name="value" formControlName="connectAttemptTimeMs" placeholder="{{ 'gateway.set' | translate }}"/>
+                    <input matInput type="number" min="500" name="value" formControlName="connectAttemptTimeMs" placeholder="{{ 'gateway.set' | translate }}"/>
                   </mat-form-field>
               </div>
               <div class="tb-form-row column-xs">
                 <div class="fixed-title-width-260 tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.modbus.connect-attempt-count' | translate }}" translate>gateway.connect-attempt-count</div>
                   <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
-                    <input matInput type="number" min="0" name="value" formControlName="connectAttemptCount" placeholder="{{ 'gateway.set' | translate }}"/>
+                    <input matInput type="number" min="5" name="value" formControlName="connectAttemptCount" placeholder="{{ 'gateway.set' | translate }}"/>
                   </mat-form-field>
               </div>
               <div class="tb-form-row column-xs">
                 <div class="fixed-title-width-260 tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.modbus.wait-after-failed-attempts' | translate }}" translate>gateway.wait-after-failed-attempts</div>
                   <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
-                    <input matInput type="number" min="0" name="value" formControlName="waitAfterFailedAttemptsMs" placeholder="{{ 'gateway.set' | translate }}"/>
+                    <input matInput type="number" min="30000" name="value" formControlName="waitAfterFailedAttemptsMs" placeholder="{{ 'gateway.set' | translate }}"/>
                   </mat-form-field>
               </div>
             </div>

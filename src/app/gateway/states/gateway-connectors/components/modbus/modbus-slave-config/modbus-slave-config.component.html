@@ -137,7 +137,7 @@
         </span>
       </div>
         <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
-          <input matInput type="number" min="0" name="value" formControlName="pollPeriod" placeholder="{{ 'gateway.set' | translate }}"/>
+          <input matInput type="number" min="100" name="value" formControlName="pollPeriod" placeholder="{{ 'gateway.set' | translate }}"/>
         </mat-form-field>
     </div>
     <div *ngIf="protocolType === ModbusProtocolType.Serial" class="tb-form-row column-xs">
