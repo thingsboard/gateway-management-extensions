@@ -36,6 +36,8 @@ export enum GatewayLogLevel {
 }
 
 export enum GatewayVersion {
+  v3_7_3 = '3.7.3',
+  v3_7_2 = '3.7.2',
   v3_7_0 = '3.7',
   v3_6_3 = '3.6.3',
   v3_6_2 = '3.6.2',

@@ -101,7 +101,7 @@ export class GatewayLogsComponent implements OnInit, AfterViewInit {
         name: 'Connector',
         filterFn: (attrData) => !attrData.message.includes(`_converter.py`)
       }, {
-        key: `${connector.key}_LOGS`,
+        key: `${connector.key}_converter_LOGS`,
         name: 'Converter',
         filterFn: (attrData) => attrData.message.includes(`_converter.py`)
       }];

@@ -204,6 +204,8 @@ export interface BacnetApplicationConfig {
   objectIdentifier: number;
   maxApduLengthAccepted: number;
   segmentationSupported: SegmentationType;
+  deviceDiscoveryTimeoutInSec?: number;
+  networkNumber?: number;
   vendorIdentifier?: number;
 }
 

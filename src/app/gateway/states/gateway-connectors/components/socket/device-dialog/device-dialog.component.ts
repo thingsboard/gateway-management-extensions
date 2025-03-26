@@ -18,39 +18,40 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  DestroyRef,
   Inject,
-  OnDestroy,
   Renderer2,
   ViewContainerRef
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { AppState } from '@core/public-api';
-import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { AppState, deleteNullProperties } from '@core/public-api';
+import { FormBuilder, Validators } from '@angular/forms';
 import { DialogComponent, helpBaseUrl, SharedModule } from '@shared/public-api';
 import { Router } from '@angular/router';
 import {
   EllipsisChipListDirective,
   noLeadTrailSpacesRegex,
+  ReportStrategyComponent,
+  ReportStrategyDefaultValue,
   SocketEncoding,
 } from '../../../../../shared/public-api';
 import {
   DevicesConfigMapping,
   MappingInfo,
+  SocketDeviceKeys,
   SocketKeysAddKeyTranslationsMap,
   SocketKeysDeleteKeyTranslationsMap,
   SocketKeysNoKeysTextTranslationsMap,
   SocketKeysPanelTitleTranslationsMap,
   SocketValueKey,
 } from '../../../models/public-api';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { MatButton } from '@angular/material/button';
 import { TbPopoverService } from '@shared/components/popover.service';
-import {
-  DeviceDataKeysPanelComponent
-} from '../device-data-keys-pannel/device-data-keys-panel.component';
+import { DeviceDataKeysPanelComponent } from '../device-data-keys-pannel/device-data-keys-panel.component';
 import { CommonModule } from '@angular/common';
+import { TbPopoverComponent } from '@shared/components/popover.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tb-device-dialog',
@@ -62,18 +63,31 @@ import { CommonModule } from '@angular/common';
     CommonModule,
     SharedModule,
     EllipsisChipListDirective,
+    ReportStrategyComponent,
   ]
 })
-export class DeviceDialogComponent extends DialogComponent<DeviceDialogComponent, DevicesConfigMapping> implements OnDestroy {
+export class DeviceDialogComponent extends DialogComponent<DeviceDialogComponent, DevicesConfigMapping> {
 
-  deviceFormGroup: UntypedFormGroup;
-  SocketValueKey = SocketValueKey;
+  deviceFormGroup = this.fb.group({
+    address: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
+    deviceName: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
+    deviceType: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
+    encoding: [SocketEncoding.UTF8],
+    telemetry: [[] as SocketDeviceKeys[]],
+    attributes: [[] as SocketDeviceKeys[]],
+    attributeRequests: [[] as SocketDeviceKeys[]],
+    attributeUpdates: [[] as SocketDeviceKeys[]],
+    serverSideRpc: [[] as SocketDeviceKeys[]],
+    reportStrategy: [{value: null, disabled: !this.data.withReportStrategy}],
+  });
   keysPopupClosed = true;
 
+  readonly SocketValueKey = SocketValueKey;
   readonly socketDeviceHelpLink = helpBaseUrl + '/docs/iot-gateway/config/socket/#device-subsection';
   readonly socketEncoding = Object.values(SocketEncoding);
+  readonly ReportStrategyDefaultValue = ReportStrategyDefaultValue;
 
-  private destroy$ = new Subject<void>();
+  private popoverComponent: TbPopoverComponent<DeviceDataKeysPanelComponent>;
 
   constructor(protected store: Store<AppState>,
               protected router: Router,
@@ -83,28 +97,12 @@ export class DeviceDialogComponent extends DialogComponent<DeviceDialogComponent
               private popoverService: TbPopoverService,
               private renderer: Renderer2,
               private viewContainerRef: ViewContainerRef,
+              private destroyRef: DestroyRef,
               private cdr: ChangeDetectorRef,
   ) {
     super(store, router, dialogRef);
 
-    this.deviceFormGroup = this.fb.group({
-      address: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-      deviceName: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-      deviceType: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-      encoding: [SocketEncoding.UTF8],
-      telemetry: [[]],
-      attributes: [[]],
-      attributeRequests: [[]],
-      attributeUpdates: [[]],
-      serverSideRpc: [[]],
-    });
     this.deviceFormGroup.patchValue(this.data.value, { emitEvent: false })
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-    super.ngOnDestroy();
   }
 
   cancel(): void {
@@ -115,19 +113,21 @@ export class DeviceDialogComponent extends DialogComponent<DeviceDialogComponent
 
   add(): void {
     if (this.deviceFormGroup.valid) {
-      this.dialogRef.close(this.deviceFormGroup.value);
+      const value = this.deviceFormGroup.value;
+      deleteNullProperties(value);
+      this.dialogRef.close(value as DevicesConfigMapping);
     }
   }
 
   manageKeys($event: Event, matButton: MatButton, keysType: SocketValueKey): void {
-    $event.stopPropagation();
+    $event?.stopPropagation();
+    if (this.popoverComponent && !this.popoverComponent.tbHidden) {
+      this.popoverComponent.hide();
+    }
     const trigger = matButton._elementRef.nativeElement;
     if (this.popoverService.hasPopover(trigger)) {
       this.popoverService.hidePopover(trigger);
       return;
-    }
-    if (this.popoverService.hasPopover(trigger)) {
-      this.popoverService.hidePopover(trigger);
     }
 
     const keysControl = this.deviceFormGroup.get(keysType);
@@ -141,7 +141,7 @@ export class DeviceDialogComponent extends DialogComponent<DeviceDialogComponent
       withReportStrategy: this.data.withReportStrategy,
     };
     this.keysPopupClosed = false;
-    const dataKeysPanelPopover = this.popoverService.displayPopover(
+    this.popoverComponent = this.popoverService.displayPopover(
       trigger,
       this.renderer,
       this.viewContainerRef,
@@ -155,14 +155,13 @@ export class DeviceDialogComponent extends DialogComponent<DeviceDialogComponent
       {},
       true
     );
-    dataKeysPanelPopover.tbComponentRef.instance.popover = dataKeysPanelPopover;
-    dataKeysPanelPopover.tbComponentRef.instance.keysDataApplied.pipe(takeUntil(this.destroy$)).subscribe((keysData) => {
-      dataKeysPanelPopover.hide();
+    this.popoverComponent.tbComponentRef.instance.keysDataApplied.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((keysData: SocketDeviceKeys[]) => {
+      this.popoverComponent.hide();
       keysControl.patchValue(keysData);
       keysControl.markAsDirty();
       this.cdr.markForCheck();
     });
-    dataKeysPanelPopover.tbHideStart.pipe(takeUntil(this.destroy$)).subscribe(() => {
+    this.popoverComponent.tbHideStart.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.keysPopupClosed = true;
     });
   }

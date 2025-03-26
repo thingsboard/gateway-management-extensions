@@ -17,6 +17,7 @@
 import {
   AfterViewInit,
   Component,
+  DestroyRef,
   EventEmitter,
   forwardRef,
   Input,
@@ -49,6 +50,7 @@ import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import {
   GatewayConfigCommand,
+  GatewayVersion,
   noLeadTrailSpacesRegex,
   numberInputPattern,
   ReportStrategyComponent,
@@ -67,6 +69,8 @@ import { GatewayGrpcConfigurationComponent } from './grpc/gateway-grpc-configura
 import { GatewayLogsConfigurationComponent } from './logs/gateway-logs-configuration.component';
 import { GatewaySecurityConfigurationComponent } from './security/gateway-security-configuration.component';
 import { GatewayDeviceCredentialsService } from '../../services/gateway-device-credentials.service';
+import { GatewayConnectorVersionMappingUtil } from '../../../gateway-connectors/utils/public-api';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tb-gateway-basic-configuration',
@@ -99,6 +103,7 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
 
   @Input() device: EntityId;
   @Input() defaultTab: GatewayBasicConfigTabKey;
+  @Input() gatewayVersion: GatewayVersion = GatewayVersion.Legacy;
   @Input() @coerceBoolean() dialogMode = false;
   @Input() @coerceBoolean() withReportStrategy = false;
 
@@ -109,6 +114,7 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
   readonly ReportStrategyDefaultValue = ReportStrategyDefaultValue;
 
   basicFormGroup: FormGroup;
+  hasUpdatedStatistics: boolean;
 
   readonly initialCredentials$ = this.gatewayCredentialsService.initialCredentials$;
 
@@ -119,6 +125,7 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
   constructor(private fb: FormBuilder,
               private deviceService: DeviceService,
               private gatewayCredentialsService: GatewayDeviceCredentialsService,
+              private destroyRef: DestroyRef,
               private dialog: MatDialog) {
     this.initBasicFormGroup();
     this.observeFormChanges();
@@ -131,7 +138,10 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.withReportStrategy && !changes.withReportStrategy.firstChange && this.withReportStrategy) {
-      this.basicFormGroup.get('thingsboard.reportStrategy').enable({emitEvent: false})
+      this.basicFormGroup.get('thingsboard.reportStrategy').enable({emitEvent: false});
+    }
+    if (!changes.gatewayVersion.firstChange && changes.gatewayVersion?.previousValue !== changes.gatewayVersion.currentValue) {
+      this.onVersionChange();
     }
   }
 
@@ -197,7 +207,7 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
   }
 
   addCommand(command?: GatewayConfigCommand, emitEvent: boolean = true): void {
-    const { attributeOnGateway = null, command: cmd = null, timeout = null, installCmd = '' } = command || {};
+    const { attributeOnGateway = null, command: cmd = null, timeout = 10, installCmd = '' } = command || {};
 
     const commandFormGroup = this.fb.group({
       attributeOnGateway: [attributeOnGateway, [Validators.required, Validators.pattern(/^[^.\s]+$/), this.uniqNameRequired()]],
@@ -242,6 +252,7 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
       checkConnectorsConfigurationInSeconds: [60, [Validators.required, Validators.min(1), Validators.pattern(numberInputPattern)]],
       statistics: this.fb.group({
         enable: [true],
+        enableCustom: [{ value: false, disabled: true }],
         statsSendPeriodInSeconds: [3600, [Validators.required, Validators.min(60), Validators.pattern(numberInputPattern)]],
         customStatsSendPeriodInSeconds: [3600, [Validators.required, Validators.min(60), Validators.pattern(numberInputPattern)]],
         commands: this.fb.array([])
@@ -254,7 +265,7 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
       security: [],
       qos: [1],
       reportStrategy: [{
-        value: { type: ReportStrategyType.OnReportPeriod, reportPeriod: ReportStrategyDefaultValue.Gateway },
+        value: { type: ReportStrategyType.OnReceived },
         disabled: true
       }],
     });
@@ -266,6 +277,22 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
       inactivityTimeoutSeconds: [300, [Validators.min(1), Validators.pattern(numberInputPattern)]],
       inactivityCheckPeriodSeconds: [10, [Validators.min(1), Validators.pattern(numberInputPattern)]]
     });
+  }
+
+  private onVersionChange(): void {
+    this.hasUpdatedStatistics = GatewayConnectorVersionMappingUtil.parseVersion(this.gatewayVersion) >= GatewayConnectorVersionMappingUtil.parseVersion(GatewayVersion.v3_7_3);
+    if (this.hasUpdatedStatistics) {
+      const enableCustomControl = this.basicFormGroup.get('thingsboard.statistics.enableCustom');
+      enableCustomControl.enable({emitEvent: false});
+      this.basicFormGroup.get('thingsboard.statistics.enable').valueChanges
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(enable => {
+          if (!enable) {
+            enableCustomControl.patchValue(false, {emitEvent: false});
+          }
+          enableCustomControl[enable ? 'enable' : 'disable']({emitEvent: false});
+        });
+    }
   }
 
   private observeFormChanges(): void {

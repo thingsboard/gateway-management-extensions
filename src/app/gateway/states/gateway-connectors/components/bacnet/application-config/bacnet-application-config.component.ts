@@ -74,6 +74,8 @@ export class BacnetApplicationConfigComponent extends ControlValueAccessorBaseAb
       vendorIdentifier: [null, [Validators.required]],
       maxApduLengthAccepted: [],
       segmentationSupported: [SegmentationType.BOTH],
+      networkNumber: [],
+      deviceDiscoveryTimeoutInSec: []
     });
   }
 
@@ -86,8 +88,10 @@ export class BacnetApplicationConfigComponent extends ControlValueAccessorBaseAb
     const {
       maxApduLengthAccepted = 1476,
       segmentationSupported = SegmentationType.BOTH,
+      networkNumber = 3,
+      deviceDiscoveryTimeoutInSec = 5,
       ...restConfig
     } = applicationConfig;
-    this.formGroup.reset({ ...restConfig, maxApduLengthAccepted, segmentationSupported }, { emitEvent: false });
+    this.formGroup.reset({ ...restConfig, maxApduLengthAccepted, segmentationSupported, networkNumber, deviceDiscoveryTimeoutInSec }, { emitEvent: false });
   }
 }

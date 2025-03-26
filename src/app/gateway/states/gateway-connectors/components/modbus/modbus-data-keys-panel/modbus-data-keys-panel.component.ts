@@ -17,10 +17,10 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import {
   AbstractControl,
   FormArray,
+  FormBuilder,
   FormControl,
   FormGroup,
   UntypedFormArray,
-  UntypedFormBuilder,
   UntypedFormGroup,
   Validators
 } from '@angular/forms';
@@ -50,7 +50,6 @@ import { coerceBoolean, SharedModule } from '@shared/public-api';
 import { filter, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { ReportStrategyComponent } from '../../../../../shared/components/public-api';
-import { ConnectorMappingHelpLinkPipe } from '../../../pipes/public-api';
 
 @Component({
   selector: 'tb-modbus-data-keys-panel',
@@ -60,7 +59,6 @@ import { ConnectorMappingHelpLinkPipe } from '../../../pipes/public-api';
   imports: [
     CommonModule,
     SharedModule,
-    ConnectorMappingHelpLinkPipe,
     ReportStrategyComponent,
     TruncateWithTooltipDirective,
   ]
@@ -77,7 +75,6 @@ export class ModbusDataKeysPanelComponent implements OnInit, OnDestroy {
   @Input() noKeysText: string;
   @Input() keysType: ModbusValueKey;
   @Input() values: ModbusValue[];
-  @Input() popover: TbPopoverComponent<ModbusDataKeysPanelComponent>;
 
   @Output() keysDataApplied = new EventEmitter<Array<ModbusValue>>();
 
@@ -99,6 +96,7 @@ export class ModbusDataKeysPanelComponent implements OnInit, OnDestroy {
   readonly ModifierTypesMap = ModifierTypesMap;
   readonly ReportStrategyDefaultValue = ReportStrategyDefaultValue;
   readonly ModbusDataType = ModbusDataType;
+  readonly ModbusValueKey = ModbusValueKey;
 
   private destroy$ = new Subject<void>();
 
@@ -107,7 +105,10 @@ export class ModbusDataKeysPanelComponent implements OnInit, OnDestroy {
   private readonly defaultWriteFunctionCodes = [6, 16];
   private readonly bitsWriteFunctionCodes = [5, 15];
 
-  constructor(private fb: UntypedFormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private popover: TbPopoverComponent<ModbusDataKeysPanelComponent>,
+  ) {}
 
   ngOnInit(): void {
     this.withFunctionCode = !this.isMaster || (this.keysType !== ModbusValueKey.ATTRIBUTES && this.keysType !== ModbusValueKey.TIMESERIES);
@@ -291,13 +292,11 @@ export class ModbusDataKeysPanelComponent implements OnInit, OnDestroy {
     const modifierTypeControl = keyFormGroup.get('modifierType');
     const modifierValueControl = keyFormGroup.get('modifierValue');
 
-    if (enable) {
-      modifierTypeControl.enable();
-      modifierValueControl.enable();
-    } else {
-      modifierTypeControl.disable();
-      modifierValueControl.disable();
-    }
+    modifierTypeControl[enable ? 'enable' : 'disable']({emitEvent: false});
+    modifierValueControl[enable ? 'enable' : 'disable']({emitEvent: false});
+
+    modifierTypeControl.markAsDirty();
+    modifierValueControl.markAsDirty();
   }
 
   private updateFunctionCodes(keyFormGroup: FormGroup, dataType: ModbusDataType): void {

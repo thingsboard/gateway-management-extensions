@@ -83,7 +83,6 @@ export class MappingDataKeysPanelComponent extends PageComponent implements OnIn
   @Input() valueTypeKeys: Array<MappingValueType | OPCUaSourceType> = Object.values(MappingValueType) as MappingValueType[];
   @Input() @coerceBoolean() rawData = false;
   @Input() @coerceBoolean() withReportStrategy = true;
-  @Input() popover: TbPopoverComponent<MappingDataKeysPanelComponent>;
 
   @Output() keysDataApplied = new EventEmitter<Array<MappingDataKey> | {[key: string]: unknown}>();
 
@@ -96,6 +95,7 @@ export class MappingDataKeysPanelComponent extends PageComponent implements OnIn
   errorText = '';
 
   constructor(private fb: FormBuilder,
+              private popover: TbPopoverComponent<MappingDataKeysPanelComponent>,
               protected store: Store<AppState>) {
     super(store);
   }
