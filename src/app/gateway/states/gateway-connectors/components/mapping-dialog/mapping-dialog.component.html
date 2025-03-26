@@ -250,7 +250,7 @@
                       <div class="fixed-title-width tb-flex no-flex align-center" translate>
                         <div class="tb-required" translate>gateway.device-info.device-name-expression</div>
                       </div>
-                      <div class="flex flex-1">
+                      <div class="flex flex-1 gap-2">
                         <mat-form-field class="tb-flex" appearance="outline" subscriptSizing="dynamic">
                           <mat-select formControlName="deviceNameExpressionSource">
                             <mat-option *ngFor="let type of sourceTypes" [value]="type">
@@ -280,7 +280,7 @@
                     </div>
                     <div class="tb-form-row column-xs">
                       <div class="fixed-title-width tb-required" translate>gateway.attribute-name-expression</div>
-                      <div class="flex flex-1">
+                      <div class="flex flex-1 gap-2">
                         <mat-form-field class="tb-flex" appearance="outline" subscriptSizing="dynamic">
                           <mat-select formControlName="attributeNameExpressionSource">
                             <mat-option *ngFor="let type of sourceTypes" [value]="type">
