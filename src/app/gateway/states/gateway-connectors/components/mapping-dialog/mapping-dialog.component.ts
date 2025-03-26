@@ -298,13 +298,16 @@ export class MappingDialogComponent extends DialogComponent<MappingDialogCompone
     if (this.data.value && Object.keys(this.data.value).length) {
       switch (this.data.mappingType) {
         case MappingType.DATA:
-          const {converter, topicFilter, subscriptionQos} = this.data.value;
+          const {converter, topicFilter, subscriptionQos, reportStrategy} = this.data.value;
           return {
             topicFilter,
             subscriptionQos,
             converter: {
               type: converter.type,
-              [converter.type]: {...converter}
+              [converter.type]: {
+                ...converter,
+                ...(reportStrategy ? { reportStrategy } : {}),
+              }
             }
           } as ConverterMappingFormValue;
         case MappingType.REQUESTS:
