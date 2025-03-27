@@ -87,8 +87,8 @@ export class RestRequestMappingTableComponent extends AbstractDevicesConfigTable
       $event.stopPropagation();
     }
     this.dialogService.confirm(
-      this.translate.instant('gateway.delete-mapping-title'),
-      '',
+      this.translate.instant('gateway.delete-mapping-title', { name: this.getRequestDetails(this.entityFormArray.at(index).value) }),
+      this.translate.instant('gateway.delete-mapping-description'),
       this.translate.instant('action.no'),
       this.translate.instant('action.yes'),
       true
@@ -103,24 +103,29 @@ export class RestRequestMappingTableComponent extends AbstractDevicesConfigTable
   protected override updateTableData(data: RestRequestMappingValue[], textSearch?: string): void {
     if (textSearch) {
       data = data.filter(item => {
-        let details: string;
-        switch (item.requestType) {
-          case 'attributeUpdates':
-            details = Object.values((item.requestValue as RestServerSideRpc).httpHeaders).join(', ');
-            break;
-          case 'serverSideRpc':
-            details = (item.requestValue as RestServerSideRpc).methodFilter;
-            break;
-          default:
-            details = (item.requestValue as RestAttributeRequest).endpoint;
-            break;
-        }
+        const details = this.getRequestDetails(item);
         return Object.values(item).some(value =>
           isString(value) && this.translate.instant(RestRequestTypesTranslationsMap.get(value)).toLowerCase().includes(textSearch.toLowerCase())
           || details?.toLowerCase().includes(textSearch.toLowerCase()));
       });
     }
     this.dataSource.loadData(data);
+  }
+
+  private getRequestDetails(item: RestRequestMappingValue): string {
+    let details: string;
+    switch (item.requestType) {
+      case 'attributeUpdates':
+        details = Object.values((item.requestValue as RestServerSideRpc).httpHeaders).join(', ');
+        break;
+      case 'serverSideRpc':
+        details = (item.requestValue as RestServerSideRpc).methodFilter;
+        break;
+      default:
+        details = (item.requestValue as RestAttributeRequest).endpoint;
+        break;
+    }
+    return details;
   }
 
   override validate(): ValidationErrors | null {

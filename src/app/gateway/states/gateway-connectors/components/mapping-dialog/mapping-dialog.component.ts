@@ -17,7 +17,7 @@
 import { Component, Inject, OnDestroy, Renderer2, ViewContainerRef } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { AppState } from '@core/public-api';
+import { AppState, deleteNullProperties } from '@core/public-api';
 import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { DialogComponent, SharedModule } from '@shared/public-api';
 import { Router } from '@angular/router';
@@ -58,13 +58,21 @@ import { startWith, takeUntil } from 'rxjs/operators';
 import { MatButton } from '@angular/material/button';
 import { TbPopoverService } from '@shared/components/popover.service';
 import { TranslateService } from '@ngx-translate/core';
-import { Attribute, ConnectorType, noLeadTrailSpacesRegex, Timeseries } from '../../../../shared/models/public-api';
+import {
+  Attribute,
+  ConnectorType,
+  noLeadTrailSpacesRegex,
+  ReportStrategyDefaultValue,
+  Timeseries
+} from '../../../../shared/models/public-api';
 import { CommonModule } from '@angular/common';
 import { EllipsisChipListDirective } from '../../../../shared/directives/public-api';
 import { ConnectorMappingHelpLinkPipe } from '../../pipes/public-api';
 import { DeviceInfoTableComponent } from '../device-info-table/device-info-table.component';
 import { MappingDataKeysPanelComponent } from '../mapping-data-keys-panel/mapping-data-keys-panel.component';
 import { ErrorTooltipIconComponent } from '../../../../shared/components/error-icon/error-icon.component';
+import { TbPopoverComponent } from '@shared/components/popover.component';
+import { ReportStrategyComponent } from '../../../../shared/components/report-strategy/report-strategy.component';
 
 @Component({
   selector: 'tb-mapping-dialog',
@@ -78,6 +86,7 @@ import { ErrorTooltipIconComponent } from '../../../../shared/components/error-i
     EllipsisChipListDirective,
     DeviceInfoTableComponent,
     ErrorTooltipIconComponent,
+    ReportStrategyComponent,
   ]
 })
 export class MappingDialogComponent extends DialogComponent<MappingDialogComponent, ConnectorMapping> implements OnDestroy {
@@ -106,10 +115,12 @@ export class MappingDialogComponent extends DialogComponent<MappingDialogCompone
   readonly DataConversionTranslationsMap = DataConversionTranslationsMap;
   readonly HelpLinkByMappingTypeMap = HelpLinkByMappingTypeMap;
   readonly ConnectorType = ConnectorType;
+  readonly ReportStrategyDefaultValue = ReportStrategyDefaultValue;
 
   keysPopupClosed = true;
 
   private destroy$ = new Subject<void>();
+  private popoverComponent: TbPopoverComponent<MappingDataKeysPanelComponent>;
 
   constructor(protected store: Store<AppState>,
               protected router: Router,
@@ -210,8 +221,9 @@ export class MappingDialogComponent extends DialogComponent<MappingDialogCompone
   }
 
   manageKeys($event: Event, matButton: MatButton, keysType: MappingKeysType): void {
-    if ($event) {
-      $event.stopPropagation();
+    $event?.stopPropagation();
+    if (this.popoverComponent && !this.popoverComponent.tbHidden) {
+      this.popoverComponent.hide();
     }
     const trigger = matButton._elementRef.nativeElement;
     if (this.popoverService.hasPopover(trigger)) {
@@ -240,18 +252,17 @@ export class MappingDialogComponent extends DialogComponent<MappingDialogCompone
         ctx.sourceType = this.mappingForm.get('deviceNodeSource').value;
       }
       this.keysPopupClosed = false;
-      const dataKeysPanelPopover = this.popoverService.displayPopover(trigger, this.renderer,
+      this.popoverComponent = this.popoverService.displayPopover(trigger, this.renderer,
         this.viewContainerRef, MappingDataKeysPanelComponent, 'leftBottom', false, null,
         ctx,
         {},
         {}, {}, true);
-      dataKeysPanelPopover.tbComponentRef.instance.popover = dataKeysPanelPopover;
-      dataKeysPanelPopover.tbComponentRef.instance.keysDataApplied.pipe(takeUntil(this.destroy$)).subscribe((keysData) => {
-        dataKeysPanelPopover.hide();
+      this.popoverComponent.tbComponentRef.instance.keysDataApplied.pipe(takeUntil(this.destroy$)).subscribe((keysData) => {
+        this.popoverComponent.hide();
         keysControl.patchValue(keysData);
         keysControl.markAsDirty();
       });
-      dataKeysPanelPopover.tbHideStart.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.popoverComponent.tbHideStart.pipe(takeUntil(this.destroy$)).subscribe(() => {
         this.keysPopupClosed = true;
       });
     }
@@ -259,15 +270,18 @@ export class MappingDialogComponent extends DialogComponent<MappingDialogCompone
 
   private prepareMappingData(): ConnectorMapping {
     const formValue = this.mappingForm.value;
+    deleteNullProperties(formValue);
     switch (this.data.mappingType) {
       case MappingType.DATA:
-        const {converter, topicFilter, subscriptionQos} = formValue;
+        const { converter, topicFilter, subscriptionQos } = formValue;
+        const { reportStrategy, ...restConverter } = converter[converter.type];
         return {
           topicFilter,
           subscriptionQos,
+          ...(reportStrategy ? { reportStrategy } : {}),
           converter: {
             type: converter.type,
-            ...converter[converter.type]
+            ...restConverter,
           }
         };
       case MappingType.REQUESTS:
@@ -284,13 +298,16 @@ export class MappingDialogComponent extends DialogComponent<MappingDialogCompone
     if (this.data.value && Object.keys(this.data.value).length) {
       switch (this.data.mappingType) {
         case MappingType.DATA:
-          const {converter, topicFilter, subscriptionQos} = this.data.value;
+          const {converter, topicFilter, subscriptionQos, reportStrategy} = this.data.value;
           return {
             topicFilter,
             subscriptionQos,
             converter: {
               type: converter.type,
-              [converter.type]: {...converter}
+              [converter.type]: {
+                ...converter,
+                ...(reportStrategy ? { reportStrategy } : {}),
+              }
             }
           } as ConverterMappingFormValue;
         case MappingType.REQUESTS:
@@ -315,16 +332,19 @@ export class MappingDialogComponent extends DialogComponent<MappingDialogCompone
       json: this.fb.group({
         deviceInfo: [{}, []],
         attributes: [[], []],
-        timeseries: [[], []]
+        timeseries: [[], []],
+        reportStrategy: [{value: null, disabled: !this.data.withReportStrategy}],
       }),
       bytes: this.fb.group({
         deviceInfo: [{}, []],
         attributes: [[], []],
-        timeseries: [[], []]
+        timeseries: [[], []],
+        reportStrategy: [{value: null, disabled: !this.data.withReportStrategy}],
       }),
       custom: this.fb.group({
         extension: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-        extensionConfig: [{}, []]
+        extensionConfig: [{}, []],
+        reportStrategy: [{value: null, disabled: !this.data.withReportStrategy}],
       }),
     }));
     this.mappingForm.patchValue(this.getFormValueData());
@@ -379,7 +399,8 @@ export class MappingDialogComponent extends DialogComponent<MappingDialogCompone
         valueExpression: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
         responseTopicQoS: [0, []],
         responseTimeout: [10000, [Validators.required, Validators.min(1)]],
-      })
+      }),
+      reportStrategy: [{value: null, disabled: !this.data.withReportStrategy}],
     }));
     this.mappingForm.get('requestType').valueChanges.pipe(
       startWith(this.mappingForm.get('requestType').value),
@@ -418,7 +439,8 @@ export class MappingDialogComponent extends DialogComponent<MappingDialogCompone
       attributes: [[], []],
       timeseries: [[], []],
       rpc_methods: [[], []],
-      attributes_updates: [[], []]
+      attributes_updates: [[], []],
+      reportStrategy: [{value: null, disabled: !this.data.withReportStrategy}],
     });
     this.mappingForm.patchValue(this.getFormValueData());
   }

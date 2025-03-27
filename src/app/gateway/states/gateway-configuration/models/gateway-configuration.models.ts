@@ -153,10 +153,10 @@ export interface LogAttribute {
   };
   handlers: {
     consoleHandler: StreamHandlerConfig;
-    databaseHandler: FileHandlerConfig;
+    databaseHandler?: FileHandlerConfig;
   };
   loggers: {
-    database: LoggerConfig;
+    database?: LoggerConfig;
   };
   root: RootConfig;
   ts: number;

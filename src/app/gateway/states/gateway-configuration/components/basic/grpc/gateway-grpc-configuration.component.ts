@@ -44,7 +44,6 @@ import { numberInputPattern } from '../../../../../shared/models/public-api';
       multi: true
     }
   ],
-  styleUrls: ['./gateway-grpc-configuration.component.scss'],
   standalone: true,
   imports: [
     CommonModule,

@@ -156,7 +156,6 @@ export interface GatewayConfigCommand {
 }
 
 export enum HTTPMethods {
-  CONNECT = 'CONNECT',
   DELETE = 'DELETE',
   GET = 'GET',
   HEAD = 'HEAD',
@@ -164,5 +163,4 @@ export enum HTTPMethods {
   PATCH = 'PATCH',
   POST = 'POST',
   PUT = 'PUT',
-  TRACE = 'TRACE'
 }

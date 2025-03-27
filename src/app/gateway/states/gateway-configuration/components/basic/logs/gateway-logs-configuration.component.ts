@@ -40,7 +40,6 @@ import { GatewayLogLevel } from '../../../../../shared/models/public-api';
 @Component({
   selector: 'tb-gateway-logs-configuration',
   templateUrl: './gateway-logs-configuration.component.html',
-  styleUrls: ['./gateway-logs-configuration.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

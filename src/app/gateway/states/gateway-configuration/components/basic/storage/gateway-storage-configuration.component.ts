@@ -36,7 +36,6 @@ import { numberInputPattern } from '../../../../../shared/models/public-api';
 @Component({
   selector: 'tb-gateway-storage-configuration',
   templateUrl: './gateway-storage-configuration.component.html',
-  styleUrls: ['gateway-storage-configuration.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -153,7 +152,7 @@ export class GatewayStorageConfigurationComponent implements AfterViewInit, Vali
   }
 
   private addSqliteStorageValidators(group: FormGroup): void {
-    ['messages_ttl_check_in_hours', 'messages_ttl_in_days'].forEach(field => {
+    ['messages_ttl_check_in_hours', 'messages_ttl_in_days', 'max_records_per_file'].forEach(field => {
       group.get(field).addValidators([Validators.required, Validators.min(1), Validators.pattern(numberInputPattern)]);
       group.get(field).updateValueAndValidity({ emitEvent: false });
     });

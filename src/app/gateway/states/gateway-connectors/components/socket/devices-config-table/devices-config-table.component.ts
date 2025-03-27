@@ -190,8 +190,8 @@ export class DevicesConfigTableComponent implements ControlValueAccessor, Valida
       $event.stopPropagation();
     }
     this.dialogService.confirm(
-      this.translate.instant('gateway.delete-device-title'),
-      '',
+      this.translate.instant('gateway.delete-device-title', { name: this.devicesFormGroup.controls[index].value.deviceName }),
+      this.translate.instant('gateway.delete-device-description'),
       this.translate.instant('action.no'),
       this.translate.instant('action.yes'),
       true

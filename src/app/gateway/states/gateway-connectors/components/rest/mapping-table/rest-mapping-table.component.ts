@@ -80,8 +80,8 @@ export class RestMappingTableComponent extends AbstractDevicesConfigTableCompone
       $event.stopPropagation();
     }
     this.dialogService.confirm(
-      this.translate.instant('gateway.delete-mapping-title'),
-      '',
+      this.translate.instant('gateway.delete-mapping-title', { name: this.entityFormArray.at(index).value.endpoint }),
+      this.translate.instant('gateway.delete-mapping-description'),
       this.translate.instant('action.no'),
       this.translate.instant('action.yes'),
       true

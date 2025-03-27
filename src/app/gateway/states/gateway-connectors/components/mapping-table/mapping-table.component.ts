@@ -236,9 +236,11 @@ export class MappingTableComponent implements ControlValueAccessor, Validator, A
     if ($event) {
       $event.stopPropagation();
     }
+    const mapping = this.mappingFormGroup.controls[index].value;
+    const name = mapping.deviceInfo?.deviceNameExpression ?? mapping.topicFilter ?? this.getRequestDetails(mapping);
     this.dialogService.confirm(
-      this.translate.instant('gateway.delete-mapping-title'),
-      '',
+      this.translate.instant('gateway.delete-mapping-title', { name }),
+      this.translate.instant('gateway.delete-mapping-description'),
       this.translate.instant('action.no'),
       this.translate.instant('action.yes'),
       true
@@ -266,19 +268,10 @@ export class MappingTableComponent implements ControlValueAccessor, Validator, A
           converter: converterType ? this.translate.instant(converterType) : ''
         };
       case MappingType.REQUESTS:
-        let details: string;
-        const requestValue = value as RequestMappingValue;
-        if (requestValue.requestType === RequestType.ATTRIBUTE_UPDATE) {
-          details = (requestValue.requestValue as AttributeUpdate).attributeFilter;
-        } else if (requestValue.requestType === RequestType.SERVER_SIDE_RPC) {
-          details = (requestValue.requestValue as ServerSideRpc).methodFilter;
-        } else {
-          details = (requestValue.requestValue as ConnectRequest | DisconnectRequest).topicFilter;
-        }
         return {
           requestType: (value as RequestMappingValue).requestType,
           type: this.translate.instant(RequestTypesTranslationsMap.get((value as RequestMappingValue).requestType)),
-          details
+          details: this.getRequestDetails(value as RequestMappingValue)
         };
       case MappingType.OPCUA:
         const deviceNamePattern = (value as DeviceConnectorMapping).deviceInfo?.deviceNameExpression;
@@ -292,6 +285,18 @@ export class MappingTableComponent implements ControlValueAccessor, Validator, A
       default:
         return {} as MappingValue;
     }
+  }
+
+  private getRequestDetails(requestValue: RequestMappingValue): string {
+    let details: string;
+    if (requestValue.requestType === RequestType.ATTRIBUTE_UPDATE) {
+      details = (requestValue.requestValue as AttributeUpdate).attributeFilter;
+    } else if (requestValue.requestType === RequestType.SERVER_SIDE_RPC) {
+      details = (requestValue.requestValue as ServerSideRpc).methodFilter;
+    } else {
+      details = (requestValue.requestValue as ConnectRequest | DisconnectRequest).topicFilter;
+    }
+    return details;
   }
 
   private setMappingColumns(): void {

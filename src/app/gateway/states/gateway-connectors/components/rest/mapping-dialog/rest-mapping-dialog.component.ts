@@ -40,6 +40,8 @@ import {
   ErrorTooltipIconComponent,
   HTTPMethods,
   noLeadTrailSpacesRegex,
+  ReportStrategyComponent,
+  ReportStrategyDefaultValue,
   Timeseries,
 } from '../../../../../shared/public-api';
 import {
@@ -61,6 +63,7 @@ import { SecurityConfigComponent } from '../../security-config/security-config.c
 import { RestConverterType, RestSourceType } from '../../../models/rest.models';
 import { MappingDataKeysPanelComponent } from '../../mapping-data-keys-panel/mapping-data-keys-panel.component';
 import { RestResponseConfigComponent } from '../response-config/rest-response-config.component';
+import { TbPopoverComponent } from '@shared/components/popover.component';
 
 @Component({
   selector: 'tb-rest-mapping-dialog',
@@ -76,6 +79,7 @@ import { RestResponseConfigComponent } from '../response-config/rest-response-co
     SecurityConfigComponent,
     RestResponseConfigComponent,
     ErrorTooltipIconComponent,
+    ReportStrategyComponent,
   ]
 })
 export class RestMappingDialogComponent extends DialogComponent<RestMappingDialogComponent, RestMapping> {
@@ -87,6 +91,7 @@ export class RestMappingDialogComponent extends DialogComponent<RestMappingDialo
     converter: this.fb.group({
       type: [RestConverterType.JSON, []],
       deviceInfo: [],
+      reportStrategy: [],
       attributes: [[] as Attribute[]],
       timeseries: [[] as Timeseries[]],
       extension: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
@@ -107,6 +112,9 @@ export class RestMappingDialogComponent extends DialogComponent<RestMappingDialo
   readonly RestDataConversionTranslationsMap = RestDataConversionTranslationsMap;
   readonly RestConverterType = RestConverterType;
   readonly ConnectorType = ConnectorType;
+  readonly ReportStrategyDefaultValue = ReportStrategyDefaultValue;
+
+  private popoverComponent: TbPopoverComponent<MappingDataKeysPanelComponent>;
 
   constructor(protected store: Store<AppState>,
               protected router: Router,
@@ -121,7 +129,7 @@ export class RestMappingDialogComponent extends DialogComponent<RestMappingDialo
   ) {
     super(store, router, dialogRef);
 
-    this.mappingFormGroup.patchValue(this.data.value, { emitEvent: false });
+    this.setInitialFormValue();
     this.observeConverterTypeChange();
     this.toggleConverterFieldsByType(this.converterType);
   }
@@ -154,15 +162,18 @@ export class RestMappingDialogComponent extends DialogComponent<RestMappingDialo
 
   add(): void {
     if (this.mappingFormGroup.valid) {
-      const value = this.mappingFormGroup.value;
-      deleteNullProperties(value);
-      this.dialogRef.close(value as RestMapping);
+      const { converter, ...value } = this.mappingFormGroup.value;
+      const { reportStrategy, ...restConverter } = converter;
+      const result = {...value, reportStrategy, converter: restConverter };
+      deleteNullProperties(result);
+      this.dialogRef.close(result as RestMapping);
     }
   }
 
   manageKeys($event: Event, matButton: MatButton, keysType: MappingKeysType): void {
-    if ($event) {
-      $event.stopPropagation();
+    $event?.stopPropagation();
+    if (this.popoverComponent && !this.popoverComponent.tbHidden) {
+      this.popoverComponent.hide();
     }
     const trigger = matButton._elementRef.nativeElement;
     if (this.popoverService.hasPopover(trigger)) {
@@ -181,22 +192,32 @@ export class RestMappingDialogComponent extends DialogComponent<RestMappingDialo
         connectorType: ConnectorType.REST
       };
       this.keysPopupClosed = false;
-      const dataKeysPanelPopover = this.popoverService.displayPopover(trigger, this.renderer,
+      this.popoverComponent = this.popoverService.displayPopover(trigger, this.renderer,
         this.viewContainerRef, MappingDataKeysPanelComponent, 'leftBottom', false, null,
         ctx,
         {},
         {}, {}, true);
-      dataKeysPanelPopover.tbComponentRef.instance.popover = dataKeysPanelPopover;
-      dataKeysPanelPopover.tbComponentRef.instance.keysDataApplied.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(keysData => {
-        dataKeysPanelPopover.hide();
+      this.popoverComponent.tbComponentRef.instance.keysDataApplied.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(keysData => {
+        this.popoverComponent.hide();
         keysControl.patchValue(keysData);
         keysControl.markAsDirty();
         this.cd.markForCheck();
       });
-      dataKeysPanelPopover.tbHideStart.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.popoverComponent.tbHideStart.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
         this.keysPopupClosed = true;
       });
     }
+  }
+
+  private setInitialFormValue(): void {
+    const { converter, reportStrategy, ...config } = this.data.value;
+    this.mappingFormGroup.patchValue({
+      ...config,
+      converter: {
+        ...converter,
+        ...(reportStrategy ? { reportStrategy } : {})
+      }
+    }, { emitEvent: false });
   }
 
   private observeConverterTypeChange(): void {

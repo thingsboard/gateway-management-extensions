@@ -252,7 +252,7 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
       checkConnectorsConfigurationInSeconds: [60, [Validators.required, Validators.min(1), Validators.pattern(numberInputPattern)]],
       statistics: this.fb.group({
         enable: [true],
-        enableCustom: [{ value: false, disabled: true}],
+        enableCustom: [{ value: false, disabled: true }],
         statsSendPeriodInSeconds: [3600, [Validators.required, Validators.min(60), Validators.pattern(numberInputPattern)]],
         customStatsSendPeriodInSeconds: [3600, [Validators.required, Validators.min(60), Validators.pattern(numberInputPattern)]],
         commands: this.fb.array([])
@@ -265,7 +265,7 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
       security: [],
       qos: [1],
       reportStrategy: [{
-        value: { type: ReportStrategyType.OnReportPeriod, reportPeriod: ReportStrategyDefaultValue.Gateway },
+        value: { type: ReportStrategyType.OnReceived },
         disabled: true
       }],
     });

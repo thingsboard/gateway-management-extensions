@@ -72,6 +72,14 @@
             [connectorType]="ConnectorType.REST"
             required="true"
           />
+          @if (data.withReportStrategy) {
+            <tb-report-strategy
+              class="stroked tb-form-panel"
+              [isExpansionMode]="true"
+              [defaultValue]="ReportStrategyDefaultValue.Device"
+              formControlName="reportStrategy"
+            />
+          }
           @if (converterType === RestConverterType.JSON) {
             <div class="tb-form-panel no-border no-padding w-full">
               <div class="tb-form-row space-between tb-flex">
