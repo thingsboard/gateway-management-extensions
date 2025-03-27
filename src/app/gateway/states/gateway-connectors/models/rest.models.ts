@@ -15,7 +15,7 @@
 ///
 
 import { ConnectorDeviceInfo, ConnectorSecurity } from './connectors.model';
-import { Attribute, HTTPMethods, Timeseries } from '../../../shared/models/public-api';
+import { Attribute, HTTPMethods, ReportStrategyConfig, Timeseries } from '../../../shared/models/public-api';
 
 export enum RestConverterType {
   JSON = 'json',
@@ -158,6 +158,7 @@ export interface RestMapping {
   security: ConnectorSecurity;
   converter: RestConverter;
   response: RestResponse;
+  reportStrategy?: ReportStrategyConfig;
 }
 
 export interface RestLegacyMapping extends Omit<RestMapping, 'converter'> {
