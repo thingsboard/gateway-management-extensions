@@ -33,7 +33,6 @@ import { GatewayConfigValue } from '../../models/public-api';
 @Component({
   selector: 'tb-gateway-advanced-configuration',
   templateUrl: './gateway-advanced-configuration.component.html',
-  styleUrls: ['./gateway-advanced-configuration.component.scss'],
   standalone: true,
   imports: [
     CommonModule,

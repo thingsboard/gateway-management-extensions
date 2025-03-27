@@ -186,7 +186,6 @@ export class RestMappingDialogComponent extends DialogComponent<RestMappingDialo
         ctx,
         {},
         {}, {}, true);
-      dataKeysPanelPopover.tbComponentRef.instance.popover = dataKeysPanelPopover;
       dataKeysPanelPopover.tbComponentRef.instance.keysDataApplied.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(keysData => {
         dataKeysPanelPopover.hide();
         keysControl.patchValue(keysData);

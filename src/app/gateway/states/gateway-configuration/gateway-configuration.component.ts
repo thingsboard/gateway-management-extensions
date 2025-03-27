@@ -83,6 +83,7 @@ export class GatewayConfigurationComponent implements AfterViewInit {
 
   private readonly gatewayConfigAttributeKeys =
     ['general_configuration', 'grpc_configuration', 'logs_configuration', 'storage_configuration', 'RemoteLoggingLevel', 'mode'];
+  private useUpdatedLogs = false;
 
   constructor(private fb: FormBuilder,
               private attributeService: AttributeService,
@@ -204,20 +205,26 @@ export class GatewayConfigurationComponent implements AfterViewInit {
           level: 0,
           stream: 'ext://sys.stdout'
         },
-        databaseHandler: {
-          class: this.getLogsHandlerClass(this.gatewayVersion),
-          formatter: 'LogFormatter',
-          filename: './logs/database.log',
-          backupCount: 1,
-          encoding: 'utf-8'
-        }
+        ...(this.useUpdatedLogs ? {}
+          : {
+            databaseHandler: {
+              class: this.useUpdatedLogs ? logsHandlerClass : logsLegacyHandlerClass,
+              formatter: 'LogFormatter',
+              filename: './logs/database.log',
+              backupCount: 1,
+              encoding: 'utf-8'
+            }
+          })
       },
       loggers: {
-        database: {
-          handlers: ['databaseHandler', 'consoleHandler'],
-          level: 'DEBUG',
-          propagate: false
-        }
+        ...(this.useUpdatedLogs ? {}
+          : {
+            database: {
+              handlers: ['databaseHandler', 'consoleHandler'],
+              level: 'DEBUG',
+              propagate: false
+            }
+          })
       },
       root: {
         level: 'ERROR',
@@ -244,7 +251,7 @@ export class GatewayConfigurationComponent implements AfterViewInit {
 
   private createHandlerObj(logObj: LogConfig, key: string) {
     return {
-      class: this.getLogsHandlerClass(this.gatewayVersion),
+      class: this.useUpdatedLogs ? logsHandlerClass : logsLegacyHandlerClass,
       formatter: 'LogFormatter',
       filename: `${logObj.filePath}/${key}.log`,
       backupCount: logObj.backupCount,
@@ -277,6 +284,8 @@ export class GatewayConfigurationComponent implements AfterViewInit {
       )
       .subscribe(attributes => {
         this.gatewayVersion = attributes.find(attribute => attribute.key === 'Version')?.value;
+        this.useUpdatedLogs = GatewayConnectorVersionMappingUtil.parseVersion(this.gatewayVersion ?? GatewayVersion.Legacy)
+          >= GatewayConnectorVersionMappingUtil.parseVersion(GatewayVersion.v3_6_3);
         this.updateConfigs(attributes);
         this.cd.detectChanges();
       });
@@ -356,11 +365,5 @@ export class GatewayConfigurationComponent implements AfterViewInit {
     }, {}) as LocalLogs;
 
     return { local: localLogs, logFormat, dateFormat };
-  }
-
-  private getLogsHandlerClass(gatewayVersion: GatewayVersion = GatewayVersion.Legacy): string {
-    return GatewayConnectorVersionMappingUtil.parseVersion(gatewayVersion) >= GatewayConnectorVersionMappingUtil.parseVersion(GatewayVersion.v3_6_3)
-      ? logsHandlerClass
-      : logsLegacyHandlerClass;
   }
 }

@@ -209,8 +209,8 @@ export class ModbusMasterTableComponent implements ControlValueAccessor, AfterVi
       $event.stopPropagation();
     }
     this.dialogService.confirm(
-      this.translate.instant('gateway.delete-slave-title'),
-      '',
+      this.translate.instant('gateway.delete-slave-title', { name: this.slaves.controls[index].value.deviceName }),
+      this.translate.instant('gateway.delete-slave-description'),
       this.translate.instant('action.no'),
       this.translate.instant('action.yes'),
       true

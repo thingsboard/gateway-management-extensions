@@ -18,6 +18,8 @@
     "advanced-settings": "Advanced settings",
     "application": "Application",
     "bacnet": {
+      "device-timeout": "Discovery timeout",
+      "network-number": "Network number",
       "alt-responses-address": "Alternative responses address",
       "apdu-length": "APDU Length",
       "object-name": "Object Name",
@@ -66,6 +68,7 @@
     "bit": "Bit",
     "bit-target-type": "Bit target type",
     "delete-value": "Delete value",
+    "delete-argument": "Delete argument",
     "delete-rpc-method": "Delete method",
     "delete-rpc-request": "Delete request",
     "delete-attribute-update": "Delete attribute update",
@@ -161,9 +164,12 @@
     "device-name-filter-hint": "This field supports regular expressions to filter incoming data by device name.",
     "device-name-filter-required": "Device name filter is required.",
     "details": "Details",
-    "delete-mapping-title": "Delete mapping?",
-    "delete-slave-title": "Delete slave?",
-    "delete-device-title": "Delete device ?",
+    "delete-mapping-title": "Are you sure you want to delete the mapping related with '{{name}}'?",
+    "delete-mapping-description": "Be careful, after the confirmation mapping configuration and all related data will become unrecoverable.",
+    "delete-slave-title": "Are you sure you want to delete the server '{{name}}'?",
+    "delete-slave-description": "Be careful, after the confirmation server configuration and all related data will become unrecoverable.",
+    "delete-device-title": "Are you sure you want to delete the device '{{name}}'?",
+    "delete-device-description": "Be careful, after the confirmation the device configuration and all related data will become unrecoverable.",
     "divider": "Divider",
     "download-configuration-file": "Download configuration file",
     "download-docker-compose": "Download docker-compose.yml for your gateway",
@@ -562,6 +568,7 @@
       "custom-send-period-required": "Custom send period is required",
       "create-command": "Create command",
       "attributes": "Attributes",
+      "name-already-exists": "Attribute name already exists.",
       "telemetry": "Telemetry",
       "storage-message-count": "Storage message count",
       "messages-from-platform": "Messages from platform",
@@ -582,7 +589,7 @@
       "statistics-button": "Go to configuration",
       "commands": "Commands",
       "name": "Time series name",
-      "name-already-exists": "Attribute name already exists.",
+      "time-series-name-already-exists": "Time series name already exists.",
       "send-period": "Statistic send period (in sec)",
       "send-period-required": "Statistic send period is required",
       "send-period-min": "Statistic send period can not be less then 60",
@@ -622,7 +629,6 @@
       "remove": "Remove command"
     },
     "storage": "Storage",
-    "storage-max-file-records": "Maximum records in file",
     "storage-max-files": "Maximum number of files",
     "storage-max-files-min": "Minimum number is 1.",
     "storage-max-files-pattern": "Number is not valid.",
@@ -666,8 +672,8 @@
       "on-received": "On received"
     },
     "source-type": {
-      "msg": "Extract from message",
-      "topic": "Extract from topic",
+      "msg": "Message",
+      "topic": "Topic",
       "const": "Constant",
       "identifier": "Identifier",
       "path": "Path",
@@ -875,6 +881,7 @@
         "objects-count": "Depends on the selected type.",
         "address": "Register address to verify.",
         "key": "Key to be used as the attribute key for the platform instance.",
+        "method": "Method name to be used for the platform instance.",
         "data-keys": "For more information about function codes and data types click on help icon",
         "modifier": "The retrieved value will be adjusted (by multiplying or dividing it) based on the specified modifier value."
       },
@@ -886,7 +893,9 @@
         "key-object-id": "Object id in the BACnet device.",
         "property-id": "Property id in the BACnet device.",
         "request-type": "“writeProperty” to write data and “readProperty” to read data.",
-        "request-timeout": "Timeout to wait the response from the BACnet device, milliseconds."
+        "request-timeout": "Timeout to wait the response from the BACnet device, milliseconds.",
+        "device-timeout": "Period of time when the connector will try to discover BACnet devices.",
+        "network-number": "Identifier of the network segment."
       }
     }
   }

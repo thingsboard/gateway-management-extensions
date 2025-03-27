@@ -90,6 +90,7 @@ export class GatewayServiceRPCComponent implements OnInit {
     ConnectorType.MODBUS,
     ConnectorType.SOCKET
   ]);
+  readonly modbusReadFunctionCodes = [1, 2, 3, 4];
 
   private subscription: IWidgetSubscription;
   private subscriptionOptions: WidgetSubscriptionOptions = {
@@ -167,7 +168,7 @@ export class GatewayServiceRPCComponent implements OnInit {
       case ConnectorType.REQUEST:
         return params.methodFilter;
       case ConnectorType.MODBUS:
-        return params.tag;
+        return this.modbusReadFunctionCodes.includes(params.functionCode) ? 'get' : 'set';
       case ConnectorType.BACNET:
       case ConnectorType.CAN:
       case ConnectorType.OPCUA:

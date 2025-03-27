@@ -66,7 +66,7 @@ export class SocketConfigComponent implements ControlValueAccessor, Validator, O
   readonly portLimits = PortLimits;
   readonly socketTypes = Object.values(SocketType);
 
-  private onChange: (value: SocketConfig) => void;
+  private onChange: (value: SocketConfig) => void = (_) => {};
 
   private destroy$ = new Subject<void>();
 
@@ -110,7 +110,7 @@ export class SocketConfigComponent implements ControlValueAccessor, Validator, O
       type,
       port,
       bufferSize,
-    }, { emitEvent: false });
+    });
   }
 
   validate(): ValidationErrors | null {

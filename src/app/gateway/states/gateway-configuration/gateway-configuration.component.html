@@ -14,48 +14,46 @@
   limitations under the License.
 -->
 
-<div [formGroup]="gatewayConfigGroup" class="gateway-config-container">
-  <div class="content-wrapper">
-    <mat-toolbar color="primary" [class.page-header]="!dialogRef">
-      <div class="tb-flex space-between align-center">
-        <h2 translate>gateway.gateway-configuration</h2>
-        <div class="toolbar-actions">
-          <tb-toggle-select [class.dialog-toggle]="!!dialogRef" formControlName="mode" appearance="{{dialogRef ? 'stroked' : 'fill'}}">
-            <tb-toggle-option [value]="ConfigurationModes.BASIC">
-              {{ 'gateway.basic' | translate }}
-            </tb-toggle-option>
-            <tb-toggle-option [value]="ConfigurationModes.ADVANCED">
-              {{ 'gateway.advanced' | translate }}
-            </tb-toggle-option>
-          </tb-toggle-select>
-          <button *ngIf="dialogRef" mat-icon-button (click)="cancel()" type="button">
-            <mat-icon class="material-icons">close</mat-icon>
-          </button>
-        </div>
+<div [formGroup]="gatewayConfigGroup" class="flex size-full max-w-full flex-col">
+  <mat-toolbar color="primary" [class.page-header]="!dialogRef">
+    <div class="tb-flex space-between align-center h-16">
+      <h2><div tbTruncateWithTooltip>{{ 'gateway.gateway-configuration' | translate }}</div></h2>
+      <div class="flex items-center">
+        <tb-toggle-select [class.dialog-toggle]="!!dialogRef" formControlName="mode" appearance="{{dialogRef ? 'stroked' : 'fill'}}">
+          <tb-toggle-option [value]="ConfigurationModes.BASIC">
+            {{ 'gateway.basic' | translate }}
+          </tb-toggle-option>
+          <tb-toggle-option [value]="ConfigurationModes.ADVANCED">
+            {{ 'gateway.advanced' | translate }}
+          </tb-toggle-option>
+        </tb-toggle-select>
+        <button *ngIf="dialogRef" mat-icon-button (click)="cancel()" type="button">
+          <mat-icon class="material-icons">close</mat-icon>
+        </button>
       </div>
-    </mat-toolbar>
-    <tb-gateway-basic-configuration
-      *ngIf="gatewayConfigGroup.get('mode').value === ConfigurationModes.BASIC"
-      formControlName="basicConfig"
-      [device]="device"
-      [defaultTab]="defaultTab"
-      [gatewayVersion]="gatewayVersion"
-      [dialogMode]="!!dialogRef"
-      [withReportStrategy]="gatewayVersion | withReportStrategy"
-      (initialized)="onInitialized($event)"
-    />
-    <tb-gateway-advanced-configuration
-      *ngIf="gatewayConfigGroup.get('mode').value === ConfigurationModes.ADVANCED"
-      formControlName="advancedConfig"
-    />
+    </div>
+  </mat-toolbar>
+  <div class="content-wrapper flex-1">
+    @if (gatewayConfigGroup.get('mode').value === ConfigurationModes.BASIC) {
+      <tb-gateway-basic-configuration
+        formControlName="basicConfig"
+        [device]="device"
+        [defaultTab]="defaultTab"
+        [gatewayVersion]="gatewayVersion"
+        [dialogMode]="!!dialogRef"
+        [withReportStrategy]="gatewayVersion | withReportStrategy"
+        (initialized)="onInitialized($event)"
+      />
+    } @else {
+      <tb-gateway-advanced-configuration formControlName="advancedConfig"/>
+    }
   </div>
-  <div class="actions">
-    <button mat-button color="primary"
-            type="button"
-            *ngIf="dialogRef"
-            (click)="cancel()">
-      {{ 'action.cancel' | translate }}
-    </button>
+  <div class="flex h-full items-center justify-end gap-2 pr-4">
+    @if (dialogRef) {
+      <button mat-button color="primary" type="button" (click)="cancel()">
+        {{ 'action.cancel' | translate }}
+      </button>
+    }
     <button mat-raised-button color="primary"
             type="button"
             [disabled]="gatewayConfigGroup.invalid || !gatewayConfigGroup.dirty"

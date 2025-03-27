@@ -30,8 +30,8 @@
               {{ 'gateway.remote-shell' | translate }}
             </mat-slide-toggle>
           </div>
-          <div class="tb-form-row no-border no-padding tb-standard-fields">
-            <mat-form-field appearance="outline" class="flex">
+          <div class="no-border no-padding tb-standard-fields xs:flex-col flex gap-2">
+            <mat-form-field appearance="outline" class="flex flex-1">
               <mat-label translate>gateway.thingsboard-host</mat-label>
               <input matInput formControlName="host"/>
               <mat-icon matIconSuffix style="cursor:pointer;"
@@ -41,7 +41,7 @@
                 <mat-error>{{ 'gateway.thingsboard-host-required' | translate }}</mat-error>
               }
             </mat-form-field>
-            <mat-form-field appearance="outline" class="flex">
+            <mat-form-field appearance="outline" class="flex flex-1">
               <mat-label translate>gateway.thingsboard-port</mat-label>
               <input matInput formControlName="port" type="number" min="0"/>
               @if (basicFormGroup.get('thingsboard.port').hasError('required')) {
@@ -130,7 +130,7 @@
                     @if (commandControl.get('attributeOnGateway').hasError('required')) {
                       <mat-error>{{ 'gateway.statistics.time-series-name-required' | translate }}</mat-error>
                     } @else if (commandControl.get('attributeOnGateway').hasError('duplicateName')) {
-                      <mat-error>{{ 'gateway.statistics.name-already-exists' | translate }}</mat-error>
+                      <mat-error>{{ 'gateway.statistics.time-series-name-already-exists' | translate }}</mat-error>
                     }
                     <mat-icon matIconSuffix style="cursor:pointer;"
                               matTooltip="{{ 'gateway.hints.attribute' | translate }}">info_outlined

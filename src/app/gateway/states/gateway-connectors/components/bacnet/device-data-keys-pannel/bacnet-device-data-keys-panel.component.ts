@@ -46,7 +46,6 @@ export class BacnetDeviceDataKeysPanelComponent extends PageComponent implements
   @Input() noKeysText: string;
   @Input() keys: Array<BacnetDeviceKey>;
   @Input() keysType: BacnetDeviceKeysType;
-  @Input() popover: TbPopoverComponent<BacnetDeviceDataKeysPanelComponent>;
   @Input({ transform: booleanAttribute }) withReportStrategy = true;
 
   keysDataApplied = output<Array<BacnetDeviceKey>>();
@@ -56,6 +55,7 @@ export class BacnetDeviceDataKeysPanelComponent extends PageComponent implements
   readonly ReportStrategyDefaultValue = ReportStrategyDefaultValue;
 
   constructor(private fb: UntypedFormBuilder,
+              private popover: TbPopoverComponent<BacnetDeviceDataKeysPanelComponent>,
               protected store: Store<AppState>) {
     super(store);
   }

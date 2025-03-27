@@ -105,6 +105,14 @@
           </mat-form-field>
         </div>
       </div>
+      @if (data.withReportStrategy) {
+        <tb-report-strategy
+          class="stroked tb-form-panel"
+          [isExpansionMode]="true"
+          [defaultValue]="ReportStrategyDefaultValue.Device"
+          formControlName="reportStrategy"
+        />
+      }
       <div class="tb-form-row space-between tb-flex">
         <div class="fixed-title-width" translate>gateway.timeseries</div>
         <div class="tb-flex ellipsis-chips-container">
