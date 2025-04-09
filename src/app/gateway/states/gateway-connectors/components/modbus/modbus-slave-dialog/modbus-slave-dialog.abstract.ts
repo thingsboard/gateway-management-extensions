@@ -134,7 +134,7 @@ export abstract class ModbusSlaveDialogAbstract<Component, Config> extends Dialo
       retries: [true],
       retryOnEmpty: [true],
       retryOnInvalid: [true],
-      pollPeriod: [100, [Validators.required]],
+      pollPeriod: [1000, [Validators.required]],
       connectAttemptTimeMs: [500, [Validators.required]],
       connectAttemptCount: [5, [Validators.required]],
       waitAfterFailedAttemptsMs: [30000, [Validators.required]],
