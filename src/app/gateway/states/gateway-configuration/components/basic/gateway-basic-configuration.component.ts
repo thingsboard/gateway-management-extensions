@@ -140,7 +140,7 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
     if (changes.withReportStrategy && !changes.withReportStrategy.firstChange && this.withReportStrategy) {
       this.basicFormGroup.get('thingsboard.reportStrategy').enable({emitEvent: false});
     }
-    if (!changes.gatewayVersion.firstChange && changes.gatewayVersion?.previousValue !== changes.gatewayVersion.currentValue) {
+    if (changes.gatewayVersion?.previousValue !== changes.gatewayVersion.currentValue) {
       this.onVersionChange();
     }
   }
@@ -210,7 +210,7 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
     const { attributeOnGateway = null, command: cmd = null, timeout = 10, installCmd = '' } = command || {};
 
     const commandFormGroup = this.fb.group({
-      attributeOnGateway: [attributeOnGateway, [Validators.required, Validators.pattern(/^[^.\s]+$/), this.uniqNameRequired()]],
+      attributeOnGateway: [attributeOnGateway, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex), this.uniqNameRequired()]],
       command: [cmd, [Validators.required, Validators.pattern(/^(?=\S).*\S$/)]],
       timeout: [timeout, [Validators.required, Validators.min(1), Validators.pattern(numberInputPattern), Validators.pattern(/^[^.\s]+$/)]],
       installCmd: [installCmd, Validators.pattern(noLeadTrailSpacesRegex)]
