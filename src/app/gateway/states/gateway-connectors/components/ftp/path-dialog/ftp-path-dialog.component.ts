@@ -47,6 +47,7 @@ import {
 import {
   FtpFileDataViewType,
   FtpReadModeType,
+  MappingDataKey,
   MappingKeysAddKeyTranslationsMap,
   MappingKeysDeleteKeyTranslationsMap,
   MappingKeysNoKeysTextTranslationsMap,
@@ -80,7 +81,7 @@ export class FtpPathDialogComponent extends DialogComponent<FtpPathDialogCompone
     txtFileDataView: [FtpFileDataViewType.TABLE],
     pollPeriod: [1000, [Validators.required, Validators.pattern(numberInputPattern)]],
     readMode: [FtpReadModeType.FULL],
-    maxFileSize: [1],
+    maxFileSize: [5, [Validators.pattern(numberInputPattern)]],
     withSortingFiles: [false],
     reportStrategy: [],
     attributes: [[] as Attribute[]],
@@ -160,9 +161,9 @@ export class FtpPathDialogComponent extends DialogComponent<FtpPathDialogCompone
         ctx,
         {},
         {}, {}, true);
-      this.popoverComponent.tbComponentRef.instance.keysDataApplied.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(keysData => {
+      this.popoverComponent.tbComponentRef.instance.keysDataApplied.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((keysData: MappingDataKey[]) => {
         this.popoverComponent.hide();
-        keysControl.patchValue(keysData as any);
+        keysControl.patchValue(keysData);
         keysControl.markAsDirty();
         this.cd.markForCheck();
       });

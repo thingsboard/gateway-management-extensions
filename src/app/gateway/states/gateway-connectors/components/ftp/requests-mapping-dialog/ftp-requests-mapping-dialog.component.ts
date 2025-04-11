@@ -122,7 +122,11 @@ export class FtpRequestsMappingDialogComponent extends DialogComponent<FtpReques
   private setInitialValue(): void {
     const { requestType, writingMode, ...value } = this.data.value;
     if (requestType === FtpRequestType.SERVER_SIDE_RPC) {
-      this.mappingFormGroup.patchValue({ requestType, methodWritingMode: writingMode as FtpServerSideRpcMethodFilter, ...value }, { emitEvent: false });
+      this.mappingFormGroup.patchValue({
+        requestType,
+        methodWritingMode: (writingMode ?? FtpServerSideRpcMethodFilter.read) as FtpServerSideRpcMethodFilter,
+        ...value
+      }, { emitEvent: false });
     } else {
       this.mappingFormGroup.patchValue(this.data.value as FtpAttributeUpdate, { emitEvent: false });
     }
