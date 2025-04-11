@@ -13,12 +13,5 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-
-export * from './mqtt-version-mapping.util';
-export * from './gateway-connector-version-mapping.util';
-export * from './modbus-version-mapping.util';
-export * from './opc-version-mapping.util';
-export * from './socket-version-mapping.util';
-export * from './bacnet-version-mapping.util';
-export * from './rest-version-mapping.util';
-export * from './ftp-version-mapping.util';
+export * from './basic-config/ftp-legacy-basic-config.component';
+export * from './basic-config/ftp-basic-config.component';

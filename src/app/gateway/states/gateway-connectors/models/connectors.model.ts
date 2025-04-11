@@ -48,6 +48,7 @@ import {
 } from './socket.models';
 import { BacnetBasicConfig_v3_6_2, BacnetLegacyBasicConfig } from './bacnet.models';
 import { RestBasicConfig_v3_7_2, RestConverterType, RestLegacyBasicConfig, RestSourceType } from './rest.models';
+import { FtpBasicConfig_v3_7_4, FtpLegacyBasicConfig } from './ftp.models';
 
 export interface ConnectorBaseInfo {
   name: string;
@@ -82,6 +83,7 @@ export enum PortLimits {
 }
 
 export const GatewayConnectorConfigVersionMap = new Map<ConnectorType, GatewayVersion>([
+  [ConnectorType.FTP, GatewayVersion.v3_7_4],
   [ConnectorType.REST, GatewayVersion.v3_7_2],
   [ConnectorType.KNX, GatewayVersion.v3_7_0],
   [ConnectorType.BACNET, GatewayVersion.v3_6_2],
@@ -317,6 +319,7 @@ export type ConnectorLegacyConfig = ConnectorBaseInfo
   | ModbusLegacyBasicConfig
   | SocketLegacyBasicConfig
   | BacnetLegacyBasicConfig
+  | FtpLegacyBasicConfig
   | RestLegacyBasicConfig;
 
 export type ConnectorBaseConfig_v3_5_2 = ConnectorBaseInfo | MQTTBasicConfig_v3_5_2 | OPCBasicConfig_v3_5_2 | ModbusBasicConfig_v3_5_2;
@@ -326,6 +329,8 @@ export type ConnectorBaseConfig_v3_6 = ConnectorBaseInfo | SocketBasicConfig_v3_
 export type ConnectorBaseConfig_v3_6_2 = ConnectorBaseInfo | BacnetBasicConfig_v3_6_2;
 
 export type ConnectorBaseConfig_v3_7_2 = ConnectorBaseInfo | RestBasicConfig_v3_7_2;
+
+export type ConnectorBaseConfig_v3_7_4 = ConnectorBaseInfo | FtpBasicConfig_v3_7_4;
 
 export interface DevicesConfigMapping {
   address: string;

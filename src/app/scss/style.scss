@@ -23,6 +23,12 @@
   }
 }
 
+.gw-toggle-select {
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
 .gw-chip-list {
   .mdc-evolution-chip-set__chips {
     justify-content: flex-end;

@@ -17,6 +17,7 @@
 import {
   BacnetBasicConfig,
   ConnectorBaseInfo,
+  FtpBasicConfig,
   ModbusBasicConfig,
   MQTTBasicConfig,
   OPCBasicConfig,
@@ -29,12 +30,13 @@ import {
   GatewayConnector,
 } from '../../../shared/models/public-api';
 import {
+  BacnetVersionProcessor,
+  FtpVersionProcessor,
+  ModbusVersionProcessor,
   MqttVersionProcessor,
   OpcVersionProcessor,
-  ModbusVersionProcessor,
-  SocketVersionProcessor,
-  BacnetVersionProcessor,
   RestVersionProcessor,
+  SocketVersionProcessor,
 } from '../abstract/public-api';
 import { isNumber, isString } from '@core/public-api';
 
@@ -54,6 +56,8 @@ export abstract class GatewayConnectorVersionMappingUtil {
         return new BacnetVersionProcessor(gatewayVersion, connector as GatewayConnector<BacnetBasicConfig>).getProcessedByVersion();
       case ConnectorType.REST:
         return new RestVersionProcessor(gatewayVersion, connector as GatewayConnector<RestBasicConfig>).getProcessedByVersion();
+      case ConnectorType.FTP:
+        return new FtpVersionProcessor(gatewayVersion, connector as GatewayConnector<FtpBasicConfig>).getProcessedByVersion();
       default:
         return connector;
     }
