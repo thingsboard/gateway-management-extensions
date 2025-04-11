@@ -1,5 +1,5 @@
 ///
-/// Copyright © 2016-2024 The Thingsboard Authors
+/// Copyright © 2016-2025 The Thingsboard Authors
 ///
 /// Licensed under the Apache License, Version 2.0 (the "License");
 /// you may not use this file except in compliance with the License.
@@ -114,7 +114,7 @@ export class ModbusSlaveConfigComponent implements ControlValueAccessor, Validat
       baudrate: [this.modbusBaudrates[0]],
       deviceName: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
       deviceType: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-      pollPeriod: [100, [Validators.required]],
+      pollPeriod: [1000, [Validators.required]],
       sendDataToThingsBoard: [false],
       byteOrder:[ModbusOrderType.BIG],
       wordOrder: [ModbusOrderType.BIG],
@@ -247,7 +247,7 @@ export class ModbusSlaveConfigComponent implements ControlValueAccessor, Validat
       unitId = 0,
       deviceName = '',
       deviceType = '',
-      pollPeriod = 100,
+      pollPeriod = 1000,
       sendDataToThingsBoard = false,
       byteOrder = ModbusOrderType.BIG,
       wordOrder = ModbusOrderType.BIG,

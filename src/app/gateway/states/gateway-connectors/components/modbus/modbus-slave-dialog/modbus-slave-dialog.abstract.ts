@@ -1,5 +1,5 @@
 ///
-/// Copyright © 2016-2024 The Thingsboard Authors
+/// Copyright © 2016-2025 The Thingsboard Authors
 ///
 /// Licensed under the Apache License, Version 2.0 (the "License");
 /// you may not use this file except in compliance with the License.
@@ -134,7 +134,7 @@ export abstract class ModbusSlaveDialogAbstract<Component, Config> extends Dialo
       retries: [true],
       retryOnEmpty: [true],
       retryOnInvalid: [true],
-      pollPeriod: [100, [Validators.required]],
+      pollPeriod: [1000, [Validators.required]],
       connectAttemptTimeMs: [500, [Validators.required]],
       connectAttemptCount: [5, [Validators.required]],
       waitAfterFailedAttemptsMs: [30000, [Validators.required]],
