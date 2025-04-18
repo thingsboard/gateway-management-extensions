@@ -23,7 +23,6 @@ import {
   FormGroup,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
-  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import { SharedModule } from '@shared/public-api';
@@ -65,8 +64,8 @@ export class RestResponseConfigComponent extends ControlValueAccessorBaseAbstrac
   readonly responseTypes = Object.values(ResponseType) as ResponseType[];
   readonly responseStatuses = Object.values(ResponseStatus) as ResponseStatus[];
 
-  get responseConfigFormGroup(): UntypedFormGroup {
-    return this.formGroup;
+  get responseConfigFormGroup(): FormGroup {
+    return this.form as FormGroup;
   }
 
   constructor() {

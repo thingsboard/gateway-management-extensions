@@ -64,6 +64,10 @@ export class SocketRpcParametersComponent extends ControlValueAccessorBaseAbstra
   readonly socketMethodProcessings = Object.values(SocketMethodProcessings) as SocketMethodProcessings[];
   readonly socketEncoding = Object.values(SocketEncoding) as SocketEncoding[];
 
+  get socketRpcParametersFormGroup(): FormGroup {
+    return this.form as FormGroup;
+  }
+
   protected initFormGroup(): FormGroup {
     return this.fb.group({
       methodRPC: [null, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],

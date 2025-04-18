@@ -14,7 +14,7 @@
 /// limitations under the License.
 ///
 import { booleanAttribute, ChangeDetectionStrategy, Component, forwardRef, Input, OnInit } from '@angular/core';
-import { NG_VALIDATORS, NG_VALUE_ACCESSOR, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 
@@ -72,8 +72,12 @@ export class BacnetDeviceDataKeyComponent extends ControlValueAccessorBaseAbstra
   readonly BacnetPropertyIdTranslationsMap = BacnetPropertyIdTranslationsMap;
   readonly BacnetRequestTypeTranslationsMap = BacnetRequestTypeTranslationsMap;
 
+  get bacnetDeviceKeyFormGroup(): FormGroup {
+    return this.form as FormGroup;
+  }
+
   ngOnInit(): void {
-    this.formGroup = this.initKeyFormGroup();
+    this.form = this.initKeyFormGroup();
     this.observeValueChanges();
     this.observeObjectType();
   }
@@ -82,7 +86,7 @@ export class BacnetDeviceDataKeyComponent extends ControlValueAccessorBaseAbstra
     return !(this.withReportStrategy && (this.keyType === BacnetDeviceKeysType.ATTRIBUTES || this.keyType === BacnetDeviceKeysType.TIMESERIES));
   }
 
-  private initKeyFormGroup(): UntypedFormGroup {
+  private initKeyFormGroup(): FormGroup {
     return this.fb.group({
       key: [{ value: '', disabled: this.keyType === BacnetDeviceKeysType.RPC_METHODS }, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
       method: [{ value: '', disabled: this.keyType !== BacnetDeviceKeysType.RPC_METHODS }, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
@@ -96,17 +100,17 @@ export class BacnetDeviceDataKeyComponent extends ControlValueAccessorBaseAbstra
   }
 
   private observeObjectType(): void {
-    this.formGroup.get('objectType').valueChanges
+    this.bacnetDeviceKeyFormGroup.get('objectType').valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(type => {
         this.propertyIds = BacnetPropertyIdByObjectType.get(type);
-        if (!this.propertyIds.includes(this.formGroup.get('propertyId').value)) {
-          this.formGroup.get('propertyId').patchValue(this.propertyIds[0], {emitEvent: false});
+        if (!this.propertyIds.includes(this.bacnetDeviceKeyFormGroup.get('propertyId').value)) {
+          this.bacnetDeviceKeyFormGroup.get('propertyId').patchValue(this.propertyIds[0], {emitEvent: false});
         }
       });
   }
 
-  protected initFormGroup(): UntypedFormGroup {
+  protected initFormGroup(): FormGroup {
     return this.fb.group({});
   }
 

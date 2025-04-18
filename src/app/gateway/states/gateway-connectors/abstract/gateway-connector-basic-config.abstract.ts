@@ -29,7 +29,7 @@ import { ControlValueAccessorBaseAbstract } from '../../../shared/abstract/publi
 
 @Directive()
 export abstract class GatewayConnectorBasicConfigDirective<InputBasicConfig, OutputBasicConfig>
-  extends ControlValueAccessorBaseAbstract<OutputBasicConfig>
+  extends ControlValueAccessorBaseAbstract<InputBasicConfig, OutputBasicConfig>
   implements AfterViewInit {
 
   @Input() generalTabContent: TemplateRef<any>;
@@ -43,7 +43,7 @@ export abstract class GatewayConnectorBasicConfigDirective<InputBasicConfig, Out
   protected onChange!: (value: OutputBasicConfig) => void;
 
   get basicFormGroup(): FormGroup {
-    return this.formGroup;
+    return this.form as FormGroup;
   }
 
   ngAfterViewInit(): void {
@@ -51,7 +51,7 @@ export abstract class GatewayConnectorBasicConfigDirective<InputBasicConfig, Out
   }
 
   protected override onWriteValue(config: OutputBasicConfig): void {
-    this.formGroup.setValue(this.mapConfigToFormValue(config), { emitEvent: false });
+    this.form.setValue(this.mapConfigToFormValue(config), { emitEvent: false });
   }
 
   protected override mapOnChangeValue(config: InputBasicConfig): OutputBasicConfig {
