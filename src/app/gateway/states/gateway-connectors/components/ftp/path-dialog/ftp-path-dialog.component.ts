@@ -79,7 +79,7 @@ export class FtpPathDialogComponent extends DialogComponent<FtpPathDialogCompone
     delimiter: ['', [Validators.pattern(noLeadTrailSpacesRegex)]],
     path: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
     txtFileDataView: [FtpFileDataViewType.TABLE],
-    pollPeriod: [1000, [Validators.required, Validators.pattern(numberInputPattern)]],
+    pollPeriod: [5, [Validators.required, Validators.pattern(numberInputPattern)]],
     readMode: [FtpReadModeType.FULL],
     maxFileSize: [5, [Validators.pattern(numberInputPattern)]],
     withSortingFiles: [false],

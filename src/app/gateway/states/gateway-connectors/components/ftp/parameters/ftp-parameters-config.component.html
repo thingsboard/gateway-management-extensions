@@ -36,7 +36,7 @@
   </div>
   <div class="tb-form-row space-between tb-flex fill-width">
     <mat-slide-toggle class="mat-slide" formControlName="TLSSupport">
-      <mat-label>{{ 'gateway.ftp.tls-support' | translate }}</mat-label>
+      <mat-label tb-hint-tooltip-icon="{{ 'gateway.hints.ftp.tls-support' | translate }}">{{ 'gateway.ftp.tls-support' | translate }}</mat-label>
     </mat-slide-toggle>
   </div>
   <tb-security-config formControlName="security" [title]="'gateway.security'" [mode]="SecurityMode.basic"/>

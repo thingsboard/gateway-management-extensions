@@ -54,9 +54,9 @@
           <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
             <input matInput type="text" name="value" formControlName="attributeFilter" placeholder="{{ 'gateway.set' | translate }}"/>
             @if (mappingFormGroup.get('attributeFilter').hasError('required') && mappingFormGroup.get('attributeFilter').touched) {
-              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.attribute-filter-required' | translate"/>
+              <tb-error-icon matSuffix [tooltipText]="'gateway.attribute-filter-required' | translate"/>
             } @else if (mappingFormGroup.get('attributeFilter').hasError('pattern') && mappingFormGroup.get('attributeFilter').touched) {
-              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.attribute-filter-pattern' | translate"/>
+              <tb-error-icon matSuffix [tooltipText]="'gateway.attribute-filter-pattern' | translate"/>
             }
           </mat-form-field>
         </div>

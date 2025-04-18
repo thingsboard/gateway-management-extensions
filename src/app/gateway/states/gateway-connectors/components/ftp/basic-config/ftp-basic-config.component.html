@@ -21,7 +21,7 @@
     <tb-ftp-parameters-config formControlName="parameters"/>
   </mat-tab>
   <mat-tab label="{{ 'gateway.ftp.paths' | translate }}*">
-    <tb-ftp-paths-table formControlName="paths"/>
+    <tb-ftp-paths-table formControlName="paths" [withReportStrategy]="withReportStrategy"/>
   </mat-tab>
   <mat-tab label="{{ 'gateway.requests-mapping' | translate }}">
     <tb-ftp-request-mapping-table formControlName="requestsMapping"/>

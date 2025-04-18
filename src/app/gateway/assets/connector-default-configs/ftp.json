@@ -18,7 +18,7 @@
         "path": "fol/*_hello*.txt",
         "readMode": "FULL",
         "maxFileSize": 5,
-        "pollPeriod": 500,
+        "pollPeriod": 5,
         "txtFileDataView": "SLICED",
         "withSortingFiles": true,
         "attributes": [
@@ -87,7 +87,7 @@
         "path": "fol/*_hello*.txt",
         "readMode": "FULL",
         "maxFileSize": 5,
-        "pollPeriod": 500,
+        "pollPeriod": 5,
         "txtFileDataView": "SLICED",
         "withSortingFiles": true,
         "attributes": [

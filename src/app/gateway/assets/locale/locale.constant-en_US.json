@@ -842,7 +842,13 @@
         "read-mode": "Will be used for txt and csv files.",
         "device-name-pattern-required": "Device name pattern is required.",
         "device-type-pattern-required": "Device type pattern is required.",
-        "path-expression-required": "Path expression is required."
+        "path-expression-required": "Path expression is required.",
+        "tls-support": "Verify whether TLS support is available on the server.",
+        "max-file-size": "The max file size in MB that will be read (if file size is more than 5 MB, it will be skipped).",
+        "sorting-files": "This is how the found files in path will be appended to the array.",
+        "path-expression": "JSON-path expression that is used for finding specific files.",
+        "path-required": "Path is required.",
+        "path-pattern": "Path is not valid."
       },
       "rest": {
         "endpoint-required": "Endpoint is required.",
