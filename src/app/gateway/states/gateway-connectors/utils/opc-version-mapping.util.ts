@@ -87,31 +87,31 @@ export class OpcVersionMappingUtil {
   }
 
   static mapMappingToCurrentVersion(mapping: DeviceConnectorMapping[]): DeviceConnectorMapping[] {
-    return mapping.map((legacyMapping: DeviceConnectorMapping) => ({
-      deviceNodePattern: legacyMapping.deviceNodePattern,
-      deviceNodeSource: this.getDeviceNodeSourceByValue(legacyMapping.deviceNodePattern),
+    return mapping.map((mapping: DeviceConnectorMapping) => ({
+      deviceNodePattern: mapping.deviceNodePattern,
+      deviceNodeSource: this.getDeviceNodeSourceByValue(mapping.deviceNodePattern),
       deviceInfo: {
-        deviceNameExpression: legacyMapping.deviceInfo.deviceNameExpression,
-        deviceNameExpressionSource: this.getTypeSourceByValue(legacyMapping?.deviceInfo?.deviceNameExpressionSource) ,
-        deviceProfileExpression: (legacyMapping?.deviceInfo?.deviceProfileExpression) ?? 'default',
-        deviceProfileExpressionSource: this.getTypeSourceByValue((legacyMapping?.deviceInfo?.deviceProfileExpressionSource) ?? 'default'),
+        deviceNameExpression: mapping.deviceInfo.deviceNameExpression,
+        deviceNameExpressionSource: this.getTypeSourceByValue(mapping?.deviceInfo?.deviceNameExpressionSource) ,
+        deviceProfileExpression: (mapping?.deviceInfo?.deviceProfileExpression) ?? 'default',
+        deviceProfileExpressionSource: this.getTypeSourceByValue((mapping?.deviceInfo?.deviceProfileExpressionSource) ?? 'default'),
       },
-      attributes: legacyMapping.attributes?.map((attribute: Attribute) => ({
+      attributes: mapping.attributes?.map((attribute: Attribute) => ({
         key: attribute.key,
         type: attribute.type,
         value: attribute?.value,
       })) ?? [],
-      attributes_updates: legacyMapping.attributes_updates?.map((attributeUpdate: AttributesUpdate) => ({
+      attributes_updates: mapping.attributes_updates?.map((attributeUpdate: AttributesUpdate) => ({
         key: attributeUpdate.key,
         type: attributeUpdate.type,
         value: attributeUpdate.value,
       })) ?? [],
-      timeseries: legacyMapping.timeseries?.map((timeseries: Timeseries) => ({
+      timeseries: mapping.timeseries?.map((timeseries: Timeseries) => ({
         key: timeseries.key,
         type: timeseries.type,
         value: timeseries.value,
       })) ?? [],
-      rpc_methods: legacyMapping.rpc_methods?.map((rpcMethod: LegacyRpcMethod) => ({
+      rpc_methods: mapping.rpc_methods?.map((rpcMethod: LegacyRpcMethod) => ({
         method: rpcMethod.method,
         arguments: rpcMethod.arguments.map(arg => ({
           value: arg,
