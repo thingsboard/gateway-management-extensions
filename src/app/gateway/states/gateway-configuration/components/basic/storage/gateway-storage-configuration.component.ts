@@ -115,7 +115,11 @@ export class GatewayStorageConfigurationComponent implements AfterViewInit, Vali
       max_records_per_file: [10000, [Validators.min(1), Validators.pattern(numberInputPattern)]],
       data_file_path: ['./data/data.db', [Validators.required]],
       messages_ttl_check_in_hours: [1, [Validators.min(1), Validators.pattern(numberInputPattern)]],
-      messages_ttl_in_days: [7, [Validators.min(1), Validators.pattern(numberInputPattern)]]
+      messages_ttl_in_days: [7, [Validators.min(1), Validators.pattern(numberInputPattern)]],
+      size_limit: [1024, [Validators.min(1), Validators.pattern(numberInputPattern)]],
+      max_db_amount: [10, [Validators.min(1), Validators.pattern(numberInputPattern)]],
+      oversize_check_period: [1, [Validators.min(1), Validators.pattern(numberInputPattern)]],
+      writing_batch_size: [1000, [Validators.min(1), Validators.pattern(numberInputPattern)]]
     });
   }
 
@@ -152,7 +156,8 @@ export class GatewayStorageConfigurationComponent implements AfterViewInit, Vali
   }
 
   private addSqliteStorageValidators(group: FormGroup): void {
-    ['messages_ttl_check_in_hours', 'messages_ttl_in_days', 'max_records_per_file'].forEach(field => {
+    ['messages_ttl_check_in_hours', 'messages_ttl_in_days', 'max_records_per_file',
+      'size_limit', 'max_db_amount', 'oversize_check_period', 'writing_batch_size'].forEach(field => {
       group.get(field).addValidators([Validators.required, Validators.min(1), Validators.pattern(numberInputPattern)]);
       group.get(field).updateValueAndValidity({ emitEvent: false });
     });
