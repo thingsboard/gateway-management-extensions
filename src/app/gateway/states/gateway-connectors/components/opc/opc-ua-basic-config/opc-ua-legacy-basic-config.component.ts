@@ -17,6 +17,8 @@
 import { ChangeDetectionStrategy, Component, forwardRef, Input } from '@angular/core';
 import { FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import {
+  DeviceConnectorMapping,
+  LegacyServerConfig,
   MappingType,
   OPCBasicConfig_v3_5_2,
   OPCLegacyBasicConfig,
@@ -25,12 +27,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { coerceBoolean, SharedModule } from '@shared/public-api';
 import { MappingTableComponent } from '../../mapping-table/mapping-table.component';
-import {
-  SecurityConfigComponent
-} from '../../security-config/security-config.component';
-import {
-  OpcServerConfigComponent
-} from '../opc-server-config/opc-server-config.component';
+import { OpcServerConfigComponent } from '../opc-server-config/opc-server-config.component';
 import { GatewayConnectorBasicConfigDirective } from '../../../abstract/public-api';
 import { OpcVersionMappingUtil } from '../../../utils/public-api';
 
@@ -54,7 +51,6 @@ import { OpcVersionMappingUtil } from '../../../utils/public-api';
   imports: [
     CommonModule,
     SharedModule,
-    SecurityConfigComponent,
     MappingTableComponent,
     OpcServerConfigComponent,
   ],
@@ -74,10 +70,18 @@ export class OpcUaLegacyBasicConfigComponent extends GatewayConnectorBasicConfig
     });
   }
 
-  protected override mapConfigToFormValue(config: OPCLegacyBasicConfig): OPCBasicConfig_v3_5_2 {
+  protected override mapConfigToFormValue(config: OPCLegacyBasicConfig | OPCBasicConfig_v3_5_2): OPCBasicConfig_v3_5_2 {
+    let mapping: DeviceConnectorMapping[];
+    if (config?.server && 'mapping' in config?.server) {
+      mapping = OpcVersionMappingUtil.mapMappingToUpgradedVersion(config.server.mapping);
+    } else if (config && 'mapping' in config) {
+      mapping = OpcVersionMappingUtil.mapMappingToCurrentVersion(config.mapping);
+    } else {
+      mapping = []
+    }
     return {
-      server: config.server ? OpcVersionMappingUtil.mapServerToUpgradedVersion(config.server) : {} as ServerConfig,
-      mapping: config.server?.mapping ? OpcVersionMappingUtil.mapMappingToUpgradedVersion(config.server.mapping) : [],
+      server: config.server ? OpcVersionMappingUtil.mapServerToUpgradedVersion(config.server as LegacyServerConfig) : {} as ServerConfig,
+      mapping,
     };
   }
 
