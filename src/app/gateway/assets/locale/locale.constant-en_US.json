@@ -762,6 +762,30 @@
     "write-coils": "Write Coils",
     "write-register": "Write Register",
     "write-registers": "Write Registers",
+    "general-configuration-widget": {
+      "general-configuration": "General configuration",
+      "connectors-configuration": "Connectors configuration",
+      "logs": "Logs",
+      "statistics": "Statistics",
+      "remote-shell": "Remote Shell",
+      "rpc": "RPC"
+    },
+    "statistics-nav-widget": {
+      "storage-statistics": "Storage",
+      "machine-statistics": "Machine",
+      "custom-statistics": "Custom"
+    },
+    "status-widget": {
+      "status": "Status",
+      "gateway-name": "Gateway name",
+      "gateway-version": "Gateway version",
+      "gateway-type": "Gateway type",
+      "devices": "Devices",
+      "active-inactive": "(Active | Inactive)",
+      "connectors": "Connectors",
+      "enabled-disabled": "(Enabled | Disabled)",
+      "errors": "Errors"
+    },
     "hints": {
       "enable-general-statistics": "Enables gateway statistics (machine, storage, connectors).",
       "enable-custom-statistics": "Enables collecting statistics using custom commands.",
