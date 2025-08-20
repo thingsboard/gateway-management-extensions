@@ -338,7 +338,6 @@
     "name": "Name",
     "name-required": "Name is required.",
     "network-mask": "Network mask",
-    "network-mask-required": "Network mask is required.",
     "no-attributes": "No attributes",
     "no-attribute-updates": "No attribute updates",
     "no-attribute-requests": "No attribute requests",
