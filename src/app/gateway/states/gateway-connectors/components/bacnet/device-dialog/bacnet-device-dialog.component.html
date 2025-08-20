@@ -59,19 +59,9 @@
         </mat-form-field>
       </div>
       <div class="tb-form-row column-xs">
-        <div class="fixed-title-width tb-required" translate>gateway.network-mask</div>
+        <div class="fixed-title-width" translate>gateway.network-mask</div>
         <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
           <input matInput name="value" formControlName="networkMask" placeholder="{{ 'gateway.set' | translate }}"/>
-          @if (deviceFormGroup.get('networkMask').hasError('required') &&
-          deviceFormGroup.get('networkMask').touched) {
-            <mat-icon matSuffix
-                      matTooltipPosition="above"
-                      matTooltipClass="tb-error-tooltip"
-                      [matTooltip]="('gateway.network-mask-required') | translate"
-                      class="tb-error">
-              warning
-            </mat-icon>
-          }
         </mat-form-field>
       </div>
       @if (!data.hideNewFields) {

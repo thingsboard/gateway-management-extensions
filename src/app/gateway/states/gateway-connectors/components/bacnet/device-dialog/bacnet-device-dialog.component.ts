@@ -79,7 +79,7 @@ export class BacnetDeviceDialogComponent extends DialogComponent<BacnetDeviceDia
   deviceFormGroup = this.fb.group({
     host: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
     port: ['', [Validators.required]],
-    networkMask: ['', [Validators.required]],
+    networkMask: [''],
     deviceInfo: [],
     altResponsesAddresses: [{ value: [] as string[], disabled: this.data.hideNewFields }],
     pollPeriod: [10000, [Validators.required, Validators.min(0)]],
