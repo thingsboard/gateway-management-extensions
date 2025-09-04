@@ -32,6 +32,7 @@ import {
 } from '../../../models/public-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { numberInputPattern } from '../../../../../shared/models/public-api';
+import { isDefinedAndNotNull } from "@core/public-api";
 
 @Component({
   selector: 'tb-gateway-storage-configuration',
@@ -79,7 +80,14 @@ export class GatewayStorageConfigurationComponent implements AfterViewInit, Vali
   }
 
   writeValue(value: GatewayStorageConfig): void {
-    this.storageFormGroup.patchValue(value, { emitEvent: false });
+    if (isDefinedAndNotNull(value)) {
+      const type = this.storageFormGroup.get('type').value;
+      this.storageFormGroup.patchValue(value, { emitEvent: false });
+      if (type !== value.type) {
+        this.removeAllStorageValidators();
+        this.storageValidators(value.type);
+      }
+    }
   }
 
   registerOnChange(fn: (config: GatewayStorageConfig) => {}): void {
@@ -109,11 +117,11 @@ export class GatewayStorageConfigurationComponent implements AfterViewInit, Vali
       type: [StorageTypes.MEMORY, [Validators.required]],
       read_records_count: [100, [Validators.required, Validators.min(1), Validators.pattern(numberInputPattern)]],
       max_records_count: [100000, [Validators.required, Validators.min(1), Validators.pattern(numberInputPattern)]],
-      data_folder_path: ['./data/', [Validators.required]],
+      data_folder_path: ['./data/', [Validators.required, Validators.pattern(/.*\/$/)]],
       max_file_count: [10, [Validators.min(1), Validators.pattern(numberInputPattern)]],
       max_read_records_count: [10, [Validators.min(1), Validators.pattern(numberInputPattern)]],
       max_records_per_file: [10000, [Validators.min(1), Validators.pattern(numberInputPattern)]],
-      data_file_path: ['./data/data.db', [Validators.required]],
+      data_file_path: ['./data/', [Validators.required, Validators.pattern(/.*\/$/)]],
       messages_ttl_check_in_hours: [1, [Validators.min(1), Validators.pattern(numberInputPattern)]],
       messages_ttl_in_days: [7, [Validators.min(1), Validators.pattern(numberInputPattern)]],
       size_limit: [1024, [Validators.min(1), Validators.pattern(numberInputPattern)]],
@@ -126,19 +134,26 @@ export class GatewayStorageConfigurationComponent implements AfterViewInit, Vali
   private observeStorageTypeChanges(): void {
     this.storageFormGroup.get('type').valueChanges.pipe(takeUntilDestroyed()).subscribe(type => {
       this.removeAllStorageValidators();
-
-      switch (type) {
-        case StorageTypes.MEMORY:
-          this.addMemoryStorageValidators(this.storageFormGroup);
-          break;
-        case StorageTypes.FILE:
-          this.addFileStorageValidators(this.storageFormGroup);
-          break;
-        case StorageTypes.SQLITE:
-          this.addSqliteStorageValidators(this.storageFormGroup);
-          break;
-      }
+      this.storageValidators(type);
     });
+  }
+
+  private storageValidators(type: StorageTypes) {
+    switch (type) {
+      case StorageTypes.MEMORY:
+        this.addMemoryStorageValidators(this.storageFormGroup);
+        break;
+      case StorageTypes.FILE:
+        this.addFileStorageValidators(this.storageFormGroup);
+        this.storageFormGroup.get('data_folder_path').addValidators([Validators.required, Validators.pattern(/.*\/$/)]);
+        this.storageFormGroup.get('data_folder_path').updateValueAndValidity({ emitEvent: false });
+        break;
+      case StorageTypes.SQLITE:
+        this.addSqliteStorageValidators(this.storageFormGroup);
+        this.storageFormGroup.get('data_file_path').addValidators([Validators.required, Validators.pattern(/.*\/$/)]);
+        this.storageFormGroup.get('data_file_path').updateValueAndValidity({ emitEvent: false });
+        break;
+    }
   }
 
   private addMemoryStorageValidators(group: FormGroup): void {
@@ -149,14 +164,14 @@ export class GatewayStorageConfigurationComponent implements AfterViewInit, Vali
   }
 
   private addFileStorageValidators(group: FormGroup): void {
-    ['max_file_count', 'max_read_records_count', 'max_records_per_file'].forEach(field => {
+    ['max_read_records_count', 'max_file_count',  'max_records_per_file'].forEach(field => {
       group.get(field).addValidators([Validators.required, Validators.min(1), Validators.pattern(numberInputPattern)]);
       group.get(field).updateValueAndValidity({ emitEvent: false });
     });
   }
 
   private addSqliteStorageValidators(group: FormGroup): void {
-    ['messages_ttl_check_in_hours', 'messages_ttl_in_days', 'max_records_per_file',
+    ['messages_ttl_check_in_hours', 'messages_ttl_in_days', 'max_read_records_count',
       'size_limit', 'max_db_amount', 'oversize_check_period', 'writing_batch_size'].forEach(field => {
       group.get(field).addValidators([Validators.required, Validators.min(1), Validators.pattern(numberInputPattern)]);
       group.get(field).updateValueAndValidity({ emitEvent: false });
