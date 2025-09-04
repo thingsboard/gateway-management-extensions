@@ -78,7 +78,7 @@ export class BacnetVersionMappingUtil {
   }
 
   private static getExpressionSource(expression: string): ExpressionType {
-    return expression.includes('${') || expression.includes('[') ? ExpressionType.Expression : ExpressionType.Constant;
+    return expression?.includes('${') || expression?.includes('[') ? ExpressionType.Expression : ExpressionType.Constant;
   }
 
   private static getUpdateKeys(keys: BacnetLegacyDeviceKey[]): BacnetDeviceKey[] {
