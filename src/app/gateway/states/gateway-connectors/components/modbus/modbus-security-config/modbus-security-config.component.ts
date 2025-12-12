@@ -82,9 +82,9 @@ export class ModbusSecurityConfigComponent implements ControlValueAccessor, Vali
 
   constructor(private fb: FormBuilder, private cdr: ChangeDetectorRef) {
     this.securityConfigFormGroup = this.fb.group({
-      certfile: ['', [Validators.pattern(noLeadTrailSpacesRegex)]],
-      keyfile: ['', [Validators.pattern(noLeadTrailSpacesRegex)]],
-      password: ['', [Validators.pattern(noLeadTrailSpacesRegex)]],
+      certfile: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
+      keyfile: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
+      password: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
       server_hostname: ['', [Validators.pattern(noLeadTrailSpacesRegex)]],
       reqclicert: [{value: false, disabled: true}],
     });

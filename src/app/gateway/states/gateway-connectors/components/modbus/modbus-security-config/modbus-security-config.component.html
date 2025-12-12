@@ -21,7 +21,7 @@
     </div>
     <div class="tb-flex no-gap">
       <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
-        <input matInput name="value" formControlName="certfile" placeholder="{{ 'gateway.set' | translate }}"/>
+        <input matInput name="value" required formControlName="certfile" placeholder="{{ 'gateway.set' | translate }}"/>
       </mat-form-field>
     </div>
   </div>
@@ -31,7 +31,7 @@
     </div>
     <div class="tb-flex no-gap">
       <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
-        <input matInput name="value" formControlName="keyfile" placeholder="{{ 'gateway.set' | translate }}"/>
+        <input matInput name="value" required formControlName="keyfile" placeholder="{{ 'gateway.set' | translate }}"/>
       </mat-form-field>
     </div>
   </div>
@@ -39,7 +39,7 @@
     <div class="fixed-title-width" translate>gateway.password</div>
     <div class="tb-flex no-gap">
       <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
-        <input matInput type="password" name="value" formControlName="password" placeholder="{{ 'gateway.set' | translate }}"/>
+        <input matInput type="password" required name="value" formControlName="password" placeholder="{{ 'gateway.set' | translate }}"/>
         <div class="tb-flex no-gap align-center fill-height" matSuffix>
           <tb-toggle-password class="tb-flex align-center fill-height"></tb-toggle-password>
         </div>
