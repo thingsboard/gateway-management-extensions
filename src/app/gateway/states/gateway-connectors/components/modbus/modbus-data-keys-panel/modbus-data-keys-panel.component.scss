@@ -28,7 +28,7 @@
     }
 
     .key-panel {
-      height: 500px;
+      height: clamp(200px, calc(100vh - 300px), 500px);
       overflow: auto;
     }
 
