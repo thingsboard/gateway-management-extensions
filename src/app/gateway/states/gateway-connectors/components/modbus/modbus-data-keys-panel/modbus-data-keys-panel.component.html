@@ -150,7 +150,7 @@
                   <div class="tb-form-row column-xs">
                     <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.hints.modbus.address' | translate }}" translate>gateway.address</div>
                     <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
-                      <input matInput type="number" min="0" max="50000" name="value" formControlName="address" placeholder="{{ 'gateway.set' | translate }}"/>
+                      <input matInput type="number" min="0" max="65535" name="value" formControlName="address" placeholder="{{ 'gateway.set' | translate }}"/>
                       <mat-icon matSuffix
                                 matTooltipPosition="above"
                                 matTooltipClass="tb-error-tooltip"
