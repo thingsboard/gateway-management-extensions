@@ -24,6 +24,7 @@ import {
 import {
   ModbusBaudrates,
   ModbusByteSizes,
+  ModbusDefaultRetries,
   ModbusMethodLabelsMap,
   ModbusMethodType,
   ModbusOrderType,
@@ -42,7 +43,7 @@ import {
 import { Subject } from 'rxjs';
 import { DialogComponent, helpBaseUrl } from '@shared/public-api';
 import { Store } from '@ngrx/store';
-import { AppState, isEqual } from '@core/public-api';
+import { AppState, isEqual, isNumber } from '@core/public-api';
 import { Router } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { takeUntil } from 'rxjs/operators';
@@ -131,7 +132,7 @@ export abstract class ModbusSlaveDialogAbstract<Component, Config> extends Dialo
       timeout: [35],
       byteOrder: [ModbusOrderType.BIG],
       wordOrder: [ModbusOrderType.BIG],
-      retries: [true],
+      retries: [ModbusDefaultRetries],
       retryOnEmpty: [true],
       retryOnInvalid: [true],
       pollPeriod: [1000, [Validators.required]],
@@ -149,6 +150,9 @@ export abstract class ModbusSlaveDialogAbstract<Component, Config> extends Dialo
       ...this.data.value,
       port: this.data.value.type === ModbusProtocolType.Serial ? null : this.data.value.port,
       serialPort: this.data.value.type === ModbusProtocolType.Serial ? this.data.value.port : '',
+      retries:  this.data.value.retries === false ? 0 :
+        isNumber(this.data.value.retries) ? this.data.value.retries :
+          ModbusDefaultRetries,
       values: {
         attributes: this.data.value.attributes ?? [],
         timeseries: this.data.value.timeseries ?? [],

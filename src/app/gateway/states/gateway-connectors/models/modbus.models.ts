@@ -75,7 +75,7 @@ export interface SlaveConfig {
   timeout: number;
   byteOrder: ModbusOrderType;
   wordOrder: ModbusOrderType;
-  retries: boolean;
+  retries: number | boolean;
   retryOnEmpty: boolean;
   retryOnInvalid: boolean;
   pollPeriod: number;
@@ -114,6 +114,7 @@ export interface ModbusValue {
 
 export const ModbusBaudrates = [4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600];
 export const ModbusByteSizes = [5, 6, 7, 8];
+export const ModbusDefaultRetries = 3;
 
 export const ModbusRegisterTranslationsMap = new Map<ModbusRegisterType, string>(
   [

@@ -788,7 +788,7 @@
         "connection-timeout": "Connection timeout (in seconds) for the Modbus server.",
         "byte-order": "Byte order for reading data.",
         "word-order": "Word order when reading multiple registers.",
-        "retries": "Retrying data transmission to the master. Acceptable values: true or false.",
+        "retries": "Retrying sending data to the master.",
         "retries-on-empty": "Retry sending data to the master if the data is empty.",
         "retries-on-invalid": "Retry sending data to the master if it fails.",
         "poll-period": "Period in milliseconds to check attributes and telemetry on the slave.",
