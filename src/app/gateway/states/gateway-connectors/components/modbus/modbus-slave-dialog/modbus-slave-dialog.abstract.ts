@@ -150,7 +150,9 @@ export abstract class ModbusSlaveDialogAbstract<Component, Config> extends Dialo
       ...this.data.value,
       port: this.data.value.type === ModbusProtocolType.Serial ? null : this.data.value.port,
       serialPort: this.data.value.type === ModbusProtocolType.Serial ? this.data.value.port : '',
-      retries: isNumber(this.data.value.retries) ? this.data.value.retries : ModbusDefaultRetries,
+      retries:  this.data.value.retries === false ? 0 :
+        isNumber(this.data.value.retries) ? this.data.value.retries :
+          ModbusDefaultRetries,
       values: {
         attributes: this.data.value.attributes ?? [],
         timeseries: this.data.value.timeseries ?? [],

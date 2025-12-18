@@ -75,7 +75,7 @@ export interface SlaveConfig {
   timeout: number;
   byteOrder: ModbusOrderType;
   wordOrder: ModbusOrderType;
-  retries: number;
+  retries: number | boolean;
   retryOnEmpty: boolean;
   retryOnInvalid: boolean;
   pollPeriod: number;
