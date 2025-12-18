@@ -16,9 +16,9 @@
 import { ChangeDetectionStrategy, Component, forwardRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
+  FormGroup,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
-  UntypedFormGroup,
   Validators
 } from '@angular/forms';
 import { SharedModule } from '@shared/public-api';
@@ -61,11 +61,11 @@ export class RestServerConfigComponent extends ControlValueAccessorBaseAbstract<
 
   readonly portLimits = PortLimits;
 
-  get serverConfigFormGroup(): UntypedFormGroup {
-    return this.formGroup;
+  get serverConfigFormGroup(): FormGroup {
+    return this.form as FormGroup;
   }
 
-  protected override initFormGroup(): UntypedFormGroup {
+  protected override initFormGroup(): FormGroup {
     return this.fb.group({
       host: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
       port: [null, [Validators.required, Validators.min(PortLimits.MIN), Validators.max(PortLimits.MAX)]],
@@ -83,6 +83,6 @@ export class RestServerConfigComponent extends ControlValueAccessorBaseAbstract<
   }
 
   protected override onWriteValue(serverConfig: RestServerConfig): void {
-    this.formGroup.reset(serverConfig, { emitEvent: false });
+    this.form.reset(serverConfig, { emitEvent: false });
   }
 }

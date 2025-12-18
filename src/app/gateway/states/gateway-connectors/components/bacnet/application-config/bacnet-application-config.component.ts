@@ -16,9 +16,9 @@
 import { ChangeDetectionStrategy, Component, forwardRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
+  FormGroup,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
-  UntypedFormGroup,
   Validators
 } from '@angular/forms';
 import { SharedModule } from '@shared/public-api';
@@ -60,11 +60,11 @@ export class BacnetApplicationConfigComponent extends ControlValueAccessorBaseAb
   readonly SegmentationTypeTranslationsMap = SegmentationTypeTranslationsMap;
   readonly portLimits = PortLimits;
 
-  get applicationConfigFormGroup(): UntypedFormGroup {
-    return this.formGroup;
+  get applicationConfigFormGroup(): FormGroup {
+    return this.form as FormGroup;
   }
 
-  protected override initFormGroup(): UntypedFormGroup {
+  protected override initFormGroup(): FormGroup {
     return this.fb.group({
       objectName: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
       host: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
@@ -92,6 +92,6 @@ export class BacnetApplicationConfigComponent extends ControlValueAccessorBaseAb
       deviceDiscoveryTimeoutInSec = 5,
       ...restConfig
     } = applicationConfig;
-    this.formGroup.reset({ ...restConfig, maxApduLengthAccepted, segmentationSupported, networkNumber, deviceDiscoveryTimeoutInSec }, { emitEvent: false });
+    this.applicationConfigFormGroup.reset({ ...restConfig, maxApduLengthAccepted, segmentationSupported, networkNumber, deviceDiscoveryTimeoutInSec }, { emitEvent: false });
   }
 }

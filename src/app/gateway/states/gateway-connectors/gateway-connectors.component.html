@@ -276,20 +276,13 @@
         </ng-container>
       </ng-container>
       <ng-template #defaultConfig>
-        <mat-tab-group>
-          <mat-tab label="{{ 'gateway.general' | translate }}">
-            <ng-container [ngTemplateOutlet]="generalTabContent"></ng-container>
-          </mat-tab>
-          <mat-tab label="{{ 'gateway.configuration' | translate }}*">
-            <tb-json-object-edit
-              class="configuration-json"
-              [fillHeight]="true"
-              jsonRequired
-              label="{{ 'gateway.configuration' | translate }}"
-              formControlName="configurationJson">
-            </tb-json-object-edit>
-          </mat-tab>
-        </mat-tab-group>
+        <tb-connector-advanced-config
+          class="h-full"
+          [generalTabContent]="generalTabContent"
+          [gatewayVersion]="gatewayVersion"
+          [type]="connectorForm.get('type').value"
+          formControlName="configurationJson"
+        />
       </ng-template>
       <div class="flex justify-end">
         <button mat-raised-button color="primary"

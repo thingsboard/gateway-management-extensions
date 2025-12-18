@@ -20,3 +20,5 @@ export * from './opc.models';
 export * from './socket.models';
 export * from './bacnet.models';
 export * from './rest.models';
+export * from './opc.schema';
+export * from './connectors.schema';

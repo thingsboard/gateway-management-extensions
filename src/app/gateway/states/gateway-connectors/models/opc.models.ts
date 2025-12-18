@@ -17,12 +17,12 @@ import {
   AttributesUpdate,
   ConnectorDeviceInfo,
   ConnectorSecurity,
-  DevicesConfigMapping,
   LegacyAttribute,
   LegacyRpcMethod,
   LegacyTimeseries,
   OPCUaSourceType,
-  RpcMethod
+  RpcMethod,
+  SecurityPolicy
 } from './connectors.model';
 import { Attribute, Timeseries } from '../../../shared/models/gateway.models';
 
@@ -35,7 +35,7 @@ export interface ServerConfig {
   enableSubscriptions: boolean;
   subCheckPeriodInMillis: number;
   showMap: boolean;
-  security: string;
+  security: SecurityPolicy;
   identity: ConnectorSecurity;
 }
 

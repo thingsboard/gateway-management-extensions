@@ -43,12 +43,14 @@ import {
   GatewayConnector,
   GatewayConnectorDefaultTypesTranslatesMap,
   GatewayLogLevel,
+  GatewayVersion,
   noLeadTrailSpacesRegex,
   ReportStrategyDefaultValue,
 } from '../../shared/models/public-api';
 import { MatDialog } from '@angular/material/dialog';
 import {
   AddConnectorDialogComponent,
+  ConnectorAdvancedConfigComponent,
   ModbusBasicConfigComponent,
   ModbusLegacyBasicConfigComponent,
   MqttBasicConfigComponent,
@@ -115,6 +117,7 @@ export class ForceErrorStateMatcher implements ErrorStateMatcher {
     BacnetLegacyBasicConfigComponent,
     RestLegacyBasicConfigComponent,
     RestBasicConfigComponent,
+    ConnectorAdvancedConfigComponent,
   ],
 })
 export class GatewayConnectorComponent extends PageComponent implements AfterViewInit, OnDestroy {
@@ -145,8 +148,8 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
   activeConnectors: Array<string>;
   initialConnector: GatewayConnector;
   basicConfigInitSubject = new Subject<void>();
+  gatewayVersion: GatewayVersion;
 
-  private gatewayVersion: string;
   private isGatewayActive: boolean;
   private inactiveConnectors: Array<string>;
   private attributeDataSource: AttributeDatasource;

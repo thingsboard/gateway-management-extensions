@@ -20,7 +20,9 @@
     "npm": "Please use yarn instead of NPM to install dependencies"
   },
   "dependencies": {
-    "echarts": "https://github.com/thingsboard/echarts/archive/5.5.0-TB.tar.gz"
+    "echarts": "https://github.com/thingsboard/echarts/archive/5.5.0-TB.tar.gz",
+    "json-source-map": "^0.6.1",
+    "jsonschema": "^1.5.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "18.2.7",
@@ -59,8 +61,8 @@
     "eslint-plugin-import": "latest",
     "eslint-plugin-jsdoc": "latest",
     "eslint-plugin-prefer-arrow": "latest",
-    "license-check-and-add": "^4.0.5",
     "eslint-plugin-tailwindcss": "^3.17.5",
+    "license-check-and-add": "^4.0.5",
     "ng-packagr": "18.2.1",
     "ngrx-store-freeze": "^0.2.4",
     "patch-package": "^8.0.0",

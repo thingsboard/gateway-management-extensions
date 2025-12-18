@@ -16,56 +16,56 @@
 
 import { DestroyRef, Directive, inject } from '@angular/core';
 import {
+  AbstractControl,
   ControlValueAccessor,
   FormBuilder,
-  FormGroup,
   ValidationErrors,
   Validator
 } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Directive()
-export abstract class ControlValueAccessorBaseAbstract<FormValueType> implements ControlValueAccessor, Validator {
+export abstract class ControlValueAccessorBaseAbstract<InputFormValueType, OutputFormValueType = InputFormValueType> implements ControlValueAccessor, Validator {
 
-  formGroup: FormGroup;
+  form: AbstractControl;
 
-  protected onChange!: (value: FormValueType) => void;
+  protected onChange!: (value: OutputFormValueType) => void;
   protected fb = inject(FormBuilder);
   protected destroyRef = inject(DestroyRef);
 
   constructor() {
-    this.formGroup = this.initFormGroup();
+    this.form = this.initFormGroup();
 
     this.observeValueChanges();
   }
 
-  registerOnChange(fn: (value: FormValueType) => void): void {
+  registerOnChange(fn: (value: OutputFormValueType) => void): void {
     this.onChange = fn;
   }
 
   registerOnTouched(_: () => void): void {}
 
   validate(): ValidationErrors | null {
-    return this.formGroup.valid ? null : {
-      formGroup: { valid: false }
+    return this.form.valid ? null : {
+      form: { valid: false }
     };
   }
 
-  writeValue(value: FormValueType): void {
+  writeValue(value: OutputFormValueType): void {
     this.onWriteValue(value);
   }
 
-  protected onWriteValue(value: FormValueType): void {
-    this.formGroup.patchValue(value, { emitEvent: false });
+  protected onWriteValue(value: OutputFormValueType): void {
+    this.form.patchValue(value, { emitEvent: false });
   }
 
-  protected mapOnChangeValue(value: unknown): FormValueType {
-    return value as FormValueType;
+  protected mapOnChangeValue(value: unknown): OutputFormValueType {
+    return value as OutputFormValueType;
   }
 
   protected observeValueChanges(): void {
-    this.formGroup.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => this.onChange(this.mapOnChangeValue(value)));
+    this.form.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => this.onChange(this.mapOnChangeValue(value)));
   }
 
-  protected abstract initFormGroup(): FormGroup;
+  protected abstract initFormGroup(): AbstractControl;
 }
