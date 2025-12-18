@@ -19,6 +19,7 @@ import {
   ConnectorBaseConfig_v3_5_2,
   ConnectorBaseConfig_v3_6,
   ConnectorBaseConfig_v3_6_2,
+  ConnectorBaseConfig_v3_7_2,
   ConnectorLegacyConfig
 } from '../../states/gateway-connectors/models/public-api';
 import { ConfigurationModes, ReportStrategyConfig } from './report-strategy.models';
@@ -91,7 +92,11 @@ export const ConnectorsTypesByVersion = new Map<GatewayVersion, ConnectorType[]>
   [GatewayVersion.Legacy, Object.values(ConnectorType).filter(type => type!== ConnectorType.KNX)],
 ]);
 
-export type ConnectorBaseConfig = ConnectorBaseConfig_v3_6_2 | ConnectorBaseConfig_v3_6 | ConnectorBaseConfig_v3_5_2 | ConnectorLegacyConfig;
+export type ConnectorBaseConfig = ConnectorLegacyConfig
+  | ConnectorBaseConfig_v3_7_2
+  | ConnectorBaseConfig_v3_6_2
+  | ConnectorBaseConfig_v3_6
+  | ConnectorBaseConfig_v3_5_2;
 
 export interface GatewayConnector<BaseConfig = ConnectorBaseConfig> extends GatewayConnectorBase {
   configurationJson: BaseConfig;
@@ -151,7 +156,6 @@ export interface GatewayConfigCommand {
 }
 
 export enum HTTPMethods {
-  CONNECT = 'CONNECT',
   DELETE = 'DELETE',
   GET = 'GET',
   HEAD = 'HEAD',
@@ -159,5 +163,4 @@ export enum HTTPMethods {
   PATCH = 'PATCH',
   POST = 'POST',
   PUT = 'PUT',
-  TRACE = 'TRACE'
 }

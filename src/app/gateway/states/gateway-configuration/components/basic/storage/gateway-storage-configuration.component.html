@@ -66,6 +66,9 @@
             <mat-error *ngIf="storageFormGroup.get('data_folder_path').hasError('required')">
               {{ 'gateway.storage-data-folder-path-required' | translate }}
             </mat-error>
+            <mat-error *ngIf="storageFormGroup.get('data_folder_path').hasError('pattern')">
+              {{ 'gateway.storage-data-folder-path-pattern' | translate }}
+            </mat-error>
             <mat-icon class="mat-form-field-infix pointer-event suffix-icon" aria-hidden="false"
                       aria-label="help-icon"
                       matSuffix style="cursor:pointer;"
@@ -91,7 +94,7 @@
         </div>
         <div class="tb-form-row no-border no-padding tb-standard-fields column-xs">
           <mat-form-field appearance="outline" class="flex">
-            <mat-label translate>gateway.storage-max-read-record-count</mat-label>
+            <mat-label translate>gateway.storage-max-read-record-count-storage</mat-label>
             <input matInput type="number" formControlName="max_read_records_count"/>
             <mat-error *ngIf="storageFormGroup.get('max_read_records_count').hasError('required')">
               {{ 'gateway.storage-max-read-record-count-required' | translate }}
@@ -132,6 +135,9 @@
             <mat-error *ngIf="storageFormGroup.get('data_file_path').hasError('required')">
               {{ 'gateway.storage-path-required' | translate }}
             </mat-error>
+            <mat-error *ngIf="storageFormGroup.get('data_file_path').hasError('pattern')">
+              {{ 'gateway.storage-path-pattern' | translate }}
+            </mat-error>
             <mat-icon matIconSuffix style="cursor:pointer;"
                       matTooltip="{{ 'gateway.hints.data-folder' | translate }}">info_outlined
             </mat-icon>
@@ -171,19 +177,87 @@
             </mat-icon>
           </mat-form-field>
           <mat-form-field appearance="outline" class="flex">
-            <mat-label translate>gateway.storage-max-records</mat-label>
-            <input matInput type="number" formControlName="max_records_per_file"/>
-            <mat-error *ngIf="storageFormGroup.get('max_records_per_file').hasError('required')">
-              {{ 'gateway.storage-max-records-required' | translate }}
+            <mat-label translate>gateway.storage-max-read-record-count</mat-label>
+            <input matInput type="number" formControlName="max_read_records_count"/>
+            <mat-error *ngIf="storageFormGroup.get('max_read_records_count').hasError('required')">
+              {{ 'gateway.storage-max-read-record-count-required' | translate }}
             </mat-error>
-            <mat-error *ngIf="storageFormGroup.get('max_records_per_file').hasError('min')">
-              {{ 'gateway.storage-max-records-min' | translate }}
+            <mat-error *ngIf="storageFormGroup.get('max_read_records_count').hasError('min')">
+              {{ 'gateway.storage-max-read-record-count-min' | translate }}
             </mat-error>
-            <mat-error *ngIf="storageFormGroup.get('max_records_per_file').hasError('pattern')">
-              {{ 'gateway.storage-max-records-pattern' | translate }}
+            <mat-error *ngIf="storageFormGroup.get('max_read_records_count').hasError('pattern')">
+              {{ 'gateway.storage-max-read-record-count-pattern' | translate }}
             </mat-error>
             <mat-icon matIconSuffix class="cursor-pointer"
-                      matTooltip="{{ 'gateway.hints.max-records' | translate }}">info_outlined
+                      matTooltip="{{ 'gateway.hints.max-read-count' | translate }}">info_outlined
+            </mat-icon>
+          </mat-form-field>
+        </div>
+        <div class="tb-form-row no-border no-padding tb-standard-fields column-xs">
+          <mat-form-field appearance="outline" class="flex">
+            <mat-label translate>gateway.size-limit</mat-label>
+            <input matInput type="number" formControlName="size_limit"/>
+            <mat-error *ngIf="storageFormGroup.get('size_limit').hasError('required')">
+              {{ 'gateway.size-limit-required' | translate }}
+            </mat-error>
+            <mat-error *ngIf="storageFormGroup.get('size_limit').hasError('min')">
+              {{ 'gateway.size-limit-min' | translate }}
+            </mat-error>
+            <mat-error *ngIf="storageFormGroup.get('size_limit').hasError('pattern')">
+              {{ 'gateway.size-limit-pattern' | translate }}
+            </mat-error>
+            <mat-icon matIconSuffix class="cursor-pointer"
+                      matTooltip="{{ 'gateway.size-limit-hint' | translate }}">info_outlined
+            </mat-icon>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="flex">
+            <mat-label translate>gateway.max-db-amount</mat-label>
+            <input matInput type="number" formControlName="max_db_amount"/>
+            <mat-error *ngIf="storageFormGroup.get('max_db_amount').hasError('required')">
+              {{ 'gateway.max-db-amount-required' | translate }}
+            </mat-error>
+            <mat-error *ngIf="storageFormGroup.get('max_db_amount').hasError('min')">
+              {{ 'gateway.max-db-amount-min' | translate }}
+            </mat-error>
+            <mat-error *ngIf="storageFormGroup.get('max_db_amount').hasError('pattern')">
+              {{ 'gateway.max-db-amount-pattern' | translate }}
+            </mat-error>
+            <mat-icon matIconSuffix class="cursor-pointer"
+                      matTooltip="{{ 'gateway.max-db-amount-hint' | translate }}">info_outlined
+            </mat-icon>
+          </mat-form-field>
+        </div>
+        <div class="tb-form-row no-border no-padding tb-standard-fields column-xs">
+          <mat-form-field appearance="outline" class="flex">
+            <mat-label translate>gateway.oversize-check-period</mat-label>
+            <input matInput type="number" formControlName="oversize_check_period"/>
+            <mat-error *ngIf="storageFormGroup.get('oversize_check_period').hasError('required')">
+              {{ 'gateway.oversize-check-period-required' | translate }}
+            </mat-error>
+            <mat-error *ngIf="storageFormGroup.get('oversize_check_period').hasError('min')">
+              {{ 'gateway.oversize-check-period-min' | translate }}
+            </mat-error>
+            <mat-error *ngIf="storageFormGroup.get('oversize_check_period').hasError('pattern')">
+              {{ 'gateway.oversize-check-period-pattern' | translate }}
+            </mat-error>
+            <mat-icon matIconSuffix class="cursor-pointer"
+                      matTooltip="{{ 'gateway.oversize-check-period-hint' | translate }}">info_outlined
+            </mat-icon>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="flex">
+            <mat-label translate>gateway.writing-batch-size</mat-label>
+            <input matInput type="number" formControlName="writing_batch_size"/>
+            <mat-error *ngIf="storageFormGroup.get('writing_batch_size').hasError('required')">
+              {{ 'gateway.writing-batch-size-required' | translate }}
+            </mat-error>
+            <mat-error *ngIf="storageFormGroup.get('writing_batch_size').hasError('min')">
+              {{ 'gateway.writing-batch-size-min' | translate }}
+            </mat-error>
+            <mat-error *ngIf="storageFormGroup.get('writing_batch_size').hasError('pattern')">
+              {{ 'gateway.writing-batch-size-pattern' | translate }}
+            </mat-error>
+            <mat-icon matIconSuffix class="cursor-pointer"
+                      matTooltip="{{ 'gateway.writing-batch-size-hint' | translate }}">info_outlined
             </mat-icon>
           </mat-form-field>
         </div>

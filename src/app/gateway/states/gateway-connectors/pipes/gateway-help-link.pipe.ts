@@ -16,12 +16,13 @@
 
 import { Pipe, PipeTransform } from '@angular/core';
 import {
+  ConverterType,
   MappingKeysType,
   MqttConverterType,
   MQTTSourceType,
   OPCUaSourceType,
+  RestSourceType,
   SourceType,
-  ConverterType
 } from '../models/public-api';
 import { ConnectorType } from '../../../shared/models/public-api';
 
@@ -35,9 +36,12 @@ export class ConnectorMappingHelpLinkPipe implements PipeTransform {
       case ConnectorType.OPCUA:
         return this.getOpcConnectorHelpLink(field, sourceType);
       case ConnectorType.MQTT:
-        return this.getMqttConnectorHelpLink(field, sourceType, converterType);
+        return this.getMqttConnectorHelpLink(field, sourceType, converterType as MqttConverterType);
       case ConnectorType.BACNET:
         return this.getBacnetConnectorHelpLink(field, sourceType);
+      case ConnectorType.REST:
+        return this.getRestConnectorHelpLink(sourceType);
+      default:
     }
   }
 
@@ -66,5 +70,12 @@ export class ConnectorMappingHelpLinkPipe implements PipeTransform {
       return `widget/lib/gateway/bacnet-device-${field}-${sourceType}_fn`;
     }
     return;
+  }
+
+  private getRestConnectorHelpLink(sourceType: SourceType): string {
+    if (sourceType === RestSourceType.CONST) {
+      return;
+    }
+    return `widget/lib/gateway/rest-json_fn`;
   }
 }
