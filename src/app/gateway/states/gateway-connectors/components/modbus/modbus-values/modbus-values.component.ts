@@ -181,7 +181,7 @@ export class ModbusValuesComponent implements ControlValueAccessor, Validator, O
       this.renderer,
       this.viewContainerRef,
       ModbusDataKeysPanelComponent,
-      'leftBottom',
+      'leftTop',
       false,
       null,
       ctx,
