@@ -251,17 +251,17 @@
         </button>
       </div>
     </div>
-    <div>
-      <button type="button" mat-stroked-button color="primary" (click)="addKey()">
-        {{ addKeyTitle | translate }}
-      </button>
-    </div>
   </div>
   <ng-template #noKeys>
     <div class="tb-flex no-flex center align-center key-panel">
       <span class="tb-prompt" translate>{{ noKeysText }}</span>
     </div>
   </ng-template>
+</div>
+<div class="flex justify-between pt-4">
+  <button type="button" mat-stroked-button color="primary" (click)="addKey()">
+    {{ addKeyTitle | translate }}
+  </button>
   <div class="tb-flex flex-end">
     <button mat-button
             color="primary"

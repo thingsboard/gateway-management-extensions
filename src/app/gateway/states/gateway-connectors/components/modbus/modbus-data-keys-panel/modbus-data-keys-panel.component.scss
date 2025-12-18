@@ -28,7 +28,8 @@
     }
 
     .key-panel {
-      height: 500px;
+      height: calc(100vh - 112px);
+      max-height: 500px;
       overflow: auto;
     }
 
