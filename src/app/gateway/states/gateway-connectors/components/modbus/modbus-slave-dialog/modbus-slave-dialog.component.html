@@ -237,11 +237,10 @@
                 </mat-expansion-panel>
               </div>
               <div class="tb-form-row">
-                <mat-slide-toggle class="mat-slide" formControlName="retries">
-                  <mat-label tb-hint-tooltip-icon="{{ 'gateway.hints.modbus.retries' | translate }}">
-                    {{ 'gateway.retries' | translate }}
-                  </mat-label>
-                </mat-slide-toggle>
+                <div class="fixed-title-width" tb-hint-tooltip-icon="{{ 'gateway.hints.modbus.retries' | translate }}" translate>gateway.retries</div>
+                <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+                  <input matInput type="number" min="0" name="retries" formControlName="retries" placeholder="{{ 'gateway.set' | translate }}"/>
+                </mat-form-field>
               </div>
               <div class="tb-form-row">
                 <mat-slide-toggle class="mat-slide" formControlName="retryOnEmpty">

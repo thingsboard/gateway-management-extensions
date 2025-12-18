@@ -1,0 +1,114 @@
+<!--
+  Copyright © 2016-2025 The Thingsboard Authors
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<div class="w-[77vw] max-w-2xl">
+  <div class="tb-form-panel no-border no-padding">
+    <div class="tb-form-panel-title">{{ 'gateway.rest.http-headers' | translate }}{{ ' (' + keysListFormArray.controls.length + ')' }}
+    </div>
+    @if (keysListFormArray.controls.length) {
+      <div class="tb-form-panel no-border no-padding h-[500px]">
+        @for (keyControl of keysListFormArray.controls; track index; let index = $index; let last = $last) {
+          <div class="tb-form-panel no-border no-padding tb-flex no-flex row center fill-width">
+            <div class="tb-form-panel stroked tb-flex">
+              <ng-container [formGroup]="keyControl">
+                <mat-expansion-panel class="tb-settings" [expanded]="last">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      <div tbTruncateWithTooltip class="max-w-[11vw]">
+                        {{ keyControl.value?.key }}
+                      </div>
+                      @if (keyControl.value?.value) {
+                        <div tbTruncateWithTooltip class="max-w-[11vw]">
+                          : {{ keyControl.value.value }}
+                        </div>
+                      }
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <ng-template matExpansionPanelContent>
+                    <div class="tb-form-row">
+                      <div class="fixed-title-width tb-required">{{ 'gateway.key' | translate }}</div>
+                      <div class="tb-flex no-gap">
+                        <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+                          <input matInput name="value" formControlName="key"
+                                 placeholder="{{ 'gateway.set' | translate }}"/>
+                          @if (keyControl.get('key').hasError('required') && keyControl.get('key').touched) {
+                            <mat-icon matSuffix
+                                      matTooltipPosition="above"
+                                      matTooltipClass="tb-error-tooltip"
+                                      [matTooltip]="('gateway.key-required') | translate"
+                                      class="tb-error">
+                              warning
+                            </mat-icon>
+                          }
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="tb-form-row">
+                      <div class="fixed-title-width tb-required" translate>gateway.value</div>
+                      <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+                        <input matInput type="text" name="value" formControlName="value" placeholder="{{ 'gateway.set' | translate }}"/>
+                        @if (keyControl.get('value').hasError('required') && keyControl.get('value').touched) {
+                          <mat-icon matSuffix
+                                    matTooltipPosition="above"
+                                    matTooltipClass="tb-error-tooltip"
+                                    [matTooltip]="('gateway.value-required') | translate"
+                                    class="tb-error">
+                            warning
+                          </mat-icon>
+                        }
+                      </mat-form-field>
+                    </div>
+                  </ng-template>
+                </mat-expansion-panel>
+              </ng-container>
+            </div>
+            <button type="button"
+                    mat-icon-button
+                    (click)="deleteKey($event, index)"
+                    class="gw-delete-icon-button"
+                    [matTooltip]="'gateway.rest.delete-http-header' | translate"
+                    matTooltipPosition="above">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="tb-flex no-flex center align-center h-[500px]">
+        <span class="tb-prompt">{{ 'gateway.rest.no-http-headers' | translate }}</span>
+      </div>
+    }
+    <div>
+      <button type="button" mat-stroked-button color="primary" (click)="addKey()">
+        {{ 'gateway.rest.add-http-header' | translate }}
+      </button>
+    </div>
+  </div>
+  <div class="tb-flex flex-end">
+    <button mat-button
+            color="primary"
+            type="button"
+            (click)="cancel()">
+      {{ 'action.cancel' | translate }}
+    </button>
+    <button mat-raised-button
+            color="primary"
+            type="button"
+            (click)="applyKeysData()"
+            [disabled]="keysListFormArray.invalid || !keysListFormArray.dirty">
+      {{ 'action.apply' | translate }}
+    </button>
+  </div>
+</div>

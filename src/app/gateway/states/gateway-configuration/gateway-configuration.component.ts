@@ -204,23 +204,13 @@ export class GatewayConfigurationComponent implements AfterViewInit {
           formatter: 'LogFormatter',
           level: 0,
           stream: 'ext://sys.stdout'
-        },
-        ...(this.useUpdatedLogs ? {}
-          : {
-            databaseHandler: {
-              class: this.useUpdatedLogs ? logsHandlerClass : logsLegacyHandlerClass,
-              formatter: 'LogFormatter',
-              filename: './logs/database.log',
-              backupCount: 1,
-              encoding: 'utf-8'
-            }
-          })
+        }
       },
       loggers: {
         ...(this.useUpdatedLogs ? {}
           : {
             database: {
-              handlers: ['databaseHandler', 'consoleHandler'],
+              handlers: ['consoleHandler'],
               level: 'DEBUG',
               propagate: false
             }

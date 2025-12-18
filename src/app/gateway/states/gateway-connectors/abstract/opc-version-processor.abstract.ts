@@ -15,6 +15,7 @@
 ///
 
 import {
+  DeviceConnectorMapping,
   LegacyServerConfig,
   OPCBasicConfig,
   OPCBasicConfig_v3_5_2,
@@ -35,11 +36,19 @@ export class OpcVersionProcessor extends GatewayConnectorVersionProcessor<OPCBas
 
   getUpgradedVersion(): GatewayConnector<OPCBasicConfig_v3_5_2> {
     const server = this.connector.configurationJson.server as LegacyServerConfig;
+    let mapping: DeviceConnectorMapping[];
+    if ('mapping' in this.connector.configurationJson.server) {
+      mapping = OpcVersionMappingUtil.mapMappingToUpgradedVersion(this.connector.configurationJson.server.mapping);
+    } else if ('mapping' in this.connector.configurationJson) {
+      mapping = OpcVersionMappingUtil.mapMappingToCurrentVersion(this.connector.configurationJson.mapping);
+    } else {
+      mapping = []
+    }
     return {
       ...this.connector,
       configurationJson: {
         server: server ? OpcVersionMappingUtil.mapServerToUpgradedVersion(server) : {},
-        mapping: server?.mapping ? OpcVersionMappingUtil.mapMappingToUpgradedVersion(server.mapping) : [],
+        mapping,
       },
       configVersion: this.gatewayVersionIn
     } as GatewayConnector<OPCBasicConfig_v3_5_2>;
