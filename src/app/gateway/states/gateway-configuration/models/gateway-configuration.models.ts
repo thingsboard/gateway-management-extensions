@@ -153,7 +153,6 @@ export interface LogAttribute {
   };
   handlers: {
     consoleHandler: StreamHandlerConfig;
-    databaseHandler?: FileHandlerConfig;
   };
   loggers: {
     database?: LoggerConfig;
