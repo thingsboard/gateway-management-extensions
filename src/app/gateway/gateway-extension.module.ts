@@ -27,6 +27,7 @@ import { GatewayConnectorComponent } from './states/gateway-connectors/public-ap
 import { DeviceGatewayCommandComponent } from './states/device-gateway-command/public-api';
 import { GatewayConfigurationComponent } from './states/gateway-configuration/public-api';
 import { GatewayLogsComponent } from './states/gateway-logs/public-api';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @NgModule({
   imports: [
@@ -44,7 +45,12 @@ import { GatewayLogsComponent } from './states/gateway-logs/public-api';
 })
 export class GatewayExtensionModule {
   constructor(private translate: TranslateService) {
-    addGatewayLocale(translate);
+    addGatewayLocale(this.translate);
+    this.translate.onLangChange.pipe(
+      takeUntilDestroyed()
+    ).subscribe(() => {
+      addGatewayLocale(translate);
+    })
     addLibraryStyles('tb-gateway-css');
   }
 }
