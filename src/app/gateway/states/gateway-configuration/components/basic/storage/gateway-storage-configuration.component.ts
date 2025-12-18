@@ -31,7 +31,7 @@ import {
   StorageTypesTranslationMap
 } from '../../../models/public-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { numberInputPattern } from '../../../../../shared/models/public-api';
+import { directoryRegex, numberInputPattern } from '../../../../../shared/models/public-api';
 import { isDefinedAndNotNull } from "@core/public-api";
 
 @Component({
@@ -117,11 +117,11 @@ export class GatewayStorageConfigurationComponent implements AfterViewInit, Vali
       type: [StorageTypes.MEMORY, [Validators.required]],
       read_records_count: [100, [Validators.required, Validators.min(1), Validators.pattern(numberInputPattern)]],
       max_records_count: [100000, [Validators.required, Validators.min(1), Validators.pattern(numberInputPattern)]],
-      data_folder_path: ['./data/', [Validators.required, Validators.pattern(/.*\/$/)]],
+      data_folder_path: ['./data/', [Validators.required, Validators.pattern(directoryRegex)]],
       max_file_count: [10, [Validators.min(1), Validators.pattern(numberInputPattern)]],
       max_read_records_count: [10, [Validators.min(1), Validators.pattern(numberInputPattern)]],
       max_records_per_file: [10000, [Validators.min(1), Validators.pattern(numberInputPattern)]],
-      data_file_path: ['./data/', [Validators.required, Validators.pattern(/.*\/$/)]],
+      data_file_path: ['./data/', [Validators.required, Validators.pattern(directoryRegex)]],
       messages_ttl_check_in_hours: [1, [Validators.min(1), Validators.pattern(numberInputPattern)]],
       messages_ttl_in_days: [7, [Validators.min(1), Validators.pattern(numberInputPattern)]],
       size_limit: [1024, [Validators.min(1), Validators.pattern(numberInputPattern)]],
@@ -164,15 +164,20 @@ export class GatewayStorageConfigurationComponent implements AfterViewInit, Vali
   }
 
   private addFileStorageValidators(group: FormGroup): void {
-    ['max_read_records_count', 'max_file_count',  'max_records_per_file'].forEach(field => {
+    group.get('data_folder_path').addValidators([Validators.required, Validators.pattern(directoryRegex)]);
+    group.get('data_folder_path').updateValueAndValidity({ emitEvent: false });
+
+    ['max_file_count', 'max_read_records_count', 'max_records_per_file'].forEach(field => {
       group.get(field).addValidators([Validators.required, Validators.min(1), Validators.pattern(numberInputPattern)]);
       group.get(field).updateValueAndValidity({ emitEvent: false });
     });
   }
 
   private addSqliteStorageValidators(group: FormGroup): void {
-    ['messages_ttl_check_in_hours', 'messages_ttl_in_days', 'max_read_records_count',
-      'size_limit', 'max_db_amount', 'oversize_check_period', 'writing_batch_size'].forEach(field => {
+    group.get('data_file_path').addValidators([Validators.required, Validators.pattern(directoryRegex)]);
+    group.get('data_file_path').updateValueAndValidity({ emitEvent: false });
+
+    ['messages_ttl_check_in_hours', 'messages_ttl_in_days', 'max_records_per_file'].forEach(field => {
       group.get(field).addValidators([Validators.required, Validators.min(1), Validators.pattern(numberInputPattern)]);
       group.get(field).updateValueAndValidity({ emitEvent: false });
     });

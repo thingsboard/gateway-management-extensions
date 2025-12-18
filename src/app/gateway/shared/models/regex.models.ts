@@ -21,3 +21,5 @@ export const noLeadTrailSpacesRegex = /^\S+(?: \S+)*$/;
 export const integerRegex = /^[-+]?\d+$/;
 
 export const nonZeroFloat = /^-?(?!0(\.0+)?$)\d+(\.\d+)?$/;
+
+export const directoryRegex = new RegExp(/^\.\/[^.\/]+(?:\/[^.\/]+)*\/$/);
