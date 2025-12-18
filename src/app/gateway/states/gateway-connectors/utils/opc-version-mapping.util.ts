@@ -86,6 +86,41 @@ export class OpcVersionMappingUtil {
     }));
   }
 
+  static mapMappingToCurrentVersion(mapping: DeviceConnectorMapping[]): DeviceConnectorMapping[] {
+    return mapping.map((mapping: DeviceConnectorMapping) => ({
+      deviceNodePattern: mapping.deviceNodePattern,
+      deviceNodeSource: this.getDeviceNodeSourceByValue(mapping.deviceNodePattern),
+      deviceInfo: {
+        deviceNameExpression: mapping.deviceInfo.deviceNameExpression,
+        deviceNameExpressionSource: this.getTypeSourceByValue(mapping?.deviceInfo?.deviceNameExpressionSource) ,
+        deviceProfileExpression: (mapping?.deviceInfo?.deviceProfileExpression) ?? 'default',
+        deviceProfileExpressionSource: this.getTypeSourceByValue((mapping?.deviceInfo?.deviceProfileExpressionSource) ?? 'default'),
+      },
+      attributes: mapping.attributes?.map((attribute: Attribute) => ({
+        key: attribute.key,
+        type: attribute.type,
+        value: attribute?.value,
+      })) ?? [],
+      attributes_updates: mapping.attributes_updates?.map((attributeUpdate: AttributesUpdate) => ({
+        key: attributeUpdate.key,
+        type: attributeUpdate.type,
+        value: attributeUpdate.value,
+      })) ?? [],
+      timeseries: mapping.timeseries?.map((timeseries: Timeseries) => ({
+        key: timeseries.key,
+        type: timeseries.type,
+        value: timeseries.value,
+      })) ?? [],
+      rpc_methods: mapping.rpc_methods?.map((rpcMethod: LegacyRpcMethod) => ({
+        method: rpcMethod.method,
+        arguments: rpcMethod.arguments.map(arg => ({
+          value: arg,
+          type: this.getArgumentType(arg),
+        } as ValueType))
+      })) ?? []
+    }));
+  }
+
   static mapMappingToDowngradedVersion(mapping: DeviceConnectorMapping[]): LegacyDeviceConnectorMapping[] {
     return mapping.map((upgradedMapping: DeviceConnectorMapping) => ({
       deviceNodePattern: upgradedMapping.deviceNodePattern,

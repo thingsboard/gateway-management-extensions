@@ -47,18 +47,14 @@ import {
   BacnetDeviceConfig,
   BacnetDeviceConfigInfo,
   BacnetDeviceKey,
-  DeviceInfoType,
-  ExpressionType,
-  PortLimits,
-} from '../../../models/public-api';
-import {
   BacnetDeviceKeysAddKeyTranslationsMap,
   BacnetDeviceKeysDeleteKeyTranslationsMap,
   BacnetDeviceKeysNoKeysTextTranslationsMap,
   BacnetDeviceKeysPanelTitleTranslationsMap,
   BacnetDeviceKeysType,
+  DeviceInfoType,
+  ExpressionType,
 } from '../../../models/public-api';
-import { GatewayPortTooltipPipe } from '../../../pipes/public-api';
 import { DeviceInfoTableComponent } from '../../device-info-table/device-info-table.component';
 import { BacnetDeviceDataKeysPanelComponent } from '../device-data-keys-pannel/bacnet-device-data-keys-panel.component';
 import { TbPopoverComponent } from '@shared/components/popover.component';
@@ -74,7 +70,6 @@ import { TbPopoverComponent } from '@shared/components/popover.component';
     SharedModule,
     EllipsisChipListDirective,
     TruncateWithTooltipDirective,
-    GatewayPortTooltipPipe,
     DeviceInfoTableComponent,
     ReportStrategyComponent,
   ]
@@ -83,7 +78,8 @@ export class BacnetDeviceDialogComponent extends DialogComponent<BacnetDeviceDia
 
   deviceFormGroup = this.fb.group({
     host: ['', [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-    port: ['', [Validators.required, Validators.min(PortLimits.MIN), Validators.max(PortLimits.MAX)]],
+    port: ['', [Validators.required]],
+    networkMask: [''],
     deviceInfo: [],
     altResponsesAddresses: [{ value: [] as string[], disabled: this.data.hideNewFields }],
     pollPeriod: [10000, [Validators.required, Validators.min(0)]],
@@ -97,7 +93,6 @@ export class BacnetDeviceDialogComponent extends DialogComponent<BacnetDeviceDia
 
   readonly BacnetDeviceKeysType = BacnetDeviceKeysType;
   readonly DeviceInfoType = DeviceInfoType;
-  readonly portLimits = PortLimits;
   readonly deviceHelpLink = helpBaseUrl + '/docs/iot-gateway/config/bacnet/#device-object-settings';
   readonly sourceTypes = Object.values(ExpressionType) as ExpressionType[];
   readonly ConnectorType = ConnectorType;
