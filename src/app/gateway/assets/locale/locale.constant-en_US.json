@@ -86,6 +86,7 @@
     "attribute-filter": "Attribute filter",
     "attribute-filter-hint": "Filter for incoming attribute name from platform, supports regular expression.",
     "attribute-filter-required": "Attribute filter required.",
+    "attribute-filter-pattern": "Attribute filter is not valid.",
     "attribute-name-expression": "Attribute name expression",
     "attribute-name-expression-required": "Attribute name expression required.",
     "attribute-name-expression-hint": "Hint for Attribute name expression",
@@ -242,6 +243,28 @@
       "write-multiple-coils": "15 - Write Multiple Coils",
       "write-multiple-holding-registers": "16 - Write Multiple Holding Registers"
     },
+    "ftp": {
+      "tls-support": "TLS support",
+      "paths": "Paths",
+      "add-path": "Add path",
+      "pattern-type": "Pattern type",
+      "pattern-name": "Pattern name",
+      "path": "Path",
+      "delete-path-title": "Are you sure you want to delete the path - '{{name}}'?",
+      "delete-path-description": "Be careful, after the confirmation path configuration and all related data will become unrecoverable.",
+      "device-name-pattern": "Device name pattern",
+      "device-type-pattern": "Device type pattern",
+      "path-expression": "Path expression",
+      "file-data-view": "File data view",
+      "poll-period": "Poll period",
+      "read-mode": "Read mode",
+      "max-file-size": "Max file size",
+      "delimiter": "Delimiter",
+      "sorting-files": "Sorting files",
+      "writing-mode": "Writing mode",
+      "path-required": "Path is required.",
+      "path-pattern": "Path is invalid."
+    },
     "to-device-response-settings": "Output request processing",
     "to-device-response-settings-hint": "For these fields you can use the following variables and they will be replaced with actual values: ${deviceName}, ${attributeKey}, ${attributeValue}",
     "gateway": "Gateway",
@@ -355,6 +378,7 @@
     "path-logs-required": "Path is required.",
     "password": "Password",
     "password-required": "Password is required.",
+    "parameters": "Parameters",
     "permit-without-calls": "Keep alive permit without calls",
     "property-id": "Property ID",
     "poll-period": "Poll period (ms)",
@@ -522,6 +546,7 @@
     "value-required": "Value is required.",
     "value-expression": "Value expression",
     "value-expression-required": "Value expression is required.",
+    "value-expression-pattern": "Value expression is not valid.",
     "with-response": "With response",
     "without-response": "Without response",
     "other": "Other",
@@ -664,7 +689,8 @@
     },
     "suffix": {
       "s": "s",
-      "ms": "ms"
+      "ms": "ms",
+      "mb": "MB"
     },
     "report-strategy": {
       "label": "Report strategy",
@@ -857,6 +883,20 @@
       "report-period-required": "Report period is required.",
       "report-period-range": "Report period must be greater than 100.",
       "timeout-pattern": "Timeout is not valid",
+      "ftp": {
+        "delimiter": "Delimiter is used for csv and txt files.",
+        "file-data-view": "Will be used to identify data format in  csv or txt files.",
+        "read-mode": "Will be used for txt and csv files.",
+        "device-name-pattern-required": "Device name pattern is required.",
+        "device-type-pattern-required": "Device type pattern is required.",
+        "path-expression-required": "Path expression is required.",
+        "tls-support": "Verify whether TLS support is available on the server.",
+        "max-file-size": "The max file size in MB that will be read (if file size is more than 5 MB, it will be skipped).",
+        "sorting-files": "This is how the found files in path will be appended to the array.",
+        "path-expression": "JSON-path expression that is used for finding specific files.",
+        "path-required": "Path is required.",
+        "path-pattern": "Path is not valid."
+      },
       "rest": {
         "endpoint-required": "Endpoint is required.",
         "endpoint-pattern": "Endpoint is not valid.",

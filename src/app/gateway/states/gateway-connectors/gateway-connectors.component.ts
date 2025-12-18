@@ -84,6 +84,7 @@ import { LatestVersionConfigPipe } from './pipes/public-api';
 import { ReportStrategyComponent } from '../../shared/components/public-api';
 import { BacnetBasicConfigComponent, BacnetLegacyBasicConfigComponent } from './components/bacnet/public-api';
 import { RestLegacyBasicConfigComponent, RestBasicConfigComponent } from './components/rest/public-api';
+import { FtpBasicConfigComponent, FtpLegacyBasicConfigComponent } from './components/ftp/public-api';
 
 export class ForceErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null): boolean {
@@ -115,6 +116,8 @@ export class ForceErrorStateMatcher implements ErrorStateMatcher {
     BacnetLegacyBasicConfigComponent,
     RestLegacyBasicConfigComponent,
     RestBasicConfigComponent,
+    FtpBasicConfigComponent,
+    FtpLegacyBasicConfigComponent,
   ],
 })
 export class GatewayConnectorComponent extends PageComponent implements AfterViewInit, OnDestroy {
@@ -131,7 +134,8 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
     ConnectorType.MODBUS,
     ConnectorType.SOCKET,
     ConnectorType.BACNET,
-    ConnectorType.REST
+    ConnectorType.REST,
+    ConnectorType.FTP,
   ]);
   readonly gatewayLogLevel = Object.values(GatewayLogLevel);
   readonly displayedColumns = ['enabled', 'key', 'type', 'syncStatus', 'errors', 'actions'];

@@ -20,6 +20,7 @@ import {
   ConnectorBaseConfig_v3_6,
   ConnectorBaseConfig_v3_6_2,
   ConnectorBaseConfig_v3_7_2,
+  ConnectorBaseConfig_v3_7_4,
   ConnectorLegacyConfig
 } from '../../states/gateway-connectors/models/public-api';
 import { ConfigurationModes, ReportStrategyConfig } from './report-strategy.models';
@@ -37,6 +38,7 @@ export enum GatewayLogLevel {
 }
 
 export enum GatewayVersion {
+  v3_7_4 = '3.7.4',
   v3_7_3 = '3.7.3',
   v3_7_2 = '3.7.2',
   v3_7_0 = '3.7',
@@ -93,6 +95,7 @@ export const ConnectorsTypesByVersion = new Map<GatewayVersion, ConnectorType[]>
 ]);
 
 export type ConnectorBaseConfig = ConnectorLegacyConfig
+  | ConnectorBaseConfig_v3_7_4
   | ConnectorBaseConfig_v3_7_2
   | ConnectorBaseConfig_v3_6_2
   | ConnectorBaseConfig_v3_6

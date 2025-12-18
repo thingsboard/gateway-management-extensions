@@ -1,0 +1,129 @@
+<!--
+  Copyright © 2016-2025 The Thingsboard Authors
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<div [formGroup]="mappingFormGroup" class="h-full w-[77vw] max-w-3xl">
+  <mat-toolbar color="primary">
+    <h2>{{ 'gateway.requests-mapping' | translate }}</h2>
+    <span class="flex-1"></span>
+    <div [tb-help]="helpLink"></div>
+    <button mat-icon-button
+            (click)="cancel()"
+            type="button">
+      <mat-icon class="material-icons">close</mat-icon>
+    </button>
+  </mat-toolbar>
+  <div mat-dialog-content>
+    <div class="tb-form-panel no-border no-padding">
+      <div class="tb-form-row">
+        <div class="fixed-title-width" translate>gateway.request-type</div>
+        <mat-form-field class="tb-flex" appearance="outline" subscriptSizing="dynamic">
+          <mat-select formControlName="requestType">
+            @for (type of requestTypes; track type) {
+              <mat-option [value]="type">{{ FtpRequestTypesTranslationsMap.get(type) | translate }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="tb-form-row">
+        <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.device-name-filter-hint' | translate }}" translate>gateway.device-name-filter</div>
+        <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+          <input matInput type="text" name="value" formControlName="deviceNameFilter" placeholder="{{ 'gateway.set' | translate }}"/>
+          @if (mappingFormGroup.get('deviceNameFilter').hasError('required') && mappingFormGroup.get('deviceNameFilter').touched) {
+            <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.device-name-filter-required' | translate"/>
+          } @else if (mappingFormGroup.get('deviceNameFilter').hasError('pattern') && mappingFormGroup.get('deviceNameFilter').touched) {
+            <tb-error-icon matSuffix [tooltipText]="'gateway.hints.rest.device-name-filter-pattern' | translate"/>
+          }
+        </mat-form-field>
+      </div>
+      @if (mappingFormGroup.get('requestType').value === FtpRequestType.ATTRIBUTE_UPDATE) {
+        <div class="tb-form-row">
+          <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.attribute-filter-hint' | translate }}" translate>gateway.attribute-filter</div>
+          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+            <input matInput type="text" name="value" formControlName="attributeFilter" placeholder="{{ 'gateway.set' | translate }}"/>
+            @if (mappingFormGroup.get('attributeFilter').hasError('required') && mappingFormGroup.get('attributeFilter').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.attribute-filter-required' | translate"/>
+            } @else if (mappingFormGroup.get('attributeFilter').hasError('pattern') && mappingFormGroup.get('attributeFilter').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.attribute-filter-pattern' | translate"/>
+            }
+          </mat-form-field>
+        </div>
+        <div class="tb-form-row space-between tb-flex">
+          <div class="fixed-title-width" translate>gateway.ftp.writing-mode</div>
+          <tb-toggle-select class="gw-toggle-select" formControlName="writingMode" appearance="fill">
+            @for (mode of ftpAttributeUpdateWritingModes; track mode) {
+              <tb-toggle-option [value]="mode">{{ mode | titlecase }}</tb-toggle-option>
+            }
+          </tb-toggle-select>
+        </div>
+        <div class="tb-form-row">
+          <div class="fixed-title-width tb-required" translate>gateway.ftp.path</div>
+          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+            <input matInput type="text" name="value" formControlName="path" placeholder="{{ 'gateway.set' | translate }}"/>
+            @if (mappingFormGroup.get('path').hasError('required') && mappingFormGroup.get('path').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.ftp.path-required' | translate"/>
+            } @else if (mappingFormGroup.get('path').hasError('pattern') && mappingFormGroup.get('path').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.hints.ftp.path-pattern' | translate"/>
+            }
+          </mat-form-field>
+        </div>
+      } @else {
+        <div class="tb-form-row">
+          <div class="fixed-title-width tb-required" tb-hint-tooltip-icon="{{ 'gateway.method-filter-hint' | translate }}" translate>gateway.method-filter</div>
+          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+            <input matInput type="text" name="value" formControlName="methodFilter" placeholder="{{ 'gateway.set' | translate }}"/>
+            @if (mappingFormGroup.get('methodFilter').hasError('required') && mappingFormGroup.get('methodFilter').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.method-filter-required' | translate"/>
+            } @else if (mappingFormGroup.get('methodFilter').hasError('pattern') && mappingFormGroup.get('methodFilter').touched) {
+              <tb-error-icon matSuffix [tooltipText]="'gateway.method-filter-pattern' | translate"/>
+            }
+          </mat-form-field>
+        </div>
+        <div class="tb-form-row space-between tb-flex">
+          <div class="fixed-title-width" translate>gateway.ftp.writing-mode</div>
+          <tb-toggle-select class="gw-toggle-select" formControlName="methodWritingMode" appearance="fill">
+            @for (mode of FtpServerSideRpcMethodFilters; track mode) {
+              <tb-toggle-option [value]="mode">{{ mode | titlecase }}</tb-toggle-option>
+            }
+          </tb-toggle-select>
+        </div>
+      }
+      <div class="tb-form-row">
+        <div class="fixed-title-width tb-required" translate>gateway.value-expression</div>
+        <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+          <input matInput type="text" name="value" formControlName="valueExpression" placeholder="{{ 'gateway.set' | translate }}"/>
+          @if (mappingFormGroup.get('valueExpression').hasError('required') && mappingFormGroup.get('valueExpression').touched) {
+            <tb-error-icon matSuffix [tooltipText]="'gateway.value-expression-required' | translate"/>
+          } @else if (mappingFormGroup.get('valueExpression').hasError('pattern') && mappingFormGroup.get('valueExpression').touched) {
+            <tb-error-icon matSuffix [tooltipText]="'gateway.value-expression-pattern' | translate"/>
+          }
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions class="justify-end">
+    <button mat-button color="primary"
+            type="button"
+            cdkFocusInitial
+            (click)="cancel()">
+      {{ 'action.cancel' | translate }}
+    </button>
+    <button mat-raised-button color="primary"
+            (click)="add()"
+            [disabled]="mappingFormGroup.invalid || !mappingFormGroup.dirty || !keysPopupClosed">
+      {{ data.buttonTitle | translate }}
+    </button>
+  </div>
+</div>

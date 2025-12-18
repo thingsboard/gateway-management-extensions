@@ -1,0 +1,43 @@
+<!--
+  Copyright © 2016-2025 The Thingsboard Authors
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<div class="tb-form-panel no-border no-padding padding-top" [formGroup]="parametersConfigFormGroup">
+  <div class="tb-form-row">
+    <div class="fixed-title-width tb-required" translate>gateway.host</div>
+    <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+      <input matInput name="value" formControlName="host" placeholder="{{ 'gateway.set' | translate }}"/>
+      @if (parametersConfigFormGroup.get('host').hasError('required') && parametersConfigFormGroup.get('host').touched) {
+        <tb-error-icon matSuffix [tooltipText]="'gateway.host-required' | translate"/>
+      }
+    </mat-form-field>
+  </div>
+  <div class="tb-form-row column-xs">
+    <div class="fixed-title-width tb-required" translate>gateway.port</div>
+    <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+      <input matInput type="number" min="{{portLimits.MIN}}" max="{{portLimits.MAX}}"
+             name="value" formControlName="port" placeholder="{{ 'gateway.set' | translate }}"/>
+      @let portControl = parametersConfigFormGroup.get('port');
+      @if ((portControl.hasError('required') || portControl.hasError('min') || portControl.hasError('max')) && portControl.touched) {
+        <tb-error-icon matSuffix [tooltipText]="portControl | getGatewayPortTooltip"/>
+      }
+    </mat-form-field>
+  </div>
+  <div class="tb-form-row space-between tb-flex fill-width">
+    <mat-slide-toggle class="mat-slide" formControlName="TLSSupport">
+      <mat-label tb-hint-tooltip-icon="{{ 'gateway.hints.ftp.tls-support' | translate }}">{{ 'gateway.ftp.tls-support' | translate }}</mat-label>
+    </mat-slide-toggle>
+  </div>
+  <tb-security-config formControlName="security" [title]="'gateway.security'" [mode]="SecurityMode.basic"/>
+</div>
