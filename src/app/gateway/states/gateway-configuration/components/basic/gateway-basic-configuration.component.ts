@@ -45,7 +45,7 @@ import {
   GatewayRemoteConfigurationDialogComponent,
   GatewayRemoteConfigurationDialogData
 } from '../../../gateway-remote-shell/public-api';
-import { DeviceService } from '@core/public-api';
+import { DeviceService, isUndefinedOrNull } from '@core/public-api';
 import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import {
@@ -132,7 +132,7 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
     this.basicFormGroup.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe(value => {
-        this.onChange(value);
+        this.onChange(this.sanitizeValue(value));
       });
   }
 
@@ -163,8 +163,9 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
   registerOnTouched(_: () => void): void {}
 
   writeValue(basicConfig: GatewayConfigValue): void {
-    this.basicFormGroup.patchValue(basicConfig, {emitEvent: false});
-    const commands = basicConfig?.thingsboard?.statistics?.commands ?? [];
+    const sanitized = this.sanitizeValue(basicConfig);
+    this.basicFormGroup.patchValue(sanitized, {emitEvent: false});
+    const commands = sanitized?.thingsboard?.statistics?.commands ?? [];
     this.commandFormArray().clear({emitEvent: false});
     commands.forEach((command: GatewayConfigCommand) => this.addCommand(command, false));
   }
@@ -264,10 +265,7 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
       checkingDeviceActivity: this.initCheckingDeviceActivityFormGroup(),
       security: [],
       qos: [1],
-      reportStrategy: [{
-        value: { type: ReportStrategyType.OnReceived },
-        disabled: true
-      }],
+      reportStrategy: [null]
     });
   }
 
@@ -324,5 +322,17 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
       checkingDeviceActivityGroup.get('inactivityTimeoutSeconds').updateValueAndValidity({ emitEvent: false });
       checkingDeviceActivityGroup.get('inactivityCheckPeriodSeconds').updateValueAndValidity({ emitEvent: false });
     });
+  }
+
+  private sanitizeValue(value: GatewayConfigValue): GatewayConfigValue {
+    if (!value) return value;
+    const config = { ...value };
+    if (config.thingsboard) {
+      config.thingsboard = { ...config.thingsboard };
+      if (isUndefinedOrNull(config.thingsboard.reportStrategy)) {
+        delete config.thingsboard.reportStrategy;
+      }
+    }
+    return config;
   }
 }
