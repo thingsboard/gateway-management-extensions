@@ -73,6 +73,10 @@ export class ReportStrategyComponent implements ControlValueAccessor, OnDestroy 
   @coerceNumber()
   @Input() defaultValue = ReportStrategyDefaultValue.Key;
 
+  @coerceBoolean()
+  @Input() isConfig = false;
+
+
   reportStrategyFormGroup: UntypedFormGroup;
   showStrategyControl: FormControl<boolean>;
 
@@ -109,7 +113,9 @@ export class ReportStrategyComponent implements ControlValueAccessor, OnDestroy 
     if (reportStrategyConfig) {
       this.reportStrategyFormGroup.enable({emitEvent: false});
     }
-    const { type = ReportStrategyType.OnReportPeriod, reportPeriod = this.defaultValue } = reportStrategyConfig ?? {};
+    const defaultType = this.isConfig ? ReportStrategyType.OnReceived : ReportStrategyType.OnReportPeriod;
+    const defaultReportPeriod = this.isConfig ? null : this.defaultValue;
+    const { type =  defaultType, reportPeriod = defaultReportPeriod } = reportStrategyConfig ?? {};
     this.reportStrategyFormGroup.setValue({ type, reportPeriod }, {emitEvent: false});
     this.onTypeChange(type);
   }
