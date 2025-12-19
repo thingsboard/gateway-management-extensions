@@ -32,22 +32,22 @@ import zhCN from '../../assets/locale/locale.constant-zh_CN.json';
 import zhTW from '../../assets/locale/locale.constant-zh_TW.json';
 import { mergeDeep } from '@core/public-api';
 
-enum AvailableLanguages {
-  English = 'en-US',
-  Arabic = 'ar-AE',
-  Catalan = 'ca-ES',
-  Czech = 'cs-CZ',
-  Danish = 'da-DK',
-  Spanish = 'es-ES',
-  Korean = 'ko-KR',
-  Lithuanian = 'lt-LT',
-  Dutch = 'nl-BE',
-  Polish = 'pl-PL',
-  PortugueseBrazil = 'pt-BR',
-  Slovenian = 'sl-SI',
-  Turkish = 'tr-TR',
-  ChineseSimplified = 'zh-CN',
-  ChineseTraditional = 'zh-TW'
+export enum AvailableLanguages {
+  English = 'en_US',
+  Arabic = 'ar_AE',
+  Catalan = 'ca_ES',
+  Czech = 'cs_CZ',
+  Danish = 'da_DK',
+  Spanish = 'es_ES',
+  Korean = 'ko_KR',
+  Lithuanian = 'lt_LT',
+  Dutch = 'nl_BE',
+  Polish = 'pl_PL',
+  PortugueseBrazil = 'pt_BR',
+  Slovenian = 'sl_SI',
+  Turkish = 'tr_TR',
+  ChineseSimplified = 'zh_CN',
+  ChineseTraditional = 'zh_TW'
 }
 
 type LocaleData = Record<string, any>;
@@ -70,10 +70,21 @@ const languagesMap = new Map<AvailableLanguages, LocaleData>([
   [AvailableLanguages.ChineseTraditional, zhTW]
 ]);
 
-export default function addGatewayLocale(translate: TranslateService): void {
-  const currentLocale = translate.currentLang;
-  const existingTranslations = translate.translations[currentLocale] || {};
-  const gatewayTranslations = languagesMap.get(currentLocale as AvailableLanguages) ?? languagesMap.get(AvailableLanguages.English);
-  const mergedTranslations = JSON.stringify(mergeDeep(existingTranslations, gatewayTranslations));
-  translate.setTranslation(currentLocale, mergedTranslations, true);
+export const addGatewayLocale = (translate: TranslateService) => {
+  let currentLocale = translate.currentLang as AvailableLanguages;
+  let existingTranslations = translate.translations[currentLocale];
+  if(!existingTranslations || !existingTranslations.gateway) {
+    currentLocale = AvailableLanguages.English;
+    existingTranslations = translate.translations[AvailableLanguages.English]
+  }
+  const gatewayTranslations = languagesMap.has(currentLocale) && languagesMap.get(currentLocale);
+  const mergedTranslations =  existingTranslations.gateway ? mergeDeep({}, existingTranslations.gateway, gatewayTranslations) : gatewayTranslations;
+  translate.setTranslation(currentLocale, {gateway: mergedTranslations}, true);
+}
+
+export const setEnglishLocale = (translate: TranslateService) => {
+  let existingTranslations = translate.translations[AvailableLanguages.English];
+  const gatewayTranslations = languagesMap.get(AvailableLanguages.English);
+  const mergedTranslations =  existingTranslations.gateway ? mergeDeep({}, existingTranslations.gateway, gatewayTranslations) : gatewayTranslations;
+  translate.setTranslation(AvailableLanguages.English, mergedTranslations, true);
 }
