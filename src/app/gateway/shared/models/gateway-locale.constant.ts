@@ -78,13 +78,13 @@ export const addGatewayLocale = (translate: TranslateService) => {
     existingTranslations = translate.translations[AvailableLanguages.English]
   }
   const gatewayTranslations = languagesMap.has(currentLocale) && languagesMap.get(currentLocale);
-  const mergedTranslations =  existingTranslations.gateway ? mergeDeep({}, existingTranslations.gateway, gatewayTranslations) : gatewayTranslations;
+  const mergedTranslations =  existingTranslations.gateway ? mergeDeep({}, existingTranslations.gateway, gatewayTranslations.gateway) : gatewayTranslations.gateway;
   translate.setTranslation(currentLocale, {gateway: mergedTranslations}, true);
 }
 
 export const setEnglishLocale = (translate: TranslateService) => {
   let existingTranslations = translate.translations[AvailableLanguages.English];
   const gatewayTranslations = languagesMap.get(AvailableLanguages.English);
-  const mergedTranslations =  existingTranslations.gateway ? mergeDeep({}, existingTranslations.gateway, gatewayTranslations) : gatewayTranslations;
-  translate.setTranslation(AvailableLanguages.English, mergedTranslations, true);
+  const mergedTranslations =  mergeDeep({}, existingTranslations.gateway, gatewayTranslations.gateway);
+  translate.setTranslation(AvailableLanguages.English, {gateway: mergedTranslations}, true);
 }
