@@ -60,7 +60,7 @@
           </div>
         </div>
         <tb-gateway-security-configuration *ngIf="initialCredentials$ | async" formControlName="security" (initialized)="onInitialized($event)"/>
-        <tb-report-strategy *ngIf="withReportStrategy" [defaultValue]="ReportStrategyDefaultValue.Gateway" class="tb-form-panel" formControlName="reportStrategy"/>
+        <tb-report-strategy [isExpansionMode]="true" [isConfig]="true" *ngIf="withReportStrategy" [defaultValue]="ReportStrategyDefaultValue.Gateway" class="tb-form-panel" formControlName="reportStrategy"/>
       </div>
     </ng-template>
   </mat-tab>
