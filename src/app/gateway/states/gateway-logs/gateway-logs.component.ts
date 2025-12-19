@@ -23,6 +23,7 @@ import { DataKeyType, PageLink, Direction, SortOrder, SharedModule } from '@shar
 import { WidgetContext } from '@home/models/widget-component.models';
 import { GatewayLogData, LogLink, GatewayStatus } from './models/public-api';
 import { CommonModule } from '@angular/common';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'tb-gateway-logs',
@@ -57,26 +58,28 @@ export class GatewayLogsComponent implements OnInit, AfterViewInit {
 
   gatewayLogLinks: Array<LogLink> = [
     {
-      name: 'General',
+      name: this.translate.instant('gateway.logs.columns.general'),
       key: 'LOGS'
     }, {
-      name: 'Service',
+      name: this.translate.instant('gateway.logs.columns.service'),
       key: 'SERVICE_LOGS'
     },
     {
-      name: 'Connection',
+      name: this.translate.instant('gateway.logs.columns.connection'),
       key: 'CONNECTION_LOGS'
     }, {
-      name: 'Storage',
+      name: this.translate.instant('gateway.logs.columns.storage'),
       key: 'STORAGE_LOGS'
     },
     {
       key: 'EXTENSIONS_LOGS',
-      name: 'Extension'
+      name: this.translate.instant('gateway.logs.columns.extension'),
     }];
 
 
-  constructor() {
+  constructor(
+    private translate: TranslateService,
+  ) {
     const sortOrder: SortOrder = {property: 'ts', direction: Direction.DESC};
     this.pageLink = new PageLink(10, 0, null, sortOrder);
     this.dataSource = new MatTableDataSource<GatewayLogData>([]);
@@ -98,11 +101,11 @@ export class GatewayLogsComponent implements OnInit, AfterViewInit {
       const connector = this.ctx.stateController.getStateParams()[this.ctx.settings.connectorLogState];
       this.logLinks = [{
         key: `${connector.key}_LOGS`,
-        name: 'Connector',
+        name: this.translate.instant('gateway.connector'),
         filterFn: (attrData) => !attrData.message.includes(`_converter.py`)
       }, {
         key: `${connector.key}_converter_LOGS`,
-        name: 'Converter',
+        name: this.translate.instant('gateway.converter'),
         filterFn: (attrData) => attrData.message.includes(`_converter.py`)
       }];
     } else {

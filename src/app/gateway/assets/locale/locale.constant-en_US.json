@@ -112,9 +112,12 @@
     "command-copied-message": "Docker command has been copied to clipboard",
     "configuration": "Configuration",
     "add-connector": "Add connector",
+    "delete-connector": "Delete connector",
     "connector-add": "Add new connector",
     "connector-enabled": "Enable connector",
     "connector-name": "Connector name",
+    "connector": "Connector",
+    "converter": "Converter",
     "connector-name-required": "Connector name is required.",
     "connector-type": "Connector type",
     "connector-type-required": "Connector type is required.",
@@ -303,6 +306,13 @@
       "log-format": "Log format",
       "log-type": "Log type",
       "log-format-required": "Log format required",
+      "columns": {
+        "general": "General",
+        "service": "Service",
+        "connection": "Connection",
+        "storage": "Storage",
+        "extension": "Extension"
+      },
       "remote": "Remote logging",
       "remote-logs": "Remote logs",
       "local": "Local logging",
@@ -404,6 +414,7 @@
       }
     },
     "rpc": {
+      "rpc":"RPC",
       "title": "{{type}} Connector RPC parameters",
       "templates-title": "Connector RPC Templates",
       "methodFilter": "Method filter",

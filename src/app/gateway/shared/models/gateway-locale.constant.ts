@@ -30,21 +30,66 @@ import slSI from '../../assets/locale/locale.constant-sl_SI.json';
 import trTR from '../../assets/locale/locale.constant-tr_TR.json';
 import zhCN from '../../assets/locale/locale.constant-zh_CN.json';
 import zhTW from '../../assets/locale/locale.constant-zh_TW.json';
+import { mergeDeep } from '@core/public-api';
 
-export default function addGatewayLocale(translate: TranslateService): void {
-  translate.setTranslation('en_US', enUS, true);
-  translate.setTranslation('ar_AE', arAE, true);
-  translate.setTranslation('ca_ES', caES, true);
-  translate.setTranslation('cs_CZ', csCZ, true);
-  translate.setTranslation('da_DK', daDK, true);
-  translate.setTranslation('es_ES', esES, true);
-  translate.setTranslation('ko_KR', koKR, true);
-  translate.setTranslation('lt_LT', ltLT, true);
-  translate.setTranslation('nl_BE', nlBE, true);
-  translate.setTranslation('pl_PL', plPL, true);
-  translate.setTranslation('pt_BR', ptBR, true);
-  translate.setTranslation('sl_SI', slSI, true);
-  translate.setTranslation('tr_TR', trTR, true);
-  translate.setTranslation('zh_CN', zhCN, true);
-  translate.setTranslation('zh_TW', zhTW, true);
+export enum AvailableLanguages {
+  English = 'en_US',
+  Arabic = 'ar_AE',
+  Catalan = 'ca_ES',
+  Czech = 'cs_CZ',
+  Danish = 'da_DK',
+  Spanish = 'es_ES',
+  Korean = 'ko_KR',
+  Lithuanian = 'lt_LT',
+  Dutch = 'nl_BE',
+  Polish = 'pl_PL',
+  PortugueseBrazil = 'pt_BR',
+  Slovenian = 'sl_SI',
+  Turkish = 'tr_TR',
+  ChineseSimplified = 'zh_CN',
+  ChineseTraditional = 'zh_TW'
+}
+
+type LocaleData = Record<string, any>;
+
+const languagesMap = new Map<AvailableLanguages, LocaleData>([
+  [AvailableLanguages.English, enUS],
+  [AvailableLanguages.Arabic, arAE],
+  [AvailableLanguages.Catalan, caES],
+  [AvailableLanguages.Czech, csCZ],
+  [AvailableLanguages.Danish, daDK],
+  [AvailableLanguages.Spanish, esES],
+  [AvailableLanguages.Korean, koKR],
+  [AvailableLanguages.Lithuanian, ltLT],
+  [AvailableLanguages.Dutch, nlBE],
+  [AvailableLanguages.Polish, plPL],
+  [AvailableLanguages.PortugueseBrazil, ptBR],
+  [AvailableLanguages.Slovenian, slSI],
+  [AvailableLanguages.Turkish, trTR],
+  [AvailableLanguages.ChineseSimplified, zhCN],
+  [AvailableLanguages.ChineseTraditional, zhTW]
+]);
+
+export const addGatewayLocale = (translate: TranslateService) => {
+  let currentLocale = translate.currentLang as AvailableLanguages;
+  let existingTranslations = translate.translations[currentLocale];
+  if(!existingTranslations || !existingTranslations.gateway) {
+    currentLocale = AvailableLanguages.English;
+    existingTranslations = translate.translations[AvailableLanguages.English]
+  }
+  const gatewayTranslations = languagesMap.get(currentLocale);
+  if (!gatewayTranslations || !gatewayTranslations.gateway) {
+    return;
+  }
+  const mergedTranslations =  existingTranslations.gateway
+    ? mergeDeep({}, existingTranslations.gateway, gatewayTranslations.gateway)
+    : gatewayTranslations.gateway;
+  translate.setTranslation(currentLocale, {gateway: mergedTranslations}, true);
+}
+
+export const setEnglishLocale = (translate: TranslateService) => {
+  let existingTranslations = translate.translations[AvailableLanguages.English];
+  const gatewayTranslations = languagesMap.get(AvailableLanguages.English);
+  const mergedTranslations =  mergeDeep({}, existingTranslations.gateway, gatewayTranslations.gateway);
+  translate.setTranslation(AvailableLanguages.English, {gateway: mergedTranslations}, true);
 }

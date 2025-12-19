@@ -14,7 +14,7 @@
 /// limitations under the License.
 ///
 
-import addGatewayLocale from './shared/models/gateway-locale.constant';
+import { setEnglishLocale, addGatewayLocale, AvailableLanguages } from './shared/models/gateway-locale.constant';
 import { addLibraryStyles } from '../scss/lib-styles';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/public-api';
@@ -27,6 +27,8 @@ import { GatewayConnectorComponent } from './states/gateway-connectors/public-ap
 import { DeviceGatewayCommandComponent } from './states/device-gateway-command/public-api';
 import { GatewayConfigurationComponent } from './states/gateway-configuration/public-api';
 import { GatewayLogsComponent } from './states/gateway-logs/public-api';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter } from 'rxjs/operators';
 
 @NgModule({
   imports: [
@@ -44,7 +46,14 @@ import { GatewayLogsComponent } from './states/gateway-logs/public-api';
 })
 export class GatewayExtensionModule {
   constructor(private translate: TranslateService) {
+    setEnglishLocale(this.translate);
     addGatewayLocale(translate);
+    this.translate.onLangChange.pipe(
+      takeUntilDestroyed(),
+      filter(value=> value.lang !== AvailableLanguages.English)
+    ).subscribe(() => {
+      addGatewayLocale(translate);
+    })
     addLibraryStyles('tb-gateway-css');
   }
 }
