@@ -107,16 +107,20 @@ export class ReportStrategyComponent implements ControlValueAccessor, OnDestroy 
   }
 
   writeValue(reportStrategyConfig: ReportStrategyConfig): void {
+    const disabled = this.isDisabledConfig(reportStrategyConfig);
     if (this.isExpansionMode) {
-      this.showStrategyControl.setValue(!!reportStrategyConfig, {emitEvent: false});
+      this.showStrategyControl.setValue(!disabled && !!reportStrategyConfig, { emitEvent: false });
     }
-    if (reportStrategyConfig) {
-      this.reportStrategyFormGroup.enable({emitEvent: false});
+
+    if (disabled || !reportStrategyConfig) {
+      this.reportStrategyFormGroup.disable({ emitEvent: false });
+      this.reportStrategyFormGroup.setValue(this.getDefaultConfig(), { emitEvent: false });
+      return;
     }
-    const defaultType = this.isConfig ? ReportStrategyType.OnReceived : ReportStrategyType.OnReportPeriod;
-    const defaultReportPeriod = this.isConfig ? null : this.defaultValue;
-    const { type =  defaultType, reportPeriod = defaultReportPeriod } = reportStrategyConfig ?? {};
-    this.reportStrategyFormGroup.setValue({ type, reportPeriod }, {emitEvent: false});
+    this.reportStrategyFormGroup.enable({ emitEvent: false });
+    const defaults = this.getDefaultConfig();
+    const { type = defaults.type, reportPeriod = defaults.reportPeriod } = reportStrategyConfig ?? {};
+    this.reportStrategyFormGroup.setValue({ type, reportPeriod }, { emitEvent: false });
     this.onTypeChange(type);
   }
 
@@ -151,14 +155,16 @@ export class ReportStrategyComponent implements ControlValueAccessor, OnDestroy 
     this.showStrategyControl.valueChanges
       .pipe(takeUntil(this.destroy$), filter(() => this.isExpansionMode))
       .subscribe(enable => {
+        this.onTypeChange(this.reportStrategyFormGroup.get('type').value);
         if (enable) {
           this.reportStrategyFormGroup.enable({emitEvent: false});
-          this.reportStrategyFormGroup.get('reportPeriod').addValidators(Validators.required);
           this.onChange(this.reportStrategyFormGroup.value);
         } else {
           this.reportStrategyFormGroup.disable({emitEvent: false});
-          this.reportStrategyFormGroup.get('reportPeriod').removeValidators(Validators.required);
-          this.onChange(null);
+          const result = this.isConfig
+            ? {type: 'DISABLED' as ReportStrategyType}
+            : null;
+          this.onChange(result);
         }
         this.reportStrategyFormGroup.updateValueAndValidity({emitEvent: false});
       });
@@ -169,8 +175,21 @@ export class ReportStrategyComponent implements ControlValueAccessor, OnDestroy 
 
     if (type === ReportStrategyType.OnChange || type === ReportStrategyType.OnReceived) {
       reportPeriodControl.disable({emitEvent: false});
+      reportPeriodControl.removeValidators(Validators.required);
     } else if (!this.isExpansionMode || this.showStrategyControl.value) {
       reportPeriodControl.enable({emitEvent: false});
+      reportPeriodControl.addValidators(Validators.required);
     }
   }
+
+  private getDefaultConfig(): ReportStrategyConfig {
+    const defaultType = this.isConfig ? ReportStrategyType.OnReceived : ReportStrategyType.OnReportPeriod;
+    const defaultReportPeriod = this.isConfig ? null : this.defaultValue;
+    return { type: defaultType, reportPeriod: defaultReportPeriod };
+  }
+
+  private isDisabledConfig(config?: ReportStrategyConfig): boolean {
+    return this.isConfig && (config?.type === ('DISABLED' as any) || config?.type === ('DISABLED' as any));
+  }
+
 }
