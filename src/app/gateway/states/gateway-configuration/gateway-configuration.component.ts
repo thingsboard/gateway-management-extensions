@@ -28,6 +28,7 @@ import {
   GatewayVersion,
   Attribute,
   ReportStrategyVersionPipe,
+  ReportStrategyType,
 } from '../../shared/public-api';
 import { deepTrim, isEqual, AttributeService } from '@core/public-api';
 import {
@@ -109,6 +110,11 @@ export class GatewayConfigurationComponent implements AfterViewInit {
     const { mode, advancedConfig } = deepTrim(this.removeEmpty(this.gatewayConfigGroup.value));
     const value = { mode, ...advancedConfig as GatewayConfigValue };
     value.thingsboard.statistics.commands = Object.values(value.thingsboard.statistics.commands ?? []);
+    if (!value.thingsboard.reportStrategy) {
+      value.thingsboard.reportStrategy = {
+        type: "DISABLED" as ReportStrategyType
+      };
+    }
     const attributes = this.generateAttributes(value);
 
     this.attributeService.saveEntityAttributes(this.device, AttributeScope.SHARED_SCOPE, attributes).pipe(
