@@ -14,7 +14,7 @@
 /// limitations under the License.
 ///
 
-import { setEnglishLocale, addGatewayLocale, AvailableLanguages } from './shared/models/gateway-locale.constant';
+import { addGatewayLocale, AvailableLanguages } from './shared/models/gateway-locale.constant';
 import { addLibraryStyles } from '../scss/lib-styles';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/public-api';
@@ -46,7 +46,6 @@ import { filter } from 'rxjs/operators';
 })
 export class GatewayExtensionModule {
   constructor(private translate: TranslateService) {
-    setEnglishLocale(this.translate);
     addGatewayLocale(translate);
     this.translate.onLangChange.pipe(
       takeUntilDestroyed(),
