@@ -78,9 +78,9 @@ export const addGatewayLocale = (translate: TranslateService) => {
   const gatewayLocale = languagesMap.get(lang)?.gateway ? lang : EN;
 
   const sources = [
-    translate.translations[currentLocale]?.gateway,
     gatewayLocale === EN ? undefined : languagesMap.get(EN)?.gateway,
-    languagesMap.get(gatewayLocale)?.gateway
+    languagesMap.get(gatewayLocale)?.gateway,
+    translate.translations[currentLocale]?.gateway
   ].filter(isNonEmptyObject);
 
   if (!sources.length) return;
