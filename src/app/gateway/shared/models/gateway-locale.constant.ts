@@ -30,7 +30,7 @@ import slSI from '../../assets/locale/locale.constant-sl_SI.json';
 import trTR from '../../assets/locale/locale.constant-tr_TR.json';
 import zhCN from '../../assets/locale/locale.constant-zh_CN.json';
 import zhTW from '../../assets/locale/locale.constant-zh_TW.json';
-import { mergeDeep } from '@core/public-api';
+import { isLiteralObject, mergeDeep } from '@core/public-api';
 
 export enum AvailableLanguages {
   English = 'en_US',
@@ -71,25 +71,22 @@ const languagesMap = new Map<AvailableLanguages, LocaleData>([
 ]);
 
 export const addGatewayLocale = (translate: TranslateService) => {
-  let currentLocale = translate.currentLang as AvailableLanguages;
-  let existingTranslations = translate.translations[currentLocale];
-  if(!existingTranslations || !existingTranslations.gateway) {
-    currentLocale = AvailableLanguages.English;
-    existingTranslations = translate.translations[AvailableLanguages.English]
-  }
-  const gatewayTranslations = languagesMap.get(currentLocale);
-  if (!gatewayTranslations || !gatewayTranslations.gateway) {
-    return;
-  }
-  const mergedTranslations =  existingTranslations.gateway
-    ? mergeDeep({}, existingTranslations.gateway, gatewayTranslations.gateway)
-    : gatewayTranslations.gateway;
-  translate.setTranslation(currentLocale, {gateway: mergedTranslations}, true);
-}
+  const EN = AvailableLanguages.English;
+  const lang = (translate.currentLang as AvailableLanguages) ?? EN;
 
-export const setEnglishLocale = (translate: TranslateService) => {
-  let existingTranslations = translate.translations[AvailableLanguages.English];
-  const gatewayTranslations = languagesMap.get(AvailableLanguages.English);
-  const mergedTranslations =  mergeDeep({}, existingTranslations.gateway, gatewayTranslations.gateway);
-  translate.setTranslation(AvailableLanguages.English, {gateway: mergedTranslations}, true);
-}
+  const currentLocale = translate.translations[lang]?.gateway ? lang : EN;
+  const gatewayLocale = languagesMap.get(lang)?.gateway ? lang : EN;
+
+  const sources = [
+    gatewayLocale === EN ? undefined : languagesMap.get(EN)?.gateway,
+    languagesMap.get(gatewayLocale)?.gateway,
+    translate.translations[currentLocale]?.gateway
+  ].filter(isNonEmptyObject);
+
+  if (!sources.length) return;
+  const merged = sources.length === 1 ? sources[0] : mergeDeep({}, ...sources);
+  translate.setTranslation(currentLocale, { gateway: merged }, true);
+};
+
+const isNonEmptyObject = (v: any) =>
+  isLiteralObject(v) && Object.keys(v).length !== 0;
