@@ -129,7 +129,7 @@
       </section>
       <section *ngSwitchCase="StorageTypes.SQLITE">
         <div class="tb-form-row no-border no-padding tb-standard-fields column-xs mb-2">
-          <mat-form-field appearance="outline" class="flex">
+          <mat-form-field appearance="outline" class="flex" subscriptSizing="dynamic">
             <mat-label translate>gateway.storage-path</mat-label>
             <input matInput formControlName="data_file_path"/>
             <mat-error *ngIf="storageFormGroup.get('data_file_path').hasError('required')">
