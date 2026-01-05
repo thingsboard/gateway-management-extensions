@@ -37,7 +37,6 @@ import { isDefinedAndNotNull } from "@core/public-api";
 @Component({
   selector: 'tb-gateway-storage-configuration',
   templateUrl: './gateway-storage-configuration.component.html',
-  styleUrls: ['./gateway-storage-configuration.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
