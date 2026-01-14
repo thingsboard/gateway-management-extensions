@@ -175,10 +175,11 @@ export class ReportStrategyComponent implements ControlValueAccessor, OnDestroy 
 
     if (type === ReportStrategyType.OnChange || type === ReportStrategyType.OnReceived) {
       reportPeriodControl.disable({emitEvent: false});
-      reportPeriodControl.removeValidators(Validators.required);
     } else if (!this.isExpansionMode || this.showStrategyControl.value) {
       reportPeriodControl.enable({emitEvent: false});
-      reportPeriodControl.addValidators(Validators.required);
+      if (this.isConfig) {
+        reportPeriodControl.setValue(ReportStrategyDefaultValue.Gateway, {emitEvent: false});
+      }
     }
   }
 
