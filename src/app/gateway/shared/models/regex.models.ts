@@ -22,4 +22,4 @@ export const integerRegex = /^[-+]?\d+$/;
 
 export const nonZeroFloat = /^-?(?!0(\.0+)?$)\d+(\.\d+)?$/;
 
-export const directoryRegex = new RegExp(/^\.\/[^.\/]+(?:\/[^.\/]+)*\/$/);
+export const directoryRegex = new RegExp(/^\.\/[^.\/ ]+(?: [^.\/ ]+)*(?:\/[^.\/ ]+(?: [^.\/ ]+)*)*\/$/);
