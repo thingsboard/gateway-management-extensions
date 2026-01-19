@@ -155,9 +155,10 @@ export class ReportStrategyComponent implements ControlValueAccessor, OnDestroy 
     this.showStrategyControl.valueChanges
       .pipe(takeUntil(this.destroy$), filter(() => this.isExpansionMode))
       .subscribe(enable => {
-        this.onTypeChange(this.reportStrategyFormGroup.get('type').value);
         if (enable) {
           this.reportStrategyFormGroup.enable({emitEvent: false});
+          this.onTypeChange(this.reportStrategyFormGroup.get('type').value);
+          this.reportStrategyFormGroup.updateValueAndValidity({emitEvent: false});
           this.onChange(this.reportStrategyFormGroup.value);
         } else {
           this.reportStrategyFormGroup.disable({emitEvent: false});
@@ -166,7 +167,6 @@ export class ReportStrategyComponent implements ControlValueAccessor, OnDestroy 
             : null;
           this.onChange(result);
         }
-        this.reportStrategyFormGroup.updateValueAndValidity({emitEvent: false});
       });
   }
 
