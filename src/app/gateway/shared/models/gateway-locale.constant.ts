@@ -14,7 +14,7 @@
 /// limitations under the License.
 ///
 
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService, TranslateStore } from '@ngx-translate/core';
 import enUS from '../../assets/locale/locale.constant-en_US.json';
 import arAE from '../../assets/locale/locale.constant-ar_AE.json';
 import caES from '../../assets/locale/locale.constant-ca_ES.json';
@@ -70,17 +70,17 @@ const languagesMap = new Map<AvailableLanguages, LocaleData>([
   [AvailableLanguages.ChineseTraditional, zhTW]
 ]);
 
-export const addGatewayLocale = (translate: TranslateService) => {
+export const addGatewayLocale = (translate: TranslateService, store: TranslateStore) => {
   const EN = AvailableLanguages.English;
-  const lang = (translate.currentLang as AvailableLanguages) ?? EN;
+  const lang = (translate.getCurrentLang() as AvailableLanguages) ?? EN;
 
-  const currentLocale = translate.translations[lang]?.gateway ? lang : EN;
+  const currentLocale = store.getTranslations(lang)?.gateway ? lang : EN;
   const gatewayLocale = languagesMap.get(lang)?.gateway ? lang : EN;
 
   const sources = [
     gatewayLocale === EN ? undefined : languagesMap.get(EN)?.gateway,
     languagesMap.get(gatewayLocale)?.gateway,
-    translate.translations[currentLocale]?.gateway
+    store.getTranslations(currentLocale)?.gateway
   ].filter(isNonEmptyObject);
 
   if (!sources.length) return;

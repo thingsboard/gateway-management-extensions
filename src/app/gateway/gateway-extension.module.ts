@@ -19,7 +19,7 @@ import { addLibraryStyles } from '../scss/lib-styles';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule, TranslateService, TranslateStore } from '@ngx-translate/core';
 import { GatewayStatisticsComponent } from './states/gateway-statistics/public-api';
 import { GatewayServiceRPCComponent } from './states/gateway-service-rpc/public-api';
 import { GatewayFormComponent } from './states/gateway-form/public-api';
@@ -45,13 +45,13 @@ import { filter } from 'rxjs/operators';
   ],
 })
 export class GatewayExtensionModule {
-  constructor(private translate: TranslateService) {
-    addGatewayLocale(translate);
+  constructor(private translate: TranslateService, private store: TranslateStore) {
+    addGatewayLocale(translate, store);
     this.translate.onLangChange.pipe(
       takeUntilDestroyed(),
       filter(value=> value.lang !== AvailableLanguages.English)
     ).subscribe(() => {
-      addGatewayLocale(translate);
+      addGatewayLocale(translate, store);
     })
     addLibraryStyles('tb-gateway-css');
   }

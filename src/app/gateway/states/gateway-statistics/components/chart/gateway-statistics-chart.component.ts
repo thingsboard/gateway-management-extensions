@@ -300,7 +300,7 @@ export class GatewayStatisticsChartComponent implements OnInit, AfterViewInit {
       this.ctx.data[index].dataKey.decimals : this.ctx.decimals;
     const units = isDefinedAndNotNull(this.ctx.data[index].dataKey.units) ?
       this.ctx.data[index].dataKey.units : this.ctx.units;
-    const value  = formatValue(param.value[1], decimals, units, false);
+    const value  = formatValue(param.value[1], decimals, units as string, false);
     const valueElement: HTMLElement = this.renderer.createElement('div');
     this.renderer.setProperty(valueElement, 'innerHTML', this.sanitizer.sanitize(SecurityContext.HTML, value));
     this.renderer.setStyle(valueElement, 'flex', '1');
@@ -383,7 +383,7 @@ export class GatewayStatisticsChartComponent implements OnInit, AfterViewInit {
         fontWeight: 400,
         show: true,
         formatter: (value: any) => {
-          return  formatValue(value, this.ctx.decimals,  this.ctx.units, false);
+          return  formatValue(value, this.ctx.decimals,  this.ctx.units as string, false);
         }
       },
       splitLine: {
