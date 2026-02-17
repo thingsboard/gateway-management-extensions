@@ -16,7 +16,7 @@
 
 import { addGatewayLocale, AvailableLanguages } from './shared/models/gateway-locale.constant';
 import { addLibraryStyles } from '../scss/lib-styles';
-import { NgModule } from '@angular/core';
+import { DestroyRef, NgModule } from '@angular/core';
 import { SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService, TranslateStore } from '@ngx-translate/core';
@@ -45,10 +45,10 @@ import { filter } from 'rxjs/operators';
   ],
 })
 export class GatewayExtensionModule {
-  constructor(private translate: TranslateService, private store: TranslateStore) {
+  constructor(private translate: TranslateService, private store: TranslateStore, private destroyRef: DestroyRef) {
     addGatewayLocale(translate, store);
     this.translate.onLangChange.pipe(
-      takeUntilDestroyed(),
+      takeUntilDestroyed(this.destroyRef),
       filter(value=> value.lang !== AvailableLanguages.English)
     ).subscribe(() => {
       addGatewayLocale(translate, store);
