@@ -110,7 +110,7 @@ export class RestResponseConfigComponent extends ControlValueAccessorBaseAbstrac
       this.responseConfigFormGroup.get('type').valueChanges,
       this.responseConfigFormGroup.get(ResponseType.ADVANCED).get('responseExpected').valueChanges
     )
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.toggleIsExpected(this.responseConfigFormGroup.get(ResponseType.ADVANCED).get('responseExpected').value, this.responseConfigFormGroup.get('type').value));
   }
 }
