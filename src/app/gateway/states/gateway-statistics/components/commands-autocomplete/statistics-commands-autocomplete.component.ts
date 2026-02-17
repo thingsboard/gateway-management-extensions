@@ -14,7 +14,15 @@
 /// limitations under the License.
 ///
 
-import { Component, ElementRef, forwardRef, input, output, ViewChild } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  ElementRef,
+  forwardRef,
+  input,
+  output,
+  ViewChild
+} from '@angular/core';
 import {
   ControlValueAccessor,
   UntypedFormBuilder,
@@ -75,9 +83,10 @@ export class StatisticsCommandsAutocompleteComponent implements ControlValueAcce
   private onChanges = (_: GatewayConfigCommand | string) => {};
 
   constructor(public truncate: TruncatePipe,
-              private fb: UntypedFormBuilder) {
+              private fb: UntypedFormBuilder,
+              private destroyRef: DestroyRef) {
     this.selectStatisticsCommandControl.valueChanges
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(value => this.onChanges(value));
   }
 

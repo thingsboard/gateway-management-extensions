@@ -13,7 +13,7 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-import { Component, forwardRef } from '@angular/core';
+import { Component, DestroyRef, forwardRef } from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -58,9 +58,10 @@ export class GatewayUsernameConfigurationComponent implements ControlValueAccess
 
   constructor(
     private fb: FormBuilder,
+    private destroyRef: DestroyRef,
   ) {
     this.initForm();
-    this.usernameFormGroup.valueChanges.pipe(takeUntilDestroyed()).subscribe(value => this.onChange(value))
+    this.usernameFormGroup.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => this.onChange(value))
   }
 
   writeValue(value: GatewayUsernamePasswordConfig): void {

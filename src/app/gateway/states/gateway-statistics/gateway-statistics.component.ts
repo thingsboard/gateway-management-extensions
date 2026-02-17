@@ -103,7 +103,7 @@ export class GatewayStatisticsComponent implements AfterViewInit {
               private dialogService: DialogService,
               private utils: UtilsService) {
     this.statisticForm.get('command').valueChanges
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(value => {
         this.subscribed = false;
         if (this.subscriptionInfo && value?.attributeOnGateway) {
