@@ -277,10 +277,6 @@
 <!--        <tb-rest-connector-security [formControl]="commandForm.get('security')"></tb-rest-connector-security>-->
       </ng-template>
       <ng-template [ngSwitchCase]="ConnectorType.REQUEST">
-        <mat-form-field>
-          <mat-label>{{ 'gateway.rpc.methodFilter' | translate }}</mat-label>
-          <input matInput formControlName="methodFilter" placeholder="echo"/>
-        </mat-form-field>
         <div class="flex flex-row items-center justify-center gap-2.5">
           <mat-form-field class="max-w-4/12 flex-[1_1_33%]">
             <mat-label>{{ 'gateway.rpc.httpMethod' | translate }}</mat-label>
@@ -312,10 +308,12 @@
                    step="1" min="1" placeholder="1"/>
           </mat-form-field>
         </div>
-        <mat-form-field>
-          <mat-label>{{ 'gateway.rpc.requestValueExpression' | translate }}</mat-label>
-          <input matInput formControlName="requestValueExpression" placeholder="${params}"/>
-        </mat-form-field>
+        @if (commandForm.get('httpMethod').value !== HTTPMethods.GET && commandForm.get('httpMethod').value !== HTTPMethods.HEAD) {
+          <mat-form-field>
+            <mat-label>{{ 'gateway.rpc.requestValueExpression' | translate }}</mat-label>
+            <input matInput formControlName="requestValueExpression" placeholder="${params}"/>
+          </mat-form-field>
+        }
         <mat-form-field>
           <mat-label>{{ 'gateway.rpc.responseValueExpression' | translate }}</mat-label>
           <input matInput formControlName="responseValueExpression" placeholder="${temp}"/>
