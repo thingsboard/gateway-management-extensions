@@ -62,18 +62,18 @@ export class RestRequestMappingTableComponent extends AbstractDevicesConfigTable
     return new MappingDatasource();
   }
 
-  manageMapping($event: Event, index?: number): void {
+  manageMapping($event: Event, mapping?: RestRequestMappingValue): void {
     if ($event) {
       $event.stopPropagation();
     }
-    const withIndex = isDefinedAndNotNull(index);
-    const { requestType = RestRequestType.ATTRIBUTE_REQUEST, requestValue = {} } = withIndex ? this.entityFormArray.at(index).value : {};
-    this.getMappingDialog({ requestType, ...requestValue }, withIndex ? 'action.apply' : 'action.add').afterClosed()
+    const withMapping = isDefinedAndNotNull(mapping);
+    this.getMappingDialog(mapping, withMapping ? 'action.apply' : 'action.add').afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(res => {
         if (res) {
-          if (withIndex) {
-            this.entityFormArray.at(index).patchValue(res);
+          if (withMapping) {
+            const originalIndex = this.entityFormArray.value.findIndex(item => JSON.stringify(item) === JSON.stringify(mapping));
+            this.entityFormArray.at(originalIndex).patchValue(res);
           } else {
             this.entityFormArray.push(this.fb.control(res));
           }
@@ -82,19 +82,20 @@ export class RestRequestMappingTableComponent extends AbstractDevicesConfigTable
       });
   }
 
-  deleteMapping($event: Event, index: number): void {
+  deleteMapping($event: Event, mapping: RestRequestMappingValue): void {
     if ($event) {
       $event.stopPropagation();
     }
     this.dialogService.confirm(
-      this.translate.instant('gateway.delete-mapping-title', { name: this.getRequestDetails(this.entityFormArray.at(index).value) }),
+      this.translate.instant('gateway.delete-mapping-title', { name: this.getRequestDetails(mapping) }),
       this.translate.instant('gateway.delete-mapping-description'),
       this.translate.instant('action.no'),
       this.translate.instant('action.yes'),
       true
     ).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result) => {
       if (result) {
-        this.entityFormArray.removeAt(index);
+        const originalIndex = this.entityFormArray.value.findIndex(item => JSON.stringify(item) === JSON.stringify(mapping));
+        this.entityFormArray.removeAt(originalIndex);
         this.entityFormArray.markAsDirty();
       }
     });
