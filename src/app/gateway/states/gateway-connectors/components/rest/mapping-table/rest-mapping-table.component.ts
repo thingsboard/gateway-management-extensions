@@ -55,18 +55,18 @@ export class RestMappingTableComponent extends AbstractDevicesConfigTableCompone
     return new MappingDatasource();
   }
 
-  manageMapping($event: Event, index?: number): void {
+  manageMapping($event: Event, mapping?: RestMapping): void {
     if ($event) {
       $event.stopPropagation();
     }
-    const withIndex = isDefinedAndNotNull(index);
-    const value = withIndex ? this.entityFormArray.at(index).value : {};
-    this.getMappingDialog(value, withIndex ? 'action.apply' : 'action.add').afterClosed()
+    const withMapping = isDefinedAndNotNull(mapping);
+    this.getMappingDialog(mapping ?? {} as RestMapping, withMapping ? 'action.apply' : 'action.add').afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(res => {
         if (res) {
-          if (withIndex) {
-            this.entityFormArray.at(index).patchValue(res);
+          if (withMapping) {
+            const originalIndex = this.entityFormArray.value.findIndex(item => JSON.stringify(item) === JSON.stringify(mapping));
+            this.entityFormArray.at(originalIndex).patchValue(res);
           } else {
             this.entityFormArray.push(this.fb.control(res));
           }
@@ -75,19 +75,20 @@ export class RestMappingTableComponent extends AbstractDevicesConfigTableCompone
       });
   }
 
-  deleteMapping($event: Event, index: number): void {
+  deleteMapping($event: Event, mapping: RestMapping): void {
     if ($event) {
       $event.stopPropagation();
     }
     this.dialogService.confirm(
-      this.translate.instant('gateway.delete-mapping-title', { name: this.entityFormArray.at(index).value.endpoint }),
+      this.translate.instant('gateway.delete-mapping-title', { name: mapping.endpoint }),
       this.translate.instant('gateway.delete-mapping-description'),
       this.translate.instant('action.no'),
       this.translate.instant('action.yes'),
       true
     ).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result) => {
       if (result) {
-        this.entityFormArray.removeAt(index);
+        const originalIndex = this.entityFormArray.value.findIndex(item => JSON.stringify(item) === JSON.stringify(mapping));
+        this.entityFormArray.removeAt(originalIndex);
         this.entityFormArray.markAsDirty();
       }
     });
