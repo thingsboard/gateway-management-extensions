@@ -15,7 +15,6 @@
 ///
 import { booleanAttribute, ChangeDetectionStrategy, Component, Input, OnInit, output } from '@angular/core';
 import { AbstractControl, FormArray, UntypedFormBuilder, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { AppState } from '@core/public-api';
 import { PageComponent, SharedModule } from '@shared/public-api';
@@ -28,7 +27,6 @@ import { noLeadTrailSpacesRegex, ReportStrategyDefaultValue } from '../../../../
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
   ]
 })

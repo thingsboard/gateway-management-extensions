@@ -23,7 +23,6 @@ import {
   ValidationErrors,
   Validators
 } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/public-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { GatewayUsernamePasswordConfig } from '../../../../models/public-api';
@@ -46,7 +45,6 @@ import { generateSecret } from '@core/public-api';
   ],
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
   ]
 })

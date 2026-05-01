@@ -27,7 +27,6 @@ import {
   SlaveConfig,
 } from '../../../models/public-api';
 import { SharedModule } from '@shared/public-api';
-import { CommonModule } from '@angular/common';
 import { ModbusValuesComponent } from '../modbus-values/modbus-values.component';
 import { ModbusSecurityConfigComponent } from '../modbus-security-config/modbus-security-config.component';
 import { Store } from '@ngrx/store';
@@ -48,7 +47,6 @@ import { GatewayPortTooltipPipe } from '../../../pipes/public-api';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
     ModbusValuesComponent,
     ModbusSecurityConfigComponent,

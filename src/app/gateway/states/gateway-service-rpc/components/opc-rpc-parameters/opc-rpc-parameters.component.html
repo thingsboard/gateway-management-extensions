@@ -25,62 +25,75 @@
     <strong>
       <span class="fields-label">{{ 'gateway.rpc.arguments' | translate }}</span>
     </strong>
-    <div class="flex flex-1 items-center justify-center gap-2.5"
-         *ngFor="let argumentFormGroup of rpcParametersFormGroup.get('arguments')['controls']; let i = index" [formGroup]="argumentFormGroup">
-      <div class="tb-form-row column-xs type-container items-center justify-between">
-        <div class="tb-required" translate>gateway.type</div>
-        <div class="tb-flex no-gap">
-          <mat-form-field class="tb-flex no-gap fill-width" appearance="outline" subscriptSizing="dynamic">
-            <mat-select formControlName="type">
-              <mat-select-trigger>
-                <div class="tb-flex align-center">
-                  <mat-icon class="tb-mat-18" [svgIcon]="valueTypes.get(argumentFormGroup.get('type').value)?.icon">
-                  </mat-icon>
-                  <span>{{ valueTypes.get(argumentFormGroup.get('type').value)?.name | translate }}</span>
-                </div>
-              </mat-select-trigger>
-              <mat-option *ngFor="let valueType of valueTypeKeys" [value]="valueType">
-                <mat-icon class="tb-mat-20" svgIcon="{{ valueTypes.get(valueType).icon }}">
-                </mat-icon>
-                <span>{{ valueTypes.get(valueType).name | translate }}</span>
-              </mat-option>
-            </mat-select>
+    @for (argumentFormGroup of rpcParametersFormGroup.get('arguments')['controls']; track argumentFormGroup; let i = $index) {
+      <div class="flex flex-1 items-center justify-center gap-2.5"
+        [formGroup]="argumentFormGroup">
+        <div class="tb-form-row column-xs type-container items-center justify-between">
+          <div class="tb-required" translate>gateway.type</div>
+          <div class="tb-flex no-gap">
+            <mat-form-field class="tb-flex no-gap fill-width" appearance="outline" subscriptSizing="dynamic">
+              <mat-select formControlName="type">
+                <mat-select-trigger>
+                  <div class="tb-flex align-center">
+                    <mat-icon class="tb-mat-18" [svgIcon]="valueTypes.get(argumentFormGroup.get('type').value)?.icon">
+                    </mat-icon>
+                    <span>{{ valueTypes.get(argumentFormGroup.get('type').value)?.name | translate }}</span>
+                  </div>
+                </mat-select-trigger>
+                @for (valueType of valueTypeKeys; track valueType) {
+                  <mat-option [value]="valueType">
+                    <mat-icon class="tb-mat-20" svgIcon="{{ valueTypes.get(valueType).icon }}">
+                    </mat-icon>
+                    <span>{{ valueTypes.get(valueType).name | translate }}</span>
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="tb-form-row column-xs value-container item-center justify-between">
+          <div class="tb-required" translate>gateway.value</div>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="tb-inline-field tb-suffix-absolute flex">
+            @switch (argumentFormGroup.get('type').value) {
+              @case (MappingValueType.STRING) {
+                <input matInput required formControlName="stringValue"
+                  placeholder="{{ 'gateway.set' | translate }}" />
+              }
+              @case (MappingValueType.INTEGER) {
+                <input matInput required formControlName="integerValue" type="number"
+                  placeholder="{{ 'gateway.set' | translate }}" />
+              }
+              @case (MappingValueType.DOUBLE) {
+                <input matInput required formControlName="doubleValue" type="number"
+                  placeholder="{{ 'gateway.set' | translate }}" />
+              }
+              @case (MappingValueType.BOOLEAN) {
+                <mat-select formControlName="booleanValue">
+                  <mat-option [value]="true">true</mat-option>
+                  <mat-option [value]="false">false</mat-option>
+                </mat-select>
+              }
+            }
+            @if (argumentFormGroup.get(argumentFormGroup.get('type').value + 'Value').hasError('required')
+              && argumentFormGroup.get(argumentFormGroup.get('type').value + 'Value').touched) {
+              <mat-icon matSuffix
+                matTooltipPosition="above"
+                matTooltipClass="tb-error-tooltip"
+                [matTooltip]="('gateway.value-required') | translate"
+                class="tb-error">
+                warning
+              </mat-icon>
+            }
           </mat-form-field>
         </div>
+        <button mat-icon-button (click)="removeArgument(i)"
+          class="tb-box-button"
+          matTooltip="{{ 'gateway.rpc.remove' | translate }}"
+          matTooltipPosition="above">
+          <mat-icon>delete</mat-icon>
+        </button>
       </div>
-      <div class="tb-form-row column-xs value-container item-center justify-between">
-        <div class="tb-required" translate>gateway.value</div>
-        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="tb-inline-field tb-suffix-absolute flex">
-          <ng-container [ngSwitch]="argumentFormGroup.get('type').value">
-            <input *ngSwitchCase="MappingValueType.STRING" matInput required formControlName="stringValue"
-                   placeholder="{{ 'gateway.set' | translate }}" />
-            <input *ngSwitchCase="MappingValueType.INTEGER" matInput required formControlName="integerValue" type="number"
-                   placeholder="{{ 'gateway.set' | translate }}" />
-            <input *ngSwitchCase="MappingValueType.DOUBLE" matInput required formControlName="doubleValue" type="number"
-                   placeholder="{{ 'gateway.set' | translate }}" />
-            <mat-select *ngSwitchCase="MappingValueType.BOOLEAN" formControlName="booleanValue">
-              <mat-option [value]="true">true</mat-option>
-              <mat-option [value]="false">false</mat-option>
-            </mat-select>
-          </ng-container>
-          <mat-icon matSuffix
-                    matTooltipPosition="above"
-                    matTooltipClass="tb-error-tooltip"
-                    [matTooltip]="('gateway.value-required') | translate"
-                    *ngIf="argumentFormGroup.get(argumentFormGroup.get('type').value + 'Value').hasError('required')
-                              && argumentFormGroup.get(argumentFormGroup.get('type').value + 'Value').touched"
-                    class="tb-error">
-            warning
-          </mat-icon>
-        </mat-form-field>
-      </div>
-      <button mat-icon-button (click)="removeArgument(i)"
-              class="tb-box-button"
-              matTooltip="{{ 'gateway.rpc.remove' | translate }}"
-              matTooltipPosition="above">
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div>
+    }
     <button mat-raised-button
             class="self-start"
             (click)="addArgument()">

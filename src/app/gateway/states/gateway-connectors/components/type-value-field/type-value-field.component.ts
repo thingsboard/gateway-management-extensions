@@ -35,7 +35,6 @@ import {
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { coerceBoolean, SharedModule } from '@shared/public-api';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'tb-type-value-field',
@@ -56,7 +55,6 @@ import { CommonModule } from '@angular/common';
   ],
   imports: [
     SharedModule,
-    CommonModule,
   ]
 })
 export class TypeValueFieldComponent implements ControlValueAccessor, Validator, OnDestroy {

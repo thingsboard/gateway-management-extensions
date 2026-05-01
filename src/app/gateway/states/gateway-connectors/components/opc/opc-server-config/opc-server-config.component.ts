@@ -37,7 +37,6 @@ import {
   TruncateWithTooltipDirective
 } from '../../../../../shared/public-api';
 import { SharedModule, HOUR, coerceBoolean } from '@shared/public-api';
-import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import {
@@ -63,7 +62,6 @@ import {
   ],
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
     SecurityConfigComponent,
     TruncateWithTooltipDirective,

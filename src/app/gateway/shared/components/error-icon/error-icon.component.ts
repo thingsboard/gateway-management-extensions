@@ -15,7 +15,6 @@
 ///
 import { Component, Input } from '@angular/core';
 import { SharedModule } from '@shared/public-api';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'tb-error-icon',
@@ -32,7 +31,6 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [
     SharedModule,
-    CommonModule,
   ],
   styles: [`
     :host {

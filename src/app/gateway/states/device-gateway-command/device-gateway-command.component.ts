@@ -16,7 +16,6 @@
 
 import { Component, Input } from '@angular/core';
 import { DeviceService } from '@core/public-api';
-import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/public-api';
 
 @Component({
@@ -25,7 +24,6 @@ import { SharedModule } from '@shared/public-api';
   styleUrls: ['./device-gateway-command.component.scss'],
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule
   ]
 })

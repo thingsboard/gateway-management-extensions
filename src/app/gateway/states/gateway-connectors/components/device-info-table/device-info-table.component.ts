@@ -50,7 +50,6 @@ import {
   ConverterType
 } from '../../models/public-api';
 import { coerceBoolean, PageComponent, SharedModule } from '@shared/public-api';
-import { CommonModule } from '@angular/common';
 import { ConnectorMappingHelpLinkPipe } from '../../pipes/public-api';
 
 @Component({
@@ -72,7 +71,6 @@ import { ConnectorMappingHelpLinkPipe } from '../../pipes/public-api';
   ],
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
     ConnectorMappingHelpLinkPipe,
   ]

@@ -14,7 +14,6 @@
 /// limitations under the License.
 ///
 
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -72,7 +71,6 @@ import { TbPopoverComponent } from '@shared/components/popover.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
     EllipsisChipListDirective,
     DeviceInfoTableComponent,
