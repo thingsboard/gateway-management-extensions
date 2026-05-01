@@ -16,7 +16,7 @@
 <div class="flex flex-1 flex-col" [class]="{'border': isConnector}">
   <div class="command-form flex flex-row gap-2.5 lt-sm:flex-col" [formGroup]="commandForm">
     <ng-container *ngIf="!isConnector; else connectorForm">
-      <mat-form-field>
+      <mat-form-field appearance="outline">
         <mat-label>{{ 'gateway.statistics.command' | translate }}</mat-label>
         <mat-select formControlName="command">
           <mat-option *ngFor="let command of RPCCommands" [value]="command">
@@ -24,7 +24,7 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field class="flex-1">
+      <mat-form-field appearance="outline" class="flex-1">
         <mat-label>{{ 'gateway.statistics.timeout' | translate }}</mat-label>
         <input matInput formControlName="time" type="number" min="1"/>
         <mat-error *ngIf="commandForm.get('time').hasError('min')">
