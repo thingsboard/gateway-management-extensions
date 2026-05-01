@@ -27,7 +27,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { SharedModule } from '@shared/public-api';
-import { CommonModule } from '@angular/common';
 import { ControlValueAccessorBaseAbstract } from '../../../../../shared/abstract/public-api';
 import { ResponseStatus, ResponseType, ResponseTypeTranslationsMap, RestResponse } from '../../../models/public-api';
 import { noLeadTrailSpacesRegex, numberInputPattern } from '../../../../../shared/models/public-api';
@@ -53,7 +52,6 @@ import { merge } from 'rxjs';
   ],
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
     ErrorTooltipIconComponent,
   ]

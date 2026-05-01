@@ -23,7 +23,6 @@ import {
   ValidationErrors, ValidatorFn,
   Validators
 } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/public-api';
 import {
   GatewayStorageConfig,
@@ -51,7 +50,6 @@ import { isDefinedAndNotNull } from "@core/public-api";
   ],
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
   ]
 })

@@ -79,16 +79,18 @@
               <div class="tb-form-hint tb-primary-fill">
                 {{ DataConversionTranslationsMap.get(converterType) | translate }}
               </div>
-              <ng-container [formGroupName]="converterType" [ngSwitch]="converterType">
-                <ng-template [ngSwitchCase]="ConvertorTypeEnum.JSON">
-                  <tb-device-info-table formControlName="deviceInfo" [convertorType]="ConvertorTypeEnum.JSON" [deviceInfoType]="DeviceInfoType.FULL" required="true">
-                  </tb-device-info-table>
-                </ng-template>
-                <ng-template [ngSwitchCase]="ConvertorTypeEnum.BYTES">
-                  <tb-device-info-table formControlName="deviceInfo" [deviceInfoType]="DeviceInfoType.FULL" [convertorType]="ConvertorTypeEnum.BYTES"
-                                        [sourceTypes]="[sourceTypesEnum.MSG, sourceTypesEnum.CONST]" required="true">
-                  </tb-device-info-table>
-                </ng-template>
+              <ng-container [formGroupName]="converterType">
+                @switch (converterType) {
+                  @case (ConvertorTypeEnum.JSON) {
+                    <tb-device-info-table formControlName="deviceInfo" [convertorType]="ConvertorTypeEnum.JSON" [deviceInfoType]="DeviceInfoType.FULL" required="true">
+                    </tb-device-info-table>
+                  }
+                  @case (ConvertorTypeEnum.BYTES) {
+                    <tb-device-info-table formControlName="deviceInfo" [deviceInfoType]="DeviceInfoType.FULL" [convertorType]="ConvertorTypeEnum.BYTES"
+                                          [sourceTypes]="[sourceTypesEnum.MSG, sourceTypesEnum.CONST]" required="true">
+                    </tb-device-info-table>
+                  }
+                }
                 @if (data.withReportStrategy) {
                   <tb-report-strategy
                     class="stroked tb-form-panel"
@@ -97,82 +99,15 @@
                     formControlName="reportStrategy"
                   />
                 }
-                <div class="tb-form-panel no-border no-padding"
-                     *ngIf="converterType === ConvertorTypeEnum.BYTES || converterType === ConvertorTypeEnum.JSON">
-                  <div class="tb-form-row space-between tb-flex">
-                    <div class="fixed-title-width" translate>gateway.attributes</div>
-                    <div class="tb-flex ellipsis-chips-container">
-                      <mat-chip-listbox [tbEllipsisChipList]="converterAttributes" class="tb-flex">
-                          <mat-chip *ngFor="let attribute of converterAttributes">
-                            {{ attribute }}
-                          </mat-chip>
-                          <mat-chip class="mat-mdc-chip ellipsis-chip">
-                            <label class="ellipsis-text"></label>
-                          </mat-chip>
-                      </mat-chip-listbox>
-                      <button type="button"
-                              mat-icon-button
-                              color="primary"
-                              matTooltip="{{ 'action.edit' | translate }}"
-                              matTooltipPosition="above"
-                              #attributesButton
-                              (click)="manageKeys($event, attributesButton, MappingKeysType.ATTRIBUTES)">
-                        <tb-icon matButtonIcon>edit</tb-icon>
-                      </button>
-                    </div>
-                  </div>
-                  <div class="tb-form-row space-between tb-flex">
-                    <div class="fixed-title-width" translate>gateway.timeseries</div>
-                    <div class="tb-flex ellipsis-chips-container">
-                      <mat-chip-listbox class="tb-flex" [tbEllipsisChipList]="converterTelemetry">
-                        <mat-chip *ngFor="let telemetry of converterTelemetry">
-                          {{ telemetry }}
-                        </mat-chip>
-                        <mat-chip class="mat-mdc-chip ellipsis-chip">
-                          <label class="ellipsis-text"></label>
-                        </mat-chip>
-                      </mat-chip-listbox>
-                      <button type="button"
-                              mat-icon-button
-                              color="primary"
-                              matTooltip="{{ 'action.edit' | translate }}"
-                              matTooltipPosition="above"
-                              #telemetryButton
-                              (click)="manageKeys($event, telemetryButton, MappingKeysType.TIMESERIES)">
-                        <tb-icon matButtonIcon>edit</tb-icon>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div class="tb-form-panel no-border no-padding" *ngIf="converterType === ConvertorTypeEnum.CUSTOM">
-                  <div class="tb-form-row column-xs">
-                    <div class="fixed-title-width tb-required"
-                         tb-hint-tooltip-icon="{{ 'gateway.extension-hint' | translate }}">
-                      {{ 'gateway.extension' | translate }}
-                    </div>
-                      <mat-form-field class="tb-flex" appearance="outline" subscriptSizing="dynamic">
-                        <input matInput name="value" formControlName="extension" placeholder="{{ 'gateway.set' | translate }}"/>
-                        <mat-icon matSuffix
-                                  matTooltipPosition="above"
-                                  matTooltipClass="tb-error-tooltip"
-                                  [matTooltip]="('gateway.extension-required') | translate"
-                                  *ngIf="mappingForm.get('converter.custom.extension').hasError('required') &&
-                                         mappingForm.get('converter.custom.extension').touched"
-                                  class="tb-error">
-                          warning
-                        </mat-icon>
-                      </mat-form-field>
-                  </div>
-                  <div class="tb-form-row space-between same-padding tb-flex column">
-                    <div class="tb-form-panel-title" translate>gateway.extension-configuration</div>
-                    <div class="tb-form-hint tb-primary-fill">{{ 'gateway.extension-configuration-hint' | translate }}</div>
+                @if (converterType === ConvertorTypeEnum.BYTES || converterType === ConvertorTypeEnum.JSON) {
+                  <div class="tb-form-panel no-border no-padding">
                     <div class="tb-form-row space-between tb-flex">
-                      <div class="fixed-title-width" translate>gateway.keys</div>
+                      <div class="fixed-title-width" translate>gateway.attributes</div>
                       <div class="tb-flex ellipsis-chips-container">
-                        <mat-chip-listbox [tbEllipsisChipList]="customKeys" class="tb-flex">
-                          <mat-chip *ngFor="let telemetry of customKeys">
-                            {{ telemetry }}
-                          </mat-chip>
+                        <mat-chip-listbox [tbEllipsisChipList]="converterAttributes" class="tb-flex">
+                          @for (attribute of converterAttributes; track attribute) {
+                            <mat-chip>{{ attribute }}</mat-chip>
+                          }
                           <mat-chip class="mat-mdc-chip ellipsis-chip">
                             <label class="ellipsis-text"></label>
                           </mat-chip>
@@ -182,14 +117,85 @@
                                 color="primary"
                                 matTooltip="{{ 'action.edit' | translate }}"
                                 matTooltipPosition="above"
-                                #keysButton
-                                (click)="manageKeys($event, keysButton, MappingKeysType.CUSTOM)">
+                                #attributesButton
+                                (click)="manageKeys($event, attributesButton, MappingKeysType.ATTRIBUTES)">
+                          <tb-icon matButtonIcon>edit</tb-icon>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="tb-form-row space-between tb-flex">
+                      <div class="fixed-title-width" translate>gateway.timeseries</div>
+                      <div class="tb-flex ellipsis-chips-container">
+                        <mat-chip-listbox class="tb-flex" [tbEllipsisChipList]="converterTelemetry">
+                          @for (telemetry of converterTelemetry; track telemetry) {
+                            <mat-chip>{{ telemetry }}</mat-chip>
+                          }
+                          <mat-chip class="mat-mdc-chip ellipsis-chip">
+                            <label class="ellipsis-text"></label>
+                          </mat-chip>
+                        </mat-chip-listbox>
+                        <button type="button"
+                                mat-icon-button
+                                color="primary"
+                                matTooltip="{{ 'action.edit' | translate }}"
+                                matTooltipPosition="above"
+                                #telemetryButton
+                                (click)="manageKeys($event, telemetryButton, MappingKeysType.TIMESERIES)">
                           <tb-icon matButtonIcon>edit</tb-icon>
                         </button>
                       </div>
                     </div>
                   </div>
-                </div>
+                }
+                @if (converterType === ConvertorTypeEnum.CUSTOM) {
+                  <div class="tb-form-panel no-border no-padding">
+                    <div class="tb-form-row column-xs">
+                      <div class="fixed-title-width tb-required"
+                           tb-hint-tooltip-icon="{{ 'gateway.extension-hint' | translate }}">
+                        {{ 'gateway.extension' | translate }}
+                      </div>
+                      <mat-form-field class="tb-flex" appearance="outline" subscriptSizing="dynamic">
+                        <input matInput name="value" formControlName="extension" placeholder="{{ 'gateway.set' | translate }}"/>
+                        @if (mappingForm.get('converter.custom.extension').hasError('required') &&
+                             mappingForm.get('converter.custom.extension').touched) {
+                          <mat-icon matSuffix
+                                    matTooltipPosition="above"
+                                    matTooltipClass="tb-error-tooltip"
+                                    [matTooltip]="('gateway.extension-required') | translate"
+                                    class="tb-error">
+                            warning
+                          </mat-icon>
+                        }
+                      </mat-form-field>
+                    </div>
+                    <div class="tb-form-row space-between same-padding tb-flex column">
+                      <div class="tb-form-panel-title" translate>gateway.extension-configuration</div>
+                      <div class="tb-form-hint tb-primary-fill">{{ 'gateway.extension-configuration-hint' | translate }}</div>
+                      <div class="tb-form-row space-between tb-flex">
+                        <div class="fixed-title-width" translate>gateway.keys</div>
+                        <div class="tb-flex ellipsis-chips-container">
+                          <mat-chip-listbox [tbEllipsisChipList]="customKeys" class="tb-flex">
+                            @for (telemetry of customKeys; track telemetry) {
+                              <mat-chip>{{ telemetry }}</mat-chip>
+                            }
+                            <mat-chip class="mat-mdc-chip ellipsis-chip">
+                              <label class="ellipsis-text"></label>
+                            </mat-chip>
+                          </mat-chip-listbox>
+                          <button type="button"
+                                  mat-icon-button
+                                  color="primary"
+                                  matTooltip="{{ 'action.edit' | translate }}"
+                                  matTooltipPosition="above"
+                                  #keysButton
+                                  (click)="manageKeys($event, keysButton, MappingKeysType.CUSTOM)">
+                            <tb-icon matButtonIcon>edit</tb-icon>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                }
               </ng-container>
             </div>
           </ng-container>
@@ -206,12 +212,12 @@
                 </mat-form-field>
             </div>
             <ng-container formGroupName="requestValue">
-              <ng-container [formGroup]="mappingForm.get('requestValue').get(requestMappingType)" [ngSwitch]="requestMappingType">
-                <div class="tb-form-row column-xs"
-                     *ngIf="requestMappingType === RequestTypeEnum.ATTRIBUTE_REQUEST ||
-                            requestMappingType === RequestTypeEnum.CONNECT_REQUEST ||
-                            requestMappingType === RequestTypeEnum.DISCONNECT_REQUEST">
-                  <div class="fixed-title-width tb-required" translate>gateway.topic-filter</div>
+              <ng-container [formGroup]="mappingForm.get('requestValue').get(requestMappingType)">
+                @if (requestMappingType === RequestTypeEnum.ATTRIBUTE_REQUEST ||
+                     requestMappingType === RequestTypeEnum.CONNECT_REQUEST ||
+                     requestMappingType === RequestTypeEnum.DISCONNECT_REQUEST) {
+                  <div class="tb-form-row column-xs">
+                    <div class="fixed-title-width tb-required" translate>gateway.topic-filter</div>
                     <mat-form-field class="tb-flex" appearance="outline" subscriptSizing="dynamic">
                       <input matInput name="value" [formControl]="mappingForm.get('requestValue').get(requestMappingType).get('topicFilter')"
                              placeholder="{{ 'gateway.set' | translate }}"/>
@@ -231,16 +237,18 @@
                            [tb-help-popup-style]="{maxWidth: '970px'}">
                       </div>
                     </mat-form-field>
-                </div>
-                <ng-template [ngSwitchCase]="RequestTypeEnum.CONNECT_REQUEST">
-                  <tb-device-info-table formControlName="deviceInfo" [deviceInfoType]="DeviceInfoType.FULL" required="true">
-                  </tb-device-info-table>
-                </ng-template>
-                <ng-template [ngSwitchCase]="RequestTypeEnum.DISCONNECT_REQUEST">
-                  <tb-device-info-table formControlName="deviceInfo" [deviceInfoType]="DeviceInfoType.PARTIAL" required="true">
-                  </tb-device-info-table>
-                </ng-template>
-                <ng-template [ngSwitchCase]="RequestTypeEnum.ATTRIBUTE_REQUEST">
+                  </div>
+                }
+                @switch (requestMappingType) {
+                  @case (RequestTypeEnum.CONNECT_REQUEST) {
+                    <tb-device-info-table formControlName="deviceInfo" [deviceInfoType]="DeviceInfoType.FULL" required="true">
+                    </tb-device-info-table>
+                  }
+                  @case (RequestTypeEnum.DISCONNECT_REQUEST) {
+                    <tb-device-info-table formControlName="deviceInfo" [deviceInfoType]="DeviceInfoType.PARTIAL" required="true">
+                    </tb-device-info-table>
+                  }
+                  @case (RequestTypeEnum.ATTRIBUTE_REQUEST) {
                   <div class="tb-form-panel stroked">
                     <div class="tb-form-panel-title tb-required" translate>gateway.from-device-request-settings</div>
                     <div class="tb-form-hint tb-primary-fill" translate>
@@ -368,8 +376,8 @@
                       </mat-slide-toggle>
                     </div>
                   </div>
-                </ng-template>
-                <ng-template [ngSwitchCase]="RequestTypeEnum.ATTRIBUTE_UPDATE">
+                  }
+                  @case (RequestTypeEnum.ATTRIBUTE_UPDATE) {
                   <div class="tb-form-row column-xs">
                     <div class="fixed-title-width tb-required"
                          tb-hint-tooltip-icon="{{ 'gateway.device-name-filter-hint' | translate }}">
@@ -454,8 +462,8 @@
                       </mat-label>
                     </mat-slide-toggle>
                   </div>
-                </ng-template>
-                <ng-template [ngSwitchCase]="RequestTypeEnum.SERVER_SIDE_RPC">
+                  }
+                  @case (RequestTypeEnum.SERVER_SIDE_RPC) {
                   <div class="tb-flex row center align-center no-gap fill-width">
                     <tb-toggle-select formControlName="type" appearance="fill">
                       <tb-toggle-option [value]="ServerSideRPCType.TWO_WAY">
@@ -591,7 +599,8 @@
                         </mat-form-field>
                     </div>
                   </ng-container>
-                </ng-template>
+                  }
+                }
               </ng-container>
             </ng-container>
         </ng-template>

@@ -30,7 +30,6 @@ import {
   ValidationErrors,
   Validators
 } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/public-api';
 import { GatewayGRPCConfig } from '../../../models/public-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -53,7 +52,6 @@ import { numberInputPattern } from '../../../../../shared/models/public-api';
   ],
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
   ]
 })

@@ -19,7 +19,9 @@
       <div tbTruncateWithTooltip>{{ 'gateway.connection-type' | translate }}</div>
     </div>
     <tb-toggle-select formControlName="type" appearance="fill">
-      <tb-toggle-option *ngFor="let type of socketTypes" [value]="type">{{ (type) }}</tb-toggle-option>
+      @for (type of socketTypes; track type) {
+        <tb-toggle-option [value]="type">{{ (type) }}</tb-toggle-option>
+      }
     </tb-toggle-select>
   </div>
   <div class="tb-form-row column-xs">
@@ -27,15 +29,16 @@
     <div class="tb-flex no-gap">
       <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
         <input matInput name="value" formControlName="address" placeholder="{{ 'gateway.set' | translate }}"/>
-        <mat-icon matSuffix
-                  matTooltipPosition="above"
-                  matTooltipClass="tb-error-tooltip"
-                  [matTooltip]="('gateway.address-required') | translate"
-                  *ngIf="socketConfigFormGroup.get('address').hasError('required')
-                                           && socketConfigFormGroup.get('address').touched"
-                  class="tb-error">
-          warning
-        </mat-icon>
+        @if (socketConfigFormGroup.get('address').hasError('required')
+          && socketConfigFormGroup.get('address').touched) {
+          <mat-icon matSuffix
+            matTooltipPosition="above"
+            matTooltipClass="tb-error-tooltip"
+            [matTooltip]="('gateway.address-required') | translate"
+            class="tb-error">
+            warning
+          </mat-icon>
+        }
       </mat-form-field>
     </div>
   </div>
@@ -45,17 +48,18 @@
       <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
         <input matInput type="number" min="{{portLimits.MIN}}" max="{{portLimits.MAX}}"
                name="value" formControlName="port" placeholder="{{ 'gateway.set' | translate }}"/>
-        <mat-icon matSuffix
-                  matTooltipPosition="above"
-                  matTooltipClass="tb-error-tooltip"
-                  [matTooltip]="socketConfigFormGroup.get('port') | getGatewayPortTooltip"
-                  *ngIf="(socketConfigFormGroup.get('port').hasError('required') ||
-                                            socketConfigFormGroup.get('port').hasError('min') ||
-                                            socketConfigFormGroup.get('port').hasError('max')) &&
-                                            socketConfigFormGroup.get('port').touched"
-                  class="tb-error">
-          warning
-        </mat-icon>
+        @if ((socketConfigFormGroup.get('port').hasError('required') ||
+          socketConfigFormGroup.get('port').hasError('min') ||
+          socketConfigFormGroup.get('port').hasError('max')) &&
+          socketConfigFormGroup.get('port').touched) {
+          <mat-icon matSuffix
+            matTooltipPosition="above"
+            matTooltipClass="tb-error-tooltip"
+            [matTooltip]="socketConfigFormGroup.get('port') | getGatewayPortTooltip"
+            class="tb-error">
+            warning
+          </mat-icon>
+        }
       </mat-form-field>
     </div>
   </div>
@@ -67,16 +71,17 @@
       <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
         <input matInput type="number" name="value" min="1" formControlName="bufferSize"
                placeholder="{{ 'gateway.set' | translate }}"/>
-        <mat-icon matSuffix
-                  matTooltipPosition="above"
-                  matTooltipClass="tb-error-tooltip"
-                  [matTooltip]="(socketConfigFormGroup.get('bufferSize').hasError('min') ? 'gateway.buffer-size-range' : 'gateway.buffer-size-required') | translate"
-                  *ngIf="socketConfigFormGroup.get('bufferSize').hasError('required')
-                         || socketConfigFormGroup.get('bufferSize').hasError('min')
-                         && socketConfigFormGroup.get('bufferSize').touched"
-                  class="tb-error">
-          warning
-        </mat-icon>
+        @if (socketConfigFormGroup.get('bufferSize').hasError('required')
+          || socketConfigFormGroup.get('bufferSize').hasError('min')
+          && socketConfigFormGroup.get('bufferSize').touched) {
+          <mat-icon matSuffix
+            matTooltipPosition="above"
+            matTooltipClass="tb-error-tooltip"
+            [matTooltip]="(socketConfigFormGroup.get('bufferSize').hasError('min') ? 'gateway.buffer-size-range' : 'gateway.buffer-size-required') | translate"
+            class="tb-error">
+            warning
+          </mat-icon>
+        }
       </mat-form-field>
     </div>
   </div>

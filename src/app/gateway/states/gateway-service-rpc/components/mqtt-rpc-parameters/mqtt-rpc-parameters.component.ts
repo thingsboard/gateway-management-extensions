@@ -31,7 +31,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { SharedModule } from '@shared/public-api';
-import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
 import {
@@ -59,7 +58,6 @@ import { RPCTemplateConfigMQTT } from '../../models/public-api';
   ],
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
   ],
 })

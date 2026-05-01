@@ -31,7 +31,6 @@ import {
   PortLimits,
 } from '../../../models/public-api';
 import { SharedModule } from '@shared/public-api';
-import { CommonModule } from '@angular/common';
 import { generateSecret } from '@core/public-api';
 import { Subject } from 'rxjs';
 import { SecurityConfigComponent } from '../../security-config/security-config.component';
@@ -44,7 +43,6 @@ import { noLeadTrailSpacesRegex } from '../../../../../shared/models/public-api'
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
     SecurityConfigComponent,
     GatewayPortTooltipPipe,

@@ -39,7 +39,6 @@ import { Subject } from 'rxjs';
 import { AppState } from '@core/public-api';
 import { takeUntil, tap } from 'rxjs/operators';
 import { LatestVersionConfigPipe } from '../../pipes/public-api';
-import { CommonModule } from '@angular/common';
 import { GatewayConnectorVersionMappingUtil } from '../../utils/public-api';
 
 @Component({
@@ -49,7 +48,6 @@ import { GatewayConnectorVersionMappingUtil } from '../../utils/public-api';
   providers: [LatestVersionConfigPipe],
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
     ReportStrategyVersionPipe
   ]

@@ -19,24 +19,26 @@
   </div>
   <div class="tb-master-table-content flex flex-col">
     <mat-toolbar class="mat-mdc-table-toolbar" [class.!hidden]="textSearchMode">
-      <div class="mat-toolbar-tools" *ngIf="(dataSource.isEmpty() | async) === false">
-        <div class="title-container">
-          <span class="tb-master-table-title">{{ 'gateway.servers-slaves' | translate}}</span>
+      @if ((dataSource.isEmpty() | async) === false) {
+        <div class="mat-toolbar-tools">
+          <div class="title-container">
+            <span class="tb-master-table-title">{{ 'gateway.servers-slaves' | translate}}</span>
+          </div>
+          <span class="flex-1"></span>
+          <button mat-icon-button
+            (click)="manageSlave($event)"
+            matTooltip="{{ 'action.add' | translate }}"
+            matTooltipPosition="above">
+            <mat-icon>add</mat-icon>
+          </button>
+          <button mat-icon-button
+            (click)="enterFilterMode()"
+            matTooltip="{{ 'action.search' | translate }}"
+            matTooltipPosition="above">
+            <mat-icon>search</mat-icon>
+          </button>
         </div>
-        <span class="flex-1"></span>
-        <button mat-icon-button
-                (click)="manageSlave($event)"
-                matTooltip="{{ 'action.add' | translate }}"
-                matTooltipPosition="above">
-          <mat-icon>add</mat-icon>
-        </button>
-        <button mat-icon-button
-                (click)="enterFilterMode()"
-                matTooltip="{{ 'action.search' | translate }}"
-                matTooltipPosition="above">
-          <mat-icon>search</mat-icon>
-        </button>
-      </div>
+      }
     </mat-toolbar>
     <mat-toolbar class="mat-mdc-table-toolbar" [class.!hidden]="!textSearchMode">
       <div class="mat-toolbar-tools">
