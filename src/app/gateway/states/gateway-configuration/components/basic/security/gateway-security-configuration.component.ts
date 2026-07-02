@@ -16,7 +16,7 @@
 import {
   AfterViewInit,
   ChangeDetectorRef,
-  Component,
+  Component, DestroyRef,
   EventEmitter,
   forwardRef,
   Output
@@ -79,6 +79,7 @@ export class GatewaySecurityConfigurationComponent implements AfterViewInit, Con
     private fb: FormBuilder,
     private cd: ChangeDetectorRef,
     private gatewayCredentialsService: GatewayDeviceCredentialsService,
+    private destroyRef: DestroyRef,
   ) {
     this.securityFormGroup = this.createSecurityFormGroup();
     this.setupFormListeners();
@@ -132,16 +133,16 @@ export class GatewaySecurityConfigurationComponent implements AfterViewInit, Con
   }
 
   private setupFormListeners(): void {
-    this.securityFormGroup.valueChanges.pipe(takeUntilDestroyed()).subscribe(({ usernamePassword, ...value }) => {
+    this.securityFormGroup.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(({ usernamePassword, ...value }) => {
       this.onChange(usernamePassword ? { ...value, ...usernamePassword } : value);
     });
     this.securityFormGroup.get('type').valueChanges.pipe(
-      takeUntilDestroyed(),
+      takeUntilDestroyed(this.destroyRef),
       distinctUntilChanged()
     ).subscribe((newType) => {
       this.toggleBySecurityType(newType);
     });
-    this.securityFormGroup.get('caCert').valueChanges.pipe(takeUntilDestroyed()).subscribe(() => this.cd.detectChanges());
+    this.securityFormGroup.get('caCert').valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.cd.detectChanges());
   }
 
   private toggleBySecurityType(type: SecurityTypes): void {

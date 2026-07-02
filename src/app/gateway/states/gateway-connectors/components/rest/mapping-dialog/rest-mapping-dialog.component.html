@@ -149,9 +149,11 @@
                   <div class="fixed-title-width">{{ 'gateway.keys' | translate }}</div>
                   <div class="tb-flex ellipsis-chips-container">
                     <mat-chip-listbox [tbEllipsisChipList]="customKeys" class="tb-flex gw-chip-list">
-                      <mat-chip *ngFor="let key of customKeys">
-                        <div tbTruncateWithTooltip>{{ key }}</div>
-                      </mat-chip>
+                      @for (key of customKeys; track key) {
+                        <mat-chip>
+                          <div tbTruncateWithTooltip>{{ key }}</div>
+                        </mat-chip>
+                      }
                       <mat-chip class="mat-mdc-chip ellipsis-chip">
                         <label class="ellipsis-text"></label>
                       </mat-chip>

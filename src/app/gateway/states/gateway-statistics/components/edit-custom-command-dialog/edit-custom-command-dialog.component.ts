@@ -22,7 +22,6 @@ import { DialogComponent, helpBaseUrl, SharedModule } from '@shared/public-api';
 import { Router } from '@angular/router';
 import { GatewayConfigCommand, noLeadTrailSpacesRegex, numberInputPattern } from '../../../../shared/public-api';
 import { AppState, DialogService } from '@core/public-api';
-import { CommonModule } from '@angular/common';
 import { EditCustomCommandDialogData, EditCustomCommandDialogResult } from '../../models/public-api';
 import { Observable, of } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
@@ -35,7 +34,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   styleUrls: ['./edit-custom-command-dialog.component.scss'],
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
   ]
 })

@@ -31,7 +31,6 @@ import {
   Validators
 } from '@angular/forms';
 import { SharedModule } from '@shared/public-api';
-import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import {
@@ -60,7 +59,6 @@ import { RPCTemplateConfigModbus } from '../../models/rpc.models';
   ],
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
   ],
 })

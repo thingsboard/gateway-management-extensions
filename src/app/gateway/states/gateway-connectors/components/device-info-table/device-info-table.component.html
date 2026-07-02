@@ -19,7 +19,9 @@
   <div class="tb-form-table no-padding no-gap">
     <div class="tb-form-table-header">
       <div class="tb-form-table-header-cell w-1/5" translate>gateway.device-info.entity-field</div>
-      <div *ngIf="useSource" class="tb-form-table-header-cell w-1/5" translate>gateway.device-info.source</div>
+      @if (useSource) {
+        <div class="tb-form-table-header-cell w-1/5" translate>gateway.device-info.source</div>
+      }
       <div class="tb-form-table-header-cell w-1/2" translate>
         gateway.device-info.expression
       </div>
@@ -28,71 +30,87 @@
       <div class="tb-form-table-row tb-form-row no-border same-padding pt-4"
            [class.pb-4]="deviceInfoType !== DeviceInfoType.FULL">
         <div class="tb-required w-1/5" translate>gateway.device-info.name</div>
-        <div class="no-gap w-1/5" *ngIf="useSource">
-          <mat-form-field class="tb-flex no-gap !w-full" appearance="outline" subscriptSizing="dynamic">
-            <mat-select formControlName="deviceNameExpressionSource">
-              <mat-option *ngFor="let type of sourceTypes" [value]="type">
-                {{ SourceTypeTranslationsMap.get(type) | translate }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
+        @if (useSource) {
+          <div class="no-gap w-1/5">
+            <mat-form-field class="tb-flex no-gap !w-full" appearance="outline" subscriptSizing="dynamic">
+              <mat-select formControlName="deviceNameExpressionSource">
+                @for (type of sourceTypes; track type) {
+                  <mat-option [value]="type">
+                    {{ SourceTypeTranslationsMap.get(type) | translate }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+        }
         <div class="tb-form-table-row-cell tb-flex no-gap">
           <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
             <input matInput name="value" formControlName="deviceNameExpression" placeholder="{{ 'gateway.set' | translate }}"/>
-            <mat-icon matSuffix
-                      matTooltipPosition="above"
-                      matTooltipClass="tb-error-tooltip"
-                      [matTooltip]="('gateway.device-info.device-name-expression-required') | translate"
-                      *ngIf="mappingFormGroup.get('deviceNameExpression').hasError('required') &&
-                             mappingFormGroup.get('deviceNameExpression').touched"
-                      class="tb-error">
-              warning
-            </mat-icon>
-            <div *ngIf="connectorType | getConnectorMappingHelpLink : 'name-field' : mappingFormGroup.get('deviceNameExpressionSource').value : convertorType"
-                 matSuffix
-                 class="see-example p-1"
-                 [tb-help-popup]="connectorType | getConnectorMappingHelpLink : 'name-field' : mappingFormGroup.get('deviceNameExpressionSource').value : convertorType"
-                 tb-help-popup-placement="left"
-                 [tb-help-popup-style]="{maxWidth: '970px'}">
-            </div>
+            @if (mappingFormGroup.get('deviceNameExpression').hasError('required') &&
+              mappingFormGroup.get('deviceNameExpression').touched) {
+              <mat-icon matSuffix
+                matTooltipPosition="above"
+                matTooltipClass="tb-error-tooltip"
+                [matTooltip]="('gateway.device-info.device-name-expression-required') | translate"
+                class="tb-error">
+                warning
+              </mat-icon>
+            }
+            @if (connectorType | getConnectorMappingHelpLink : 'name-field' : mappingFormGroup.get('deviceNameExpressionSource').value : convertorType) {
+              <div
+                matSuffix
+                class="see-example p-1"
+                [tb-help-popup]="connectorType | getConnectorMappingHelpLink : 'name-field' : mappingFormGroup.get('deviceNameExpressionSource').value : convertorType"
+                tb-help-popup-placement="left"
+                [tb-help-popup-style]="{maxWidth: '970px'}">
+              </div>
+            }
           </mat-form-field>
         </div>
       </div>
-      <div class="tb-form-table-row tb-form-row no-border same-padding pb-4"
-           *ngIf="deviceInfoType === DeviceInfoType.FULL">
-        <div class="tb-required w-1/5" translate>gateway.device-info.profile-name</div>
-        <div class="no-gap w-1/5" *ngIf="useSource">
-          <mat-form-field class="tb-flex no-gap !w-full" appearance="outline" subscriptSizing="dynamic">
-            <mat-select formControlName="deviceProfileExpressionSource">
-              <mat-option *ngFor="let type of sourceTypes" [value]="type">
-                {{ SourceTypeTranslationsMap.get(type) | translate }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="tb-form-table-row-cell tb-flex no-gap">
-          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
-            <input matInput name="value" formControlName="deviceProfileExpression" placeholder="{{ 'gateway.set' | translate }}"/>
-            <mat-icon matSuffix
-                      matTooltipPosition="above"
-                      matTooltipClass="tb-error-tooltip"
-                      [matTooltip]="('gateway.device-info.device-profile-expression-required') | translate"
-                      *ngIf="mappingFormGroup.get('deviceProfileExpression').hasError('required') &&
-                             mappingFormGroup.get('deviceProfileExpression').touched"
-                      class="tb-error">
-              warning
-            </mat-icon>
-            <div *ngIf="connectorType | getConnectorMappingHelpLink: 'profile-name' : mappingFormGroup.get('deviceProfileExpressionSource').value : convertorType"
-                 matSuffix
-                 class="see-example p-1"
-                 [tb-help-popup]="connectorType | getConnectorMappingHelpLink:'profile-name' : mappingFormGroup.get('deviceProfileExpressionSource').value : convertorType"
-                 tb-help-popup-placement="left"
-                 [tb-help-popup-style]="{maxWidth: '970px'}">
+      @if (deviceInfoType === DeviceInfoType.FULL) {
+        <div class="tb-form-table-row tb-form-row no-border same-padding pb-4"
+          >
+          <div class="tb-required w-1/5" translate>gateway.device-info.profile-name</div>
+          @if (useSource) {
+            <div class="no-gap w-1/5">
+              <mat-form-field class="tb-flex no-gap !w-full" appearance="outline" subscriptSizing="dynamic">
+                <mat-select formControlName="deviceProfileExpressionSource">
+                  @for (type of sourceTypes; track type) {
+                    <mat-option [value]="type">
+                      {{ SourceTypeTranslationsMap.get(type) | translate }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
             </div>
-          </mat-form-field>
+          }
+          <div class="tb-form-table-row-cell tb-flex no-gap">
+            <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+              <input matInput name="value" formControlName="deviceProfileExpression" placeholder="{{ 'gateway.set' | translate }}"/>
+              @if (mappingFormGroup.get('deviceProfileExpression').hasError('required') &&
+                mappingFormGroup.get('deviceProfileExpression').touched) {
+                <mat-icon matSuffix
+                  matTooltipPosition="above"
+                  matTooltipClass="tb-error-tooltip"
+                  [matTooltip]="('gateway.device-info.device-profile-expression-required') | translate"
+                  class="tb-error">
+                  warning
+                </mat-icon>
+              }
+              @if (connectorType | getConnectorMappingHelpLink: 'profile-name' : mappingFormGroup.get('deviceProfileExpressionSource').value : convertorType) {
+                <div
+                  matSuffix
+                  class="see-example p-1"
+                  [tb-help-popup]="connectorType | getConnectorMappingHelpLink:'profile-name' : mappingFormGroup.get('deviceProfileExpressionSource').value : convertorType"
+                  tb-help-popup-placement="left"
+                  [tb-help-popup-style]="{maxWidth: '970px'}">
+                </div>
+              }
+            </mat-form-field>
+          </div>
         </div>
-      </div>
+      }
     </div>
   </div>
 </div>

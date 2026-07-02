@@ -14,30 +14,33 @@
   limitations under the License.
 -->
 
-<ng-container *ngIf="singleMode else multipleView">
+@if (singleMode) {
   <div [formGroup]="valuesFormGroup" class="tb-form-panel no-border no-padding padding-top">
     <ng-container [ngTemplateOutlet]="singleView" [ngTemplateOutletContext]="{$implicit: null}"></ng-container>
   </div>
-</ng-container>
-
-<ng-template #multipleView>
+} @else {
   <mat-tab-group [formGroup]="valuesFormGroup">
-    <mat-tab *ngFor="let register of modbusRegisterTypes" label="{{ ModbusValuesTranslationsMap.get(register) | translate }}">
-      <div [formGroup]="valuesFormGroup.get(register)" class="tb-form-panel no-border no-padding padding-top">
-        <ng-container [ngTemplateOutlet]="singleView" [ngTemplateOutletContext]="{$implicit: register}"></ng-container>
-      </div>
-    </mat-tab>
+    @for (register of modbusRegisterTypes; track register) {
+      <mat-tab label="{{ ModbusValuesTranslationsMap.get(register) | translate }}">
+        <div [formGroup]="valuesFormGroup.get(register)" class="tb-form-panel no-border no-padding padding-top">
+          <ng-container [ngTemplateOutlet]="singleView" [ngTemplateOutletContext]="{$implicit: register}"></ng-container>
+        </div>
+      </mat-tab>
+    }
   </mat-tab-group>
-</ng-template>
+}
+
 
 <ng-template #singleView let-register>
   <div class="tb-form-row space-between tb-flex">
     <div class="fixed-title-width" translate>gateway.attributes</div>
     <div class="tb-flex ellipsis-chips-container">
       <mat-chip-listbox [tbEllipsisChipList]="getValueGroup(ModbusValueKey.ATTRIBUTES, register).value" class="tb-flex">
-        <mat-chip *ngFor="let attribute of getValueGroup(ModbusValueKey.ATTRIBUTES, register).value">
-          {{ attribute.tag }}
-        </mat-chip>
+        @for (attribute of getValueGroup(ModbusValueKey.ATTRIBUTES, register).value; track attribute) {
+          <mat-chip>
+            {{ attribute.tag }}
+          </mat-chip>
+        }
         <mat-chip class="mat-mdc-chip ellipsis-chip">
           <label class="ellipsis-text"></label>
         </mat-chip>
@@ -58,9 +61,11 @@
     <div class="fixed-title-width" translate>gateway.timeseries</div>
     <div class="tb-flex ellipsis-chips-container">
       <mat-chip-listbox class="tb-flex" [tbEllipsisChipList]="getValueGroup(ModbusValueKey.TIMESERIES, register).value">
-        <mat-chip *ngFor="let telemetry of getValueGroup(ModbusValueKey.TIMESERIES, register).value">
-          {{ telemetry.tag }}
-        </mat-chip>
+        @for (telemetry of getValueGroup(ModbusValueKey.TIMESERIES, register).value; track telemetry) {
+          <mat-chip>
+            {{ telemetry.tag }}
+          </mat-chip>
+        }
         <mat-chip class="mat-mdc-chip ellipsis-chip">
           <label class="ellipsis-text"></label>
         </mat-chip>
@@ -81,9 +86,11 @@
     <div class="fixed-title-width" translate>gateway.attribute-updates</div>
     <div class="tb-flex ellipsis-chips-container">
       <mat-chip-listbox [tbEllipsisChipList]="getValueGroup(ModbusValueKey.ATTRIBUTES_UPDATES, register).value" class="tb-flex">
-        <mat-chip *ngFor="let attributeUpdate of getValueGroup(ModbusValueKey.ATTRIBUTES_UPDATES, register).value">
-          {{ attributeUpdate.tag }}
-        </mat-chip>
+        @for (attributeUpdate of getValueGroup(ModbusValueKey.ATTRIBUTES_UPDATES, register).value; track attributeUpdate) {
+          <mat-chip>
+            {{ attributeUpdate.tag }}
+          </mat-chip>
+        }
         <mat-chip class="mat-mdc-chip ellipsis-chip">
           <label class="ellipsis-text"></label>
         </mat-chip>
@@ -104,9 +111,11 @@
     <div class="fixed-title-width" translate>gateway.rpc-requests</div>
     <div class="tb-flex ellipsis-chips-container">
       <mat-chip-listbox [tbEllipsisChipList]="getValueGroup(ModbusValueKey.RPC_REQUESTS, register).value" class="tb-flex">
-        <mat-chip *ngFor="let rpcRequest of getValueGroup(ModbusValueKey.RPC_REQUESTS, register).value">
-          {{ rpcRequest.tag }}
-        </mat-chip>
+        @for (rpcRequest of getValueGroup(ModbusValueKey.RPC_REQUESTS, register).value; track rpcRequest) {
+          <mat-chip>
+            {{ rpcRequest.tag }}
+          </mat-chip>
+        }
         <mat-chip class="mat-mdc-chip ellipsis-chip">
           <label class="ellipsis-text"></label>
         </mat-chip>
