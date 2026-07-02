@@ -16,7 +16,6 @@
 import { booleanAttribute, ChangeDetectionStrategy, Component, forwardRef, Input, OnInit } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR, UntypedFormGroup, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { CommonModule } from '@angular/common';
 
 import { SharedModule } from '@shared/public-api';
 import { noLeadTrailSpacesRegex, ReportStrategyDefaultValue } from '../../../../../shared/models/public-api';
@@ -52,7 +51,6 @@ import { ControlValueAccessorBaseAbstract } from '../../../../../shared/abstract
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
     ReportStrategyComponent,
   ]

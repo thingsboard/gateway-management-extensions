@@ -62,7 +62,7 @@ export abstract class AbstractDevicesConfigTableComponent<Entity> implements Con
   constructor() {
     this.entityFormArray = this.fb.array([]);
     this.entityFormArray.valueChanges.pipe(
-      takeUntilDestroyed()
+      takeUntilDestroyed(this.destroyRef),
     ).subscribe(value => {
       this.updateTableData(value);
       this.onChange(value);
