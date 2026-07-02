@@ -15,8 +15,8 @@
 ///
 
 import { BuilderContext, BuilderOutput, createBuilder } from '@angular-devkit/architect';
-import * as express from 'express';
-import * as http from 'http';
+import express from 'express';
+import { Server } from 'http';
 import { NgPackagrBuilderOptions } from '@angular-devkit/build-angular';
 import { resolve } from 'path';
 import { from, Observable } from 'rxjs';
@@ -37,7 +37,7 @@ interface StaticServeConfig {
   };
 }
 
-let server: http.Server = null;
+let server: Server<any, any> = null;
 
 async function initialize(
   options: StaticServeOptions,
@@ -127,13 +127,12 @@ export function createServer(options: StaticServeOptions, context: BuilderContex
       res.sendFile(resolve(context.workspaceRoot, 'dist/rulenode-core-config/bundles/rulenode-core-config.umd.js.map'));
     }); */
 
-  server = http.createServer(app);
   const host = 'localhost';
+  server = app.listen(options.port, host, 511, () => {
+    context.logger.info(`==> 🌎  Listening on port ${options.port}. Open up http://localhost:${options.port}/ in your browser.`);
+  });
   server.on('error', (error) => {
     context.logger.error(error.message);
-  });
-  server.listen(options.port, host, 511, () => {
-    context.logger.info(`==> 🌎  Listening on port ${options.port}. Open up http://localhost:${options.port}/ in your browser.`);
   });
 }
 
