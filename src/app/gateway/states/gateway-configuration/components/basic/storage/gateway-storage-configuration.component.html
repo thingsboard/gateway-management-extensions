@@ -59,8 +59,8 @@
         </mat-form-field>
       </section>
       <section *ngSwitchCase="StorageTypes.FILE">
-        <div class="tb-form-row no-border no-padding tb-standard-fields column-xs mb-2">
-          <mat-form-field appearance="outline" class="flex">
+        <div class="tb-form-row no-border no-padding tb-standard-fields column-xs align-start mb-2">
+          <mat-form-field appearance="outline" class="flex" subscriptSizing="dynamic">
             <mat-label translate>gateway.storage-data-folder-path</mat-label>
             <input matInput formControlName="data_folder_path"/>
             <mat-error *ngIf="storageFormGroup.get('data_folder_path').hasError('required')">
@@ -69,6 +69,7 @@
             <mat-error *ngIf="storageFormGroup.get('data_folder_path').hasError('pattern')">
               {{ 'gateway.storage-data-folder-path-pattern' | translate }}
             </mat-error>
+            <mat-hint></mat-hint>
             <mat-icon class="mat-form-field-infix pointer-event suffix-icon" aria-hidden="false"
                       aria-label="help-icon"
                       matSuffix style="cursor:pointer;"
