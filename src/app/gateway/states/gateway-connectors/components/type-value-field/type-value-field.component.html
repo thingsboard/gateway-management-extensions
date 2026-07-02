@@ -21,22 +21,25 @@
         <mat-select formControlName="type">
           <mat-select-trigger>
             <div class="tb-flex align-center">
-              <mat-icon *ngIf="!rawData" class="tb-mat-18" [svgIcon]="valueTypes.get(valueTypeFormGroup.get('type').value)?.icon">
-              </mat-icon>
+              @if (!rawData) {
+                <mat-icon class="tb-mat-18" [svgIcon]="valueTypes.get(valueTypeFormGroup.get('type').value)?.icon">
+                </mat-icon>
+              }
               <span>{{ (valueTypes.get(valueTypeFormGroup.get('type').value)?.name | translate) || ('gateway.raw' | translate) }}</span>
             </div>
           </mat-select-trigger>
-          <ng-container *ngIf="!rawData else raw">
-            <mat-option *ngFor="let valueType of valueTypeKeys" [value]="valueType">
-              <mat-icon class="tb-mat-20" svgIcon="{{ valueTypes.get(valueType)?.icon }}"></mat-icon>
-              <span>{{ valueTypes.get(valueType)?.name | translate }}</span>
-            </mat-option>
-          </ng-container>
-          <ng-template #raw>
+          @if (!rawData) {
+            @for (valueType of valueTypeKeys; track valueType) {
+              <mat-option [value]="valueType">
+                <mat-icon class="tb-mat-20" svgIcon="{{ valueTypes.get(valueType)?.icon }}"></mat-icon>
+                <span>{{ valueTypes.get(valueType)?.name | translate }}</span>
+              </mat-option>
+            }
+          } @else {
             <mat-option value="raw">
               <span>{{ 'gateway.raw' | translate }}</span>
             </mat-option>
-          </ng-template>
+          }
         </mat-select>
       </mat-form-field>
     </div>
@@ -44,37 +47,49 @@
   <div class="tb-form-row column-xs">
     <div class="fixed-title-width tb-required" translate>gateway.value</div>
     <mat-form-field appearance="outline" subscriptSizing="dynamic" class="tb-inline-field flex tb-suffix-absolute">
-      <ng-container [ngSwitch]="valueTypeFormGroup.get('type').value">
-        <input *ngSwitchCase="MappingValueType.STRING" matInput required formControlName="stringValue"
-               placeholder="{{ 'gateway.set' | translate }}" />
-        <input *ngSwitchCase="MappingValueType.INTEGER" matInput required formControlName="integerValue" type="number"
-               placeholder="{{ 'gateway.set' | translate }}" />
-        <input *ngSwitchCase="MappingValueType.DOUBLE" matInput required formControlName="doubleValue" type="number"
-               placeholder="{{ 'gateway.set' | translate }}" />
-        <input *ngSwitchCase="'raw'" matInput required formControlName="rawValue"
-               placeholder="{{ 'gateway.set' | translate }}" />
-        <mat-select *ngSwitchCase="MappingValueType.BOOLEAN" formControlName="booleanValue">
-          <mat-option [value]="true">true</mat-option>
-          <mat-option [value]="false">false</mat-option>
-        </mat-select>
-      </ng-container>
-      <mat-icon matSuffix
-                matTooltipPosition="above"
-                matTooltipClass="tb-error-tooltip"
-                [matTooltip]="('gateway.value-required') | translate"
-                *ngIf="valueTypeFormGroup.get(valueTypeFormGroup.get('type').value)?.hasError('required')
-                              && valueTypeFormGroup.get(valueTypeFormGroup.get('type').value).touched"
-                class="tb-error">
-        warning
-      </mat-icon>
-      <div matSuffix
-           class="see-example p-1"
-           *ngIf="helpLink"
-           (click)="$event.stopPropagation()"
-           [tb-help-popup]="helpLink"
-           tb-help-popup-placement="left"
-           [tb-help-popup-style]="{maxWidth: '970px'}">
-      </div>
+      @switch (valueTypeFormGroup.get('type').value) {
+        @case (MappingValueType.STRING) {
+          <input matInput required formControlName="stringValue"
+            placeholder="{{ 'gateway.set' | translate }}" />
+        }
+        @case (MappingValueType.INTEGER) {
+          <input matInput required formControlName="integerValue" type="number"
+            placeholder="{{ 'gateway.set' | translate }}" />
+        }
+        @case (MappingValueType.DOUBLE) {
+          <input matInput required formControlName="doubleValue" type="number"
+            placeholder="{{ 'gateway.set' | translate }}" />
+        }
+        @case ('raw') {
+          <input matInput required formControlName="rawValue"
+            placeholder="{{ 'gateway.set' | translate }}" />
+        }
+        @case (MappingValueType.BOOLEAN) {
+          <mat-select formControlName="booleanValue">
+            <mat-option [value]="true">true</mat-option>
+            <mat-option [value]="false">false</mat-option>
+          </mat-select>
+        }
+      }
+      @if (valueTypeFormGroup.get(valueTypeFormGroup.get('type').value)?.hasError('required')
+        && valueTypeFormGroup.get(valueTypeFormGroup.get('type').value).touched) {
+        <mat-icon matSuffix
+          matTooltipPosition="above"
+          matTooltipClass="tb-error-tooltip"
+          [matTooltip]="('gateway.value-required') | translate"
+          class="tb-error">
+          warning
+        </mat-icon>
+      }
+      @if (helpLink) {
+        <div matSuffix
+          class="see-example p-1"
+          (click)="$event.stopPropagation()"
+          [tb-help-popup]="helpLink"
+          tb-help-popup-placement="left"
+          [tb-help-popup-style]="{maxWidth: '970px'}">
+        </div>
+      }
     </mat-form-field>
   </div>
 </ng-container>

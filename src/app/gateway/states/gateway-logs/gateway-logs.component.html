@@ -15,9 +15,11 @@
 -->
 <div class="flex h-full flex-col">
   <nav mat-tab-nav-bar [tabPanel]="tabPanel">
-    <a mat-tab-link *ngFor="let link of logLinks"
-       (click)="onTabChanged(link)"
-       [active]="activeLink.name === link.name"> {{ link.name }} </a>
+    @for (link of logLinks; track link) {
+      <a mat-tab-link
+        (click)="onTabChanged(link)"
+      [active]="activeLink.name === link.name"> {{ link.name }} </a>
+    }
   </nav>
   <mat-tab-nav-panel #tabPanel></mat-tab-nav-panel>
   <div class="flex-1 overflow-auto">

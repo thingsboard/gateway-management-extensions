@@ -31,7 +31,7 @@ export abstract class ModbusBasicConfigDirective<InputBasicConfig, OutputBasicCo
     super();
 
     this.enableSlaveControl.valueChanges
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(enable => {
         this.updateSlaveEnabling(enable);
         this.basicFormGroup.get('slave').updateValueAndValidity({ emitEvent: !!this.onChange });

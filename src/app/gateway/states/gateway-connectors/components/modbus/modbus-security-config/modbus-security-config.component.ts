@@ -38,7 +38,6 @@ import {
   TruncateWithTooltipDirective,
 } from '../../../../../shared/public-api';
 import { SharedModule, coerceBoolean } from '@shared/public-api';
-import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ModbusSecurity } from '../../../models/public-api';
@@ -61,7 +60,6 @@ import { ModbusSecurity } from '../../../models/public-api';
   ],
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
     TruncateWithTooltipDirective,
   ]

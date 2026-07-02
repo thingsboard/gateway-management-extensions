@@ -50,7 +50,6 @@ import {
   ReportStrategyComponent,
   ConnectorType,
 } from '../../../../shared/public-api';
-import { CommonModule } from '@angular/common';
 import { TypeValuePanelComponent } from '../type-value-panel/type-value-panel.component';
 import { ConnectorMappingHelpLinkPipe } from '../../pipes/public-api';
 
@@ -60,7 +59,6 @@ import { ConnectorMappingHelpLinkPipe } from '../../pipes/public-api';
   styleUrls: ['./mapping-data-keys-panel.component.scss'],
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
     ReportStrategyComponent,
     TypeValuePanelComponent,

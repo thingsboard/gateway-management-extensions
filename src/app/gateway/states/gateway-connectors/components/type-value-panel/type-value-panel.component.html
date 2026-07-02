@@ -14,40 +14,43 @@
   limitations under the License.
 -->
 <div class="tb-form-panel no-border no-padding">
-  <div class="tb-form-panel no-border no-padding key-panel" *ngIf="valueListFormArray.controls.length; else noKeys">
-    <div class="tb-form-panel no-border no-padding tb-flex no-flex row center fill-width"
-         *ngFor="let keyControl of valueListFormArray.controls; trackBy: trackByKey; let $index = index; let last = last;">
-      <div class="tb-form-panel stroked tb-flex">
-        <ng-container [formGroup]="keyControl">
-          <mat-expansion-panel class="tb-settings" [expanded]="last">
-            <mat-expansion-panel-header class="flex-wrap">
-              <mat-panel-title>
-                <div class="title-container" tbTruncateWithTooltip>{{ keyControl.get('typeValue').value?.value ?? '' }}</div>
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <ng-template matExpansionPanelContent>
-              <tb-type-value-field [helpLink]="helpLink" formControlName="typeValue"/>
-            </ng-template>
-          </mat-expansion-panel>
-        </ng-container>
-      </div>
-      <button type="button"
-              mat-icon-button
-              (click)="deleteKey($event, $index)"
-              [matTooltip]="'gateway.delete-argument' | translate"
-              matTooltipPosition="above">
-        <mat-icon>delete</mat-icon>
-      </button>
+  @if (valueListFormArray.controls.length) {
+    <div class="tb-form-panel no-border no-padding key-panel">
+      @for (keyControl of valueListFormArray.controls; track trackByKey($index, keyControl); let last = $last) {
+        <div class="tb-form-panel no-border no-padding tb-flex no-flex row center fill-width"
+          >
+          <div class="tb-form-panel stroked tb-flex">
+            <ng-container [formGroup]="keyControl">
+              <mat-expansion-panel class="tb-settings" [expanded]="last">
+                <mat-expansion-panel-header class="flex-wrap">
+                  <mat-panel-title>
+                    <div class="title-container" tbTruncateWithTooltip>{{ keyControl.get('typeValue').value?.value ?? '' }}</div>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <ng-template matExpansionPanelContent>
+                  <tb-type-value-field [helpLink]="helpLink" formControlName="typeValue"/>
+                </ng-template>
+              </mat-expansion-panel>
+            </ng-container>
+          </div>
+          <button type="button"
+            mat-icon-button
+            (click)="deleteKey($event, $index)"
+            [matTooltip]="'gateway.delete-argument' | translate"
+            matTooltipPosition="above">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      }
     </div>
-  </div>
+  } @else {
+    <div class="tb-flex no-flex center align-center key-panel">
+      <span class="tb-prompt" translate>{{ 'gateway.no-value' }}</span>
+    </div>
+  }
   <div>
     <button type="button" mat-stroked-button color="primary" (click)="addKey()">
       {{ 'gateway.add-value' | translate }}
     </button>
   </div>
 </div>
-<ng-template #noKeys>
-  <div class="tb-flex no-flex center align-center key-panel">
-    <span class="tb-prompt" translate>{{ 'gateway.no-value' }}</span>
-  </div>
-</ng-template>

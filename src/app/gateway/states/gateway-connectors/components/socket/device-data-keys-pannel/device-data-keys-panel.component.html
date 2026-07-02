@@ -17,289 +17,327 @@
   <div class="tb-form-panel no-border no-padding">
     <div class="tb-form-panel-title">{{ panelTitle  | translate }}{{ ' (' + keysListFormArray.controls.length + ')' }}
     </div>
-    <div class="tb-form-panel no-border no-padding key-panel" *ngIf="keysListFormArray.controls.length; else noKeys">
-      <div class="tb-form-panel no-border no-padding tb-flex no-flex row center fill-width"
-           *ngFor="let keyControl of keysListFormArray.controls; trackBy: trackByKey; let $index = index; let last = last;">
-        <div class="tb-form-panel stroked tb-flex">
-          <ng-container [formGroup]="keyControl">
-            <mat-expansion-panel class="tb-settings" [expanded]="last">
-              <mat-expansion-panel-header class="flex-wrap">
-                <mat-panel-title>
-                  <div class="title-container"
-                       *ngIf="keysType === SocketValueKey.TIMESERIES || keysType === SocketValueKey.ATTRIBUTES else valueTitle">
-                    {{ keyControl.get('key').value }}
-                  </div>
-                  <ng-template #valueTitle>
-                    <div class="title-container" [ngSwitch]="keysType">
-                      <ng-container *ngSwitchCase="SocketValueKey.RPC_METHODS">{{ keyControl.get('methodRPC').value }}</ng-container>
-                      <ng-container *ngSwitchCase="SocketValueKey.ATTRIBUTES_UPDATES">{{ keyControl.get('attributeOnThingsBoard').value }}</ng-container>
-                      <ng-container *ngSwitchCase="SocketValueKey.ATTRIBUTES_REQUESTS">
-                        {{ keyControl.get('requestExpression').value + ' - ' }}{{ keyControl.get('attributeNameExpression').value }}
-                      </ng-container>
-                    </div>
-                  </ng-template>
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-              <ng-template matExpansionPanelContent>
-                <div class="tb-form-panel no-border no-padding"
-                     *ngIf="keysType === SocketValueKey.TIMESERIES || keysType === SocketValueKey.ATTRIBUTES">
-                  <div class="tb-form-panel stroked">
-                    <div class="tb-form-panel-title" translate>gateway.platform-side</div>
-                    <div class="tb-form-row column-xs">
-                      <div class="fixed-title-width tb-required"
+    @if (keysListFormArray.controls.length) {
+      <div class="tb-form-panel no-border no-padding key-panel">
+        @for (keyControl of keysListFormArray.controls; track trackByKey($index, keyControl); let last = $last) {
+          <div class="tb-form-panel no-border no-padding tb-flex no-flex row center fill-width"
+            >
+            <div class="tb-form-panel stroked tb-flex">
+              <ng-container [formGroup]="keyControl">
+                <mat-expansion-panel class="tb-settings" [expanded]="last">
+                  <mat-expansion-panel-header class="flex-wrap">
+                    <mat-panel-title>
+                      @if (keysType === SocketValueKey.TIMESERIES || keysType === SocketValueKey.ATTRIBUTES) {
+                        <div class="title-container"
+                          >
+                          {{ keyControl.get('key').value }}
+                        </div>
+                      } @else {
+                        <div class="title-container">
+                          @switch (keysType) {
+                            @case (SocketValueKey.RPC_METHODS) {
+                              {{ keyControl.get('methodRPC').value }}
+                            }
+                            @case (SocketValueKey.ATTRIBUTES_UPDATES) {
+                              {{ keyControl.get('attributeOnThingsBoard').value }}
+                            }
+                            @case (SocketValueKey.ATTRIBUTES_REQUESTS) {
+                              {{ keyControl.get('requestExpression').value + ' - ' }}{{ keyControl.get('attributeNameExpression').value }}
+                            }
+                          }
+                        </div>
+                      }
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <ng-template matExpansionPanelContent>
+                    @if (keysType === SocketValueKey.TIMESERIES || keysType === SocketValueKey.ATTRIBUTES) {
+                      <div class="tb-form-panel no-border no-padding"
+                        >
+                        <div class="tb-form-panel stroked">
+                          <div class="tb-form-panel-title" translate>gateway.platform-side</div>
+                          <div class="tb-form-row column-xs">
+                            <div class="fixed-title-width tb-required"
                            tb-hint-tooltip-icon="{{ keysType === SocketValueKey.ATTRIBUTES
                            ? ('gateway.hints.socket.key-attribute' | translate)
                            : ('gateway.hints.socket.key-telemetry' | translate) }}">
-                        {{ 'gateway.key' | translate }}
-                      </div>
-                      <div class="tb-flex no-gap">
-                        <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
-                          <input matInput name="value" formControlName="key"
-                                 placeholder="{{ 'gateway.set' | translate }}"/>
-                          <mat-icon matSuffix
+                              {{ 'gateway.key' | translate }}
+                            </div>
+                            <div class="tb-flex no-gap">
+                              <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+                                <input matInput name="value" formControlName="key"
+                                  placeholder="{{ 'gateway.set' | translate }}"/>
+                                @if (keyControl.get('key').hasError('required') &&
+                                  keyControl.get('key').touched) {
+                                  <mat-icon matSuffix
                                     matTooltipPosition="above"
                                     matTooltipClass="tb-error-tooltip"
                                     [matTooltip]="('gateway.key-required') | translate"
-                                    *ngIf="keyControl.get('key').hasError('required') &&
-                                           keyControl.get('key').touched"
                                     class="tb-error">
-                            warning
-                          </mat-icon>
-                        </mat-form-field>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="tb-form-panel stroked">
-                    <div class="tb-form-panel-title" translate>gateway.connector-side</div>
-                    <div class="tb-form-row column-xs">
-                      <div class="fixed-title-width tb-flex align-center">
-                        <span class="tb-required">{{ 'gateway.byte' | translate }}</span>
-                        <div  matSuffix
-                              class="see-example p-1"
-                              [tb-help-popup]="'widget/lib/gateway/byte_fn'"
-                              tb-help-popup-placement="left"
-                              [tb-help-popup-style]="{maxWidth: '970px'}">
+                                    warning
+                                  </mat-icon>
+                                }
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="tb-form-panel stroked">
+                          <div class="tb-form-panel-title" translate>gateway.connector-side</div>
+                          <div class="tb-form-row column-xs">
+                            <div class="fixed-title-width tb-flex align-center">
+                              <span class="tb-required">{{ 'gateway.byte' | translate }}</span>
+                              <div  matSuffix
+                                class="see-example p-1"
+                                [tb-help-popup]="'widget/lib/gateway/byte_fn'"
+                                tb-help-popup-placement="left"
+                                [tb-help-popup-style]="{maxWidth: '970px'}">
+                              </div>
+                            </div>
+                            <label for="byteFrom" class="tb-small-label">from</label>
+                            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="tb-flex no-gap flex-1">
+                              <input matInput required formControlName="byteFrom" type="number" id="byteFrom"
+                                placeholder="{{ 'gateway.set' | translate }}"/>
+                              @if (keyControl.get('byteFrom').hasError('required') &&
+                                keyControl.get('byteFrom').touched) {
+                                <mat-icon matSuffix
+                                  matTooltipPosition="above"
+                                  matTooltipClass="tb-error-tooltip"
+                                  [matTooltip]="('gateway.value-required') | translate"
+                                  class="tb-error">
+                                  warning
+                                </mat-icon>
+                              }
+                            </mat-form-field>
+                            <label for="byteTo" class="tb-small-label">to</label>
+                            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="tb-flex no-gap flex-1">
+                              <input matInput required formControlName="byteTo" type="number" id="byteTo"
+                                placeholder="{{ 'gateway.set' | translate }}"/>
+                              @if (keyControl.get('byteTo').hasError('required') &&
+                                keyControl.get('byteTo').touched) {
+                                <mat-icon matSuffix
+                                  matTooltipPosition="above"
+                                  matTooltipClass="tb-error-tooltip"
+                                  [matTooltip]="('gateway.value-required') | translate"
+                                  class="tb-error">
+                                  warning
+                                </mat-icon>
+                              }
+                            </mat-form-field>
+                          </div>
+                          @if (withReportStrategy && (keysType === SocketValueKey.ATTRIBUTES || keysType === SocketValueKey.TIMESERIES)) {
+                            <tb-report-strategy
+                              [isExpansionMode]="true"
+                              [defaultValue]="ReportStrategyDefaultValue.Key"
+                              formControlName="reportStrategy"
+                              />
+                          }
                         </div>
                       </div>
-                      <label for="byteFrom" class="tb-small-label">from</label>
-                      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="tb-flex no-gap flex-1">
-                        <input matInput required formControlName="byteFrom" type="number" id="byteFrom"
-                               placeholder="{{ 'gateway.set' | translate }}"/>
-                        <mat-icon matSuffix
-                                  matTooltipPosition="above"
-                                  matTooltipClass="tb-error-tooltip"
-                                  [matTooltip]="('gateway.value-required') | translate"
-                                  *ngIf="keyControl.get('byteFrom').hasError('required') &&
-                                         keyControl.get('byteFrom').touched"
-                                  class="tb-error">
-                          warning
-                        </mat-icon>
-                      </mat-form-field>
-                      <label for="byteTo" class="tb-small-label">to</label>
-                      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="tb-flex no-gap flex-1">
-                        <input matInput required formControlName="byteTo" type="number" id="byteTo"
-                               placeholder="{{ 'gateway.set' | translate }}"/>
-                        <mat-icon matSuffix
-                                  matTooltipPosition="above"
-                                  matTooltipClass="tb-error-tooltip"
-                                  [matTooltip]="('gateway.value-required') | translate"
-                                  *ngIf="keyControl.get('byteTo').hasError('required') &&
-                                         keyControl.get('byteTo').touched"
-                                  class="tb-error">
-                          warning
-                        </mat-icon>
-                      </mat-form-field>
-                    </div>
-                    <tb-report-strategy
-                      *ngIf="withReportStrategy && (keysType === SocketValueKey.ATTRIBUTES || keysType === SocketValueKey.TIMESERIES)"
-                      [isExpansionMode]="true"
-                      [defaultValue]="ReportStrategyDefaultValue.Key"
-                      formControlName="reportStrategy"
-                    />
-                  </div>
-                </div>
-                <div class="tb-form-panel no-border no-padding" *ngIf="keysType === SocketValueKey.RPC_METHODS">
-                  <div class="tb-form-row column-xs">
-                    <div class="fixed-title-width tb-required">
-                      {{ 'gateway.method-name' | translate }}
-                    </div>
-                    <div class="tb-flex no-gap">
-                      <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
-                        <input matInput name="value" formControlName="methodRPC"
-                               placeholder="{{ 'gateway.set' | translate }}"/>
-                        <mat-icon matSuffix
+                    }
+                    @if (keysType === SocketValueKey.RPC_METHODS) {
+                      <div class="tb-form-panel no-border no-padding">
+                        <div class="tb-form-row column-xs">
+                          <div class="fixed-title-width tb-required">
+                            {{ 'gateway.method-name' | translate }}
+                          </div>
+                          <div class="tb-flex no-gap">
+                            <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+                              <input matInput name="value" formControlName="methodRPC"
+                                placeholder="{{ 'gateway.set' | translate }}"/>
+                              @if (keyControl.get('methodRPC').hasError('required') && keyControl.get('methodRPC').touched) {
+                                <mat-icon matSuffix
                                   matTooltipPosition="above"
                                   matTooltipClass="tb-error-tooltip"
                                   [matTooltip]="('gateway.method-required') | translate"
-                                  *ngIf="keyControl.get('methodRPC').hasError('required') && keyControl.get('methodRPC').touched"
                                   class="tb-error">
-                          warning
-                        </mat-icon>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                  <div class="tb-form-row column-xs">
-                    <div class="fixed-title-width" tb-hint-tooltip-icon="{{ 'gateway.hints.encoding' | translate }}"
-                         translate>
-                      gateway.encoding
-                    </div>
-                    <div class="tb-flex no-gap">
-                      <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
-                        <mat-select formControlName="encoding">
-                          <mat-option *ngFor="let encoding of socketEncoding" [value]="encoding">{{ encoding.toUpperCase() }}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                  <div class="tb-form-row">
-                    <mat-slide-toggle class="mat-slide" (click)="$event.stopPropagation()"
-                                      formControlName="withResponse">
-                      <mat-label tb-hint-tooltip-icon="{{ 'gateway.hints.socket.with-response' | translate }}">
-                        {{ 'gateway.rpc.withResponse' | translate }}
-                      </mat-label>
-                    </mat-slide-toggle>
-                  </div>
-                </div>
-                <div class="tb-form-panel no-border no-padding" *ngIf="keysType === SocketValueKey.ATTRIBUTES_REQUESTS">
-                  <div class="tb-form-row column-xs">
-                    <div class="fixed-title-width" tb-hint-tooltip-icon="{{ 'gateway.hints.socket.attribute-requests-type' | translate }}"
-                         translate>
-                      gateway.type
-                    </div>
-                    <div class="tb-flex no-gap">
-                      <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
-                        <mat-select formControlName="type">
-                          <mat-option *ngFor="let type of requestsType" [value]="type">{{ type | titlecase }}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                  <div class="tb-form-row column-xs">
-                    <div class="fixed-title-width tb-required">
-                      {{ 'gateway.request-expression' | translate }}
-                    </div>
-                    <div class="tb-flex">
-                      <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
-                        <mat-select formControlName="requestExpressionSource">
-                          <mat-option *ngFor="let type of expressionType" [value]="type">{{ type | titlecase }}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                      <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
-                        <input matInput name="value" formControlName="requestExpression"
-                               placeholder="{{ 'gateway.set' | translate }}"/>
-                        <mat-icon matSuffix
+                                  warning
+                                </mat-icon>
+                              }
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="tb-form-row column-xs">
+                          <div class="fixed-title-width" tb-hint-tooltip-icon="{{ 'gateway.hints.encoding' | translate }}"
+                            translate>
+                            gateway.encoding
+                          </div>
+                          <div class="tb-flex no-gap">
+                            <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+                              <mat-select formControlName="encoding">
+                                @for (encoding of socketEncoding; track encoding) {
+                                  <mat-option [value]="encoding">{{ encoding.toUpperCase() }}
+                                  </mat-option>
+                                }
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="tb-form-row">
+                          <mat-slide-toggle class="mat-slide" (click)="$event.stopPropagation()"
+                            formControlName="withResponse">
+                            <mat-label tb-hint-tooltip-icon="{{ 'gateway.hints.socket.with-response' | translate }}">
+                              {{ 'gateway.rpc.withResponse' | translate }}
+                            </mat-label>
+                          </mat-slide-toggle>
+                        </div>
+                      </div>
+                    }
+                    @if (keysType === SocketValueKey.ATTRIBUTES_REQUESTS) {
+                      <div class="tb-form-panel no-border no-padding">
+                        <div class="tb-form-row column-xs">
+                          <div class="fixed-title-width" tb-hint-tooltip-icon="{{ 'gateway.hints.socket.attribute-requests-type' | translate }}"
+                            translate>
+                            gateway.type
+                          </div>
+                          <div class="tb-flex no-gap">
+                            <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+                              <mat-select formControlName="type">
+                                @for (type of requestsType; track type) {
+                                  <mat-option [value]="type">{{ type | titlecase }}
+                                  </mat-option>
+                                }
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="tb-form-row column-xs">
+                          <div class="fixed-title-width tb-required">
+                            {{ 'gateway.request-expression' | translate }}
+                          </div>
+                          <div class="tb-flex">
+                            <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+                              <mat-select formControlName="requestExpressionSource">
+                                @for (type of expressionType; track type) {
+                                  <mat-option [value]="type">{{ type | titlecase }}
+                                  </mat-option>
+                                }
+                              </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+                              <input matInput name="value" formControlName="requestExpression"
+                                placeholder="{{ 'gateway.set' | translate }}"/>
+                              @if (keyControl.get('requestExpression').hasError('required') && keyControl.get('requestExpression').touched) {
+                                <mat-icon matSuffix
                                   matTooltipPosition="above"
                                   matTooltipClass="tb-error-tooltip"
                                   [matTooltip]="('gateway.request-expression-required') | translate"
-                                  *ngIf="keyControl.get('requestExpression').hasError('required') && keyControl.get('requestExpression').touched"
                                   class="tb-error">
-                          warning
-                        </mat-icon>
-                        <div  matSuffix
-                              *ngIf="keyControl.get('requestExpressionSource').value === ExpressionType.Expression"
-                              class="see-example p-1"
-                              [tb-help-popup]="'widget/lib/gateway/request-expression_fn'"
-                              tb-help-popup-placement="left"
-                              [tb-help-popup-style]="{maxWidth: '970px'}">
+                                  warning
+                                </mat-icon>
+                              }
+                              @if (keyControl.get('requestExpressionSource').value === ExpressionType.Expression) {
+                                <div  matSuffix
+                                  class="see-example p-1"
+                                  [tb-help-popup]="'widget/lib/gateway/request-expression_fn'"
+                                  tb-help-popup-placement="left"
+                                  [tb-help-popup-style]="{maxWidth: '970px'}">
+                                </div>
+                              }
+                            </mat-form-field>
+                          </div>
                         </div>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                  <div class="tb-form-row column-xs">
-                    <div class="fixed-title-width tb-required">
-                      {{ 'gateway.attribute-name-expression' | translate }}
-                    </div>
-                    <div class="tb-flex">
-                      <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
-                        <mat-select formControlName="attributeNameExpressionSource">
-                          <mat-option *ngFor="let type of expressionType" [value]="type">{{ type | titlecase }}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                      <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
-                        <input matInput name="value" formControlName="attributeNameExpression"
-                               placeholder="{{ 'gateway.set' | translate }}"/>
-                        <mat-icon matSuffix
+                        <div class="tb-form-row column-xs">
+                          <div class="fixed-title-width tb-required">
+                            {{ 'gateway.attribute-name-expression' | translate }}
+                          </div>
+                          <div class="tb-flex">
+                            <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+                              <mat-select formControlName="attributeNameExpressionSource">
+                                @for (type of expressionType; track type) {
+                                  <mat-option [value]="type">{{ type | titlecase }}
+                                  </mat-option>
+                                }
+                              </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+                              <input matInput name="value" formControlName="attributeNameExpression"
+                                placeholder="{{ 'gateway.set' | translate }}"/>
+                              @if (keyControl.get('attributeNameExpression').hasError('required') && keyControl.get('attributeNameExpression').touched) {
+                                <mat-icon matSuffix
                                   matTooltipPosition="above"
                                   matTooltipClass="tb-error-tooltip"
                                   [matTooltip]="('gateway.attribute-name-expression-required') | translate"
-                                  *ngIf="keyControl.get('attributeNameExpression').hasError('required') && keyControl.get('attributeNameExpression').touched"
                                   class="tb-error">
-                          warning
-                        </mat-icon>
-                        <div  matSuffix
-                              *ngIf="keyControl.get('attributeNameExpressionSource').value === ExpressionType.Expression"
-                              class="see-example p-1"
-                              [tb-help-popup]="'widget/lib/gateway/attribute-name-expression_fn'"
-                              tb-help-popup-placement="left"
-                              [tb-help-popup-style]="{maxWidth: '970px'}">
+                                  warning
+                                </mat-icon>
+                              }
+                              @if (keyControl.get('attributeNameExpressionSource').value === ExpressionType.Expression) {
+                                <div  matSuffix
+                                  class="see-example p-1"
+                                  [tb-help-popup]="'widget/lib/gateway/attribute-name-expression_fn'"
+                                  tb-help-popup-placement="left"
+                                  [tb-help-popup-style]="{maxWidth: '970px'}">
+                                </div>
+                              }
+                            </mat-form-field>
+                          </div>
                         </div>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                </div>
-                <div class="tb-form-panel no-border no-padding" *ngIf="keysType === SocketValueKey.ATTRIBUTES_UPDATES">
-                  <div class="tb-form-row column-xs">
-                    <div class="fixed-title-width" tb-hint-tooltip-icon="{{ 'gateway.hints.encoding' | translate }}"
-                         translate>
-                      gateway.encoding
-                    </div>
-                    <div class="tb-flex no-gap">
-                      <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
-                        <mat-select formControlName="encoding">
-                          <mat-option *ngFor="let encoding of socketEncoding" [value]="encoding">{{ encoding.toUpperCase() }}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                  <div class="tb-form-row column-xs">
-                    <div class="fixed-title-width tb-required">
-                      {{ 'gateway.attribute-on-platform' | translate }}
-                    </div>
-                    <div class="tb-flex no-gap">
-                      <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
-                        <input matInput name="value" formControlName="attributeOnThingsBoard"
-                               placeholder="{{ 'gateway.set' | translate }}"/>
-                        <mat-icon matSuffix
+                      </div>
+                    }
+                    @if (keysType === SocketValueKey.ATTRIBUTES_UPDATES) {
+                      <div class="tb-form-panel no-border no-padding">
+                        <div class="tb-form-row column-xs">
+                          <div class="fixed-title-width" tb-hint-tooltip-icon="{{ 'gateway.hints.encoding' | translate }}"
+                            translate>
+                            gateway.encoding
+                          </div>
+                          <div class="tb-flex no-gap">
+                            <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+                              <mat-select formControlName="encoding">
+                                @for (encoding of socketEncoding; track encoding) {
+                                  <mat-option [value]="encoding">{{ encoding.toUpperCase() }}
+                                  </mat-option>
+                                }
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="tb-form-row column-xs">
+                          <div class="fixed-title-width tb-required">
+                            {{ 'gateway.attribute-on-platform' | translate }}
+                          </div>
+                          <div class="tb-flex no-gap">
+                            <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+                              <input matInput name="value" formControlName="attributeOnThingsBoard"
+                                placeholder="{{ 'gateway.set' | translate }}"/>
+                              @if (keyControl.get('attributeOnThingsBoard').hasError('required') && keyControl.get('attributeOnThingsBoard').touched) {
+                                <mat-icon matSuffix
                                   matTooltipPosition="above"
                                   matTooltipClass="tb-error-tooltip"
                                   [matTooltip]="('gateway.hints.socket.attribute-on-platform-required') | translate"
-                                  *ngIf="keyControl.get('attributeOnThingsBoard').hasError('required') && keyControl.get('attributeOnThingsBoard').touched"
                                   class="tb-error">
-                          warning
-                        </mat-icon>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                </div>
-              </ng-template>
-            </mat-expansion-panel>
-          </ng-container>
-        </div>
-        <button type="button"
-                mat-icon-button
-                (click)="deleteKey($event, $index)"
-                [matTooltip]="deleteKeyTitle | translate"
-                matTooltipPosition="above">
-          <mat-icon>delete</mat-icon>
-        </button>
+                                  warning
+                                </mat-icon>
+                              }
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  </ng-template>
+                </mat-expansion-panel>
+              </ng-container>
+            </div>
+            <button type="button"
+              mat-icon-button
+              (click)="deleteKey($event, $index)"
+              [matTooltip]="deleteKeyTitle | translate"
+              matTooltipPosition="above">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        }
       </div>
-    </div>
+    } @else {
+      <div class="tb-flex no-flex center align-center key-panel">
+        <span class="tb-prompt" translate>{{ noKeysText }}</span>
+      </div>
+    }
     <div>
       <button type="button" mat-stroked-button color="primary" (click)="addKey()">
         {{ addKeyTitle | translate }}
       </button>
     </div>
   </div>
-  <ng-template #noKeys>
-    <div class="tb-flex no-flex center align-center key-panel">
-      <span class="tb-prompt" translate>{{ noKeysText }}</span>
-    </div>
-  </ng-template>
   <div class="tb-flex flex-end">
     <button mat-button
             color="primary"

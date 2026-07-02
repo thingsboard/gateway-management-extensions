@@ -21,16 +21,20 @@
   <mat-form-field class="mat-block">
     <mat-label>{{ 'gateway.rpc.methodProcessing' | translate }}</mat-label>
     <mat-select formControlName="methodProcessing">
-      <mat-option *ngFor="let method of socketMethodProcessings" [value]="method">
-        {{ SocketMethodProcessingsTranslates.get(method) | translate }}
-      </mat-option>
+      @for (method of socketMethodProcessings; track method) {
+        <mat-option [value]="method">
+          {{ SocketMethodProcessingsTranslates.get(method) | translate }}
+        </mat-option>
+      }
     </mat-select>
   </mat-form-field>
   <mat-form-field class="mat-block">
     <mat-label>{{ 'gateway.encoding' | translate }}</mat-label>
     <mat-select formControlName="encoding">
-      <mat-option *ngFor="let encoding of socketEncoding" [value]="encoding">{{ encoding.toUpperCase() }}
-      </mat-option>
+      @for (encoding of socketEncoding; track encoding) {
+        <mat-option [value]="encoding">{{ encoding.toUpperCase() }}
+        </mat-option>
+      }
     </mat-select>
   </mat-form-field>
   <mat-slide-toggle class="mat-slide margin" formControlName="withResponse">

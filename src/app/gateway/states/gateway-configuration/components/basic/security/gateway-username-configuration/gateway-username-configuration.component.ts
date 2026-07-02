@@ -13,7 +13,7 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-import { Component, forwardRef } from '@angular/core';
+import { Component, DestroyRef, forwardRef } from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -23,7 +23,6 @@ import {
   ValidationErrors,
   Validators
 } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/public-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { GatewayUsernamePasswordConfig } from '../../../../models/public-api';
@@ -47,7 +46,6 @@ import { distinctUntilChanged } from 'rxjs/operators';
   ],
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
   ]
 })
@@ -59,9 +57,10 @@ export class GatewayUsernameConfigurationComponent implements ControlValueAccess
 
   constructor(
     private fb: FormBuilder,
+    private destroyRef: DestroyRef,
   ) {
     this.initForm();
-    this.usernameFormGroup.valueChanges.pipe(takeUntilDestroyed(),distinctUntilChanged((prev, curr) => isEqual(prev, curr))).subscribe(value => this.onChange(value))
+    this.usernameFormGroup.valueChanges.pipe(takeUntilDestroyed(this.destroyRef),distinctUntilChanged((prev, curr) => isEqual(prev, curr))).subscribe(value => this.onChange(value))
   }
 
   writeValue(value: GatewayUsernamePasswordConfig): void {

@@ -18,9 +18,11 @@
     <mat-form-field appearance="outline" class="flex flex-1">
       <mat-label translate>security.clientId</mat-label>
       <input matInput formControlName="clientId"/>
-      <mat-error *ngIf="usernameFormGroup.get('clientId').hasError('required')">
-        {{ 'security.clientId-required' | translate }}
-      </mat-error>
+      @if (usernameFormGroup.get('clientId').hasError('required')) {
+        <mat-error>
+          {{ 'security.clientId-required' | translate }}
+        </mat-error>
+      }
       @if (usernameFormGroup.get('clientId').value) {
         <tb-copy-button
           matSuffix
@@ -48,9 +50,11 @@
     <mat-form-field appearance="outline" class="flex flex-1">
       <mat-label translate>security.username</mat-label>
       <input matInput formControlName="username"/>
-      <mat-error *ngIf="usernameFormGroup.get('username').hasError('required')">
-        {{ 'security.username-required' | translate }}
-      </mat-error>
+      @if (usernameFormGroup.get('username').hasError('required')) {
+        <mat-error>
+          {{ 'security.username-required' | translate }}
+        </mat-error>
+      }
       @if (usernameFormGroup.get('username').value) {
         <tb-copy-button
           matSuffix
@@ -104,11 +108,13 @@
     </mat-icon>
   </mat-form-field>
 </section>
-<tb-error class="block"
-          *ngIf="usernameFormGroup.hasError('atLeastOneRequired') && usernameFormGroup.touched"
-          [error]="('device.client-id-or-user-name-necessary' | translate)">
-</tb-error>
-<tb-error class="block"
-          *ngIf="usernameFormGroup.hasError('usernameRequired') && usernameFormGroup.touched"
-          [error]="('gateway.hints.username-required-with-password' | translate)">
-</tb-error>
+@if (usernameFormGroup.hasError('atLeastOneRequired') && usernameFormGroup.touched) {
+  <tb-error class="block"
+    [error]="('device.client-id-or-user-name-necessary' | translate)">
+  </tb-error>
+}
+@if (usernameFormGroup.hasError('usernameRequired') && usernameFormGroup.touched) {
+  <tb-error class="block"
+    [error]="('gateway.hints.username-required-with-password' | translate)">
+  </tb-error>
+}
