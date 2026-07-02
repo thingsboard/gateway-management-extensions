@@ -69,6 +69,7 @@
             <mat-error *ngIf="storageFormGroup.get('data_folder_path').hasError('pattern')">
               {{ 'gateway.storage-data-folder-path-pattern' | translate }}
             </mat-error>
+            <mat-hint></mat-hint>
             <mat-icon class="mat-form-field-infix pointer-event suffix-icon" aria-hidden="false"
                       aria-label="help-icon"
                       matSuffix style="cursor:pointer;"
