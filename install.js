@@ -19,11 +19,28 @@ const path = require('path');
 
 let _projectRoot = null;
 
-(async() => {
-  await fse.move(sourcePackage(),
-    targetPackage(),
-    {overwrite: true});
+(async () => {
+  // Move the JavaScript file and its associated source map
+  await moveFileWithSourceMap(sourcePackage(), targetPackage());
 })();
+
+// Function to move the main package and its source map
+async function moveFileWithSourceMap(sourceFilePath, targetFilePath) {
+  try {
+    // Move the main JavaScript file
+    await fse.move(sourceFilePath, targetFilePath, { overwrite: true });
+
+    // Check if a source map exists and move it if found
+    const sourceMapPath = `${sourceFilePath}.map`;
+    const targetMapPath = `${targetFilePath}.map`;
+
+    if (fse.pathExists(sourceMapPath)) {
+      await fse.move(sourceMapPath, targetMapPath, { overwrite: true });
+    }
+  } catch (err) {
+    console.error(`Error moving files: ${err.message}`);
+  }
+}
 
 function projectRoot() {
   if (!_projectRoot) {
