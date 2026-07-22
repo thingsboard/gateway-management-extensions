@@ -83,7 +83,7 @@
         </ng-container>
         <ng-container matColumnDef="actions" stickyEnd>
           <mat-header-cell *matHeaderCellDef class="w-12"/>
-          <mat-cell *matCellDef="let device; let i = index">
+          <mat-cell *matCellDef="let device">
             <ng-template #rowActions>
               <button mat-icon-button
                       matTooltip="{{ 'action.edit' | translate }}"
