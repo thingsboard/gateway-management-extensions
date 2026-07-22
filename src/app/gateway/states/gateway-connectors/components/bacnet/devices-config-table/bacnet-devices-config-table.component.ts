@@ -92,7 +92,8 @@ export class BacnetDevicesConfigTableComponent extends AbstractDevicesConfigTabl
       true
     ).pipe(take(1), takeUntilDestroyed(this.destroyRef)).subscribe((result) => {
       if (result) {
-        this.entityFormArray.removeAt(index);
+        const originalIndex = this.entityFormArray.value.findIndex(item => JSON.stringify(item) === JSON.stringify(device));
+        this.entityFormArray.removeAt(originalIndex);
         this.entityFormArray.markAsDirty();
       }
     });
