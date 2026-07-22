@@ -94,18 +94,18 @@
         </ng-container>
         <ng-container matColumnDef="actions" stickyEnd>
           <mat-header-cell *matHeaderCellDef class="w-12"/>
-          <mat-cell *matCellDef="let slave; let i = index">
+          <mat-cell *matCellDef="let slave">
             <ng-template #rowActions>
               <button mat-icon-button
                       matTooltip="{{ 'action.edit' | translate }}"
                       matTooltipPosition="above"
-                      (click)="manageSlave($event, i)">
+                      (click)="manageSlave($event, slave)">
                 <tb-icon>edit</tb-icon>
               </button>
               <button mat-icon-button
                       matTooltip="{{ 'action.delete' | translate }}"
                       matTooltipPosition="above"
-                      (click)="deleteSlave($event, i)">
+                      (click)="deleteSlave($event, slave)">
                 <tb-icon>delete</tb-icon>
               </button>
             </ng-template>
