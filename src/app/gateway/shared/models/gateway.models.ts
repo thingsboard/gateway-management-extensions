@@ -37,6 +37,7 @@ export enum GatewayLogLevel {
 }
 
 export enum GatewayVersion {
+  v3_8_5 = '3.8.5',
   v3_7_3 = '3.7.3',
   v3_7_2 = '3.7.2',
   v3_7_0 = '3.7',
@@ -65,6 +66,7 @@ export enum ConnectorType {
   OCPP = 'ocpp',
   CUSTOM = 'custom',
   KNX = 'knx',
+  S7 = 's7',
 }
 
 export const GatewayConnectorDefaultTypesTranslatesMap = new Map<ConnectorType, string>([
@@ -85,11 +87,13 @@ export const GatewayConnectorDefaultTypesTranslatesMap = new Map<ConnectorType, 
   [ConnectorType.OCPP, 'OCPP'],
   [ConnectorType.CUSTOM, 'CUSTOM'],
   [ConnectorType.KNX, 'KNX'],
+  [ConnectorType.S7, 'S7'],
 ]);
 
 export const ConnectorsTypesByVersion = new Map<GatewayVersion, ConnectorType[]>([
-  [GatewayVersion.v3_7_0, Object.values(ConnectorType)],
-  [GatewayVersion.Legacy, Object.values(ConnectorType).filter(type => type!== ConnectorType.KNX)],
+  [GatewayVersion.v3_8_5, Object.values(ConnectorType)],
+  [GatewayVersion.v3_7_0, Object.values(ConnectorType).filter(type => type !== ConnectorType.S7)],
+  [GatewayVersion.Legacy, Object.values(ConnectorType).filter(type => ![ConnectorType.KNX, ConnectorType.S7].includes(type))],
 ]);
 
 export type ConnectorBaseConfig = ConnectorLegacyConfig
