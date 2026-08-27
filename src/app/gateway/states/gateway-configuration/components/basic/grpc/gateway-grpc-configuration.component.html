@@ -32,18 +32,26 @@
           <mat-icon matIconSuffix style="cursor:pointer;"
                     matTooltip="{{ 'gateway.hints.server-port' | translate }}">info_outlined
           </mat-icon>
-          <mat-error *ngIf="grpcFormGroup.get('serverPort').hasError('required')">
-            {{ 'gateway.thingsboard-port-required' | translate }}
-          </mat-error>
-          <mat-error *ngIf="grpcFormGroup.get('serverPort').hasError('min')">
-            {{ 'gateway.thingsboard-port-min' | translate }}
-          </mat-error>
-          <mat-error *ngIf="grpcFormGroup.get('serverPort').hasError('max')">
-            {{ 'gateway.thingsboard-port-max' | translate }}
-          </mat-error>
-          <mat-error *ngIf="grpcFormGroup.get('serverPort').hasError('pattern')">
-            {{ 'gateway.thingsboard-port-pattern' | translate }}
-          </mat-error>
+          @if (grpcFormGroup.get('serverPort').hasError('required')) {
+            <mat-error>
+              {{ 'gateway.thingsboard-port-required' | translate }}
+            </mat-error>
+          }
+          @if (grpcFormGroup.get('serverPort').hasError('min')) {
+            <mat-error>
+              {{ 'gateway.thingsboard-port-min' | translate }}
+            </mat-error>
+          }
+          @if (grpcFormGroup.get('serverPort').hasError('max')) {
+            <mat-error>
+              {{ 'gateway.thingsboard-port-max' | translate }}
+            </mat-error>
+          }
+          @if (grpcFormGroup.get('serverPort').hasError('pattern')) {
+            <mat-error>
+              {{ 'gateway.thingsboard-port-pattern' | translate }}
+            </mat-error>
+          }
         </mat-form-field>
         <mat-form-field appearance="outline" class="flex">
           <mat-label translate>gateway.grpc-keep-alive-timeout</mat-label>
@@ -51,15 +59,21 @@
           <mat-icon matIconSuffix style="cursor:pointer;"
                     matTooltip="{{ 'gateway.hints.grpc-keep-alive-timeout' | translate }}">info_outlined
           </mat-icon>
-          <mat-error *ngIf="grpcFormGroup.get('keepAliveTimeoutMs').hasError('required')">
-            {{ 'gateway.grpc-keep-alive-timeout-required' | translate }}
-          </mat-error>
-          <mat-error *ngIf="grpcFormGroup.get('keepAliveTimeoutMs').hasError('min')">
-            {{ 'gateway.grpc-keep-alive-timeout-min' | translate }}
-          </mat-error>
-          <mat-error *ngIf="grpcFormGroup.get('keepAliveTimeoutMs').hasError('pattern')">
-            {{ 'gateway.grpc-keep-alive-timeout-pattern' | translate }}
-          </mat-error>
+          @if (grpcFormGroup.get('keepAliveTimeoutMs').hasError('required')) {
+            <mat-error>
+              {{ 'gateway.grpc-keep-alive-timeout-required' | translate }}
+            </mat-error>
+          }
+          @if (grpcFormGroup.get('keepAliveTimeoutMs').hasError('min')) {
+            <mat-error>
+              {{ 'gateway.grpc-keep-alive-timeout-min' | translate }}
+            </mat-error>
+          }
+          @if (grpcFormGroup.get('keepAliveTimeoutMs').hasError('pattern')) {
+            <mat-error>
+              {{ 'gateway.grpc-keep-alive-timeout-pattern' | translate }}
+            </mat-error>
+          }
         </mat-form-field>
       </section>
       <section class="tb-form-row no-border no-padding tb-standard-fields column-xs">
@@ -69,15 +83,21 @@
           <mat-icon matIconSuffix style="cursor:pointer;"
                     matTooltip="{{ 'gateway.hints.grpc-keep-alive' | translate }}">info_outlined
           </mat-icon>
-          <mat-error *ngIf="grpcFormGroup.get('keepAliveTimeMs').hasError('required')">
-            {{ 'gateway.grpc-keep-alive-required' | translate }}
-          </mat-error>
-          <mat-error *ngIf="grpcFormGroup.get('keepAliveTimeMs').hasError('min')">
-            {{ 'gateway.grpc-keep-alive-min' | translate }}
-          </mat-error>
-          <mat-error *ngIf="grpcFormGroup.get('keepAliveTimeMs').hasError('pattern')">
-            {{ 'gateway.grpc-keep-alive-pattern' | translate }}
-          </mat-error>
+          @if (grpcFormGroup.get('keepAliveTimeMs').hasError('required')) {
+            <mat-error>
+              {{ 'gateway.grpc-keep-alive-required' | translate }}
+            </mat-error>
+          }
+          @if (grpcFormGroup.get('keepAliveTimeMs').hasError('min')) {
+            <mat-error>
+              {{ 'gateway.grpc-keep-alive-min' | translate }}
+            </mat-error>
+          }
+          @if (grpcFormGroup.get('keepAliveTimeMs').hasError('pattern')) {
+            <mat-error>
+              {{ 'gateway.grpc-keep-alive-pattern' | translate }}
+            </mat-error>
+          }
         </mat-form-field>
         <mat-form-field appearance="outline" class="flex">
           <mat-label translate>gateway.grpc-min-time-between-pings</mat-label>
@@ -85,15 +105,21 @@
           <mat-icon matIconSuffix style="cursor:pointer;"
                     matTooltip="{{ 'gateway.hints.grpc-min-time-between-pings' | translate }}">info_outlined
           </mat-icon>
-          <mat-error *ngIf="grpcFormGroup.get('minTimeBetweenPingsMs').hasError('required')">
-            {{ 'gateway.grpc-min-time-between-pings-required' | translate }}
-          </mat-error>
-          <mat-error *ngIf="grpcFormGroup.get('minTimeBetweenPingsMs').hasError('min')">
-            {{ 'gateway.grpc-min-time-between-pings-min' | translate }}
-          </mat-error>
-          <mat-error *ngIf="grpcFormGroup.get('minTimeBetweenPingsMs').hasError('pattern')">
-            {{ 'gateway.grpc-min-time-between-pings-pattern' | translate }}
-          </mat-error>
+          @if (grpcFormGroup.get('minTimeBetweenPingsMs').hasError('required')) {
+            <mat-error>
+              {{ 'gateway.grpc-min-time-between-pings-required' | translate }}
+            </mat-error>
+          }
+          @if (grpcFormGroup.get('minTimeBetweenPingsMs').hasError('min')) {
+            <mat-error>
+              {{ 'gateway.grpc-min-time-between-pings-min' | translate }}
+            </mat-error>
+          }
+          @if (grpcFormGroup.get('minTimeBetweenPingsMs').hasError('pattern')) {
+            <mat-error>
+              {{ 'gateway.grpc-min-time-between-pings-pattern' | translate }}
+            </mat-error>
+          }
         </mat-form-field>
       </section>
       <section class="tb-form-row no-border no-padding tb-standard-fields column-xs">
@@ -103,15 +129,21 @@
           <mat-icon matIconSuffix style="cursor:pointer;"
                     matTooltip="{{ 'gateway.hints.grpc-max-pings-without-data' | translate }}">info_outlined
           </mat-icon>
-          <mat-error *ngIf="grpcFormGroup.get('maxPingsWithoutData').hasError('required')">
-            {{ 'gateway.grpc-max-pings-without-data-required' | translate }}
-          </mat-error>
-          <mat-error *ngIf="grpcFormGroup.get('maxPingsWithoutData').hasError('min')">
-            {{ 'gateway.grpc-max-pings-without-data-min' | translate }}
-          </mat-error>
-          <mat-error *ngIf="grpcFormGroup.get('maxPingsWithoutData').hasError('pattern')">
-            {{ 'gateway.grpc-max-pings-without-data-pattern' | translate }}
-          </mat-error>
+          @if (grpcFormGroup.get('maxPingsWithoutData').hasError('required')) {
+            <mat-error>
+              {{ 'gateway.grpc-max-pings-without-data-required' | translate }}
+            </mat-error>
+          }
+          @if (grpcFormGroup.get('maxPingsWithoutData').hasError('min')) {
+            <mat-error>
+              {{ 'gateway.grpc-max-pings-without-data-min' | translate }}
+            </mat-error>
+          }
+          @if (grpcFormGroup.get('maxPingsWithoutData').hasError('pattern')) {
+            <mat-error>
+              {{ 'gateway.grpc-max-pings-without-data-pattern' | translate }}
+            </mat-error>
+          }
         </mat-form-field>
         <mat-form-field appearance="outline" class="flex">
           <mat-label translate>gateway.grpc-min-ping-interval-without-data</mat-label>
@@ -119,15 +151,21 @@
           <mat-icon matIconSuffix style="cursor:pointer;"
                     matTooltip="{{ 'gateway.hints.grpc-min-ping-interval-without-data' | translate }}">info_outlined
           </mat-icon>
-          <mat-error *ngIf="grpcFormGroup.get('minPingIntervalWithoutDataMs').hasError('required')">
-            {{ 'gateway.grpc-min-ping-interval-without-data-required' | translate }}
-          </mat-error>
-          <mat-error *ngIf="grpcFormGroup.get('minPingIntervalWithoutDataMs').hasError('min')">
-            {{ 'gateway.grpc-min-ping-interval-without-data-min' | translate }}
-          </mat-error>
-          <mat-error *ngIf="grpcFormGroup.get('minPingIntervalWithoutDataMs').hasError('pattern')">
-            {{ 'gateway.grpc-min-ping-interval-without-data-pattern' | translate }}
-          </mat-error>
+          @if (grpcFormGroup.get('minPingIntervalWithoutDataMs').hasError('required')) {
+            <mat-error>
+              {{ 'gateway.grpc-min-ping-interval-without-data-required' | translate }}
+            </mat-error>
+          }
+          @if (grpcFormGroup.get('minPingIntervalWithoutDataMs').hasError('min')) {
+            <mat-error>
+              {{ 'gateway.grpc-min-ping-interval-without-data-min' | translate }}
+            </mat-error>
+          }
+          @if (grpcFormGroup.get('minPingIntervalWithoutDataMs').hasError('pattern')) {
+            <mat-error>
+              {{ 'gateway.grpc-min-ping-interval-without-data-pattern' | translate }}
+            </mat-error>
+          }
         </mat-form-field>
       </section>
     </section>

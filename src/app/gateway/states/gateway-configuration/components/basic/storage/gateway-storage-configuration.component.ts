@@ -13,7 +13,7 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-import { AfterViewInit, Component, EventEmitter, forwardRef, Output } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, EventEmitter, forwardRef, Output } from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -23,7 +23,6 @@ import {
   ValidationErrors, ValidatorFn,
   Validators
 } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/public-api';
 import {
   GatewayStorageConfig,
@@ -51,7 +50,6 @@ import { isDefinedAndNotNull } from "@core/public-api";
   ],
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
   ]
 })
@@ -94,10 +92,11 @@ export class GatewayStorageConfigurationComponent implements AfterViewInit, Vali
     }
   };
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private destroyRef: DestroyRef) {
     this.storageFormGroup = this.initStorageFormGroup();
     this.observeStorageTypeChanges();
-    this.storageFormGroup.valueChanges.pipe(takeUntilDestroyed()).subscribe(value => {
+    this.storageFormGroup.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
       this.onChange(value);
     });
   }
@@ -146,7 +145,7 @@ export class GatewayStorageConfigurationComponent implements AfterViewInit, Vali
   }
 
   private observeStorageTypeChanges(): void {
-    this.storageFormGroup.get('type').valueChanges.pipe(takeUntilDestroyed()).subscribe((type: StorageTypes) => {
+    this.storageFormGroup.get('type').valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((type: StorageTypes) => {
       this.updateValidators(type);
     });
   }

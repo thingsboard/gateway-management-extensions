@@ -22,13 +22,17 @@
     <mat-form-field class="flex-1">
       <mat-label>{{ 'gateway.rpc.type' | translate }}</mat-label>
       <mat-select formControlName="type">
-        <mat-option *ngFor="let type of modbusDataTypes" [value]="type">{{ type }}</mat-option>
+        @for (type of modbusDataTypes; track type) {
+          <mat-option [value]="type">{{ type }}</mat-option>
+        }
       </mat-select>
     </mat-form-field>
     <mat-form-field class="flex-1">
       <mat-label>{{ 'gateway.rpc.functionCode' | translate }}</mat-label>
       <mat-select formControlName="functionCode">
-        <mat-option *ngFor="let code of functionCodes" [value]="code">{{ ModbusFunctionCodeTranslationsMap.get(code) | translate}}</mat-option>
+        @for (code of functionCodes; track code) {
+          <mat-option [value]="code">{{ ModbusFunctionCodeTranslationsMap.get(code) | translate}}</mat-option>
+        }
       </mat-select>
     </mat-form-field>
   </div>
@@ -36,15 +40,16 @@
     <mat-form-field class="flex-1">
       <mat-label>{{ 'gateway.rpc.address' | translate }}</mat-label>
       <input matInput type="number" min="0" max="50000" name="value" formControlName="address" placeholder="{{ 'gateway.set' | translate }}"/>
-      <mat-icon matSuffix
-                matTooltipPosition="above"
-                matTooltipClass="tb-error-tooltip"
-                [matTooltip]="('gateway.address-required') | translate"
-                *ngIf="rpcParametersFormGroup.get('address').hasError('required') &&
-                                           rpcParametersFormGroup.get('address').touched"
-                class="tb-error">
-        warning
-      </mat-icon>
+      @if (rpcParametersFormGroup.get('address').hasError('required') &&
+        rpcParametersFormGroup.get('address').touched) {
+        <mat-icon matSuffix
+          matTooltipPosition="above"
+          matTooltipClass="tb-error-tooltip"
+          [matTooltip]="('gateway.address-required') | translate"
+          class="tb-error">
+          warning
+        </mat-icon>
+      }
     </mat-form-field>
     <mat-form-field class="flex-1">
       <mat-label>{{ 'gateway.rpc.objectsCount' | translate }}</mat-label>
@@ -60,20 +65,23 @@
       />
     </mat-form-field>
   </div>
-  <div *ngIf="writeFunctionCodes.includes(rpcParametersFormGroup.get('functionCode').value)" class="flex">
-    <mat-form-field class="flex-1">
-      <mat-label>{{ 'gateway.rpc.value' | translate }}</mat-label>
-      <input matInput name="value" formControlName="value" placeholder="{{ 'gateway.set' | translate }}"/>
-      <mat-icon matSuffix
-                matTooltipPosition="above"
-                matTooltipClass="tb-error-tooltip"
-                [matTooltip]="('gateway.value-required') | translate"
-                *ngIf="rpcParametersFormGroup.get('value').hasError('required') && rpcParametersFormGroup.get('value').touched"
-                class="tb-error"
-      >
-        warning
-      </mat-icon>
-    </mat-form-field>
-  </div>
+  @if (writeFunctionCodes.includes(rpcParametersFormGroup.get('functionCode').value)) {
+    <div class="flex">
+      <mat-form-field class="flex-1">
+        <mat-label>{{ 'gateway.rpc.value' | translate }}</mat-label>
+        <input matInput name="value" formControlName="value" placeholder="{{ 'gateway.set' | translate }}"/>
+        @if (rpcParametersFormGroup.get('value').hasError('required') && rpcParametersFormGroup.get('value').touched) {
+          <mat-icon matSuffix
+            matTooltipPosition="above"
+            matTooltipClass="tb-error-tooltip"
+            [matTooltip]="('gateway.value-required') | translate"
+            class="tb-error"
+            >
+            warning
+          </mat-icon>
+        }
+      </mat-form-field>
+    </div>
+  }
 </ng-container>
 

@@ -13,7 +13,14 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-import { AfterViewInit, Component, EventEmitter, forwardRef, Output } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  DestroyRef,
+  EventEmitter,
+  forwardRef,
+  Output
+} from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -74,10 +81,11 @@ export class GatewayLogsConfigurationComponent implements AfterViewInit, Validat
 
   private onChange: (value: GatewayLogsConfig) => void = () => {};
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private destroyRef: DestroyRef) {
     this.logsFormGroup = this.initLogsFormGroup();
     this.showRemoteLogsControl = this.fb.control(false);
-    this.logsFormGroup.valueChanges.pipe(takeUntilDestroyed()).subscribe(value => {
+    this.logsFormGroup.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
       this.onChange(value);
     });
     this.logSelector = this.fb.control(LocalLogsConfigs.service);
@@ -85,7 +93,7 @@ export class GatewayLogsConfigurationComponent implements AfterViewInit, Validat
       this.addLocalLogConfig(key, {} as LogConfig);
     }
     this.showRemoteLogsControl.valueChanges
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(enable => this.logsFormGroup.get('logLevel')[enable ? 'enable' : 'disable']());
   }
 

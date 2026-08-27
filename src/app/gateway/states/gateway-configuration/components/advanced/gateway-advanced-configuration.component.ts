@@ -27,7 +27,6 @@ import {
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SharedModule } from '@shared/public-api';
-import { CommonModule } from '@angular/common';
 import { GatewayConfigValue } from '../../models/public-api';
 
 @Component({
@@ -35,7 +34,6 @@ import { GatewayConfigValue } from '../../models/public-api';
   templateUrl: './gateway-advanced-configuration.component.html',
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
   ],
   providers: [

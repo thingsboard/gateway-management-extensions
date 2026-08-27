@@ -21,7 +21,6 @@ import {
   Component,
   Input,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { AttributeData, AttributeScope, DeviceId, SharedModule } from '@shared/public-api';
 import { WidgetContext } from '@home/models/widget-component.models';
 import { AttributeService } from '@core/public-api';
@@ -33,7 +32,6 @@ import { AttributeService } from '@core/public-api';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
   ]
 })

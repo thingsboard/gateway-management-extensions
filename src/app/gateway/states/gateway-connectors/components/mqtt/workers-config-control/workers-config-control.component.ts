@@ -31,7 +31,6 @@ import {
   Validators
 } from '@angular/forms';
 import { SharedModule } from '@shared/public-api';
-import { CommonModule } from '@angular/common';
 import { TruncateWithTooltipDirective } from '../../../../../shared/directives/public-api';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -43,7 +42,6 @@ import { WorkersConfig } from '../../../models/public-api';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
     TruncateWithTooltipDirective,
   ],

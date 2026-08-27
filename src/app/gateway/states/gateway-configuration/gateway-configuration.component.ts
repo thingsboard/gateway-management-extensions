@@ -51,7 +51,6 @@ import {
   AttributeScope,
   SharedModule
 } from '@shared/public-api';
-import { CommonModule } from '@angular/common';
 import { GatewayBasicConfigurationComponent, GatewayAdvancedConfigurationComponent } from './components/public-api';
 import { GatewayDeviceCredentialsService } from './services/public-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -63,7 +62,6 @@ import { GatewayConnectorVersionMappingUtil } from '../gateway-connectors/utils/
   styleUrls: ['./gateway-configuration.component.scss'],
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
     ReportStrategyVersionPipe,
     GatewayBasicConfigurationComponent,

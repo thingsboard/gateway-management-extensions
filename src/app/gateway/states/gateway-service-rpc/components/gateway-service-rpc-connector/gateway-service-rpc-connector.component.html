@@ -15,10 +15,10 @@
 -->
 <div class="command-form flex flex-col" [formGroup]="commandForm">
   <div
-    class="mat-subtitle-1 title">{{ 'gateway.rpc.title' | translate: {type: gatewayConnectorDefaultTypesTranslates.get(connectorType)} }}</div>
-  <ng-template [ngIf]="connectorType">
-    <ng-container [ngSwitch]="connectorType">
-      <ng-template [ngSwitchCase]="ConnectorType.BACNET">
+  class="mat-subtitle-1 title">{{ 'gateway.rpc.title' | translate: {type: gatewayConnectorDefaultTypesTranslates.get(connectorType)} }}</div>
+  @if (connectorType) {
+    @switch (connectorType) {
+      @case (ConnectorType.BACNET) {
         <mat-form-field>
           <mat-label>{{ 'gateway.rpc.methodRPC' | translate }}</mat-label>
           <input matInput formControlName="method" placeholder="set_state"/>
@@ -26,9 +26,11 @@
         <mat-form-field class="mat-block">
           <mat-label>{{ 'gateway.rpc.requestType' | translate }}</mat-label>
           <mat-select formControlName="requestType">
-            <mat-option *ngFor="let type of bACnetRequestTypes" [value]="type">
-              {{bACnetRequestTypesTranslates.get(type) | translate}}
-            </mat-option>
+            @for (type of bACnetRequestTypes; track type) {
+              <mat-option [value]="type">
+                {{bACnetRequestTypesTranslates.get(type) | translate}}
+              </mat-option>
+            }
           </mat-select>
         </mat-form-field>
         <mat-form-field>
@@ -40,9 +42,11 @@
           <mat-form-field class="flex-1">
             <mat-label>{{ 'gateway.rpc.objectType' | translate }}</mat-label>
             <mat-select formControlName="objectType">
-              <mat-option *ngFor="let type of bACnetObjectTypes" [value]="type">
-                {{bACnetObjectTypesTranslates.get(type) | translate}}
-              </mat-option>
+              @for (type of bACnetObjectTypes; track type) {
+                <mat-option [value]="type">
+                  {{bACnetObjectTypesTranslates.get(type) | translate}}
+                </mat-option>
+              }
             </mat-select>
           </mat-form-field>
           <mat-form-field class="flex-1">
@@ -55,8 +59,8 @@
           <mat-label>{{ 'gateway.rpc.propertyId' | translate }}</mat-label>
           <input matInput formControlName="propertyId" placeholder="presentValue"/>
         </mat-form-field>
-      </ng-template>
-      <ng-template [ngSwitchCase]="ConnectorType.BLE">
+      }
+      @case (ConnectorType.BLE) {
         <mat-form-field>
           <mat-label>{{ 'gateway.rpc.methodRPC' | translate }}</mat-label>
           <input matInput formControlName="methodRPC" placeholder="rpcMethod1"/>
@@ -68,16 +72,18 @@
         <mat-form-field class="mat-block">
           <mat-label>{{ 'gateway.rpc.methodProcessing' | translate }}</mat-label>
           <mat-select formControlName="methodProcessing">
-            <mat-option *ngFor="let type of bLEMethods" [value]="type">
-              {{bLEMethodsTranslates.get(type) | translate}}
-            </mat-option>
+            @for (type of bLEMethods; track type) {
+              <mat-option [value]="type">
+                {{bLEMethodsTranslates.get(type) | translate}}
+              </mat-option>
+            }
           </mat-select>
         </mat-form-field>
         <mat-slide-toggle class="mat-slide" formControlName="withResponse">
           {{ 'gateway.rpc.withResponse' | translate }}
         </mat-slide-toggle>
-      </ng-template>
-      <ng-template [ngSwitchCase]="ConnectorType.CAN">
+      }
+      @case (ConnectorType.CAN) {
         <mat-form-field>
           <mat-label>{{ 'gateway.rpc.methodRPC' | translate }}</mat-label>
           <input matInput formControlName="method" placeholder="sendSameData"/>
@@ -103,9 +109,11 @@
           <mat-form-field class="flex-1">
             <mat-label>{{ 'gateway.rpc.dataByteorder' | translate }}</mat-label>
             <mat-select formControlName="dataByteorder">
-              <mat-option *ngFor="let order of cANByteOrders" [value]="order">
-                {{ order | translate }}
-              </mat-option>
+              @for (order of cANByteOrders; track order) {
+                <mat-option [value]="order">
+                  {{ order | translate }}
+                </mat-option>
+              }
             </mat-select>
           </mat-form-field>
         </div>
@@ -129,8 +137,8 @@
           <input matInput formControlName="dataExpression"
                  placeholder="userSpeed if maxAllowedSpeed > userSpeed else maxAllowedSpeed"/>
         </mat-form-field>
-      </ng-template>
-      <ng-template [ngSwitchCase]="ConnectorType.FTP">
+      }
+      @case (ConnectorType.FTP) {
         <mat-form-field>
           <mat-label>{{ 'gateway.rpc.methodFilter' | translate }}</mat-label>
           <input matInput formControlName="methodFilter" placeholder="read"/>
@@ -139,8 +147,8 @@
           <mat-label>{{ 'gateway.rpc.valueExpression' | translate }}</mat-label>
           <input matInput formControlName="valueExpression" placeholder="${params}"/>
         </mat-form-field>
-      </ng-template>
-      <ng-template [ngSwitchCase]="ConnectorType.OCPP">
+      }
+      @case (ConnectorType.OCPP) {
         <mat-form-field>
           <mat-label>{{ 'gateway.rpc.methodRPC' | translate }}</mat-label>
           <input matInput formControlName="methodRPC" placeholder="rpc1"/>
@@ -152,8 +160,8 @@
         <mat-slide-toggle class="mat-slide margin" formControlName="withResponse">
           {{ 'gateway.rpc.withResponse' | translate }}
         </mat-slide-toggle>
-      </ng-template>
-      <ng-template [ngSwitchCase]="ConnectorType.XMPP">
+      }
+      @case (ConnectorType.XMPP) {
         <mat-form-field>
           <mat-label>{{ 'gateway.rpc.methodRPC' | translate }}</mat-label>
           <input matInput formControlName="methodRPC" placeholder="rpc1"/>
@@ -165,8 +173,8 @@
         <mat-slide-toggle class="mat-slide margin" formControlName="withResponse">
           {{ 'gateway.rpc.withResponse' | translate }}
         </mat-slide-toggle>
-      </ng-template>
-      <ng-template [ngSwitchCase]="ConnectorType.SNMP">
+      }
+      @case (ConnectorType.SNMP) {
         <mat-form-field>
           <mat-label>{{ 'gateway.rpc.requestFilter' | translate }}</mat-label>
           <input matInput formControlName="requestFilter" placeholder="setData"/>
@@ -174,9 +182,11 @@
         <mat-form-field class="mat-block">
           <mat-label>{{ 'gateway.rpc.method' | translate }}</mat-label>
           <mat-select formControlName="method">
-            <mat-option *ngFor="let method of sNMPMethods" [value]="method">
-              {{ SNMPMethodsTranslations.get(method) | translate }}
-            </mat-option>
+            @for (method of sNMPMethods; track method) {
+              <mat-option [value]="method">
+                {{ SNMPMethodsTranslations.get(method) | translate }}
+              </mat-option>
+            }
           </mat-select>
         </mat-form-field>
         <mat-slide-toggle class="mat-slide margin" formControlName="withResponse">
@@ -184,25 +194,27 @@
         </mat-slide-toggle>
         <fieldset class="fields flex flex-col gap-2.5 border" formArrayName="oid">
           <span class="fields-label">{{ 'gateway.rpc.oids' | translate }}*</span>
-          <div class="flex flex-1 flex-row items-center justify-center gap-2.5"
-               *ngFor="let control of getFormArrayControls('oid'); let i = index">
-            <mat-form-field class="tb-inline-field flex-1" appearance="outline" subscriptSizing="dynamic">
-              <input matInput [formControl]="control" required/>
-            </mat-form-field>
-            <mat-icon style="cursor:pointer; max-width:30px;min-width:30px"
-                      class="flex-[1_1_30px]"
-                      (click)="removeSNMPoid(i)"
-                      matTooltip="{{ 'gateway.rpc.remove' | translate }}">delete
-            </mat-icon>
-          </div>
+          @for (control of getFormArrayControls('oid'); track control; let i = $index) {
+            <div class="flex flex-1 flex-row items-center justify-center gap-2.5"
+              >
+              <mat-form-field class="tb-inline-field flex-1" appearance="outline" subscriptSizing="dynamic">
+                <input matInput [formControl]="control" required/>
+              </mat-form-field>
+              <mat-icon style="cursor:pointer; max-width:30px;min-width:30px"
+                class="flex-[1_1_30px]"
+                (click)="removeSNMPoid(i)"
+                matTooltip="{{ 'gateway.rpc.remove' | translate }}">delete
+              </mat-icon>
+            </div>
+          }
           <button mat-raised-button
                   class="self-start"
                   (click)="addSNMPoid()">
             {{ 'gateway.rpc.add-oid' | translate }}
           </button>
         </fieldset>
-      </ng-template>
-      <ng-template [ngSwitchCase]="ConnectorType.REST">
+      }
+      @case (ConnectorType.REST) {
         <mat-form-field>
           <mat-label>{{ 'gateway.rpc.methodFilter' | translate }}</mat-label>
           <input matInput formControlName="methodFilter" placeholder="post_attributes"/>
@@ -211,9 +223,11 @@
           <mat-form-field class="max-w-4/12 flex-[1_1_33%]">
             <mat-label>{{ 'gateway.rpc.httpMethod' | translate }}</mat-label>
             <mat-select formControlName="httpMethod">
-              <mat-option *ngFor="let method of hTTPMethods" [value]="method">
-                {{ method }}
-              </mat-option>
+              @for (method of hTTPMethods; track method) {
+                <mat-option [value]="method">
+                  {{ method }}
+                </mat-option>
+              }
             </mat-select>
           </mat-form-field>
           <mat-form-field class="flex-1">
@@ -245,45 +259,51 @@
         </mat-form-field>
         <fieldset class="fields flex flex-col gap-2.5 border" formArrayName="httpHeaders">
           <span class="fields-label">{{ 'gateway.rpc.httpHeaders' | translate }}</span>
-          <div class="flex flex-col gap-2.5 border" *ngIf="getFormArrayControls('httpHeaders').length">
-            <div class="flex flex-row items-center justify-center gap-2.5">
-              <span class="title flex-1">{{ 'gateway.rpc.header-name' | translate }}</span>
-              <span class="title flex-1">{{ 'gateway.rpc.value' | translate }}</span>
-              <span style="width: 30px"></span>
+          @if (getFormArrayControls('httpHeaders').length) {
+            <div class="flex flex-col gap-2.5 border">
+              <div class="flex flex-row items-center justify-center gap-2.5">
+                <span class="title flex-1">{{ 'gateway.rpc.header-name' | translate }}</span>
+                <span class="title flex-1">{{ 'gateway.rpc.value' | translate }}</span>
+                <span style="width: 30px"></span>
+              </div>
+              <mat-divider></mat-divider>
+              @for (control of getFormArrayControls('httpHeaders'); track control; let i = $index) {
+                <div class="flex flex-row items-center justify-center gap-2.5"
+                  >
+                  <ng-container [formGroupName]="i">
+                    <mat-form-field appearance="outline" class="flex-1">
+                      <input matInput formControlName="headerName"/>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="flex-1">
+                      <input matInput formControlName="value" placeholder="application/json"/>
+                    </mat-form-field>
+                    <mat-icon style="cursor:pointer; width: 30px"
+                      (click)="removeHTTPHeader(i)"
+                      matTooltip="{{ 'gateway.rpc.remove' | translate }}">delete
+                    </mat-icon>
+                  </ng-container>
+                </div>
+              }
             </div>
-            <mat-divider></mat-divider>
-            <div class="flex flex-row items-center justify-center gap-2.5"
-                 *ngFor="let control of getFormArrayControls('httpHeaders'); let i = index">
-              <ng-container [formGroupName]="i">
-                <mat-form-field appearance="outline" class="flex-1">
-                  <input matInput formControlName="headerName"/>
-                </mat-form-field>
-                <mat-form-field appearance="outline" class="flex-1">
-                  <input matInput formControlName="value" placeholder="application/json"/>
-                </mat-form-field>
-                <mat-icon style="cursor:pointer; width: 30px"
-                          (click)="removeHTTPHeader(i)"
-                          matTooltip="{{ 'gateway.rpc.remove' | translate }}">delete
-                </mat-icon>
-              </ng-container>
-            </div>
-          </div>
+          }
           <button mat-raised-button
                   class="self-start"
                   (click)="addHTTPHeader()">
             {{ 'gateway.rpc.add-header' | translate }}
           </button>
         </fieldset>
-<!--        <tb-rest-connector-security [formControl]="commandForm.get('security')"></tb-rest-connector-security>-->
-      </ng-template>
-      <ng-template [ngSwitchCase]="ConnectorType.REQUEST">
+        <!--        <tb-rest-connector-security [formControl]="commandForm.get('security')"></tb-rest-connector-security>-->
+      }
+      @case (ConnectorType.REQUEST) {
         <div class="flex flex-row items-center justify-center gap-2.5">
           <mat-form-field class="max-w-4/12 flex-[1_1_33%]">
             <mat-label>{{ 'gateway.rpc.httpMethod' | translate }}</mat-label>
             <mat-select formControlName="httpMethod">
-              <mat-option *ngFor="let method of hTTPMethods" [value]="method">
-                {{ method }}
-              </mat-option>
+              @for (method of hTTPMethods; track method) {
+                <mat-option [value]="method">
+                  {{ method }}
+                </mat-option>
+              }
             </mat-select>
           </mat-form-field>
           <mat-form-field class="flex-1">
@@ -320,37 +340,41 @@
         </mat-form-field>
         <fieldset class="fields flex flex-col gap-2.5 border" formArrayName="httpHeaders">
           <span class="fields-label">{{ 'gateway.rpc.httpHeaders' | translate }}</span>
-          <div class="flex flex-col gap-2.5 border" *ngIf="getFormArrayControls('httpHeaders').length">
-            <div class="flex flex-row items-center justify-center gap-2.5">
-              <span class="title flex-1">{{ 'gateway.rpc.header-name' | translate }}</span>
-              <span class="title flex-1">{{ 'gateway.rpc.value' | translate }}</span>
-              <span style="width: 30px"></span>
+          @if (getFormArrayControls('httpHeaders').length) {
+            <div class="flex flex-col gap-2.5 border">
+              <div class="flex flex-row items-center justify-center gap-2.5">
+                <span class="title flex-1">{{ 'gateway.rpc.header-name' | translate }}</span>
+                <span class="title flex-1">{{ 'gateway.rpc.value' | translate }}</span>
+                <span style="width: 30px"></span>
+              </div>
+              <mat-divider></mat-divider>
+              @for (control of getFormArrayControls('httpHeaders'); track control; let i = $index) {
+                <div class="flex flex-row items-center justify-center gap-2.5"
+                  >
+                  <ng-container [formGroupName]="i">
+                    <mat-form-field appearance="outline" class="flex-1">
+                      <input matInput formControlName="headerName" placeholder="{{ 'gateway.rpc.set' | translate }}"/>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="flex-1">
+                      <input matInput formControlName="value"/>
+                    </mat-form-field>
+                    <mat-icon style="cursor:pointer;width:30px"
+                      (click)="removeHTTPHeader(i)"
+                      matTooltip="{{ 'gateway.rpc.remove' | translate }}">delete
+                    </mat-icon>
+                  </ng-container>
+                </div>
+              }
             </div>
-            <mat-divider></mat-divider>
-            <div class="flex flex-row items-center justify-center gap-2.5"
-                 *ngFor="let control of getFormArrayControls('httpHeaders'); let i = index">
-              <ng-container [formGroupName]="i">
-                <mat-form-field appearance="outline" class="flex-1">
-                  <input matInput formControlName="headerName" placeholder="{{ 'gateway.rpc.set' | translate }}"/>
-                </mat-form-field>
-                <mat-form-field appearance="outline" class="flex-1">
-                  <input matInput formControlName="value"/>
-                </mat-form-field>
-                <mat-icon style="cursor:pointer;width:30px"
-                          (click)="removeHTTPHeader(i)"
-                          matTooltip="{{ 'gateway.rpc.remove' | translate }}">delete
-                </mat-icon>
-              </ng-container>
-            </div>
-          </div>
+          }
           <button mat-raised-button
                   class="self-start"
                   (click)="addHTTPHeader()">
             {{ 'gateway.rpc.add-header' | translate }}
           </button>
         </fieldset>
-      </ng-template>
-      <ng-template ngSwitchDefault>
+      }
+      @default {
         <mat-form-field>
           <mat-label>{{ 'gateway.statistics.command' | translate }}</mat-label>
           <input matInput formControlName="command"/>
@@ -363,13 +387,15 @@
                     (click)="openEditJSONDialog($event)"
                     matTooltip="{{ 'gateway.rpc-command-edit-params' | translate }}">edit
           </mat-icon>
-          <mat-error *ngIf="commandForm.get('params').hasError('invalidJSON')">
-            {{ 'gateway.rpc.json-value-invalid' | translate }}
-          </mat-error>
+          @if (commandForm.get('params').hasError('invalidJSON')) {
+            <mat-error>
+              {{ 'gateway.rpc.json-value-invalid' | translate }}
+            </mat-error>
+          }
         </mat-form-field>
-      </ng-template>
-    </ng-container>
-  </ng-template>
+      }
+    }
+  }
   <div class="template-actions flex flex-row justify-end gap-2.5">
     <button mat-raised-button
             (click)="save()"

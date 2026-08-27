@@ -36,9 +36,11 @@
       <mat-form-field class="flex">
         <mat-label>{{'gateway.security-type' | translate }}</mat-label>
         <mat-select formControlName="securityType" >
-          <mat-option *ngFor="let securityType of securityTypes | keyvalue" [value]="securityType.key">
-            {{ securityType.value.toString() | translate }}
-          </mat-option>
+          @for (securityType of securityTypes | keyvalue; track securityType) {
+            <mat-option [value]="securityType.key">
+              {{ securityType.value.toString() | translate }}
+            </mat-option>
+          }
         </mat-select>
       </mat-form-field>
       <div class="flex" [class]="{
@@ -49,42 +51,54 @@
         <mat-form-field class="flex-1">
           <mat-label>{{ 'gateway.thingsboard-host' | translate }}</mat-label>
           <input matInput type="text" formControlName="host">
-          <mat-error *ngIf="gatewayConfigurationGroup.get('host').hasError('required')" translate>
-            gateway.thingsboard-host-required
-          </mat-error>
+          @if (gatewayConfigurationGroup.get('host').hasError('required')) {
+            <mat-error translate>
+              gateway.thingsboard-host-required
+            </mat-error>
+          }
         </mat-form-field>
         <mat-form-field class="flex-1">
           <mat-label>{{ 'gateway.thingsboard-port' | translate }}</mat-label>
           <input matInput type="number" formControlName="port">
-          <mat-error *ngIf="gatewayConfigurationGroup.get('port').hasError('required')" translate>
-            gateway.thingsboard-port-required
-          </mat-error>
-          <mat-error *ngIf="gatewayConfigurationGroup.get('port').hasError('min')" translate>
-            gateway.thingsboard-port-min
-          </mat-error>
-          <mat-error *ngIf="gatewayConfigurationGroup.get('port').hasError('max')" translate>
-            gateway.thingsboard-port-max
-          </mat-error>
-          <mat-error *ngIf="gatewayConfigurationGroup.get('port').hasError('pattern')" translate>
-            gateway.thingsboard-port-pattern
-          </mat-error>
+          @if (gatewayConfigurationGroup.get('port').hasError('required')) {
+            <mat-error translate>
+              gateway.thingsboard-port-required
+            </mat-error>
+          }
+          @if (gatewayConfigurationGroup.get('port').hasError('min')) {
+            <mat-error translate>
+              gateway.thingsboard-port-min
+            </mat-error>
+          }
+          @if (gatewayConfigurationGroup.get('port').hasError('max')) {
+            <mat-error translate>
+              gateway.thingsboard-port-max
+            </mat-error>
+          }
+          @if (gatewayConfigurationGroup.get('port').hasError('pattern')) {
+            <mat-error translate>
+              gateway.thingsboard-port-pattern
+            </mat-error>
+          }
         </mat-form-field>
       </div>
 
-      <div *ngIf="gatewayConfigurationGroup.get('securityType').value === 'tls'" class="flex flex-col">
-        <mat-form-field>
-          <mat-label>{{ 'gateway.tls-path-ca-certificate' | translate }}</mat-label>
-          <input matInput type="text" formControlName="caCertPath">
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>{{ 'gateway.tls-path-private-key' | translate }}</mat-label>
-          <input matInput type="text" formControlName="privateKeyPath">
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>{{ 'gateway.tls-path-client-certificate' | translate }}</mat-label>
-          <input matInput type="text" formControlName="certPath">
-        </mat-form-field>
-      </div>
+      @if (gatewayConfigurationGroup.get('securityType').value === 'tls') {
+        <div class="flex flex-col">
+          <mat-form-field>
+            <mat-label>{{ 'gateway.tls-path-ca-certificate' | translate }}</mat-label>
+            <input matInput type="text" formControlName="caCertPath">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>{{ 'gateway.tls-path-private-key' | translate }}</mat-label>
+            <input matInput type="text" formControlName="privateKeyPath">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>{{ 'gateway.tls-path-client-certificate' | translate }}</mat-label>
+            <input matInput type="text" formControlName="certPath">
+          </mat-form-field>
+        </div>
+      }
 
       <mat-checkbox formControlName="remoteConfiguration">{{ 'gateway.remote' | translate }}</mat-checkbox>
 
@@ -96,18 +110,22 @@
         <mat-form-field class="flex-1">
           <mat-label>{{'gateway.remote-logging-level' | translate }}</mat-label>
           <mat-select formControlName="remoteLoggingLevel">
-            <mat-option *ngFor="let logLevel of gatewayLogLevels" [value]="logLevel">
-              {{ logLevel }}
-            </mat-option>
+            @for (logLevel of gatewayLogLevels; track logLevel) {
+              <mat-option [value]="logLevel">
+                {{ logLevel }}
+              </mat-option>
+            }
           </mat-select>
         </mat-form-field>
 
         <mat-form-field class="flex-1">
           <mat-label>{{ 'gateway.path-logs' | translate }}</mat-label>
           <input matInput type="text" formControlName="remoteLoggingPathToLogs">
-          <mat-error *ngIf="gatewayConfigurationGroup.get('remoteLoggingPathToLogs').hasError('required')" translate>
-            gateway.path-logs-required
-          </mat-error>
+          @if (gatewayConfigurationGroup.get('remoteLoggingPathToLogs').hasError('required')) {
+            <mat-error translate>
+              gateway.path-logs-required
+            </mat-error>
+          }
         </mat-form-field>
       </div>
 
@@ -124,9 +142,11 @@
         <mat-form-field>
           <mat-label>{{'gateway.storage-type' | translate }}</mat-label>
           <mat-select formControlName="storageType">
-            <mat-option *ngFor="let storageType of storageTypes | keyvalue" [value]="storageType.key">
-              {{ storageType.value.toString() | translate}}
-            </mat-option>
+            @for (storageType of storageTypes | keyvalue; track storageType) {
+              <mat-option [value]="storageType.key">
+                {{ storageType.value.toString() | translate}}
+              </mat-option>
+            }
           </mat-select>
         </mat-form-field>
 
@@ -138,15 +158,21 @@
           <mat-form-field class="flex-1">
             <mat-label>{{ 'gateway.storage-pack-size' | translate }}</mat-label>
             <input matInput type="number" formControlName="readRecordsCount">
-            <mat-error *ngIf="gatewayConfigurationGroup.get('readRecordsCount').hasError('required')" translate>
-              gateway.storage-pack-size-required
-            </mat-error>
-            <mat-error *ngIf="gatewayConfigurationGroup.get('readRecordsCount').hasError('min')" translate>
-              gateway.storage-pack-size-min
-            </mat-error>
-            <mat-error *ngIf="gatewayConfigurationGroup.get('readRecordsCount').hasError('pattern')" translate>
-              gateway.storage-pack-size-pattern
-            </mat-error>
+            @if (gatewayConfigurationGroup.get('readRecordsCount').hasError('required')) {
+              <mat-error translate>
+                gateway.storage-pack-size-required
+              </mat-error>
+            }
+            @if (gatewayConfigurationGroup.get('readRecordsCount').hasError('min')) {
+              <mat-error translate>
+                gateway.storage-pack-size-min
+              </mat-error>
+            }
+            @if (gatewayConfigurationGroup.get('readRecordsCount').hasError('pattern')) {
+              <mat-error translate>
+                gateway.storage-pack-size-pattern
+              </mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field class="flex-1">
@@ -154,45 +180,60 @@
               {{ (gatewayConfigurationGroup.get('storageType').value !== 'file' ? 'gateway.storage-max-records' : 'gateway.storage-max-file-records') | translate}}
             </mat-label>
             <input matInput type="number" formControlName="maxRecordsCount">
-            <mat-error *ngIf="gatewayConfigurationGroup.get('maxRecordsCount').hasError('required')" translate>
-              gateway.storage-max-records-required
-            </mat-error>
-            <mat-error *ngIf="gatewayConfigurationGroup.get('maxRecordsCount').hasError('min')" translate>
-              gateway.storage-max-records-min
-            </mat-error>
-            <mat-error *ngIf="gatewayConfigurationGroup.get('maxRecordsCount').hasError('pattern')" translate>
-              gateway.storage-max-records-pattern
-            </mat-error>
+            @if (gatewayConfigurationGroup.get('maxRecordsCount').hasError('required')) {
+              <mat-error translate>
+                gateway.storage-max-records-required
+              </mat-error>
+            }
+            @if (gatewayConfigurationGroup.get('maxRecordsCount').hasError('min')) {
+              <mat-error translate>
+                gateway.storage-max-records-min
+              </mat-error>
+            }
+            @if (gatewayConfigurationGroup.get('maxRecordsCount').hasError('pattern')) {
+              <mat-error translate>
+                gateway.storage-max-records-pattern
+              </mat-error>
+            }
           </mat-form-field>
         </div>
 
-        <div class="flex" [class]="{
+        @if (gatewayConfigurationGroup.get('storageType').value === 'file') {
+          <div class="flex" [class]="{
             'gap-1.25': layoutGap,
             'flex-row': alignment,
             'flex-col': !alignment
-          }" *ngIf="gatewayConfigurationGroup.get('storageType').value === 'file'">
-          <mat-form-field class="flex-1">
-            <mat-label>{{ 'gateway.storage-max-files' | translate }}</mat-label>
-            <input matInput type="number" formControlName="maxFilesCount">
-            <mat-error *ngIf="gatewayConfigurationGroup.get('maxFilesCount').hasError('required')" translate>
-              gateway.storage-max-files-required
-            </mat-error>
-            <mat-error *ngIf="gatewayConfigurationGroup.get('maxFilesCount').hasError('min')" translate>
-              gateway.storage-max-files-min
-            </mat-error>
-            <mat-error *ngIf="gatewayConfigurationGroup.get('maxFilesCount').hasError('pattern')" translate>
-              gateway.storage-max-files-pattern
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field class="flex-1">
-            <mat-label>{{ 'gateway.storage-path' | translate }}</mat-label>
-            <input matInput type="text" formControlName="dataFolderPath">
-            <mat-error *ngIf="gatewayConfigurationGroup.get('dataFolderPath').hasError('required')" translate>
-              gateway.storage-path-required
-            </mat-error>
-          </mat-form-field>
-        </div>
+          }">
+            <mat-form-field class="flex-1">
+              <mat-label>{{ 'gateway.storage-max-files' | translate }}</mat-label>
+              <input matInput type="number" formControlName="maxFilesCount">
+              @if (gatewayConfigurationGroup.get('maxFilesCount').hasError('required')) {
+                <mat-error translate>
+                  gateway.storage-max-files-required
+                </mat-error>
+              }
+              @if (gatewayConfigurationGroup.get('maxFilesCount').hasError('min')) {
+                <mat-error translate>
+                  gateway.storage-max-files-min
+                </mat-error>
+              }
+              @if (gatewayConfigurationGroup.get('maxFilesCount').hasError('pattern')) {
+                <mat-error translate>
+                  gateway.storage-max-files-pattern
+                </mat-error>
+              }
+            </mat-form-field>
+            <mat-form-field class="flex-1">
+              <mat-label>{{ 'gateway.storage-path' | translate }}</mat-label>
+              <input matInput type="text" formControlName="dataFolderPath">
+              @if (gatewayConfigurationGroup.get('dataFolderPath').hasError('required')) {
+                <mat-error translate>
+                  gateway.storage-path-required
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+        }
       </div>
     </mat-expansion-panel>
 
@@ -204,56 +245,63 @@
       </mat-expansion-panel-header>
 
       <div class="gateway-config flex flex-col">
-        <section formArrayName="connectors" *ngFor="let connector of connectors.controls; let i = index;">
-          <div [formGroupName]="i" class="flex flex-row items-stretch justify-between gap-2">
-            <div class="flex flex-col justify-center">
-              <mat-slide-toggle formControlName="enabled"></mat-slide-toggle>
+        @for (connector of connectors.controls; track connector; let i = $index) {
+          <section formArrayName="connectors">
+            <div [formGroupName]="i" class="flex flex-row items-stretch justify-between gap-2">
+              <div class="flex flex-col justify-center">
+                <mat-slide-toggle formControlName="enabled"></mat-slide-toggle>
+              </div>
+              <div class="flex-full flex" [class]="{
+                  'gap-1.25': layoutGap,
+                  'flex-row': alignment,
+                  'flex-col': !alignment
+                }">
+                <mat-form-field class="flex-1">
+                  <mat-label>{{'gateway.connector-type' | translate }}</mat-label>
+                  <mat-select formControlName="configType" (selectionChange)="changeConnectorType(connector)">
+                    @for (connectorType of connectorTypes; track connectorType) {
+                      <mat-option [value]="connectorType">
+                        {{ connectorType }}
+                      </mat-option>
+                    }
+                  </mat-select>
+                  @if (connector.get('configType').hasError('required')) {
+                    <mat-error translate>
+                      gateway.connector-type-required
+                    </mat-error>
+                  }
+                </mat-form-field>
+                <mat-form-field class="flex-1">
+                  <mat-label>{{ 'gateway.connector-name' | translate }}</mat-label>
+                  <input matInput type="text" formControlName="name" (blur)="changeConnectorName(connector, i)">
+                  @if (connector.get('name').hasError('required')) {
+                    <mat-error translate>
+                      gateway.connector-name-required
+                    </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <div class="action-buttons flex" [class]="{
+                  'gap-1.25': layoutGap,
+                  'flex-row justify-end item-center': alignment,
+                  'flex-col justify-evenly item-center': !alignment
+                }">
+                <button [disabled]="isReadOnlyForm" mat-icon-button (click)="openConfigDialog($event, i, connector.get('config').value, connector.get('name').value)"
+                  matTooltip="{{ 'gateway.update-config' | translate }}"
+                  matTooltipPosition="above"
+                  [class.mat-warn]="connector.get('config').invalid">
+                  <mat-icon>more_horiz</mat-icon>
+                </button>
+                <button [disabled]="isReadOnlyForm"
+                  mat-icon-button (click)="removeConnector(i)"
+                  matTooltip="{{ 'gateway.delete' | translate }}"
+                  matTooltipPosition="above">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
             </div>
-            <div class="flex-full flex" [class]="{
-                'gap-1.25': layoutGap,
-                'flex-row': alignment,
-                'flex-col': !alignment
-              }">
-              <mat-form-field class="flex-1">
-                <mat-label>{{'gateway.connector-type' | translate }}</mat-label>
-                <mat-select formControlName="configType" (selectionChange)="changeConnectorType(connector)">
-                  <mat-option *ngFor="let connectorType of connectorTypes" [value]="connectorType">
-                    {{ connectorType }}
-                  </mat-option>
-                </mat-select>
-                <mat-error *ngIf="connector.get('configType').hasError('required')" translate>
-                  gateway.connector-type-required
-                </mat-error>
-              </mat-form-field>
-
-              <mat-form-field class="flex-1">
-                <mat-label>{{ 'gateway.connector-name' | translate }}</mat-label>
-                <input matInput type="text" formControlName="name" (blur)="changeConnectorName(connector, i)">
-                <mat-error *ngIf="connector.get('name').hasError('required')" translate>
-                  gateway.connector-name-required
-                </mat-error>
-              </mat-form-field>
-            </div>
-            <div class="action-buttons flex" [class]="{
-                'gap-1.25': layoutGap,
-                'flex-row justify-end item-center': alignment,
-                'flex-col justify-evenly item-center': !alignment
-              }">
-              <button [disabled]="isReadOnlyForm" mat-icon-button (click)="openConfigDialog($event, i, connector.get('config').value, connector.get('name').value)"
-                         matTooltip="{{ 'gateway.update-config' | translate }}"
-                         matTooltipPosition="above"
-                         [class.mat-warn]="connector.get('config').invalid">
-                <mat-icon>more_horiz</mat-icon>
-              </button>
-              <button [disabled]="isReadOnlyForm"
-                      mat-icon-button (click)="removeConnector(i)"
-                      matTooltip="{{ 'gateway.delete' | translate }}"
-                      matTooltipPosition="above">
-                <mat-icon>close</mat-icon>
-              </button>
-            </div>
-          </div>
-        </section>
+          </section>
+        }
         <span [class.!hidden]="connectors.length" class="no-data-found items-center justify-center">{{'gateway.no-connectors' | translate}}</span>
         <div>
           <button [class.!hidden]="isReadOnlyForm" mat-raised-button type="button" (click)="addNewConnector()"
@@ -266,19 +314,21 @@
     </mat-expansion-panel>
   </mat-accordion>
   <section [class.!hidden]="isReadOnlyForm" class="form-action-buttons flex flex-row items-center justify-end">
-    <button mat-raised-button color="primary" type="button"
-            (click)="exportConfig()"
-            *ngIf="!gatewayConfigurationGroup.get('remoteConfiguration').value"
-            [disabled]="!gatewayConfigurationGroup.dirty || gatewayConfigurationGroup.invalid"
-            matTooltip="{{'gateway.download-tip' | translate }}">
-      {{'action.download' | translate }}
-    </button>
+    @if (!gatewayConfigurationGroup.get('remoteConfiguration').value) {
+      <button mat-raised-button color="primary" type="button"
+        (click)="exportConfig()"
+        [disabled]="!gatewayConfigurationGroup.dirty || gatewayConfigurationGroup.invalid"
+        matTooltip="{{'gateway.download-tip' | translate }}">
+        {{'action.download' | translate }}
+      </button>
+    }
 
-    <button mat-raised-button color="primary" type="submit"
-            *ngIf="gatewayConfigurationGroup.get('remoteConfiguration').value"
-            [disabled]="!gatewayConfigurationGroup.dirty || gatewayConfigurationGroup.invalid"
-            matTooltip="{{'gateway.save-tip' | translate }}">
-      {{'action.save' | translate }}
-    </button>
+    @if (gatewayConfigurationGroup.get('remoteConfiguration').value) {
+      <button mat-raised-button color="primary" type="submit"
+        [disabled]="!gatewayConfigurationGroup.dirty || gatewayConfigurationGroup.invalid"
+        matTooltip="{{'gateway.save-tip' | translate }}">
+        {{'action.save' | translate }}
+      </button>
+    }
   </section>
 </form>

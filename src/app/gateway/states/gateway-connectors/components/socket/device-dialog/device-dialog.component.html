@@ -37,15 +37,16 @@
           <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
             <input matInput name="value" formControlName="address"
                    placeholder="{{ 'gateway.set' | translate }}"/>
-            <mat-icon matSuffix
-                      matTooltipPosition="above"
-                      matTooltipClass="tb-error-tooltip"
-                      [matTooltip]="('gateway.address-filter-required') | translate"
-                      *ngIf="deviceFormGroup.get('address').hasError('required')
-                                           && deviceFormGroup.get('address').touched"
-                      class="tb-error">
-              warning
-            </mat-icon>
+            @if (deviceFormGroup.get('address').hasError('required')
+              && deviceFormGroup.get('address').touched) {
+              <mat-icon matSuffix
+                matTooltipPosition="above"
+                matTooltipClass="tb-error-tooltip"
+                [matTooltip]="('gateway.address-filter-required') | translate"
+                class="tb-error">
+                warning
+              </mat-icon>
+            }
             <div  matSuffix
                   class="see-example p-1"
                   [tb-help-popup]="'widget/lib/gateway/address-filter_fn'"
@@ -61,15 +62,16 @@
           <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
             <input matInput name="value" formControlName="deviceName"
                    placeholder="{{ 'gateway.set' | translate }}"/>
-            <mat-icon matSuffix
-                      matTooltipPosition="above"
-                      matTooltipClass="tb-error-tooltip"
-                      [matTooltip]="('gateway.device-name-required') | translate"
-                      *ngIf="deviceFormGroup.get('deviceName').hasError('required')
-                                           && deviceFormGroup.get('deviceName').touched"
-                      class="tb-error">
-              warning
-            </mat-icon>
+            @if (deviceFormGroup.get('deviceName').hasError('required')
+              && deviceFormGroup.get('deviceName').touched) {
+              <mat-icon matSuffix
+                matTooltipPosition="above"
+                matTooltipClass="tb-error-tooltip"
+                [matTooltip]="('gateway.device-name-required') | translate"
+                class="tb-error">
+                warning
+              </mat-icon>
+            }
           </mat-form-field>
         </div>
       </div>
@@ -79,15 +81,16 @@
           <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
             <input matInput name="value" formControlName="deviceType"
                    placeholder="{{ 'gateway.set' | translate }}"/>
-            <mat-icon matSuffix
-                      matTooltipPosition="above"
-                      matTooltipClass="tb-error-tooltip"
-                      [matTooltip]="('gateway.device-profile-required') | translate"
-                      *ngIf="deviceFormGroup.get('deviceType').hasError('required')
-                                           && deviceFormGroup.get('deviceType').touched"
-                      class="tb-error">
-              warning
-            </mat-icon>
+            @if (deviceFormGroup.get('deviceType').hasError('required')
+              && deviceFormGroup.get('deviceType').touched) {
+              <mat-icon matSuffix
+                matTooltipPosition="above"
+                matTooltipClass="tb-error-tooltip"
+                [matTooltip]="('gateway.device-profile-required') | translate"
+                class="tb-error">
+                warning
+              </mat-icon>
+            }
           </mat-form-field>
         </div>
       </div>
@@ -99,8 +102,10 @@
         <div class="tb-flex no-gap">
           <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
             <mat-select formControlName="encoding">
-              <mat-option *ngFor="let encoding of socketEncoding" [value]="encoding">{{ encoding.toUpperCase() }}
-              </mat-option>
+              @for (encoding of socketEncoding; track encoding) {
+                <mat-option [value]="encoding">{{ encoding.toUpperCase() }}
+                </mat-option>
+              }
             </mat-select>
           </mat-form-field>
         </div>
@@ -117,9 +122,11 @@
         <div class="fixed-title-width" translate>gateway.timeseries</div>
         <div class="tb-flex ellipsis-chips-container">
           <mat-chip-listbox class="tb-flex" [tbEllipsisChipList]="deviceFormGroup.get('telemetry').value">
-            <mat-chip *ngFor="let telemetry of deviceFormGroup.get('telemetry').value">
-              {{ telemetry.key }}
-            </mat-chip>
+            @for (telemetry of deviceFormGroup.get('telemetry').value; track telemetry) {
+              <mat-chip>
+                {{ telemetry.key }}
+              </mat-chip>
+            }
             <mat-chip class="mat-mdc-chip ellipsis-chip">
               <label class="ellipsis-text"></label>
             </mat-chip>
@@ -139,9 +146,11 @@
         <div class="fixed-title-width" translate>gateway.attributes</div>
         <div class="tb-flex ellipsis-chips-container">
           <mat-chip-listbox [tbEllipsisChipList]="deviceFormGroup.get('attributes').value" class="tb-flex">
-            <mat-chip *ngFor="let attribute of deviceFormGroup.get('attributes').value">
-              {{ attribute.key }}
-            </mat-chip>
+            @for (attribute of deviceFormGroup.get('attributes').value; track attribute) {
+              <mat-chip>
+                {{ attribute.key }}
+              </mat-chip>
+            }
             <mat-chip class="mat-mdc-chip ellipsis-chip">
               <label class="ellipsis-text"></label>
             </mat-chip>
@@ -161,9 +170,11 @@
         <div class="fixed-title-width" translate>gateway.attribute-requests</div>
         <div class="tb-flex ellipsis-chips-container">
           <mat-chip-listbox [tbEllipsisChipList]="deviceFormGroup.get('attributeRequests').value" class="tb-flex">
-            <mat-chip *ngFor="let request of deviceFormGroup.get('attributeRequests').value">
-              {{ request.type }}
-            </mat-chip>
+            @for (request of deviceFormGroup.get('attributeRequests').value; track request) {
+              <mat-chip>
+                {{ request.type }}
+              </mat-chip>
+            }
             <mat-chip class="mat-mdc-chip ellipsis-chip">
               <label class="ellipsis-text"></label>
             </mat-chip>
@@ -183,9 +194,11 @@
         <div class="fixed-title-width" translate>gateway.attribute-updates</div>
         <div class="tb-flex ellipsis-chips-container">
           <mat-chip-listbox [tbEllipsisChipList]="deviceFormGroup.get('attributeUpdates').value" class="tb-flex">
-            <mat-chip *ngFor="let attribute of deviceFormGroup.get('attributeUpdates').value">
-              {{ attribute.encoding }}
-            </mat-chip>
+            @for (attribute of deviceFormGroup.get('attributeUpdates').value; track attribute) {
+              <mat-chip>
+                {{ attribute.encoding }}
+              </mat-chip>
+            }
             <mat-chip class="mat-mdc-chip ellipsis-chip">
               <label class="ellipsis-text"></label>
             </mat-chip>
@@ -205,9 +218,11 @@
         <div class="fixed-title-width" translate>gateway.rpc-methods</div>
         <div class="tb-flex ellipsis-chips-container">
           <mat-chip-listbox [tbEllipsisChipList]="deviceFormGroup.get('serverSideRpc').value" class="tb-flex">
-            <mat-chip *ngFor="let rpc of deviceFormGroup.get('serverSideRpc').value">
-              {{ rpc.methodRPC }}
-            </mat-chip>
+            @for (rpc of deviceFormGroup.get('serverSideRpc').value; track rpc) {
+              <mat-chip>
+                {{ rpc.methodRPC }}
+              </mat-chip>
+            }
             <mat-chip class="mat-mdc-chip ellipsis-chip">
               <label class="ellipsis-text"></label>
             </mat-chip>

@@ -36,7 +36,6 @@ import {
   noLeadTrailSpacesRegex,
 } from '../../../../shared/models/public-api';
 import { SharedModule } from '@shared/public-api';
-import { CommonModule } from '@angular/common';
 import { RestSecurityType, RestSecurityTypeTranslationsMap } from '../../models/public-api';
 
 @Component({
@@ -59,7 +58,6 @@ import { RestSecurityType, RestSecurityTypeTranslationsMap } from '../../models/
   standalone: true,
   imports: [
     SharedModule,
-    CommonModule,
   ]
 })
 export class RestConnectorSecurityComponent implements ControlValueAccessor, Validator, OnDestroy {

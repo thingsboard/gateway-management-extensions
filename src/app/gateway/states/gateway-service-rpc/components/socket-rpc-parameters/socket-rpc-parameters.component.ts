@@ -26,7 +26,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { SharedModule } from '@shared/public-api';
-import { CommonModule } from '@angular/common';
 import { noLeadTrailSpacesRegex, SocketEncoding } from '../../../../shared/models/public-api';
 import {
   RPCTemplateConfigSocket,
@@ -54,7 +53,6 @@ import { ControlValueAccessorBaseAbstract } from '../../../../shared/abstract/pu
   ],
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
   ],
 })
