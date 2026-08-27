@@ -57,7 +57,7 @@ import {
 } from '../../models/public-api';
 import { TruncateWithTooltipDirective } from '../../../../shared/directives/public-api';
 import { MappingDialogComponent } from '../public-api';
-import { isDefinedAndNotNull, isUndefinedOrNull, DialogService } from '@core/public-api';
+import { isDefinedAndNotNull, DialogService } from '@core/public-api';
 import { CommonModule } from '@angular/common';
 import { TbTableDatasource, coerceBoolean, SharedModule } from '@shared/public-api';
 
@@ -137,7 +137,7 @@ export class MappingTableComponent implements ControlValueAccessor, Validator, A
     this.mappingFormGroup.valueChanges.pipe(
       takeUntil(this.destroy$)
     ).subscribe((value) => {
-      this.updateTableData(value);
+      this.updateTableData(value, this.textSearch.value.trim());
       this.onChange(value);
       this.onTouched();
     });
@@ -192,25 +192,27 @@ export class MappingTableComponent implements ControlValueAccessor, Validator, A
     this.textSearch.reset();
   }
 
-  manageMapping($event: Event, index?: number): void {
+  manageMapping($event: Event, mapping?: MappingValue): void {
     if ($event) {
       $event.stopPropagation();
     }
-    const value = isDefinedAndNotNull(index) ? this.mappingFormGroup.at(index).value : {};
+    const withMapping = isDefinedAndNotNull(mapping);
+    const index = withMapping ? this.getMappingIndex(mapping) : -1;
+    const value = withMapping ? this.mappingFormGroup.at(index).value : {};
     this.dialog.open<MappingDialogComponent, MappingInfo, ConnectorMapping>(MappingDialogComponent, {
       disableClose: true,
       panelClass: ['tb-dialog', 'tb-fullscreen-dialog'],
       data: {
         mappingType: this.mappingType,
         value,
-        buttonTitle: isUndefinedOrNull(index) ?  'action.add' : 'action.apply',
+        buttonTitle: withMapping ? 'action.apply' : 'action.add',
         withReportStrategy: this.withReportStrategy,
       }
     }).afterClosed()
       .pipe(take(1), takeUntil(this.destroy$))
       .subscribe(res => {
         if (res) {
-          if (isDefinedAndNotNull(index)) {
+          if (withMapping) {
             this.mappingFormGroup.at(index).patchValue(res);
           } else {
             this.pushDataAsFormArrays([res]);
@@ -232,12 +234,13 @@ export class MappingTableComponent implements ControlValueAccessor, Validator, A
     this.dataSource.loadData(tableValue);
   }
 
-  deleteMapping($event: Event, index: number): void {
+  deleteMapping($event: Event, mapping: MappingValue): void {
     if ($event) {
       $event.stopPropagation();
     }
-    const mapping = this.mappingFormGroup.controls[index].value;
-    const name = mapping.deviceInfo?.deviceNameExpression ?? mapping.topicFilter ?? this.getRequestDetails(mapping);
+    const index = this.getMappingIndex(mapping);
+    const rawMapping = this.mappingFormGroup.controls[index].value;
+    const name = rawMapping.deviceInfo?.deviceNameExpression ?? rawMapping.topicFilter ?? this.getRequestDetails(rawMapping);
     this.dialogService.confirm(
       this.translate.instant('gateway.delete-mapping-title', { name }),
       this.translate.instant('gateway.delete-mapping-description'),
@@ -252,6 +255,11 @@ export class MappingTableComponent implements ControlValueAccessor, Validator, A
     });
   }
 
+  private getMappingIndex(mapping: MappingValue): number {
+    const raw = (mapping as { __raw?: ConnectorMapping }).__raw;
+    return this.mappingFormGroup.controls.findIndex(control => control.value === raw);
+  }
+
   private pushDataAsFormArrays(data: ConnectorMapping[]): void {
     if (data?.length) {
       data.forEach((mapping: ConnectorMapping) => this.mappingFormGroup.push(this.fb.control(mapping)));
@@ -259,32 +267,38 @@ export class MappingTableComponent implements ControlValueAccessor, Validator, A
   }
 
   private getMappingValue(value: ConnectorMapping): MappingValue {
+    let mappingValue: MappingValue;
     switch (this.mappingType) {
       case MappingType.DATA:
         const converterType = ConvertorTypeTranslationsMap.get((value as ConverterConnectorMapping).converter?.type);
-        return {
+        mappingValue = {
           topicFilter: (value as ConverterConnectorMapping).topicFilter,
           QoS: (value as ConverterConnectorMapping).subscriptionQos,
           converter: converterType ? this.translate.instant(converterType) : ''
         };
+        break;
       case MappingType.REQUESTS:
-        return {
+        mappingValue = {
           requestType: (value as RequestMappingValue).requestType,
           type: this.translate.instant(RequestTypesTranslationsMap.get((value as RequestMappingValue).requestType)),
           details: this.getRequestDetails(value as RequestMappingValue)
         };
+        break;
       case MappingType.OPCUA:
         const deviceNamePattern = (value as DeviceConnectorMapping).deviceInfo?.deviceNameExpression;
         const deviceProfileExpression = (value as DeviceConnectorMapping).deviceInfo?.deviceProfileExpression;
         const { deviceNodePattern } = value as DeviceConnectorMapping;
-        return {
+        mappingValue = {
           deviceNodePattern,
           deviceNamePattern,
           deviceProfileExpression
         };
+        break;
       default:
-        return {} as MappingValue;
+        mappingValue = {} as MappingValue;
     }
+    Object.defineProperty(mappingValue, '__raw', { value, enumerable: false });
+    return mappingValue;
   }
 
   private getRequestDetails(requestValue: RequestMappingValue): string {
