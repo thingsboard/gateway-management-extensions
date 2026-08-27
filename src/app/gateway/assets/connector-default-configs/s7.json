@@ -1,0 +1,94 @@
+{
+  "3.8.5": {
+    "devices": [
+      {
+        "type": "PLC",
+        "address": "127.0.0.1",
+        "port": 1102,
+        "rack": 0,
+        "slot": 1,
+        "deviceName": "S7 PLC",
+        "deviceProfileName": "default",
+        "autoReconnect": true,
+        "maxRetries": 3,
+        "retryDelay": 1.0,
+        "maxDelay": 30.0,
+        "heartbeatInterval": 0,
+        "pollPeriod": 30000,
+        "attributes": [],
+        "timeseries": [
+          {
+            "type": "data",
+            "key": "light",
+            "dataType": "bool",
+            "dbNumber": 0,
+            "start": 0,
+            "size": 1,
+            "bit": 1
+          },
+          {
+            "type": "tag",
+            "key": "raw_data",
+            "tag": "DB0.DBB100:STRING[37]"
+          }
+        ],
+        "attributeUpdates": [
+          {
+            "key": "light",
+            "type": "data",
+            "dataType": "bool",
+            "dbNumber": 0,
+            "start": 0,
+            "size": 1,
+            "bit": 1
+          }
+        ],
+        "serverSideRpc": [
+          {
+            "method": "set_light",
+            "requestType": "write",
+            "type": "data",
+            "dataType": "bool",
+            "dbNumber": 0,
+            "start": 0,
+            "size": 1,
+            "bit": 1
+          },
+          {
+            "method": "get_light",
+            "requestType": "read",
+            "type": "data",
+            "dataType": "bool",
+            "dbNumber": 0,
+            "start": 0,
+            "size": 1,
+            "bit": 1
+          }
+        ]
+      },
+      {
+        "type": "LOGO",
+        "address": "127.0.0.1",
+        "port": 102,
+        "tsapSnap7": 20,
+        "tsapLogo": 30,
+        "deviceName": "LOGO",
+        "deviceProfileName": "default",
+        "pollPeriod": 1000,
+        "attributes": [],
+        "timeseries": [
+          {
+            "type": "vm",
+            "key": "temperature",
+            "vmAddress": "VW30"
+          },
+          {
+            "type": "vm",
+            "key": "humidity",
+            "vmAddress": "VW0"
+          }
+        ]
+      }
+    ]
+  }
+}
