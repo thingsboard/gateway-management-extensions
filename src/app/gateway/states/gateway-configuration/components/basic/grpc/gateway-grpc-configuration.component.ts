@@ -13,7 +13,14 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-import { AfterViewInit, Component, EventEmitter, forwardRef, Output } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  DestroyRef,
+  EventEmitter,
+  forwardRef,
+  Output
+} from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -23,7 +30,6 @@ import {
   ValidationErrors,
   Validators
 } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/public-api';
 import { GatewayGRPCConfig } from '../../../models/public-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -46,7 +52,6 @@ import { numberInputPattern } from '../../../../../shared/models/public-api';
   ],
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
   ]
 })
@@ -58,12 +63,13 @@ export class GatewayGrpcConfigurationComponent implements AfterViewInit, Validat
 
   private onChange: (value: GatewayGRPCConfig) => void = () => {};
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private destroyRef: DestroyRef) {
     this.grpcFormGroup = this.initGrpcFormGroup();
-    this.grpcFormGroup.valueChanges.pipe(takeUntilDestroyed()).subscribe(value => {
+    this.grpcFormGroup.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
       this.onChange(value);
     });
-    this.grpcFormGroup.get('enabled').valueChanges.pipe(takeUntilDestroyed()).subscribe(value => {
+    this.grpcFormGroup.get('enabled').valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
       this.toggleRpcFields(value);
     });
   }

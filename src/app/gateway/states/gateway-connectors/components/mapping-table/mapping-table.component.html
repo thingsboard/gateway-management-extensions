@@ -16,24 +16,26 @@
 <div class="tb-mapping-table tb-absolute-fill">
   <div class="tb-mapping-table-content flex flex-col">
     <mat-toolbar class="mat-mdc-table-toolbar" [class.!hidden]="textSearchMode">
-      <div class="mat-toolbar-tools" *ngIf="(dataSource.isEmpty() | async) === false">
-        <div class="title-container">
-          <span class="tb-mapping-table-title">{{mappingTypeTranslationsMap.get(mappingType) | translate}}</span>
+      @if ((dataSource.isEmpty() | async) === false) {
+        <div class="mat-toolbar-tools">
+          <div class="title-container">
+            <span class="tb-mapping-table-title">{{mappingTypeTranslationsMap.get(mappingType) | translate}}</span>
+          </div>
+          <span class="flex-1"></span>
+          <button mat-icon-button
+            (click)="manageMapping($event)"
+            matTooltip="{{ 'action.add' | translate }}"
+            matTooltipPosition="above">
+            <mat-icon>add</mat-icon>
+          </button>
+          <button mat-icon-button
+            (click)="enterFilterMode()"
+            matTooltip="{{ 'action.search' | translate }}"
+            matTooltipPosition="above">
+            <mat-icon>search</mat-icon>
+          </button>
         </div>
-        <span class="flex-1"></span>
-        <button mat-icon-button
-                (click)="manageMapping($event)"
-                matTooltip="{{ 'action.add' | translate }}"
-                matTooltipPosition="above">
-          <mat-icon>add</mat-icon>
-        </button>
-        <button mat-icon-button
-                (click)="enterFilterMode()"
-                matTooltip="{{ 'action.search' | translate }}"
-                matTooltipPosition="above">
-          <mat-icon>search</mat-icon>
-        </button>
-      </div>
+      }
     </mat-toolbar>
     <mat-toolbar class="mat-mdc-table-toolbar" [class.!hidden]="!textSearchMode">
       <div class="mat-toolbar-tools">
@@ -57,16 +59,18 @@
     </mat-toolbar>
     <div class="table-container">
       <table mat-table [dataSource]="dataSource">
-        <ng-container [matColumnDef]="column.def" *ngFor="let column of mappingColumns; let i = index">
-          <mat-header-cell *matHeaderCellDef class="table-value-column"
-                           [class.request-column]="mappingType === mappingTypeEnum.REQUESTS">
-            {{ column.title | translate }}
-          </mat-header-cell>
-          <mat-cell tbTruncateWithTooltip *matCellDef="let mapping" class="table-value-column"
-                    [class.request-column]="mappingType === mappingTypeEnum.REQUESTS">
-            {{ mapping[column.def] }}
-          </mat-cell>
-        </ng-container>
+        @for (column of mappingColumns; track column; let i = $index) {
+          <ng-container [matColumnDef]="column.def">
+            <mat-header-cell *matHeaderCellDef class="table-value-column"
+              [class.request-column]="mappingType === mappingTypeEnum.REQUESTS">
+              {{ column.title | translate }}
+            </mat-header-cell>
+            <mat-cell tbTruncateWithTooltip *matCellDef="let mapping" class="table-value-column"
+              [class.request-column]="mappingType === mappingTypeEnum.REQUESTS">
+              {{ mapping[column.def] }}
+            </mat-cell>
+          </ng-container>
+        }
         <ng-container matColumnDef="actions" stickyEnd>
           <mat-header-cell *matHeaderCellDef class="w-12"/>
           <mat-cell *matCellDef="let mapping; let i = index">

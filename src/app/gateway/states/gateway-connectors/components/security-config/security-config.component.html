@@ -17,27 +17,30 @@
   <div class="tb-flex row space-between align-center no-gap fill-width">
     <div class="fixed-title-width tb-required">{{ title | translate }}</div>
     <tb-toggle-select formControlName="type" appearance="fill">
-      <tb-toggle-option *ngFor="let type of securityTypes" [value]="type">
-        {{ SecurityTypeTranslationsMap.get(type) | translate }}
-      </tb-toggle-option>
+      @for (type of securityTypes; track type) {
+        <tb-toggle-option [value]="type">
+          {{ SecurityTypeTranslationsMap.get(type) | translate }}
+        </tb-toggle-option>
+      }
     </tb-toggle-select>
   </div>
-  <ng-container [ngSwitch]="securityFormGroup.get('type').value">
-    <ng-template [ngSwitchCase]="BrokerSecurityType.BASIC">
+  @switch (securityFormGroup.get('type').value) {
+    @case (BrokerSecurityType.BASIC) {
       <div class="tb-form-row space-between tb-flex fill-width">
         <div class="fixed-title-width tb-required" translate>gateway.username</div>
         <div class="tb-flex no-gap">
           <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
             <input matInput name="value" formControlName="username" placeholder="{{ 'gateway.set' | translate }}"/>
-            <mat-icon matSuffix
-                      matTooltipPosition="above"
-                      matTooltipClass="tb-error-tooltip"
-                      [matTooltip]="('gateway.username-required') | translate"
-                      *ngIf="securityFormGroup.get('username').hasError('required')
-                                             && securityFormGroup.get('username').touched"
-                      class="tb-error">
-              warning
-            </mat-icon>
+            @if (securityFormGroup.get('username').hasError('required')
+              && securityFormGroup.get('username').touched) {
+              <mat-icon matSuffix
+                matTooltipPosition="above"
+                matTooltipClass="tb-error-tooltip"
+                [matTooltip]="('gateway.username-required') | translate"
+                class="tb-error">
+                warning
+              </mat-icon>
+            }
           </mat-form-field>
         </div>
       </div>
@@ -52,8 +55,8 @@
           </mat-form-field>
         </div>
       </div>
-    </ng-template>
-    <ng-template [ngSwitchCase]="BrokerSecurityType.CERTIFICATES">
+    }
+    @case (BrokerSecurityType.CERTIFICATES) {
       <div class="tb-form-hint tb-primary-fill">{{ 'gateway.path-hint' | translate }}</div>
       <div class="tb-form-row space-between tb-flex fill-width">
         <div class="fixed-title-width" tbTruncateWithTooltip>{{ 'gateway.CA-certificate-path' | translate }}</div>
@@ -79,15 +82,17 @@
           </mat-form-field>
         </div>
       </div>
-      <ng-container *ngIf="mode() === SecurityMode.extendedCertificates">
+      @if (mode() === SecurityMode.extendedCertificates) {
         <div class="tb-form-row space-between tb-flex fill-width">
           <div class="fixed-title-width" translate>gateway.mode</div>
           <div class="tb-flex no-gap">
             <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
               <mat-select formControlName="mode">
-                <mat-option *ngFor="let type of modeTypes" [value]="type">
-                  {{ type }}
-                </mat-option>
+                @for (type of modeTypes; track type) {
+                  <mat-option [value]="type">
+                    {{ type }}
+                  </mat-option>
+                }
               </mat-select>
             </mat-form-field>
           </div>
@@ -97,15 +102,16 @@
           <div class="tb-flex no-gap">
             <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
               <input matInput name="value" formControlName="username" placeholder="{{ 'gateway.set' | translate }}"/>
-              <mat-icon matSuffix
-                        matTooltipPosition="above"
-                        matTooltipClass="tb-error-tooltip"
-                        [matTooltip]="('gateway.username-required') | translate"
-                        *ngIf="securityFormGroup.get('username').hasError('required')
-                                               && securityFormGroup.get('username').touched"
-                        class="tb-error">
-                warning
-              </mat-icon>
+              @if (securityFormGroup.get('username').hasError('required')
+                && securityFormGroup.get('username').touched) {
+                <mat-icon matSuffix
+                  matTooltipPosition="above"
+                  matTooltipClass="tb-error-tooltip"
+                  [matTooltip]="('gateway.username-required') | translate"
+                  class="tb-error">
+                  warning
+                </mat-icon>
+              }
             </mat-form-field>
           </div>
         </div>
@@ -120,7 +126,7 @@
             </mat-form-field>
           </div>
         </div>
-      </ng-container>
-    </ng-template>
-  </ng-container>
+      }
+    }
+  }
 </div>

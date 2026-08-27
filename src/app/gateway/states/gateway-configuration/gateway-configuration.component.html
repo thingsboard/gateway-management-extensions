@@ -27,9 +27,11 @@
             {{ 'gateway.advanced' | translate }}
           </tb-toggle-option>
         </tb-toggle-select>
-        <button *ngIf="dialogRef" mat-icon-button (click)="cancel()" type="button">
-          <mat-icon class="material-icons">close</mat-icon>
-        </button>
+        @if (dialogRef) {
+          <button mat-icon-button (click)="cancel()" type="button">
+            <mat-icon class="material-icons">close</mat-icon>
+          </button>
+        }
       </div>
     </div>
   </mat-toolbar>

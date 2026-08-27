@@ -14,22 +14,23 @@
   limitations under the License.
 -->
 <ng-container [formGroup]="reportStrategyFormGroup">
-  <mat-expansion-panel *ngIf="isExpansionMode else defaultMode" class="tb-settings" [expanded]="showStrategyControl.value">
-    <mat-expansion-panel-header class="flex-wrap">
-      <mat-panel-title>
-        <mat-slide-toggle [formControl]="showStrategyControl" class="mat-slide" (click)="$event.stopPropagation()">
-          <mat-label>
-            {{ 'gateway.report-strategy.label' | translate }}
-          </mat-label>
-        </mat-slide-toggle>
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <ng-container [ngTemplateOutlet]="strategyFields"></ng-container>
-  </mat-expansion-panel>
-  <ng-template #defaultMode>
+  @if (isExpansionMode) {
+    <mat-expansion-panel class="tb-settings" [expanded]="showStrategyControl.value">
+      <mat-expansion-panel-header class="flex-wrap">
+        <mat-panel-title>
+          <mat-slide-toggle [formControl]="showStrategyControl" class="mat-slide" (click)="$event.stopPropagation()">
+            <mat-label>
+              {{ 'gateway.report-strategy.label' | translate }}
+            </mat-label>
+          </mat-slide-toggle>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <ng-container [ngTemplateOutlet]="strategyFields"></ng-container>
+    </mat-expansion-panel>
+  } @else {
     <div class="tb-form-panel-title" translate>gateway.report-strategy.label</div>
     <ng-container [ngTemplateOutlet]="strategyFields"></ng-container>
-  </ng-template>
+  }
   <ng-template #strategyFields>
     <div class="tb-form-row column-xs">
       <div class="fixed-title-width flex items-center gap-2">
@@ -43,32 +44,33 @@
       </div>
       <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
         <mat-select formControlName="type">
-          <mat-option *ngFor="let type of reportStrategyTypes" [value]="type">{{ ReportTypeTranslateMap.get(type) | translate }}</mat-option>
+          @for (type of reportStrategyTypes; track type) {
+            <mat-option [value]="type">{{ ReportTypeTranslateMap.get(type) | translate }}</mat-option>
+          }
         </mat-select>
       </mat-form-field>
     </div>
-    <div
-      *ngIf="reportStrategyFormGroup.get('type').value !== ReportStrategyType.OnChange && reportStrategyFormGroup.get('type').value !== ReportStrategyType.OnReceived"
-      class="tb-form-row column-xs"
-    >
-      <div class="fixed-title-width tb-required" tbTruncateWithTooltip>
-        {{ 'gateway.report-strategy.report-period' | translate }}
+    @if (reportStrategyFormGroup.get('type').value !== ReportStrategyType.OnChange && reportStrategyFormGroup.get('type').value !== ReportStrategyType.OnReceived) {
+      <div class="tb-form-row column-xs">
+        <div class="fixed-title-width tb-required" tbTruncateWithTooltip>
+          {{ 'gateway.report-strategy.report-period' | translate }}
+        </div>
+        <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+          <input matInput type="number" min="100" name="value" formControlName="reportPeriod" placeholder="{{ 'gateway.set' | translate }}"/>
+          @if (reportStrategyFormGroup.get('reportPeriod').hasError('required')
+            || reportStrategyFormGroup.get('reportPeriod').hasError('min')
+            && reportStrategyFormGroup.get('reportPeriod').touched) {
+            <mat-icon matSuffix
+              matTooltipPosition="above"
+              matTooltipClass="tb-error-tooltip"
+              [matTooltip]="(reportStrategyFormGroup.get('reportPeriod').hasError('min') ? 'gateway.hints.report-period-range' : 'gateway.hints.report-period-required') | translate"
+              class="tb-error">
+              warning
+            </mat-icon>
+          }
+          <span translate class="block pr-2" matSuffix>gateway.suffix.ms</span>
+        </mat-form-field>
       </div>
-      <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
-        <input matInput type="number" min="100" name="value" formControlName="reportPeriod" placeholder="{{ 'gateway.set' | translate }}"/>
-        @if (reportStrategyFormGroup.get('reportPeriod').hasError('required')
-        || reportStrategyFormGroup.get('reportPeriod').hasError('min')
-        && reportStrategyFormGroup.get('reportPeriod').touched) {
-          <mat-icon matSuffix
-                    matTooltipPosition="above"
-                    matTooltipClass="tb-error-tooltip"
-                    [matTooltip]="(reportStrategyFormGroup.get('reportPeriod').hasError('min') ? 'gateway.hints.report-period-range' : 'gateway.hints.report-period-required') | translate"
-                    class="tb-error">
-            warning
-          </mat-icon>
-        }
-        <span translate class="block pr-2" matSuffix>gateway.suffix.ms</span>
-      </mat-form-field>
-    </div>
+    }
   </ng-template>
 </ng-container>

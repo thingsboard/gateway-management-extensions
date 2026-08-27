@@ -25,16 +25,20 @@
   <mat-form-field class="mat-block tb-value-type" style="flex-grow: 0">
     <mat-label translate>gateway.rpc.template-name</mat-label>
     <input matInput [formControl]="templateNameCtrl" required/>
-    <mat-error
-      *ngIf="templateNameCtrl.hasError('required')">
-      {{ 'gateway.rpc.template-name-required' | translate }}
-    </mat-error>
+    @if (templateNameCtrl.hasError('required')) {
+      <mat-error
+        >
+        {{ 'gateway.rpc.template-name-required' | translate }}
+      </mat-error>
+    }
   </mat-form-field>
-  <div class="mat-mdc-form-field-error"
-       style="margin-top: -15px; padding-left: 10px; font-size: 14px;"
-       *ngIf="validateDuplicateName(templateNameCtrl)">
-    {{ 'gateway.rpc.template-name-duplicate' | translate }}
-  </div>
+  @if (validateDuplicateName(templateNameCtrl)) {
+    <div class="mat-mdc-form-field-error"
+      style="margin-top: -15px; padding-left: 10px; font-size: 14px;"
+      >
+      {{ 'gateway.rpc.template-name-duplicate' | translate }}
+    </div>
+  }
 </div>
 <div mat-dialog-actions class="justify-end">
   <button mat-button

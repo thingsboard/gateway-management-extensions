@@ -36,7 +36,6 @@ import {
   AttributeService,
   DialogService,
 } from '@core/public-api';
-import { CommonModule } from '@angular/common';
 import {
   CustomStatisticsTableComponent,
   EditCustomCommandDialogComponent,
@@ -56,7 +55,6 @@ import { EditCustomCommandDialogData } from './models/gateway-statistics.model';
   templateUrl: './gateway-statistics.component.html',
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
     StatisticsCommandsAutocompleteComponent,
     CustomStatisticsTableComponent,
@@ -103,7 +101,7 @@ export class GatewayStatisticsComponent implements AfterViewInit {
               private dialogService: DialogService,
               private utils: UtilsService) {
     this.statisticForm.get('command').valueChanges
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(value => {
         this.subscribed = false;
         if (this.subscriptionInfo && value?.attributeOnGateway) {

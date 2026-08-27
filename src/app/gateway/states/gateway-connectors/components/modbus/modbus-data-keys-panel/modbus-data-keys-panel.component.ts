@@ -44,7 +44,6 @@ import {
   ModifierType,
   ModifierTypesMap,
 } from '../../../models/public-api';
-import { CommonModule } from '@angular/common';
 import { generateSecret } from '@core/public-api';
 import { coerceBoolean, SharedModule } from '@shared/public-api';
 import { filter, takeUntil } from 'rxjs/operators';
@@ -57,7 +56,6 @@ import { ReportStrategyComponent } from '../../../../../shared/components/public
   styleUrls: ['./modbus-data-keys-panel.component.scss'],
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
     ReportStrategyComponent,
     TruncateWithTooltipDirective,

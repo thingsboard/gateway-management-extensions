@@ -28,10 +28,12 @@
   <mat-form-field class="mat-block tb-value-type" style="flex-grow: 0">
     <mat-label translate>gateway.configuration-delete-dialog-input</mat-label>
     <input matInput [formControl]="gatewayControl" required/>
-    <mat-error
-      *ngIf="gatewayControl.hasError('required')">
-      {{ 'gateway.configuration-delete-dialog-input-required' | translate }}
-    </mat-error>
+    @if (gatewayControl.hasError('required')) {
+      <mat-error
+        >
+        {{ 'gateway.configuration-delete-dialog-input-required' | translate }}
+      </mat-error>
+    }
   </mat-form-field>
 </div>
 <div mat-dialog-actions class="justify-end">
