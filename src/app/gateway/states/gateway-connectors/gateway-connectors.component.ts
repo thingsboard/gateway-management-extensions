@@ -42,6 +42,7 @@ import {
   ConnectorType,
   GatewayConnector,
   GatewayConnectorDefaultTypesTranslatesMap,
+  GatewayConnectorHelpLinksMap,
   GatewayLogLevel,
   noLeadTrailSpacesRegex,
   ReportStrategyDefaultValue,
@@ -67,7 +68,6 @@ import {
   Direction,
   EntityId,
   EntityType,
-  helpBaseUrl,
   NULL_UUID,
   PageComponent,
   PageData,
@@ -142,7 +142,7 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
   readonly GatewayConnectorTypesTranslatesMap = GatewayConnectorDefaultTypesTranslatesMap;
   readonly ConnectorConfigurationModes = ConfigurationModes;
   readonly ReportStrategyDefaultValue = ReportStrategyDefaultValue;
-  readonly s7HelpLink = helpBaseUrl + '/docs/iot-gateway/config/s7/';
+  readonly connectorHelpLinksMap = GatewayConnectorHelpLinksMap;
 
   pageLink: PageLink;
   dataSource: MatTableDataSource<GatewayAttributeData>;

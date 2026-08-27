@@ -153,12 +153,12 @@
   </section>
   <section [formGroup]="connectorForm" class="tb-form-panel section-container flex">
     <div class="tb-form-panel-title tb-flex no-flex space-between align-center">
-      <div class="tb-form-panel-title">
+      <div class="tb-form-panel-title tb-flex no-flex align-center">
         {{ initialConnector?.type ? GatewayConnectorTypesTranslatesMap.get(initialConnector.type) : '' }}
         {{ 'gateway.configuration' | translate }}
         <span class="version-placeholder" *ngIf="connectorForm.get('configVersion').value">v{{connectorForm.get('configVersion').value}}</span>
+        <div *ngIf="connectorHelpLinksMap.get(initialConnector?.type) as connectorHelpLink" [tb-help]="connectorHelpLink"></div>
       </div>
-      <div *ngIf="initialConnector?.type === ConnectorType.S7" [tb-help]="s7HelpLink"></div>
       <tb-toggle-select *ngIf="initialConnector && allowBasicConfig.has(initialConnector.type)"
                         formControlName="mode" appearance="fill">
         <tb-toggle-option [value]="ConnectorConfigurationModes.BASIC">
