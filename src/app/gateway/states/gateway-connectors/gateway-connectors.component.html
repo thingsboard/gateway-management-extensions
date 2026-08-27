@@ -92,7 +92,8 @@
           </mat-header-cell>
           <mat-cell *matCellDef="let attribute">
             <div class="lt-md:!hidden flex-row justify-end" [style]="{ minWidth: '144px', maxWidth: '144px', width: '144px', textAlign: 'center'}">
-              <button mat-icon-button
+              <button *ngIf="!rpcNotSupportedTypes.has(attribute.value.type)"
+                      mat-icon-button
                       [matTooltip]="'gateway.rpc.rpc' | translate"
                       matTooltipPosition="above"
                       [disabled]="!attribute.value.configurationJson.id"
@@ -119,7 +120,8 @@
                 <mat-icon class="material-icons">more_vert</mat-icon>
               </button>
               <mat-menu #cellActionsMenu="matMenu" xPosition="before">
-                <button mat-icon-button
+                <button *ngIf="!rpcNotSupportedTypes.has(attribute.value.type)"
+                        mat-icon-button
                         [matTooltip]="'gateway.rpc.rpc' | translate"
                         matTooltipPosition="above"
                         [disabled]="!attribute.value.configurationJson.id"
@@ -151,10 +153,11 @@
   </section>
   <section [formGroup]="connectorForm" class="tb-form-panel section-container flex">
     <div class="tb-form-panel-title tb-flex no-flex space-between align-center">
-      <div class="tb-form-panel-title">
+      <div class="tb-form-panel-title tb-flex no-flex align-center">
         {{ initialConnector?.type ? GatewayConnectorTypesTranslatesMap.get(initialConnector.type) : '' }}
         {{ 'gateway.configuration' | translate }}
         <span class="version-placeholder" *ngIf="connectorForm.get('configVersion').value">v{{connectorForm.get('configVersion').value}}</span>
+        <div *ngIf="connectorHelpLinksMap.get(initialConnector?.type) as connectorHelpLink" [tb-help]="connectorHelpLink"></div>
       </div>
       <tb-toggle-select *ngIf="initialConnector && allowBasicConfig.has(initialConnector.type)"
                         formControlName="mode" appearance="fill">

@@ -23,6 +23,7 @@ import {
   ConnectorLegacyConfig
 } from '../../states/gateway-connectors/models/public-api';
 import { ConfigurationModes, ReportStrategyConfig } from './report-strategy.models';
+import { helpBaseUrl } from '@shared/public-api';
 
 export const jsonRequired = (control: AbstractControl): ValidationErrors | null => !control.value ? {required: true} : null;
 
@@ -37,6 +38,7 @@ export enum GatewayLogLevel {
 }
 
 export enum GatewayVersion {
+  v3_8_5 = '3.8.5',
   v3_7_3 = '3.7.3',
   v3_7_2 = '3.7.2',
   v3_7_0 = '3.7',
@@ -65,6 +67,7 @@ export enum ConnectorType {
   OCPP = 'ocpp',
   CUSTOM = 'custom',
   KNX = 'knx',
+  S7 = 's7',
 }
 
 export const GatewayConnectorDefaultTypesTranslatesMap = new Map<ConnectorType, string>([
@@ -85,11 +88,32 @@ export const GatewayConnectorDefaultTypesTranslatesMap = new Map<ConnectorType, 
   [ConnectorType.OCPP, 'OCPP'],
   [ConnectorType.CUSTOM, 'CUSTOM'],
   [ConnectorType.KNX, 'KNX'],
+  [ConnectorType.S7, 'S7'],
+]);
+
+export const GatewayConnectorHelpLinksMap = new Map<ConnectorType, string>([
+  [ConnectorType.MQTT, `${helpBaseUrl}/docs/iot-gateway/config/mqtt/`],
+  [ConnectorType.MODBUS, `${helpBaseUrl}/docs/iot-gateway/config/modbus/`],
+  [ConnectorType.OPCUA, `${helpBaseUrl}/docs/iot-gateway/config/opc-ua/`],
+  [ConnectorType.BLE, `${helpBaseUrl}/docs/iot-gateway/config/ble/`],
+  [ConnectorType.REQUEST, `${helpBaseUrl}/docs/iot-gateway/config/request/`],
+  [ConnectorType.CAN, `${helpBaseUrl}/docs/iot-gateway/config/can/`],
+  [ConnectorType.BACNET, `${helpBaseUrl}/docs/iot-gateway/config/bacnet/`],
+  [ConnectorType.ODBC, `${helpBaseUrl}/docs/iot-gateway/config/odbc/`],
+  [ConnectorType.REST, `${helpBaseUrl}/docs/iot-gateway/config/rest/`],
+  [ConnectorType.SNMP, `${helpBaseUrl}/docs/iot-gateway/config/snmp/`],
+  [ConnectorType.FTP, `${helpBaseUrl}/docs/iot-gateway/config/ftp/`],
+  [ConnectorType.SOCKET, `${helpBaseUrl}/docs/iot-gateway/config/socket/`],
+  [ConnectorType.XMPP, `${helpBaseUrl}/docs/iot-gateway/config/xmpp/`],
+  [ConnectorType.OCPP, `${helpBaseUrl}/docs/iot-gateway/config/ocpp/`],
+  [ConnectorType.KNX, `${helpBaseUrl}/docs/iot-gateway/config/knx/`],
+  [ConnectorType.S7, `${helpBaseUrl}/docs/iot-gateway/config/s7/`],
 ]);
 
 export const ConnectorsTypesByVersion = new Map<GatewayVersion, ConnectorType[]>([
-  [GatewayVersion.v3_7_0, Object.values(ConnectorType)],
-  [GatewayVersion.Legacy, Object.values(ConnectorType).filter(type => type!== ConnectorType.KNX)],
+  [GatewayVersion.v3_8_5, Object.values(ConnectorType)],
+  [GatewayVersion.v3_7_0, Object.values(ConnectorType).filter(type => type !== ConnectorType.S7)],
+  [GatewayVersion.Legacy, Object.values(ConnectorType).filter(type => ![ConnectorType.KNX, ConnectorType.S7].includes(type))],
 ]);
 
 export type ConnectorBaseConfig = ConnectorLegacyConfig
