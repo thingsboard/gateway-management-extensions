@@ -64,7 +64,7 @@ export abstract class AbstractDevicesConfigTableComponent<Entity> implements Con
     this.entityFormArray.valueChanges.pipe(
       takeUntilDestroyed()
     ).subscribe(value => {
-      this.updateTableData(value);
+      this.updateTableData(value, this.textSearch.value.trim());
       this.onChange(value);
     });
     this.dataSource = this.getDatasource();

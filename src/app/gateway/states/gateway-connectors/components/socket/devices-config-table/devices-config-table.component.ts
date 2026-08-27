@@ -100,7 +100,7 @@ export class DevicesConfigTableComponent implements ControlValueAccessor, Valida
     this.devicesFormGroup.valueChanges.pipe(
       takeUntil(this.destroy$)
     ).subscribe(value => {
-      this.updateTableData(value);
+      this.updateTableData(value, this.textSearch.value.trim());
       this.onChange(value);
     });
   }
@@ -144,17 +144,18 @@ export class DevicesConfigTableComponent implements ControlValueAccessor, Valida
     this.textSearch.reset();
   }
 
-  manageDevices($event: Event, index?: number): void {
+  manageDevices($event: Event, device?: DevicesConfigMapping): void {
     if ($event) {
       $event.stopPropagation();
     }
-    const withIndex = isDefinedAndNotNull(index);
-    const value = withIndex ? this.devicesFormGroup.at(index).value : {};
-    this.getDeviceDialog(value, withIndex ? 'action.apply' : 'action.add').afterClosed()
+    const withDevice = isDefinedAndNotNull(device);
+    const index = withDevice ? this.getDeviceIndex(device) : -1;
+    const value = withDevice ? this.devicesFormGroup.at(index).value : {};
+    this.getDeviceDialog(value, withDevice ? 'action.apply' : 'action.add').afterClosed()
       .pipe(take(1), takeUntil(this.destroy$))
       .subscribe(res => {
         if (res) {
-          if (withIndex) {
+          if (withDevice) {
             this.devicesFormGroup.at(index).patchValue(res);
           } else {
             this.devicesFormGroup.push(this.fb.control(res));
@@ -162,6 +163,10 @@ export class DevicesConfigTableComponent implements ControlValueAccessor, Valida
           this.devicesFormGroup.markAsDirty();
         }
     });
+  }
+
+  private getDeviceIndex(device: DevicesConfigMapping): number {
+    return this.devicesFormGroup.controls.findIndex(control => control.value === device);
   }
 
   validate(): ValidationErrors | null {
@@ -185,12 +190,13 @@ export class DevicesConfigTableComponent implements ControlValueAccessor, Valida
     });
   }
 
-  deleteDevice($event: Event, index: number): void {
+  deleteDevice($event: Event, device: DevicesConfigMapping): void {
     if ($event) {
       $event.stopPropagation();
     }
+    const index = this.getDeviceIndex(device);
     this.dialogService.confirm(
-      this.translate.instant('gateway.delete-device-title', { name: this.devicesFormGroup.controls[index].value.deviceName }),
+      this.translate.instant('gateway.delete-device-title', { name: device.deviceName }),
       this.translate.instant('gateway.delete-device-description'),
       this.translate.instant('action.no'),
       this.translate.instant('action.yes'),

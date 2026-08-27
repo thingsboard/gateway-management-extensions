@@ -82,6 +82,7 @@ export enum PortLimits {
 }
 
 export const GatewayConnectorConfigVersionMap = new Map<ConnectorType, GatewayVersion>([
+  [ConnectorType.S7, GatewayVersion.v3_8_5],
   [ConnectorType.REST, GatewayVersion.v3_7_2],
   [ConnectorType.KNX, GatewayVersion.v3_7_0],
   [ConnectorType.BACNET, GatewayVersion.v3_6_2],

@@ -63,13 +63,14 @@ export class BacnetDevicesConfigTableComponent extends AbstractDevicesConfigTabl
       $event.stopPropagation();
     }
     const withDevice = isDefinedAndNotNull(device);
-    this.getDeviceDialog(device, withDevice ? 'action.apply' : 'action.add').afterClosed()
+    const index = withDevice ? this.getEntityIndex(device) : -1;
+    const value = withDevice ? this.entityFormArray.at(index).value : {} as DevicesConfigMapping;
+    this.getDeviceDialog(value, withDevice ? 'action.apply' : 'action.add').afterClosed()
       .pipe(take(1), takeUntilDestroyed(this.destroyRef))
       .subscribe(res => {
         if (res) {
           if (withDevice) {
-            const originalIndex = this.entityFormArray.value.findIndex(item => JSON.stringify(item) === JSON.stringify(device));
-            this.entityFormArray.at(originalIndex).patchValue(res);
+            this.entityFormArray.at(index).patchValue(res);
           } else {
             this.entityFormArray.push(this.fb.control(res));
           }
@@ -82,6 +83,7 @@ export class BacnetDevicesConfigTableComponent extends AbstractDevicesConfigTabl
     if ($event) {
       $event.stopPropagation();
     }
+    const index = this.getEntityIndex(device);
     this.dialogService.confirm(
       this.translate.instant('gateway.delete-device-title', { name: device.deviceInfo?.deviceNameExpression }),
       this.translate.instant('gateway.delete-device-description'),
@@ -95,6 +97,10 @@ export class BacnetDevicesConfigTableComponent extends AbstractDevicesConfigTabl
         this.entityFormArray.markAsDirty();
       }
     });
+  }
+
+  private getEntityIndex(device: BacnetDeviceConfig): number {
+    return this.entityFormArray.controls.findIndex(control => control.value === device);
   }
 
   private getDeviceDialog(
