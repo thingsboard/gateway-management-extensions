@@ -134,9 +134,7 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
     ConnectorType.BACNET,
     ConnectorType.REST
   ]);
-  readonly rpcNotSupportedTypes = new Set<ConnectorType>([
-    ConnectorType.S7
-  ]);
+  readonly rpcNotSupportedTypes = new Set<ConnectorType>();
   readonly gatewayLogLevel = Object.values(GatewayLogLevel);
   readonly displayedColumns = ['enabled', 'key', 'type', 'syncStatus', 'errors', 'actions'];
   readonly GatewayConnectorTypesTranslatesMap = GatewayConnectorDefaultTypesTranslatesMap;

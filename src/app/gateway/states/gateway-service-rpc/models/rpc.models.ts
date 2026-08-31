@@ -152,6 +152,72 @@ export interface OPCTypeValue {
   stringValue?: string;
 }
 
+export enum S7DeviceType {
+  PLC = 'PLC',
+  LOGO = 'LOGO'
+}
+
+export enum S7RequestType {
+  READ = 'read',
+  WRITE = 'write'
+}
+
+export enum S7AddressType {
+  DATA = 'data',
+  TAG = 'tag',
+  VM = 'vm'
+}
+
+export enum S7DataType {
+  BOOLEAN = 'boolean',
+  STRING = 'string',
+  RAW = 'raw',
+  BYTES = 'bytes',
+  BIT = 'bit',
+  BYTE = 'byte',
+  USINT = 'usint',
+  UINT8 = 'uint8',
+  SINT = 'sint',
+  INT8 = 'int8',
+  INT = 'int',
+  INT16 = 'int16',
+  SHORT = 'short',
+  UINT = 'uint',
+  UINT16 = 'uint16',
+  WORD = 'word',
+  DINT = 'dint',
+  INT32 = 'int32',
+  UDINT = 'udint',
+  UINT32 = 'uint32',
+  DWORD = 'dword',
+  REAL = 'real',
+  FLOAT = 'float',
+  FLOAT32 = 'float32',
+  LREAL = 'lreal',
+  DOUBLE = 'double',
+  FLOAT64 = 'float64'
+}
+
+export const S7BooleanDataTypes: S7DataType[] = [S7DataType.BOOLEAN];
+
+export interface S7RpcDeviceOption {
+  deviceName: string;
+}
+
+export interface RPCTemplateConfigS7 {
+  deviceName: string;
+  requestType: S7RequestType;
+  type: S7AddressType;
+  dataType?: S7DataType;
+  dbNumber?: number;
+  start?: number;
+  size?: number;
+  bit?: number;
+  tag?: string;
+  vmAddress?: string;
+  value?: string;
+}
+
 export interface SaveRPCTemplateData {
   config: RPCTemplateConfig;
   templates: Array<RPCTemplate>;
