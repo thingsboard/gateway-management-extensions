@@ -162,11 +162,21 @@ export enum S7RequestType {
   WRITE = 'write'
 }
 
+export const S7RequestTypeTranslates = new Map<S7RequestType, string>([
+  [S7RequestType.READ, 'gateway.rpc.read'],
+  [S7RequestType.WRITE, 'gateway.rpc.write']
+]);
+
 export enum S7AddressType {
   DATA = 'data',
   TAG = 'tag',
   VM = 'vm'
 }
+
+export const S7AddressTypeTranslates = new Map<S7AddressType, string>([
+  [S7AddressType.DATA, 'gateway.rpc.data'],
+  [S7AddressType.TAG, 'gateway.rpc.tag']
+]);
 
 export enum S7DataType {
   BOOLEAN = 'boolean',

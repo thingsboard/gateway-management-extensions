@@ -18,25 +18,17 @@ import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { WidgetContext } from '@home/models/widget-component.models';
-import { RPCCommand, RPCTemplate, RPCTemplateConfig, S7RpcDeviceOption, SaveRPCTemplateData } from './models/public-api';
+import { RPCCommand, RPCTemplate, RPCTemplateConfig, SaveRPCTemplateData } from './models/public-api';
 import { ConnectorType, GatewayConnectorDefaultTypesTranslatesMap, jsonRequired } from '../../shared/public-api';
 import {
   GatewayServiceRPCConnectorTemplateDialogComponent
 } from './components/gateway-service-rpc-connector-template-dialog/gateway-service-rpc-connector-template-dialog';
 import {
-  AliasFilterType,
   AttributeScope,
   ContentType,
-  createDefaultEntityDataPageLink,
   DatasourceType,
-  EntityDataQuery,
-  EntityKeyType,
-  EntityKeyValueType,
   EntityType,
-  FilterPredicateType,
-  KeyFilter,
   SharedModule,
-  StringOperation,
   widgetType
 } from '@shared/public-api';
 import { AttributeService, IWidgetSubscription, UtilsService, WidgetSubscriptionOptions } from '@core/public-api';
@@ -110,8 +102,6 @@ export class GatewayServiceRPCComponent implements OnInit {
   ]);
   readonly modbusReadFunctionCodes = [1, 2, 3, 4];
 
-  public s7Devices: S7RpcDeviceOption[] = [];
-
   private subscription: IWidgetSubscription;
   private subscriptionOptions: WidgetSubscriptionOptions = {
     callbacks: {
@@ -145,9 +135,6 @@ export class GatewayServiceRPCComponent implements OnInit {
       this.commandForm.get('command').setValue(this.RPCCommands[0]);
     } else {
       this.connectorType = this.ctx.stateController.getStateParams().connector_rpc.value.type;
-      if (this.connectorType === ConnectorType.S7) {
-        this.loadS7Devices();
-      }
       const subscriptionInfo = [{
         type: DatasourceType.entity,
         entityType: EntityType.DEVICE,
@@ -249,41 +236,6 @@ export class GatewayServiceRPCComponent implements OnInit {
 
   useTemplate($event) {
     this.commandForm.get('params').patchValue($event.config);
-  }
-
-  private loadS7Devices(): void {
-    const connectorName = this.ctx.stateController.getStateParams().connector_rpc.value.name;
-    const query: EntityDataQuery = {
-      entityFilter: {
-        type: AliasFilterType.entityType,
-        entityType: EntityType.DEVICE
-      },
-      pageLink: createDefaultEntityDataPageLink(100),
-      entityFields: [{type: EntityKeyType.ENTITY_FIELD, key: 'name'}],
-      keyFilters: [
-        this.buildAttributeEqualsFilter('connectorType', this.connectorType),
-        this.buildAttributeEqualsFilter('connectorName', connectorName)
-      ]
-    };
-    this.ctx.entityService.findEntityDataByQuery(query).subscribe(pageData => {
-      this.s7Devices = pageData.data.map(data => ({
-        deviceName: data.latest[EntityKeyType.ENTITY_FIELD]?.name?.value
-      }));
-      this.cd.detectChanges();
-    });
-  }
-
-  private buildAttributeEqualsFilter(key: string, value: string): KeyFilter {
-    return {
-      key: {type: EntityKeyType.SERVER_ATTRIBUTE, key},
-      valueType: EntityKeyValueType.STRING,
-      predicate: {
-        type: FilterPredicateType.STRING,
-        operation: StringOperation.EQUAL,
-        value: {defaultValue: value},
-        ignoreCase: true
-      }
-    };
   }
 
   private updateTemplates() {

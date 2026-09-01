@@ -101,8 +101,8 @@ export class RestResponseConfigComponent extends ControlValueAccessorBaseAbstrac
 
   private toggleIsExpected(isExpected: boolean, type: ResponseType): void {
     const shouldEnable = isExpected && type === ResponseType.ADVANCED;
-    this.responseConfigFormGroup.get(ResponseType.ADVANCED).get('timeout')[shouldEnable ? 'enable' : 'disable']({emitEvent: false});
-    this.responseConfigFormGroup.get(ResponseType.ADVANCED).get('responseAttribute')[shouldEnable ? 'enable' : 'disable']({emitEvent: false});
+    this.toggleControl(this.responseConfigFormGroup.get(ResponseType.ADVANCED).get('timeout'), shouldEnable);
+    this.toggleControl(this.responseConfigFormGroup.get(ResponseType.ADVANCED).get('responseAttribute'), shouldEnable);
   }
 
   private observeIsExpected(): void {

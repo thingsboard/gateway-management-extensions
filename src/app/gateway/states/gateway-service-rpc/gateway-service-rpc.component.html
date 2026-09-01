@@ -54,7 +54,7 @@
             <tb-gateway-mqtt-rpc-parameters *ngSwitchCase="ConnectorType.MQTT" formControlName="params"/>
             <tb-gateway-opc-rpc-parameters *ngSwitchCase="ConnectorType.OPCUA" formControlName="params"/>
             <tb-gateway-socket-rpc-parameters *ngSwitchCase="ConnectorType.SOCKET" formControlName="params"/>
-            <tb-gateway-s7-rpc-parameters *ngSwitchCase="ConnectorType.S7" formControlName="params" [devices]="s7Devices"/>
+            <tb-gateway-s7-rpc-parameters *ngSwitchCase="ConnectorType.S7" formControlName="params" [ctx]="ctx"/>
           </ng-container>
           <div class="fex-row template-actions flex flex-1 items-center justify-end gap-2.5">
             <button mat-raised-button

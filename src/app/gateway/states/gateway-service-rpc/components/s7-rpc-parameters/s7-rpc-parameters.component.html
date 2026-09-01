@@ -15,24 +15,21 @@
 -->
 <ng-container [formGroup]="formGroup">
   <div class="flex flex-1 flex-row gap-2.5">
-    <mat-form-field class="flex-1">
+    <mat-form-field class="flex-1" appearance="outline">
       <mat-label>{{ 'gateway.rpc.deviceName' | translate }}</mat-label>
       <mat-select formControlName="deviceName">
+        @if (!devices.length) {
+          <mat-option disabled>{{ 'gateway.rpc.no-devices-found' | translate }}</mat-option>
+        }
         @for (device of devices; track device.deviceName) {
           <mat-option [value]="device.deviceName">{{ device.deviceName }}</mat-option>
         }
       </mat-select>
       @if (formGroup.get('deviceName').hasError('required') && formGroup.get('deviceName').touched) {
-        <mat-icon matSuffix
-          matTooltipPosition="above"
-          matTooltipClass="tb-error-tooltip"
-          [matTooltip]="('gateway.device-name-required') | translate"
-          class="tb-error">
-          warning
-        </mat-icon>
+        <tb-error-icon matSuffix [tooltipText]="'gateway.device-name-required' | translate"/>
       }
     </mat-form-field>
-    <mat-form-field class="flex-1">
+    <mat-form-field class="flex-1" appearance="outline">
       <mat-label>{{ 'gateway.rpc.deviceType' | translate }}</mat-label>
       <mat-select formControlName="deviceType">
         @for (type of s7DeviceTypes; track type) {
@@ -43,19 +40,21 @@
   </div>
 
   <div class="flex flex-1 flex-row gap-2.5">
-    <mat-form-field class="flex-1">
+    <mat-form-field class="flex-1" appearance="outline">
       <mat-label>{{ 'gateway.rpc.requestType' | translate }}</mat-label>
       <mat-select formControlName="requestType">
-        <mat-option [value]="S7RequestType.READ">{{ 'gateway.rpc.read' | translate }}</mat-option>
-        <mat-option [value]="S7RequestType.WRITE">{{ 'gateway.rpc.write' | translate }}</mat-option>
+        @for (type of s7RequestTypes; track type) {
+          <mat-option [value]="type">{{ S7RequestTypeTranslates.get(type) | translate }}</mat-option>
+        }
       </mat-select>
     </mat-form-field>
     @if (formGroup.get('deviceType').value !== S7DeviceType.LOGO) {
-      <mat-form-field class="flex-1">
+      <mat-form-field class="flex-1" appearance="outline">
         <mat-label>{{ 'gateway.rpc.addressType' | translate }}</mat-label>
         <mat-select formControlName="type">
-          <mat-option [value]="S7AddressType.DATA">{{ 'gateway.rpc.data' | translate }}</mat-option>
-          <mat-option [value]="S7AddressType.TAG">{{ 'gateway.rpc.tag' | translate }}</mat-option>
+          @for (type of s7AddressTypes; track type) {
+            <mat-option [value]="type">{{ S7AddressTypeTranslates.get(type) | translate }}</mat-option>
+          }
         </mat-select>
       </mat-form-field>
     }
@@ -63,7 +62,7 @@
 
   @if (formGroup.get('type').value === S7AddressType.DATA) {
     <div class="flex flex-1 flex-row gap-2.5">
-      <mat-form-field class="flex-1">
+      <mat-form-field class="flex-1" appearance="outline">
         <mat-label>{{ 'gateway.rpc.dataType' | translate }}</mat-label>
         <mat-select formControlName="dataType">
           @for (type of s7DataTypes; track type) {
@@ -71,59 +70,47 @@
           }
         </mat-select>
       </mat-form-field>
-      <mat-form-field class="flex-1">
+      <mat-form-field class="flex-1" appearance="outline">
         <mat-label>{{ 'gateway.rpc.dbNumber' | translate }}</mat-label>
         <input matInput type="number" min="0" formControlName="dbNumber"/>
-        @if (formGroup.get('dbNumber').invalid && formGroup.get('dbNumber').touched) {
-          <mat-icon matSuffix
-            matTooltipPosition="above"
-            matTooltipClass="tb-error-tooltip"
-            [matTooltip]="('gateway.db-number-required') | translate"
-            class="tb-error">
-            warning
-          </mat-icon>
+        @let dbNumberTouched = formGroup.get('dbNumber').touched;
+        @if (formGroup.get('dbNumber').hasError('required') && dbNumberTouched) {
+          <tb-error-icon matSuffix [tooltipText]="'gateway.rpc.db-number-required' | translate"/>
+        } @else if (formGroup.get('dbNumber').hasError('min') && dbNumberTouched) {
+          <tb-error-icon matSuffix [tooltipText]="'gateway.rpc.db-number-min' | translate"/>
         }
       </mat-form-field>
     </div>
     <div class="flex flex-1 flex-row gap-2.5">
-      <mat-form-field class="flex-1">
+      <mat-form-field class="flex-1" appearance="outline">
         <mat-label>{{ 'gateway.rpc.start' | translate }}</mat-label>
         <input matInput type="number" min="0" formControlName="start"/>
-        @if (formGroup.get('start').invalid && formGroup.get('start').touched) {
-          <mat-icon matSuffix
-            matTooltipPosition="above"
-            matTooltipClass="tb-error-tooltip"
-            [matTooltip]="('gateway.start-required') | translate"
-            class="tb-error">
-            warning
-          </mat-icon>
+        @let startTouched = formGroup.get('start').touched;
+        @if (formGroup.get('start').hasError('required') && startTouched) {
+          <tb-error-icon matSuffix [tooltipText]="'gateway.rpc.start-required' | translate"/>
+        } @else if (formGroup.get('start').hasError('min') && startTouched) {
+          <tb-error-icon matSuffix [tooltipText]="'gateway.rpc.start-min' | translate"/>
         }
       </mat-form-field>
-      <mat-form-field class="flex-1">
+      <mat-form-field class="flex-1" appearance="outline">
         <mat-label>{{ 'gateway.rpc.size' | translate }}</mat-label>
         <input matInput type="number" min="0" formControlName="size"/>
-        @if (formGroup.get('size').invalid && formGroup.get('size').touched) {
-          <mat-icon matSuffix
-            matTooltipPosition="above"
-            matTooltipClass="tb-error-tooltip"
-            [matTooltip]="('gateway.size-required') | translate"
-            class="tb-error">
-            warning
-          </mat-icon>
+        @let sizeTouched = formGroup.get('size').touched;
+        @if (formGroup.get('size').hasError('required') && sizeTouched) {
+          <tb-error-icon matSuffix [tooltipText]="'gateway.rpc.size-required' | translate"/>
+        } @else if (formGroup.get('size').hasError('min') && sizeTouched) {
+          <tb-error-icon matSuffix [tooltipText]="'gateway.rpc.size-min' | translate"/>
         }
       </mat-form-field>
       @if (isBooleanDataType) {
-        <mat-form-field class="flex-1">
+        <mat-form-field class="flex-1" appearance="outline">
           <mat-label>{{ 'gateway.rpc.bit' | translate }}</mat-label>
-          <input matInput type="number" min="0" max="7" formControlName="bit"/>
-          @if (formGroup.get('bit').invalid && formGroup.get('bit').touched) {
-            <mat-icon matSuffix
-              matTooltipPosition="above"
-              matTooltipClass="tb-error-tooltip"
-              [matTooltip]="('gateway.bit-required') | translate"
-              class="tb-error">
-              warning
-            </mat-icon>
+          <input matInput type="number" min="1" max="7" formControlName="bit"/>
+          @let bitTouched = formGroup.get('bit').touched;
+          @if (formGroup.get('bit').hasError('required') && bitTouched) {
+            <tb-error-icon matSuffix [tooltipText]="'gateway.rpc.bit-required' | translate"/>
+          } @else if ((formGroup.get('bit').hasError('min') || formGroup.get('bit').hasError('max')) && bitTouched) {
+            <tb-error-icon matSuffix [tooltipText]="'gateway.rpc.bit-range' | translate"/>
           }
         </mat-form-field>
       }
@@ -131,49 +118,40 @@
   }
 
   @if (formGroup.get('type').value === S7AddressType.TAG) {
-    <mat-form-field class="w-full">
+    <mat-form-field class="w-full" appearance="outline">
       <mat-label>{{ 'gateway.rpc.tag' | translate }}</mat-label>
       <input matInput formControlName="tag" placeholder="DB0.DBX0.0"/>
-      @if (formGroup.get('tag').invalid && formGroup.get('tag').touched) {
-        <mat-icon matSuffix
-          matTooltipPosition="above"
-          matTooltipClass="tb-error-tooltip"
-          [matTooltip]="('gateway.tag-required') | translate"
-          class="tb-error">
-          warning
-        </mat-icon>
+      @let tagTouched = formGroup.get('tag').touched;
+      @if (formGroup.get('tag').hasError('required') && tagTouched) {
+        <tb-error-icon matSuffix [tooltipText]="'gateway.rpc.tag-required' | translate"/>
+      } @else if (formGroup.get('tag').hasError('pattern') && tagTouched) {
+        <tb-error-icon matSuffix [tooltipText]="'gateway.rpc.tag-pattern' | translate"/>
       }
     </mat-form-field>
   }
 
   @if (formGroup.get('type').value === S7AddressType.VM) {
-    <mat-form-field class="w-full">
+    <mat-form-field class="w-full" appearance="outline">
       <mat-label>{{ 'gateway.rpc.vmAddress' | translate }}</mat-label>
       <input matInput formControlName="vmAddress" placeholder="VW30"/>
-      @if (formGroup.get('vmAddress').invalid && formGroup.get('vmAddress').touched) {
-        <mat-icon matSuffix
-          matTooltipPosition="above"
-          matTooltipClass="tb-error-tooltip"
-          [matTooltip]="('gateway.vm-address-required') | translate"
-          class="tb-error">
-          warning
-        </mat-icon>
+      @let vmAddressTouched = formGroup.get('vmAddress').touched;
+      @if (formGroup.get('vmAddress').hasError('required') && vmAddressTouched) {
+        <tb-error-icon matSuffix [tooltipText]="'gateway.rpc.vm-address-required' | translate"/>
+      } @else if (formGroup.get('vmAddress').hasError('pattern') && vmAddressTouched) {
+        <tb-error-icon matSuffix [tooltipText]="'gateway.rpc.vm-address-pattern' | translate"/>
       }
     </mat-form-field>
   }
 
   @if (formGroup.get('requestType').value === S7RequestType.WRITE) {
-    <mat-form-field class="w-full">
+    <mat-form-field class="w-full" appearance="outline">
       <mat-label>{{ 'gateway.rpc.value' | translate }}</mat-label>
       <input matInput formControlName="value"/>
-      @if (formGroup.get('value').invalid && formGroup.get('value').touched) {
-        <mat-icon matSuffix
-          matTooltipPosition="above"
-          matTooltipClass="tb-error-tooltip"
-          [matTooltip]="('gateway.value-required') | translate"
-          class="tb-error">
-          warning
-        </mat-icon>
+      @let valueTouched = formGroup.get('value').touched;
+      @if (formGroup.get('value').hasError('required') && valueTouched) {
+        <tb-error-icon matSuffix [tooltipText]="'gateway.value-required' | translate"/>
+      } @else if (formGroup.get('value').hasError('pattern') && valueTouched) {
+        <tb-error-icon matSuffix [tooltipText]="'gateway.value-pattern' | translate"/>
       }
     </mat-form-field>
   }

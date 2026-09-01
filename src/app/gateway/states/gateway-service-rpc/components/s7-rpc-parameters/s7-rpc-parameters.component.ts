@@ -16,30 +16,48 @@
 
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   forwardRef,
   Input,
+  OnInit,
 } from '@angular/core';
 import {
-  AbstractControl,
   FormGroup,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   Validators,
 } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { WidgetContext } from '@home/models/widget-component.models';
 import { SharedModule } from '@shared/public-api';
 import { noLeadTrailSpacesRegex } from '../../../../shared/public-api';
 import {
   RPCTemplateConfigS7,
   S7AddressType,
+  S7AddressTypeTranslates,
   S7BooleanDataTypes,
   S7DataType,
   S7DeviceType,
   S7RequestType,
+  S7RequestTypeTranslates,
   S7RpcDeviceOption,
 } from '../../models/public-api';
 import { ControlValueAccessorBaseAbstract } from '../../../../shared/abstract/public-api';
+import { ErrorTooltipIconComponent } from '../../../../shared/components/public-api';
+import {
+  AliasFilterType,
+  createDefaultEntityDataPageLink,
+  EntityDataQuery,
+  EntityKeyType,
+  EntityKeyValueType,
+  EntityType,
+  FilterPredicateType,
+  KeyFilter,
+  StringOperation,
+} from '@shared/public-api';
+
+const S7_DEVICES_PAGE_LIMIT = 100;
 
 @Component({
   selector: 'tb-gateway-s7-rpc-parameters',
@@ -60,21 +78,35 @@ import { ControlValueAccessorBaseAbstract } from '../../../../shared/abstract/pu
   standalone: true,
   imports: [
     SharedModule,
+    ErrorTooltipIconComponent,
   ],
 })
-export class S7RpcParametersComponent extends ControlValueAccessorBaseAbstract<RPCTemplateConfigS7> {
+export class S7RpcParametersComponent extends ControlValueAccessorBaseAbstract<RPCTemplateConfigS7> implements OnInit {
 
-  @Input() devices: S7RpcDeviceOption[] = [];
+  @Input() ctx: WidgetContext;
 
   readonly S7RequestType = S7RequestType;
   readonly S7AddressType = S7AddressType;
   readonly S7DeviceType = S7DeviceType;
-  readonly S7DataType = S7DataType;
+  readonly S7RequestTypeTranslates = S7RequestTypeTranslates;
+  readonly S7AddressTypeTranslates = S7AddressTypeTranslates;
   readonly s7DataTypes = Object.values(S7DataType) as S7DataType[];
   readonly s7DeviceTypes = Object.values(S7DeviceType) as S7DeviceType[];
+  readonly s7RequestTypes = Array.from(S7RequestTypeTranslates.keys());
+  readonly s7AddressTypes = Array.from(S7AddressTypeTranslates.keys());
+
+  devices: S7RpcDeviceOption[] = [];
 
   get isBooleanDataType(): boolean {
-    return S7BooleanDataTypes.includes(this.formGroup?.get('dataType').value);
+    return S7BooleanDataTypes.includes(this.formGroup.get('dataType').value);
+  }
+
+  constructor(private cd: ChangeDetectorRef) {
+    super();
+  }
+
+  ngOnInit(): void {
+    this.loadDevices();
   }
 
   protected initFormGroup(): FormGroup {
@@ -87,7 +119,7 @@ export class S7RpcParametersComponent extends ControlValueAccessorBaseAbstract<R
       dbNumber: [0, [Validators.required, Validators.min(0)]],
       start: [0, [Validators.required, Validators.min(0)]],
       size: [1, [Validators.required, Validators.min(0)]],
-      bit: [1, [Validators.required, Validators.min(0), Validators.max(7)]],
+      bit: [1, [Validators.required, Validators.min(1), Validators.max(7)]],
       tag: [{value: null, disabled: true}, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
       vmAddress: [{value: null, disabled: true}, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
       value: [{value: null, disabled: true}, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
@@ -111,49 +143,21 @@ export class S7RpcParametersComponent extends ControlValueAccessorBaseAbstract<R
       const deviceType = value.type === S7AddressType.VM ? S7DeviceType.LOGO : S7DeviceType.PLC;
       this.formGroup.get('deviceType').setValue(deviceType, {emitEvent: false});
       this.onDeviceTypeChange(deviceType);
-      this.updateValueEnabling(value.requestType);
+      this.updateValueEnabling(this.formGroup.get('requestType').value);
     }
   }
 
-  protected override mapOnChangeValue(): RPCTemplateConfigS7 {
-    const value = this.formGroup.getRawValue() as RPCTemplateConfigS7;
-    const params: RPCTemplateConfigS7 = {
-      deviceName: value.deviceName,
-      requestType: value.requestType,
-      type: value.type
-    };
-
-    if (value.type === S7AddressType.DATA) {
-      params.dataType = value.dataType;
-      params.dbNumber = value.dbNumber;
-      params.start = value.start;
-      params.size = value.size;
-      if (S7BooleanDataTypes.includes(value.dataType)) {
-        params.bit = value.bit;
-      }
-    } else if (value.type === S7AddressType.TAG) {
-      params.tag = value.tag;
-    } else {
-      params.vmAddress = value.vmAddress;
-    }
-
-    if (value.requestType === S7RequestType.WRITE) {
-      params.value = value.value;
-    }
-
-    return params;
+  protected override mapOnChangeValue(value: RPCTemplateConfigS7 & {deviceType: S7DeviceType}): RPCTemplateConfigS7 {
+    const {deviceType, ...config} = value;
+    return config;
   }
 
   private onDeviceTypeChange(deviceType: S7DeviceType): void {
     const typeControl = this.formGroup.get('type');
     if (deviceType === S7DeviceType.LOGO) {
       typeControl.setValue(S7AddressType.VM, {emitEvent: false});
-      typeControl.disable({emitEvent: false});
-    } else {
-      typeControl.enable({emitEvent: false});
-      if (typeControl.value === S7AddressType.VM) {
-        typeControl.setValue(S7AddressType.DATA, {emitEvent: false});
-      }
+    } else if (typeControl.value === S7AddressType.VM) {
+      typeControl.setValue(S7AddressType.DATA, {emitEvent: false});
     }
     this.updateAddressTypeEnabling(typeControl.value);
   }
@@ -185,11 +189,38 @@ export class S7RpcParametersComponent extends ControlValueAccessorBaseAbstract<R
     this.toggleControl(this.formGroup.get('value'), requestType === S7RequestType.WRITE);
   }
 
-  private toggleControl(control: AbstractControl, enabled: boolean): void {
-    if (enabled) {
-      control.enable({emitEvent: false});
-    } else {
-      control.disable({emitEvent: false});
-    }
+  private loadDevices(): void {
+    const connector = this.ctx.stateController.getStateParams().connector_rpc.value;
+    const query: EntityDataQuery = {
+      entityFilter: {
+        type: AliasFilterType.entityType,
+        entityType: EntityType.DEVICE
+      },
+      pageLink: createDefaultEntityDataPageLink(S7_DEVICES_PAGE_LIMIT),
+      entityFields: [{type: EntityKeyType.ENTITY_FIELD, key: 'name'}],
+      keyFilters: [
+        this.buildAttributeEqualsFilter('connectorType', connector.type),
+        this.buildAttributeEqualsFilter('connectorName', connector.name)
+      ]
+    };
+    this.ctx.entityService.findEntityDataByQuery(query).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(pageData => {
+      this.devices = pageData.data
+        .map(data => ({deviceName: data.latest[EntityKeyType.ENTITY_FIELD]?.name?.value}))
+        .filter(device => !!device.deviceName);
+      this.cd.detectChanges();
+    });
+  }
+
+  private buildAttributeEqualsFilter(key: string, value: string): KeyFilter {
+    return {
+      key: {type: EntityKeyType.SERVER_ATTRIBUTE, key},
+      valueType: EntityKeyValueType.STRING,
+      predicate: {
+        type: FilterPredicateType.STRING,
+        operation: StringOperation.EQUAL,
+        value: {defaultValue: value},
+        ignoreCase: true
+      }
+    };
   }
 }
