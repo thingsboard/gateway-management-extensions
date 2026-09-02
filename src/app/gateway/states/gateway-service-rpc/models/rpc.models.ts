@@ -178,6 +178,8 @@ export const S7AddressTypeTranslates = new Map<S7AddressType, string>([
   [S7AddressType.TAG, 'gateway.rpc.tag']
 ]);
 
+export const S7SelectableAddressTypes: S7AddressType[] = [S7AddressType.DATA, S7AddressType.TAG];
+
 export enum S7DataType {
   BOOLEAN = 'boolean',
   STRING = 'string',
@@ -210,10 +212,6 @@ export enum S7DataType {
 
 export const S7BooleanDataTypes: S7DataType[] = [S7DataType.BOOLEAN];
 
-export interface S7RpcDeviceOption {
-  deviceName: string;
-}
-
 export interface RPCTemplateConfigS7 {
   deviceName: string;
   requestType: S7RequestType;
@@ -226,6 +224,10 @@ export interface RPCTemplateConfigS7 {
   tag?: string;
   vmAddress?: string;
   value?: string;
+}
+
+export interface S7RpcFormValue extends RPCTemplateConfigS7 {
+  deviceType: S7DeviceType;
 }
 
 export interface SaveRPCTemplateData {

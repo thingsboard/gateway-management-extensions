@@ -18,11 +18,15 @@
     <mat-form-field class="flex-1" appearance="outline">
       <mat-label>{{ 'gateway.rpc.deviceName' | translate }}</mat-label>
       <mat-select formControlName="deviceName">
-        @if (!devices.length) {
+        @if (!devicesLoaded) {
+          <mat-option disabled>{{ 'gateway.rpc.loading-devices' | translate }}</mat-option>
+        } @else if (devicesLoadError) {
+          <mat-option disabled>{{ 'gateway.rpc.devices-load-error' | translate }}</mat-option>
+        } @else if (!devices.length) {
           <mat-option disabled>{{ 'gateway.rpc.no-devices-found' | translate }}</mat-option>
         }
-        @for (device of devices; track device.deviceName) {
-          <mat-option [value]="device.deviceName">{{ device.deviceName }}</mat-option>
+        @for (device of devices; track device) {
+          <mat-option [value]="device">{{ device }}</mat-option>
         }
       </mat-select>
       @if (formGroup.get('deviceName').hasError('required') && formGroup.get('deviceName').touched) {

@@ -19,6 +19,7 @@ import {
   ChangeDetectorRef,
   Component,
   forwardRef,
+  inject,
   Input,
   OnInit,
 } from '@angular/core';
@@ -41,7 +42,8 @@ import {
   S7DeviceType,
   S7RequestType,
   S7RequestTypeTranslates,
-  S7RpcDeviceOption,
+  S7RpcFormValue,
+  S7SelectableAddressTypes,
 } from '../../models/public-api';
 import { ControlValueAccessorBaseAbstract } from '../../../../shared/abstract/public-api';
 import { ErrorTooltipIconComponent } from '../../../../shared/components/public-api';
@@ -93,16 +95,16 @@ export class S7RpcParametersComponent extends ControlValueAccessorBaseAbstract<R
   readonly s7DataTypes = Object.values(S7DataType) as S7DataType[];
   readonly s7DeviceTypes = Object.values(S7DeviceType) as S7DeviceType[];
   readonly s7RequestTypes = Array.from(S7RequestTypeTranslates.keys());
-  readonly s7AddressTypes = Array.from(S7AddressTypeTranslates.keys());
+  readonly s7AddressTypes = S7SelectableAddressTypes;
 
-  devices: S7RpcDeviceOption[] = [];
+  devices: string[] = [];
+  devicesLoaded = false;
+  devicesLoadError = false;
+
+  private cdr = inject(ChangeDetectorRef);
 
   get isBooleanDataType(): boolean {
     return S7BooleanDataTypes.includes(this.formGroup.get('dataType').value);
-  }
-
-  constructor(private cd: ChangeDetectorRef) {
-    super();
   }
 
   ngOnInit(): void {
@@ -144,10 +146,11 @@ export class S7RpcParametersComponent extends ControlValueAccessorBaseAbstract<R
       this.formGroup.get('deviceType').setValue(deviceType, {emitEvent: false});
       this.onDeviceTypeChange(deviceType);
       this.updateValueEnabling(this.formGroup.get('requestType').value);
+      this.cdr.markForCheck();
     }
   }
 
-  protected override mapOnChangeValue(value: RPCTemplateConfigS7 & {deviceType: S7DeviceType}): RPCTemplateConfigS7 {
+  protected override mapOnChangeValue(value: S7RpcFormValue): RPCTemplateConfigS7 {
     const {deviceType, ...config} = value;
     return config;
   }
@@ -203,11 +206,19 @@ export class S7RpcParametersComponent extends ControlValueAccessorBaseAbstract<R
         this.buildAttributeEqualsFilter('connectorName', connector.name)
       ]
     };
-    this.ctx.entityService.findEntityDataByQuery(query).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(pageData => {
-      this.devices = pageData.data
-        .map(data => ({deviceName: data.latest[EntityKeyType.ENTITY_FIELD]?.name?.value}))
-        .filter(device => !!device.deviceName);
-      this.cd.detectChanges();
+    this.ctx.entityService.findEntityDataByQuery(query).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: pageData => {
+        this.devices = pageData.data
+          .map(data => data.latest[EntityKeyType.ENTITY_FIELD]?.name?.value)
+          .filter(deviceName => !!deviceName);
+        this.devicesLoaded = true;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.devicesLoadError = true;
+        this.devicesLoaded = true;
+        this.cdr.markForCheck();
+      }
     });
   }
 

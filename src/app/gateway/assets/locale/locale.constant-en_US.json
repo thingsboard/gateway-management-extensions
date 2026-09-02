@@ -432,6 +432,8 @@
       "requestType": "Request Type",
       "requestTimeout": "Request Timeout",
       "deviceName": "Device name",
+      "loading-devices": "Loading devices...",
+      "devices-load-error": "Failed to load devices",
       "no-devices-found": "No devices found",
       "deviceType": "Device type",
       "addressType": "Address type",
