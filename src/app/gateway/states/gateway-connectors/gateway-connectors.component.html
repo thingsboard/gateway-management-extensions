@@ -92,8 +92,7 @@
           </mat-header-cell>
           <mat-cell *matCellDef="let attribute">
             <div class="lt-md:!hidden flex-row justify-end" [style]="{ minWidth: '144px', maxWidth: '144px', width: '144px', textAlign: 'center'}">
-              <button *ngIf="!rpcNotSupportedTypes.has(attribute.value.type)"
-                      mat-icon-button
+              <button mat-icon-button
                       [matTooltip]="'gateway.rpc.rpc' | translate"
                       matTooltipPosition="above"
                       [disabled]="!attribute.value.configurationJson.id"
@@ -120,8 +119,7 @@
                 <mat-icon class="material-icons">more_vert</mat-icon>
               </button>
               <mat-menu #cellActionsMenu="matMenu" xPosition="before">
-                <button *ngIf="!rpcNotSupportedTypes.has(attribute.value.type)"
-                        mat-icon-button
+                <button mat-icon-button
                         [matTooltip]="'gateway.rpc.rpc' | translate"
                         matTooltipPosition="above"
                         [disabled]="!attribute.value.configurationJson.id"

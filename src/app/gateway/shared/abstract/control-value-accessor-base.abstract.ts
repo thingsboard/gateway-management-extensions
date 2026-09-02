@@ -16,6 +16,7 @@
 
 import { DestroyRef, Directive, inject } from '@angular/core';
 import {
+  AbstractControl,
   ControlValueAccessor,
   FormBuilder,
   FormGroup,
@@ -65,6 +66,14 @@ export abstract class ControlValueAccessorBaseAbstract<FormValueType> implements
 
   protected observeValueChanges(): void {
     this.formGroup.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => this.onChange(this.mapOnChangeValue(value)));
+  }
+
+  protected toggleControl(control: AbstractControl, enabled: boolean): void {
+    if (enabled) {
+      control.enable({emitEvent: false});
+    } else {
+      control.disable({emitEvent: false});
+    }
   }
 
   protected abstract initFormGroup(): FormGroup;
