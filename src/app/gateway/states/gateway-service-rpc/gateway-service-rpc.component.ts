@@ -23,7 +23,14 @@ import { ConnectorType, GatewayConnectorDefaultTypesTranslatesMap, jsonRequired 
 import {
   GatewayServiceRPCConnectorTemplateDialogComponent
 } from './components/gateway-service-rpc-connector-template-dialog/gateway-service-rpc-connector-template-dialog';
-import { AttributeScope, ContentType, DatasourceType, EntityType, SharedModule, widgetType } from '@shared/public-api';
+import {
+  AttributeScope,
+  ContentType,
+  DatasourceType,
+  EntityType,
+  SharedModule,
+  widgetType
+} from '@shared/public-api';
 import { AttributeService, IWidgetSubscription, UtilsService, WidgetSubscriptionOptions } from '@core/public-api';
 import { CommonModule } from '@angular/common';
 import {
@@ -36,6 +43,7 @@ import {
   GatewayServiceRPCConnectorTemplatesComponent
 } from './components/gateway-service-rpc-connector-templates/gateway-service-rpc-connector-templates.component';
 import { SocketRpcParametersComponent } from './components/socket-rpc-parameters/socket-rpc-parameters.component';
+import { S7RpcParametersComponent } from './components/s7-rpc-parameters/s7-rpc-parameters.component';
 
 @Component({
   selector: 'tb-gateway-service-rpc',
@@ -51,6 +59,7 @@ import { SocketRpcParametersComponent } from './components/socket-rpc-parameters
     OpcRpcParametersComponent,
     GatewayServiceRPCConnectorTemplatesComponent,
     SocketRpcParametersComponent,
+    S7RpcParametersComponent,
   ]
 })
 export class GatewayServiceRPCComponent implements OnInit {
@@ -88,7 +97,8 @@ export class GatewayServiceRPCComponent implements OnInit {
     ConnectorType.MQTT,
     ConnectorType.OPCUA,
     ConnectorType.MODBUS,
-    ConnectorType.SOCKET
+    ConnectorType.SOCKET,
+    ConnectorType.S7
   ]);
   readonly modbusReadFunctionCodes = [1, 2, 3, 4];
 
@@ -178,6 +188,8 @@ export class GatewayServiceRPCComponent implements OnInit {
       case ConnectorType.SOCKET:
       case ConnectorType.XMPP:
         return params.methodRPC;
+      case ConnectorType.S7:
+        return params.requestType;
       default:
         return params.command;
     }

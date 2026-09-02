@@ -65,6 +65,9 @@
             @case (ConnectorType.SOCKET) {
               <tb-gateway-socket-rpc-parameters formControlName="params"/>
             }
+            @case (ConnectorType.S7) {
+              <tb-gateway-s7-rpc-parameters formControlName="params" [ctx]="ctx"/>
+            }
           }
           <div class="fex-row template-actions flex flex-1 items-center justify-end gap-2.5">
             <button mat-raised-button
