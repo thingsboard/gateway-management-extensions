@@ -224,7 +224,7 @@ export class S7RpcParametersComponent extends ControlValueAccessorBaseAbstract<R
 
   private buildAttributeEqualsFilter(key: string, value: string): KeyFilter {
     return {
-      key: {type: EntityKeyType.SERVER_ATTRIBUTE, key},
+      key: {type: EntityKeyType.CLIENT_ATTRIBUTE, key},
       valueType: EntityKeyValueType.STRING,
       predicate: {
         type: FilterPredicateType.STRING,
