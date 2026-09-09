@@ -121,7 +121,7 @@ export class S7RpcParametersComponent extends ControlValueAccessorBaseAbstract<R
       dbNumber: [0, [Validators.required, Validators.min(0)]],
       start: [0, [Validators.required, Validators.min(0)]],
       size: [1, [Validators.required, Validators.min(0)]],
-      bit: [1, [Validators.required, Validators.min(1), Validators.max(7)]],
+      bit: [0, [Validators.required, Validators.min(0), Validators.max(7)]],
       tag: [{value: null, disabled: true}, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
       vmAddress: [{value: null, disabled: true}, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
       value: [{value: null, disabled: true}, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],

@@ -109,7 +109,7 @@
       @if (isBooleanDataType) {
         <mat-form-field class="flex-1" appearance="outline">
           <mat-label>{{ 'gateway.rpc.bit' | translate }}</mat-label>
-          <input matInput type="number" min="1" max="7" formControlName="bit"/>
+          <input matInput type="number" min="0" max="7" formControlName="bit"/>
           @let bitTouched = formGroup.get('bit').touched;
           @if (formGroup.get('bit').hasError('required') && bitTouched) {
             <tb-error-icon matSuffix [tooltipText]="'gateway.rpc.bit-required' | translate"/>
