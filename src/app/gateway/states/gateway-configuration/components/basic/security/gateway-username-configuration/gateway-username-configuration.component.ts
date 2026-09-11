@@ -27,7 +27,8 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/public-api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { GatewayUsernamePasswordConfig } from '../../../../models/public-api';
-import { generateSecret } from '@core/public-api';
+import { generateSecret, isEqual } from '@core/public-api';
+import { distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'tb-gateway-username-configuration',
@@ -60,11 +61,13 @@ export class GatewayUsernameConfigurationComponent implements ControlValueAccess
     private fb: FormBuilder,
   ) {
     this.initForm();
-    this.usernameFormGroup.valueChanges.pipe(takeUntilDestroyed()).subscribe(value => this.onChange(value))
+    this.usernameFormGroup.valueChanges.pipe(takeUntilDestroyed(),distinctUntilChanged((prev, curr) => isEqual(prev, curr))).subscribe(value => this.onChange(value))
   }
 
   writeValue(value: GatewayUsernamePasswordConfig): void {
-    this.usernameFormGroup.patchValue(value, { emitEvent: false });
+    if (!isEqual(value, this.usernameFormGroup.value)) {
+      this.usernameFormGroup.patchValue(value, { emitEvent: false });
+    }
   }
 
   registerOnChange(fn: (config: GatewayUsernamePasswordConfig) => {}): void {
@@ -77,11 +80,15 @@ export class GatewayUsernameConfigurationComponent implements ControlValueAccess
     if (isDisabled) {
       this.usernameFormGroup.disable({ emitEvent: false });
     } else {
-      this.usernameFormGroup.enable({ emitEvent: false });
+      this.usernameFormGroup.enable();
+      this.usernameFormGroup.updateValueAndValidity({ emitEvent: false });
     }
   }
 
   validate(): ValidationErrors | null {
+    if (this.usernameFormGroup.disabled) {
+      return null;
+    }
     return this.usernameFormGroup.valid ? null : {
       usernameFormGroup: { valid: false }
     };

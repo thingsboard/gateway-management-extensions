@@ -91,6 +91,7 @@ export class GatewayServiceRPCConnectorComponent implements OnInit, OnDestroy, C
   cANByteOrders = Object.values(CANByteOrders) as CANByteOrders[];
   sNMPMethods = Object.values(SNMPMethods) as SNMPMethods[];
   hTTPMethods = Object.values(HTTPMethods) as HTTPMethods[];
+  HTTPMethods = HTTPMethods;
 
   bACnetRequestTypesTranslates = BACnetRequestTypesTranslates;
   bACnetObjectTypesTranslates = BACnetObjectTypesTranslates;

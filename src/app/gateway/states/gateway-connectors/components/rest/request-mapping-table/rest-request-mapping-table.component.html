@@ -92,13 +92,13 @@
               <button mat-icon-button
                       matTooltip="{{ 'action.edit' | translate }}"
                       matTooltipPosition="above"
-                      (click)="manageMapping($event, i)">
+                      (click)="manageMapping($event, mapping)">
                 <tb-icon>edit</tb-icon>
               </button>
               <button mat-icon-button
                       matTooltip="{{ 'action.delete' | translate }}"
                       matTooltipPosition="above"
-                      (click)="deleteMapping($event, i)">
+                      (click)="deleteMapping($event, mapping)">
                 <tb-icon>delete</tb-icon>
               </button>
             </ng-template>

@@ -40,7 +40,8 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { GatewayUsernameConfigurationComponent } from './gateway-username-configuration/gateway-username-configuration.component';
 import { GatewayDeviceCredentialsService } from '../../../services/gateway-device-credentials.service';
-import { generateSecret } from '@core/public-api';
+import { generateSecret, isEqual } from '@core/public-api';
+import { distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'tb-gateway-security-configuration',
@@ -89,11 +90,14 @@ export class GatewaySecurityConfigurationComponent implements AfterViewInit, Con
   }
 
   writeValue(value: GatewayConfigSecurity): void {
-    if (value) {
-      this.updateFormBySecurityConfig(value);
-    } else {
-      this.updateFormBySecurityConfig(this.gatewayCredentialsService.credentialsToSecurityConfig(this.gatewayCredentialsService.initialCredentials));
+    const configToSet = value ?? this.gatewayCredentialsService.credentialsToSecurityConfig(this.gatewayCredentialsService.initialCredentials);
+    const formValue = this.securityFormGroup.getRawValue();
+    const { usernamePassword, ...rest } = formValue;
+    const currentConfig = usernamePassword ? { ...rest, ...usernamePassword } : rest;
+    if (isEqual(configToSet, currentConfig)) {
+      return;
     }
+    this.updateFormBySecurityConfig(configToSet);
   }
 
   registerOnChange(fn: (config: GatewayConfigSecurity) => {}): void {
@@ -131,28 +135,37 @@ export class GatewaySecurityConfigurationComponent implements AfterViewInit, Con
     this.securityFormGroup.valueChanges.pipe(takeUntilDestroyed()).subscribe(({ usernamePassword, ...value }) => {
       this.onChange(usernamePassword ? { ...value, ...usernamePassword } : value);
     });
-    this.securityFormGroup.get('type').valueChanges.pipe(takeUntilDestroyed()).subscribe(type => {
-      this.toggleBySecurityType(type);
+    this.securityFormGroup.get('type').valueChanges.pipe(
+      takeUntilDestroyed(),
+      distinctUntilChanged()
+    ).subscribe((newType) => {
+      this.toggleBySecurityType(newType);
     });
     this.securityFormGroup.get('caCert').valueChanges.pipe(takeUntilDestroyed()).subscribe(() => this.cd.detectChanges());
   }
 
   private toggleBySecurityType(type: SecurityTypes): void {
-    this.securityFormGroup.disable({ emitEvent: false });
-    this.securityFormGroup.get('type').enable({ emitEvent: false });
     switch (type) {
       case SecurityTypes.ACCESS_TOKEN:
         this.securityFormGroup.get('accessToken').enable({ emitEvent: false });
+        this.securityFormGroup.get('caCert').disable({ emitEvent: false });
+        this.securityFormGroup.get('usernamePassword').disable({ emitEvent: false });
         break;
       case SecurityTypes.TLS_PRIVATE_KEY:
         this.securityFormGroup.get('caCert').enable({ emitEvent: false });
+        this.securityFormGroup.get('accessToken').disable({ emitEvent: false });
+        this.securityFormGroup.get('usernamePassword').disable({ emitEvent: false });
         break;
       case SecurityTypes.TLS_ACCESS_TOKEN:
         this.securityFormGroup.get('accessToken').enable({ emitEvent: false });
         this.securityFormGroup.get('caCert').enable({ emitEvent: false });
+        this.securityFormGroup.get('usernamePassword').disable({ emitEvent: false });
         break;
       case SecurityTypes.USERNAME_PASSWORD:
         this.securityFormGroup.get('usernamePassword').enable({ emitEvent: false });
+        this.securityFormGroup.get('accessToken').disable({ emitEvent: false });
+        this.securityFormGroup.get('caCert').disable({ emitEvent: false });
+        this.cd.detectChanges();
         break;
     }
   }

@@ -45,7 +45,7 @@ import {
   GatewayRemoteConfigurationDialogComponent,
   GatewayRemoteConfigurationDialogData
 } from '../../../gateway-remote-shell/public-api';
-import { DeviceService } from '@core/public-api';
+import { DeviceService, isEqual } from '@core/public-api';
 import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import {
@@ -163,6 +163,9 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
   registerOnTouched(_: () => void): void {}
 
   writeValue(basicConfig: GatewayConfigValue): void {
+    if (!basicConfig || isEqual(basicConfig, this.basicFormGroup.value)) {
+      return;
+    }
     this.basicFormGroup.patchValue(basicConfig, {emitEvent: false});
     const reportStrategyCtrl = this.basicFormGroup.get('thingsboard.reportStrategy');
     const rs = basicConfig?.thingsboard?.reportStrategy;
@@ -172,8 +175,11 @@ export class GatewayBasicConfigurationComponent implements OnChanges, AfterViewI
       reportStrategyCtrl.enable({ emitEvent: false });
     }
     const commands = basicConfig?.thingsboard?.statistics?.commands ?? [];
-    this.commandFormArray().clear({emitEvent: false});
-    commands.forEach((command: GatewayConfigCommand) => this.addCommand(command, false));
+    const currentCommands = this.commandFormArray().getRawValue();
+    if (!isEqual(commands, currentCommands)) {
+      this.commandFormArray().clear({emitEvent: false});
+      commands.forEach((command: GatewayConfigCommand) => this.addCommand(command, false));
+    }
   }
 
   validate(): ValidationErrors | null {

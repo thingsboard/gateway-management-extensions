@@ -111,7 +111,7 @@ export class ModbusMasterTableComponent implements ControlValueAccessor, AfterVi
     this.masterFormGroup.valueChanges.pipe(
       takeUntil(this.destroy$)
     ).subscribe((value) => {
-      this.updateTableData(value.slaves);
+      this.updateTableData(value.slaves, this.textSearch.value.trim());
       this.onChange(value);
       this.onTouched();
     });
@@ -157,17 +157,18 @@ export class ModbusMasterTableComponent implements ControlValueAccessor, AfterVi
     this.textSearch.reset();
   }
 
-  manageSlave($event: Event, index?: number): void {
+  manageSlave($event: Event, slave?: SlaveConfig): void {
     if ($event) {
       $event.stopPropagation();
     }
-    const withIndex = isDefinedAndNotNull(index);
-    const value = withIndex ? this.slaves.at(index).value : {};
-    this.getSlaveDialog(value, withIndex ? 'action.apply' : 'action.add').afterClosed()
+    const withSlave = isDefinedAndNotNull(slave);
+    const index = withSlave ? this.getSlaveIndex(slave) : -1;
+    const value = withSlave ? this.slaves.at(index).value : {};
+    this.getSlaveDialog(value, withSlave ? 'action.apply' : 'action.add').afterClosed()
       .pipe(take(1), takeUntil(this.destroy$))
       .subscribe(res => {
         if (res) {
-          if (withIndex) {
+          if (withSlave) {
             this.slaves.at(index).patchValue(res);
           } else {
             this.slaves.push(this.fb.control(res));
@@ -175,6 +176,10 @@ export class ModbusMasterTableComponent implements ControlValueAccessor, AfterVi
           this.masterFormGroup.markAsDirty();
         }
     });
+  }
+
+  private getSlaveIndex(slave: SlaveConfig): number {
+    return this.slaves.controls.findIndex(control => control.value === slave);
   }
 
   private getSlaveDialog(
@@ -204,12 +209,13 @@ export class ModbusMasterTableComponent implements ControlValueAccessor, AfterVi
     });
   }
 
-  deleteSlave($event: Event, index: number): void {
+  deleteSlave($event: Event, slave: SlaveConfig): void {
     if ($event) {
       $event.stopPropagation();
     }
+    const index = this.getSlaveIndex(slave);
     this.dialogService.confirm(
-      this.translate.instant('gateway.delete-slave-title', { name: this.slaves.controls[index].value.deviceName }),
+      this.translate.instant('gateway.delete-slave-title', { name: slave.deviceName }),
       this.translate.instant('gateway.delete-slave-description'),
       this.translate.instant('action.no'),
       this.translate.instant('action.yes'),

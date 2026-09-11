@@ -42,6 +42,7 @@ import {
   ConnectorType,
   GatewayConnector,
   GatewayConnectorDefaultTypesTranslatesMap,
+  GatewayConnectorHelpLinksMap,
   GatewayLogLevel,
   noLeadTrailSpacesRegex,
   ReportStrategyDefaultValue,
@@ -138,6 +139,7 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
   readonly GatewayConnectorTypesTranslatesMap = GatewayConnectorDefaultTypesTranslatesMap;
   readonly ConnectorConfigurationModes = ConfigurationModes;
   readonly ReportStrategyDefaultValue = ReportStrategyDefaultValue;
+  readonly connectorHelpLinksMap = GatewayConnectorHelpLinksMap;
 
   pageLink: PageLink;
   dataSource: MatTableDataSource<GatewayAttributeData>;

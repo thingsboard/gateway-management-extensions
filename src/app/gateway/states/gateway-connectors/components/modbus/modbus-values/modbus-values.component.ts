@@ -123,6 +123,9 @@ export class ModbusValuesComponent implements ControlValueAccessor, Validator, O
   }
 
   writeValue(values: ModbusValuesState): void {
+    if (this.popoverComponent && !this.popoverComponent.tbHidden) {
+      this.popoverComponent.hide();
+    }
     if (this.singleMode) {
       this.valuesFormGroup.setValue(this.getSingleRegisterState(values as ModbusValues), { emitEvent: false });
     } else {

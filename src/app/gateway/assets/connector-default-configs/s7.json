@@ -1,0 +1,138 @@
+{
+  "3.8.5": {
+    "devices": [
+      {
+        "type": "PLC",
+        "address": "127.0.0.1",
+        "port": 1102,
+        "rack": 0,
+        "slot": 1,
+        "deviceName": "S7 PLC",
+        "deviceProfileName": "default",
+        "autoReconnect": true,
+        "maxRetries": 3,
+        "retryDelay": 1.0,
+        "maxDelay": 30.0,
+        "heartbeatInterval": 0,
+        "pollPeriod": 10000,
+        "attributes": [
+          {
+            "type": "tag",
+            "key": "power",
+            "tag": "DB1.DBD204:REAL"
+          },
+          {
+            "type": "tag",
+            "key": "frequency",
+            "tag": "DB1.DBD200:REAL"
+          }
+        ],
+        "timeseries": [
+          {
+            "type": "data",
+            "key": "temperature",
+            "dataType": "real",
+            "dbNumber": 1,
+            "start": 50,
+            "size": 4
+          },
+          {
+            "type": "data",
+            "key": "humidity",
+            "dataType": "lreal",
+            "dbNumber": 1,
+            "start": 54,
+            "size": 8
+          },
+          {
+            "type": "data",
+            "key": "relay",
+            "dataType": "bool",
+            "dbNumber": 1,
+            "start": 0,
+            "size": 1,
+            "bit": 0
+          }
+        ],
+        "attributeUpdates": [
+          {
+            "type": "tag",
+            "key": "relay",
+            "tag": "DB1.DBX0.0:BOOL"
+          }
+        ],
+        "serverSideRpc": [
+          {
+            "method": "getRelay",
+            "requestType": "read",
+            "type": "data",
+            "dataType": "bool",
+            "dbNumber": 1,
+            "start": 0,
+            "size": 1,
+            "bit": 0
+          },
+          {
+            "method": "setRelay",
+            "requestType": "write",
+            "type": "data",
+            "dataType": "bool",
+            "dbNumber": 1,
+            "start": 0,
+            "size": 1,
+            "bit": 0
+          }
+        ]
+      },
+      {
+        "type": "LOGO",
+        "address": "127.0.0.1",
+        "port": 102,
+        "tsapSnap7": 20,
+        "tsapLogo": 30,
+        "deviceName": "LOGO",
+        "deviceProfileName": "default",
+        "autoReconnect": true,
+        "maxRetries": 3,
+        "retryDelay": 1.0,
+        "maxDelay": 30.0,
+        "heartbeatInterval": 0,
+        "pollPeriod": 10000,
+        "attributes": [],
+        "timeseries": [
+          {
+            "type": "vm",
+            "key": "temperature",
+            "vmAddress": "VW30"
+          },
+          {
+            "type": "vm",
+            "key": "humidity",
+            "vmAddress": "VW0"
+          }
+        ],
+        "attributeUpdates": [
+          {
+            "type": "vm",
+            "key": "lightLevel",
+            "vmAddress": "VW30"
+          }
+        ],
+        "serverSideRpc": [
+          {
+            "method": "setLight",
+            "requestType": "write",
+            "type": "vm",
+            "vmAddress": "VW30"
+          },
+          {
+            "method": "getLight",
+            "requestType": "read",
+            "type": "vm",
+            "vmAddress": "VW30"
+          }
+        ]
+      }
+    ]
+  }
+}
