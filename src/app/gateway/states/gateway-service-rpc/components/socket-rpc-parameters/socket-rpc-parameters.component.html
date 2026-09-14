@@ -14,11 +14,11 @@
   limitations under the License.
 -->
 <ng-container [formGroup]="formGroup">
-  <mat-form-field class="w-full">
+  <mat-form-field appearance="outline" class="w-full">
     <mat-label>{{ 'gateway.rpc.methodRPC' | translate }}</mat-label>
     <input matInput formControlName="methodRPC" placeholder="rpcMethod1"/>
   </mat-form-field>
-  <mat-form-field class="mat-block">
+  <mat-form-field appearance="outline" class="mat-block">
     <mat-label>{{ 'gateway.rpc.methodProcessing' | translate }}</mat-label>
     <mat-select formControlName="methodProcessing">
       <mat-option *ngFor="let method of socketMethodProcessings" [value]="method">
@@ -26,7 +26,7 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-form-field class="mat-block">
+  <mat-form-field appearance="outline" class="mat-block">
     <mat-label>{{ 'gateway.encoding' | translate }}</mat-label>
     <mat-select formControlName="encoding">
       <mat-option *ngFor="let encoding of socketEncoding" [value]="encoding">{{ encoding.toUpperCase() }}
