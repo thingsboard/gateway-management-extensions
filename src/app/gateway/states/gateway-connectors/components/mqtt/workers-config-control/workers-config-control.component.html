@@ -22,16 +22,17 @@
     <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
       <input matInput name="value" type="number" min="1" formControlName="maxNumberOfWorkers"
              placeholder="{{ 'gateway.set' | translate }}"/>
-      <mat-icon matSuffix
-                matTooltipPosition="above"
-                matTooltipClass="tb-error-tooltip"
-                [matTooltip]="('gateway.max-number-of-workers-required') | translate"
-                *ngIf="workersConfigFormGroup.get('maxNumberOfWorkers').hasError('min') ||
-                                         (workersConfigFormGroup.get('maxNumberOfWorkers').hasError('required') &&
-                                         workersConfigFormGroup.get('maxNumberOfWorkers').touched)"
-                class="tb-error">
-        warning
-      </mat-icon>
+      @if (workersConfigFormGroup.get('maxNumberOfWorkers').hasError('min') ||
+        (workersConfigFormGroup.get('maxNumberOfWorkers').hasError('required') &&
+        workersConfigFormGroup.get('maxNumberOfWorkers').touched)) {
+        <mat-icon matSuffix
+          matTooltipPosition="above"
+          matTooltipClass="tb-error-tooltip"
+          [matTooltip]="('gateway.max-number-of-workers-required') | translate"
+          class="tb-error">
+          warning
+        </mat-icon>
+      }
     </mat-form-field>
   </div>
   <div class="tb-form-row column-xs">
@@ -42,16 +43,17 @@
     <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
       <input matInput name="value" type="number" min="1" formControlName="maxMessageNumberPerWorker"
              placeholder="{{ 'gateway.set' | translate }}"/>
-      <mat-icon matSuffix
-                matTooltipPosition="above"
-                matTooltipClass="tb-error-tooltip"
-                [matTooltip]="('gateway.max-messages-queue-for-worker-required') | translate"
-                *ngIf="workersConfigFormGroup.get('maxMessageNumberPerWorker').hasError('min') ||
-                                         (workersConfigFormGroup.get('maxMessageNumberPerWorker').hasError('required') &&
-                                         workersConfigFormGroup.get('maxMessageNumberPerWorker').touched)"
-                class="tb-error">
-        warning
-      </mat-icon>
+      @if (workersConfigFormGroup.get('maxMessageNumberPerWorker').hasError('min') ||
+        (workersConfigFormGroup.get('maxMessageNumberPerWorker').hasError('required') &&
+        workersConfigFormGroup.get('maxMessageNumberPerWorker').touched)) {
+        <mat-icon matSuffix
+          matTooltipPosition="above"
+          matTooltipClass="tb-error-tooltip"
+          [matTooltip]="('gateway.max-messages-queue-for-worker-required') | translate"
+          class="tb-error">
+          warning
+        </mat-icon>
+      }
     </mat-form-field>
   </div>
 </div>

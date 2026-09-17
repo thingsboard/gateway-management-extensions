@@ -28,7 +28,6 @@ import {
   noLeadTrailSpacesRegex,
 } from '../../../../../shared/models/public-api';
 import { SharedModule } from '@shared/public-api';
-import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { GatewayPortTooltipPipe } from '../../../pipes/public-api';
 import { takeUntil } from 'rxjs/operators';
@@ -41,7 +40,6 @@ import { SocketConfig, SocketType, PortLimits } from '../../../models/public-api
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
     GatewayPortTooltipPipe,
     TruncateWithTooltipDirective,

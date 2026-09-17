@@ -45,7 +45,6 @@ import {
 } from '../../models/public-api';
 import { takeUntil } from 'rxjs/operators';
 import { SharedModule } from '@shared/public-api';
-import { CommonModule } from '@angular/common';
 import { deleteNullProperties } from '@core/public-api';
 
 @Component({
@@ -67,7 +66,6 @@ import { deleteNullProperties } from '@core/public-api';
   ],
   standalone: true,
   imports:[
-    CommonModule,
     SharedModule,
     TruncateWithTooltipDirective
   ]

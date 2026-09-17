@@ -29,7 +29,6 @@ import { MappingDataKey } from '../../models/public-api';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { ValueType } from '../../../../shared/models/public-api';
-import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/public-api';
 import { TypeValueFieldComponent } from '../type-value-field/type-value-field.component';
 
@@ -51,7 +50,6 @@ import { TypeValueFieldComponent } from '../type-value-field/type-value-field.co
   ],
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
     TypeValueFieldComponent
   ]

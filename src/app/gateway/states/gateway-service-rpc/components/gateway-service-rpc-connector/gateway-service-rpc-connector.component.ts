@@ -52,7 +52,7 @@ import {
 import { deepClone } from '@core/public-api';
 import { Subject } from "rxjs";
 import { takeUntil } from 'rxjs/operators';
-import { CommonModule } from '@angular/common';
+
 import { SharedModule } from '@shared/public-api';
 
 @Component({
@@ -68,7 +68,6 @@ import { SharedModule } from '@shared/public-api';
   ],
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
   ]
 })

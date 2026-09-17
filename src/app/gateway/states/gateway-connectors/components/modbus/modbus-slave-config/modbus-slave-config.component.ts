@@ -44,7 +44,6 @@ import {
   SlaveConfig,
 } from '../../../models/public-api';
 import { SharedModule } from '@shared/public-api';
-import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ModbusSecurityConfigComponent } from '../modbus-security-config/modbus-security-config.component';
@@ -70,7 +69,6 @@ import { GatewayPortTooltipPipe } from '../../../pipes/public-api';
   ],
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
     ModbusValuesComponent,
     ModbusSecurityConfigComponent,

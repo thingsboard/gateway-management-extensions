@@ -59,8 +59,12 @@
             </mat-form-field>
           </div>
         </div>
-        <tb-gateway-security-configuration *ngIf="initialCredentials$ | async" formControlName="security" (initialized)="onInitialized($event)"/>
-        <tb-report-strategy [isExpansionMode]="true" [isConfig]="true" *ngIf="withReportStrategy" [defaultValue]="ReportStrategyDefaultValue.Gateway" class="tb-form-panel" formControlName="reportStrategy"/>
+        @if (initialCredentials$ | async) {
+          <tb-gateway-security-configuration formControlName="security" (initialized)="onInitialized($event)"/>
+        }
+        @if (withReportStrategy) {
+          <tb-report-strategy [isExpansionMode]="true" [isConfig]="true" [defaultValue]="ReportStrategyDefaultValue.Gateway" class="tb-form-panel" formControlName="reportStrategy"/>
+        }
       </div>
     </ng-template>
   </mat-tab>
@@ -120,80 +124,81 @@
           <div class="tb-form-panel-title" translate>gateway.statistics.commands</div>
           <div class="tb-form-panel-hint" translate>gateway.hints.commands</div>
           <ng-container formGroupName="statistics">
-            <div formArrayName="commands" class="statistics-container flex flex-row"
-                 *ngFor="let commandControl of commandFormArray().controls; let $index = index">
-              <section [formGroupName]="$index" class="tb-form-panel stroked no-padding-bottom no-gap command-container">
-                <section class="tb-form-row no-border no-padding tb-standard-fields column-xs">
-                  <mat-form-field appearance="outline" class="flex">
-                    <mat-label translate>gateway.statistics.name</mat-label>
-                    <input matInput formControlName="attributeOnGateway"/>
-                    @if (commandControl.get('attributeOnGateway').hasError('required')) {
-                      <mat-error>{{ 'gateway.statistics.time-series-name-required' | translate }}</mat-error>
-                    } @else if (commandControl.get('attributeOnGateway').hasError('pattern')) {
-                      <mat-error>
-                        {{ 'gateway.statistics.time-series-name-pattern' | translate }}
-                      </mat-error>
-                    } @else if (commandControl.get('attributeOnGateway').hasError('duplicateName')) {
-                      <mat-error>{{ 'gateway.statistics.time-series-name-already-exists' | translate }}</mat-error>
-                    }
-                    <mat-icon matIconSuffix style="cursor:pointer;"
-                              matTooltip="{{ 'gateway.hints.attribute' | translate }}">info_outlined
-                    </mat-icon>
-                  </mat-form-field>
-                  <mat-form-field appearance="outline" class="flex">
-                    <mat-label translate>gateway.statistics.timeout</mat-label>
-                    <input matInput formControlName="timeout" type="number" min="0"/>
-                    @if (commandControl.get('timeout').hasError('required')) {
-                      <mat-error>{{ 'gateway.statistics.timeout-required' | translate }}</mat-error>
-                    } @else if (commandControl.get('timeout').hasError('min')) {
-                      <mat-error>{{ 'gateway.statistics.timeout-min' | translate }}</mat-error>
-                    } @else if (commandControl.get('timeout').hasError('pattern')) {
-                      <mat-error>{{ 'gateway.statistics.timeout-pattern' | translate }}</mat-error>
-                    }
-                    <mat-icon matIconSuffix style="cursor:pointer;"
-                              matTooltip="{{ 'gateway.hints.timeout' | translate }}">info_outlined
-                    </mat-icon>
-                  </mat-form-field>
-                </section>
-                <section>
-                  <mat-form-field appearance="outline" class="mat-block">
-                    <mat-label translate>gateway.statistics.command</mat-label>
-                    <input matInput formControlName="command"/>
-                    @if (commandControl.get('command').hasError('required')) {
-                      <mat-error>{{ 'gateway.statistics.command-required' | translate }}</mat-error>
-                    } @else if (commandControl.get('command').hasError('pattern')) {
-                      <mat-error>{{ 'gateway.statistics.command-pattern' | translate }}</mat-error>
-                    }
-                    <mat-icon matIconSuffix style="cursor:pointer;"
-                              matTooltip="{{ 'gateway.hints.command' | translate }}">info_outlined
-                    </mat-icon>
-                  </mat-form-field>
-                </section>
-                <section>
-                  <mat-expansion-panel class="tb-settings pb-4">
-                    <mat-expansion-panel-header>
-                      <mat-panel-title>
-                        <div class="tb-form-panel-title" translate>gateway.advanced-settings</div>
-                      </mat-panel-title>
-                    </mat-expansion-panel-header>
+            @for (commandControl of commandFormArray().controls; track commandControl) {
+              <div formArrayName="commands" class="statistics-container flex flex-row">
+                <section [formGroupName]="$index" class="tb-form-panel stroked no-padding-bottom no-gap command-container">
+                  <section class="tb-form-row no-border no-padding tb-standard-fields column-xs">
                     <mat-form-field appearance="outline" class="flex">
-                      <mat-label translate>gateway.statistics.install-cmd</mat-label>
-                      <input matInput formControlName="installCmd"/>
-                      <mat-icon matIconSuffix class="cursor-pointer"
-                                matTooltip="{{ 'gateway.hints.install-cmd' | translate }}">info_outlined
+                      <mat-label translate>gateway.statistics.name</mat-label>
+                      <input matInput formControlName="attributeOnGateway"/>
+                      @if (commandControl.get('attributeOnGateway').hasError('required')) {
+                        <mat-error>{{ 'gateway.statistics.time-series-name-required' | translate }}</mat-error>
+                      } @else if (commandControl.get('attributeOnGateway').hasError('pattern')) {
+                        <mat-error>
+                          {{ 'gateway.statistics.time-series-name-pattern' | translate }}
+                        </mat-error>
+                      } @else if (commandControl.get('attributeOnGateway').hasError('duplicateName')) {
+                        <mat-error>{{ 'gateway.statistics.time-series-name-already-exists' | translate }}</mat-error>
+                      }
+                      <mat-icon matIconSuffix style="cursor:pointer;"
+                        matTooltip="{{ 'gateway.hints.attribute' | translate }}">info_outlined
                       </mat-icon>
                     </mat-form-field>
-                  </mat-expansion-panel>
+                    <mat-form-field appearance="outline" class="flex">
+                      <mat-label translate>gateway.statistics.timeout</mat-label>
+                      <input matInput formControlName="timeout" type="number" min="0"/>
+                      @if (commandControl.get('timeout').hasError('required')) {
+                        <mat-error>{{ 'gateway.statistics.timeout-required' | translate }}</mat-error>
+                      } @else if (commandControl.get('timeout').hasError('min')) {
+                        <mat-error>{{ 'gateway.statistics.timeout-min' | translate }}</mat-error>
+                      } @else if (commandControl.get('timeout').hasError('pattern')) {
+                        <mat-error>{{ 'gateway.statistics.timeout-pattern' | translate }}</mat-error>
+                      }
+                      <mat-icon matIconSuffix style="cursor:pointer;"
+                        matTooltip="{{ 'gateway.hints.timeout' | translate }}">info_outlined
+                      </mat-icon>
+                    </mat-form-field>
+                  </section>
+                  <section>
+                    <mat-form-field appearance="outline" class="mat-block">
+                      <mat-label translate>gateway.statistics.command</mat-label>
+                      <input matInput formControlName="command"/>
+                      @if (commandControl.get('command').hasError('required')) {
+                        <mat-error>{{ 'gateway.statistics.command-required' | translate }}</mat-error>
+                      } @else if (commandControl.get('command').hasError('pattern')) {
+                        <mat-error>{{ 'gateway.statistics.command-pattern' | translate }}</mat-error>
+                      }
+                      <mat-icon matIconSuffix style="cursor:pointer;"
+                        matTooltip="{{ 'gateway.hints.command' | translate }}">info_outlined
+                      </mat-icon>
+                    </mat-form-field>
+                  </section>
+                  <section>
+                    <mat-expansion-panel class="tb-settings pb-4">
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>
+                          <div class="tb-form-panel-title" translate>gateway.advanced-settings</div>
+                        </mat-panel-title>
+                      </mat-expansion-panel-header>
+                      <mat-form-field appearance="outline" class="flex">
+                        <mat-label translate>gateway.statistics.install-cmd</mat-label>
+                        <input matInput formControlName="installCmd"/>
+                        <mat-icon matIconSuffix class="cursor-pointer"
+                          matTooltip="{{ 'gateway.hints.install-cmd' | translate }}">info_outlined
+                        </mat-icon>
+                      </mat-form-field>
+                    </mat-expansion-panel>
+                  </section>
                 </section>
-              </section>
-              <button mat-icon-button (click)="removeCommandControl($index, $event)"
-                      class="tb-box-button"
-                      [disabled]="!basicFormGroup.get('thingsboard.remoteConfiguration').value"
-                      matTooltip="{{ 'gateway.statistics.remove' | translate }}"
-                      matTooltipPosition="above">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </div>
+                <button mat-icon-button (click)="removeCommandControl($index, $event)"
+                  class="tb-box-button"
+                  [disabled]="!basicFormGroup.get('thingsboard.remoteConfiguration').value"
+                  matTooltip="{{ 'gateway.statistics.remove' | translate }}"
+                  matTooltipPosition="above">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            }
             <button mat-stroked-button color="primary"
                     style="width: fit-content;"
                     type="button"
@@ -217,37 +222,39 @@
               {{ 'gateway.checking-device-activity'  | translate }}
             </mat-slide-toggle>
           </div>
-          <section class="tb-form-row no-border no-padding tb-standard-fields column-xs"
-                   *ngIf="basicFormGroup.get('thingsboard.checkingDeviceActivity.checkDeviceInactivity').value">
-            <mat-form-field appearance="outline" class="flex">
-              <mat-label translate>gateway.inactivity-timeout-seconds</mat-label>
-              <input matInput formControlName="inactivityTimeoutSeconds" type="number" min="0"/>
-              @if (basicFormGroup.get('thingsboard.checkingDeviceActivity.inactivityTimeoutSeconds').hasError('required')) {
-                <mat-error>{{ 'gateway.inactivity-timeout-seconds-required' | translate }}</mat-error>
-              } @else if (basicFormGroup.get('thingsboard.checkingDeviceActivity.inactivityTimeoutSeconds').hasError('min')) {
-                <mat-error>{{ 'gateway.inactivity-timeout-seconds-min' | translate }}</mat-error>
-              } @else if (basicFormGroup.get('thingsboard.checkingDeviceActivity.inactivityTimeoutSeconds').hasError('pattern')) {
-                <mat-error>{{ 'gateway.inactivity-timeout-seconds-pattern' | translate }}</mat-error>
-              }
-              <mat-icon matIconSuffix style="cursor:pointer;"
-                        matTooltip="{{ 'gateway.hints.inactivity-timeout' | translate }}">info_outlined
-              </mat-icon>
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="flex">
-              <mat-label translate>gateway.inactivity-check-period-seconds</mat-label>
-              <input matInput type="number" min="0" formControlName="inactivityCheckPeriodSeconds"/>
-              @if (basicFormGroup.get('thingsboard.checkingDeviceActivity.inactivityCheckPeriodSeconds').hasError('required')) {
-                <mat-error>{{ 'gateway.inactivity-check-period-seconds-required' | translate }}</mat-error>
-              } @else if (basicFormGroup.get('thingsboard.checkingDeviceActivity.inactivityCheckPeriodSeconds').hasError('min')) {
-                <mat-error>{{ 'gateway.inactivity-check-period-seconds-min' | translate }}</mat-error>
-              } @else if (basicFormGroup.get('thingsboard.checkingDeviceActivity.inactivityCheckPeriodSeconds').hasError('pattern')) {
-                <mat-error>{{ 'gateway.inactivity-check-period-seconds-pattern' | translate }}</mat-error>
-              }
-              <mat-icon matIconSuffix style="cursor:pointer;"
-                        matTooltip="{{ 'gateway.hints.inactivity-period' | translate }}">info_outlined
-              </mat-icon>
-            </mat-form-field>
-          </section>
+          @if (basicFormGroup.get('thingsboard.checkingDeviceActivity.checkDeviceInactivity').value) {
+            <section class="tb-form-row no-border no-padding tb-standard-fields column-xs"
+              >
+              <mat-form-field appearance="outline" class="flex">
+                <mat-label translate>gateway.inactivity-timeout-seconds</mat-label>
+                <input matInput formControlName="inactivityTimeoutSeconds" type="number" min="0"/>
+                @if (basicFormGroup.get('thingsboard.checkingDeviceActivity.inactivityTimeoutSeconds').hasError('required')) {
+                  <mat-error>{{ 'gateway.inactivity-timeout-seconds-required' | translate }}</mat-error>
+                } @else if (basicFormGroup.get('thingsboard.checkingDeviceActivity.inactivityTimeoutSeconds').hasError('min')) {
+                  <mat-error>{{ 'gateway.inactivity-timeout-seconds-min' | translate }}</mat-error>
+                } @else if (basicFormGroup.get('thingsboard.checkingDeviceActivity.inactivityTimeoutSeconds').hasError('pattern')) {
+                  <mat-error>{{ 'gateway.inactivity-timeout-seconds-pattern' | translate }}</mat-error>
+                }
+                <mat-icon matIconSuffix style="cursor:pointer;"
+                  matTooltip="{{ 'gateway.hints.inactivity-timeout' | translate }}">info_outlined
+                </mat-icon>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="flex">
+                <mat-label translate>gateway.inactivity-check-period-seconds</mat-label>
+                <input matInput type="number" min="0" formControlName="inactivityCheckPeriodSeconds"/>
+                @if (basicFormGroup.get('thingsboard.checkingDeviceActivity.inactivityCheckPeriodSeconds').hasError('required')) {
+                  <mat-error>{{ 'gateway.inactivity-check-period-seconds-required' | translate }}</mat-error>
+                } @else if (basicFormGroup.get('thingsboard.checkingDeviceActivity.inactivityCheckPeriodSeconds').hasError('min')) {
+                  <mat-error>{{ 'gateway.inactivity-check-period-seconds-min' | translate }}</mat-error>
+                } @else if (basicFormGroup.get('thingsboard.checkingDeviceActivity.inactivityCheckPeriodSeconds').hasError('pattern')) {
+                  <mat-error>{{ 'gateway.inactivity-check-period-seconds-pattern' | translate }}</mat-error>
+                }
+                <mat-icon matIconSuffix style="cursor:pointer;"
+                  matTooltip="{{ 'gateway.hints.inactivity-period' | translate }}">info_outlined
+                </mat-icon>
+              </mat-form-field>
+            </section>
+          }
         </div>
         <div class="tb-form-panel no-padding-bottom">
           <div class="tb-form-panel-title" translate>gateway.advanced</div>

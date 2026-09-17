@@ -14,7 +14,6 @@
 /// limitations under the License.
 ///
 import { ChangeDetectionStrategy, Component, forwardRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import {
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
@@ -50,7 +49,6 @@ import { deleteNullProperties } from '@core/public-api';
   ],
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
     GatewayPortTooltipPipe,
     TruncateWithTooltipDirective,

@@ -19,9 +19,11 @@
       <mat-form-field appearance="outline">
         <mat-label translate>gateway.logs.date-format</mat-label>
         <input matInput formControlName="dateFormat"/>
-        <mat-error *ngIf="logsFormGroup.get('dateFormat').hasError('required')">
-          {{ 'gateway.logs.date-format-required' | translate }}
-        </mat-error>
+        @if (logsFormGroup.get('dateFormat').hasError('required')) {
+          <mat-error>
+            {{ 'gateway.logs.date-format-required' | translate }}
+          </mat-error>
+        }
         <mat-icon matIconSuffix style="cursor:pointer;"
                   matTooltip="{{ 'gateway.hints.date-form' | translate }}">info_outlined
         </mat-icon>
@@ -29,9 +31,11 @@
       <mat-form-field appearance="outline">
         <mat-label translate>gateway.logs.log-format</mat-label>
         <textarea matInput formControlName="logFormat" rows="2"></textarea>
-        <mat-error *ngIf="logsFormGroup.get('logFormat').hasError('required')">
-          {{ 'gateway.logs.log-format-required' | translate }}
-        </mat-error>
+        @if (logsFormGroup.get('logFormat').hasError('required')) {
+          <mat-error>
+            {{ 'gateway.logs.log-format-required' | translate }}
+          </mat-error>
+        }
         <mat-icon matIconSuffix style="cursor:pointer;"
                   matTooltip="{{ 'gateway.hints.log-format' | translate }}">info_outlined
         </mat-icon>
@@ -52,7 +56,9 @@
       <mat-form-field appearance="outline">
         <mat-label translate>gateway.logs.level</mat-label>
         <mat-select formControlName="logLevel">
-          <mat-option *ngFor="let logLevel of remoteLogLevel" [value]="logLevel">{{ logLevel }}</mat-option>
+          @for (logLevel of remoteLogLevel; track logLevel) {
+            <mat-option [value]="logLevel">{{ logLevel }}</mat-option>
+          }
         </mat-select>
       </mat-form-field>
     </mat-expansion-panel>
@@ -60,23 +66,29 @@
   <div class="tb-form-panel no-padding-bottom" formGroupName="local">
     <div translate class="tb-form-panel-title">gateway.logs.local</div>
     <tb-toggle-select class="toggle-group" [formControl]="logSelector">
-      <tb-toggle-option *ngFor="let logConfig of localLogsConfigs" [value]="logConfig"
-                        class="first-capital">{{ localLogsConfigTranslateMap.get(logConfig) }}</tb-toggle-option>
+      @for (logConfig of localLogsConfigs; track logConfig) {
+        <tb-toggle-option [value]="logConfig"
+        class="first-capital">{{ localLogsConfigTranslateMap.get(logConfig) }}</tb-toggle-option>
+      }
     </tb-toggle-select>
     <ng-container [formGroup]="getLogFormGroup(logSelector.value)">
       <div class="tb-form-row no-border no-padding tb-standard-fields column-xs">
         <mat-form-field appearance="outline" class="flex">
           <mat-label translate>gateway.logs.level</mat-label>
           <mat-select formControlName="logLevel">
-            <mat-option *ngFor="let logLevel of gatewayLogLevel" [value]="logLevel">{{ logLevel }}</mat-option>
+            @for (logLevel of gatewayLogLevel; track logLevel) {
+              <mat-option [value]="logLevel">{{ logLevel }}</mat-option>
+            }
           </mat-select>
         </mat-form-field>
         <mat-form-field appearance="outline" class="flex">
           <mat-label translate>gateway.logs.file-path</mat-label>
           <input matInput formControlName="filePath"/>
-          <mat-error *ngIf="logsFormGroup.get('local.' + logSelector.value + '.filePath').hasError('required')">
-            {{ 'gateway.logs.file-path-required' | translate }}
-          </mat-error>
+          @if (logsFormGroup.get('local.' + logSelector.value + '.filePath').hasError('required')) {
+            <mat-error>
+              {{ 'gateway.logs.file-path-required' | translate }}
+            </mat-error>
+          }
         </mat-form-field>
       </div>
       <div class="tb-form-row no-border no-padding tb-standard-fields column-xs">
@@ -84,34 +96,44 @@
           <mat-form-field appearance="outline" class="flex">
             <mat-label translate>gateway.logs.saving-period</mat-label>
             <input matInput formControlName="savingTime" type="number" min="0"/>
-            <mat-error
-              *ngIf="logsFormGroup.get('local.' + logSelector.value + '.savingTime').hasError('required')">
-              {{ 'gateway.logs.saving-period-required' | translate }}
-            </mat-error>
-            <mat-error
-              *ngIf="logsFormGroup.get('local.' + logSelector.value + '.savingTime').hasError('min')">
-              {{ 'gateway.logs.saving-period-min' | translate }}
-            </mat-error>
+            @if (logsFormGroup.get('local.' + logSelector.value + '.savingTime').hasError('required')) {
+              <mat-error
+                >
+                {{ 'gateway.logs.saving-period-required' | translate }}
+              </mat-error>
+            }
+            @if (logsFormGroup.get('local.' + logSelector.value + '.savingTime').hasError('min')) {
+              <mat-error
+                >
+                {{ 'gateway.logs.saving-period-min' | translate }}
+              </mat-error>
+            }
           </mat-form-field>
           <mat-form-field appearance="outline" hideRequiredMarker style="min-width: 110px; width: 30%">
             <mat-select formControlName="savingPeriod">
-              <mat-option *ngFor="let period of logSavingPeriods | keyvalue" [value]="period.key">
-                {{ period.value | translate }}
-              </mat-option>
+              @for (period of logSavingPeriods | keyvalue; track period) {
+                <mat-option [value]="period.key">
+                  {{ period.value | translate }}
+                </mat-option>
+              }
             </mat-select>
           </mat-form-field>
         </div>
         <mat-form-field appearance="outline" class="flex">
           <mat-label translate>gateway.logs.backup-count</mat-label>
           <input matInput formControlName="backupCount" type="number" min="0"/>
-          <mat-error
-            *ngIf="logsFormGroup.get('local.' + logSelector.value + '.backupCount').hasError('required')">
-            {{ 'gateway.logs.backup-count-required' | translate }}
-          </mat-error>
-          <mat-error
-            *ngIf="logsFormGroup.get('local.' + logSelector.value + '.backupCount').hasError('min')">
-            {{ 'gateway.logs.backup-count-min' | translate }}
-          </mat-error>
+          @if (logsFormGroup.get('local.' + logSelector.value + '.backupCount').hasError('required')) {
+            <mat-error
+              >
+              {{ 'gateway.logs.backup-count-required' | translate }}
+            </mat-error>
+          }
+          @if (logsFormGroup.get('local.' + logSelector.value + '.backupCount').hasError('min')) {
+            <mat-error
+              >
+              {{ 'gateway.logs.backup-count-min' | translate }}
+            </mat-error>
+          }
           <mat-icon matIconSuffix style="cursor:pointer;"
                     matTooltip="{{ 'gateway.hints.backup-count' | translate }}">info_outlined
           </mat-icon>

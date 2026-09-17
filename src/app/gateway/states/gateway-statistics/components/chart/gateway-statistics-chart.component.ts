@@ -90,7 +90,7 @@ export class GatewayStatisticsChartComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.myChart = echarts.init(this.echartContainer.nativeElement,  null, {
+    this.myChart = echarts.init(this.echartContainer.nativeElement, null, {
       renderer: 'svg'
     });
     this.initResize();
@@ -133,7 +133,7 @@ export class GatewayStatisticsChartComponent implements OnInit, AfterViewInit {
           type: 'inside',
           disabled: false,
           realtime: true,
-          filterMode:  'none'
+          filterMode: 'none'
         },
         {
           type: 'slider',
@@ -154,9 +154,9 @@ export class GatewayStatisticsChartComponent implements OnInit, AfterViewInit {
     const newData = [];
     this.onResize();
     this.updateXAxisTimeWindow(this.xAxis, this.ctx.defaultSubscription.timeWindow);
-    for(const key in this.ctx.data) {
+    for (const key in this.ctx.data) {
       newData[key] = [];
-      for(const [ts, value] of this.ctx.data[key].data) {
+      for (const [ts, value] of this.ctx.data[key].data) {
         newData[key].push({
           name: ts,
           value: [
@@ -168,7 +168,7 @@ export class GatewayStatisticsChartComponent implements OnInit, AfterViewInit {
     }
 
     const linesData = [];
-    for(const data of newData) {
+    for (const data of newData) {
       linesData.push({data});
     }
     this.option.series = linesData;
@@ -178,9 +178,9 @@ export class GatewayStatisticsChartComponent implements OnInit, AfterViewInit {
   }
 
   private updateAxisOffset(lazy = true): void {
-    const leftOffset = calculateAxisSize(this.myChart, this.yAxis.mainType,  this.yAxis.id as string);
+    const leftOffset = calculateAxisSize(this.myChart, this.yAxis.mainType, this.yAxis.id as string);
     const leftNameSize = measureAxisNameSize(this.myChart, this.yAxis.mainType, this.yAxis.id as string, this.yAxis.name);
-    const bottomOffset = calculateAxisSize(this.myChart, this.xAxis.mainType,  this.xAxis.id as string);
+    const bottomOffset = calculateAxisSize(this.myChart, this.xAxis.mainType, this.xAxis.id as string);
     const bottomNameSize = measureAxisNameSize(this.myChart, this.yAxis.mainType, this.yAxis.id as string, this.yAxis.name);
     const newGridLeft = leftOffset + leftNameSize;
     const newGridBottom = bottomOffset + bottomNameSize + 35;
@@ -300,7 +300,7 @@ export class GatewayStatisticsChartComponent implements OnInit, AfterViewInit {
       this.ctx.data[index].dataKey.decimals : this.ctx.decimals;
     const units = isDefinedAndNotNull(this.ctx.data[index].dataKey.units) ?
       this.ctx.data[index].dataKey.units : this.ctx.units;
-    const value  = formatValue(param.value[1], decimals, units, false);
+    const value = formatValue(param.value[1], decimals, units as string, false);
     const valueElement: HTMLElement = this.renderer.createElement('div');
     this.renderer.setProperty(valueElement, 'innerHTML', this.sanitizer.sanitize(SecurityContext.HTML, value));
     this.renderer.setStyle(valueElement, 'flex', '1');
@@ -328,7 +328,7 @@ export class GatewayStatisticsChartComponent implements OnInit, AfterViewInit {
   }
 
   private setupAnimationSettings(): object {
-    return  {
+    return {
       animation: true,
       animationDelay: 0,
       animationDelayUpdate: 0,
@@ -342,7 +342,7 @@ export class GatewayStatisticsChartComponent implements OnInit, AfterViewInit {
 
   private setupChartLines(): SeriesOption[] {
     const series: SeriesOption[] = [];
-    for(const [index, dataKey] of this.ctx.datasources[0].dataKeys.entries()) {
+    for (const [index, dataKey] of this.ctx.datasources[0].dataKeys.entries()) {
       series.push({
         id: index,
         name: dataKey.label,
@@ -383,7 +383,7 @@ export class GatewayStatisticsChartComponent implements OnInit, AfterViewInit {
         fontWeight: 400,
         show: true,
         formatter: (value: any) => {
-          return  formatValue(value, this.ctx.decimals,  this.ctx.units, false);
+          return  formatValue(value, this.ctx.decimals,  this.ctx.units as string, false);
         }
       },
       splitLine: {
@@ -420,8 +420,8 @@ export class GatewayStatisticsChartComponent implements OnInit, AfterViewInit {
       position: "bottom",
       offset: 0,
       nameLocation: 'middle',
-      max:  this.ctx.defaultSubscription.timeWindow.maxTime,
-      min:  this.ctx.defaultSubscription.timeWindow.minTime,
+      max: this.ctx.defaultSubscription.timeWindow.maxTime,
+      min: this.ctx.defaultSubscription.timeWindow.minTime,
       nameTextStyle: {
         color: 'rgba(0, 0, 0, 0.54)',
         fontStyle: 'normal',
