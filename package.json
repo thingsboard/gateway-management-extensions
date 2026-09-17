@@ -6,10 +6,13 @@
   "scripts": {
     "ng": "ng",
     "start": "yarn run build:scss && node ./node_modules/@angular/cli/bin/ng serve",
-    "build": "yarn run build:scss && node ./node_modules/@angular/cli/bin/ng build && node install.js",
+    "build": "yarn license-check && yarn run build:scss && node ./node_modules/@angular/cli/bin/ng build && node install.js",
     "build:scss": "npx postcss ./src/app/scss/style.scss -o ./src/app/scss/style.comp.scss",
     "prepare": "patch-package",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "license-check": "license-check-and-add check -f .license-check.json",
+    "license-add": "license-check-and-add add -f .license-check.json",
+    "license-remove": "license-check-and-add remove -f .license-check.json"
   },
   "engines": {
     "node": ">=20.20.0",
@@ -51,6 +54,7 @@
     "eslint-plugin-jsdoc": "62.5.0",
     "eslint-plugin-prefer-arrow": "1.2.3",
     "eslint-plugin-tailwindcss": "3.18.2",
+    "license-check-and-add": "^4.0.5",
     "ng-packagr": "20.3.2",
     "ngrx-store-freeze": "^0.2.4",
     "patch-package": "^8.0.1",
@@ -70,6 +74,7 @@
     "zone.js": "~0.15.1"
   },
   "resolutions": {
+    "@types/minimatch": "5.1.2",
     "tinymce": "6.8.6",
     "rxjs": "7.8.2",
     "@babel/traverse": "7.28.6",
