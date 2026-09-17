@@ -49,7 +49,6 @@ import {
 import { MatButton } from '@angular/material/button';
 import { TbPopoverService } from '@shared/components/popover.service';
 import { DeviceDataKeysPanelComponent } from '../device-data-keys-pannel/device-data-keys-panel.component';
-import { CommonModule } from '@angular/common';
 import { TbPopoverComponent } from '@shared/components/popover.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -60,7 +59,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule,
     EllipsisChipListDirective,
     ReportStrategyComponent,

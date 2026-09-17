@@ -21,7 +21,7 @@ import { AppState } from '@core/public-api';
 import { DialogComponent, SharedModule } from '@shared/public-api';
 import { Router } from '@angular/router';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 
 export interface GatewayRemoteConfigurationDialogData {
   gatewayName: string;
@@ -32,7 +32,6 @@ export interface GatewayRemoteConfigurationDialogData {
   templateUrl: './gateway-remote-configuration-dialog.html',
   standalone: true,
   imports: [
-    CommonModule,
     SharedModule
   ]
 })
