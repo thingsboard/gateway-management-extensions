@@ -19,11 +19,11 @@
   @if (connectorType) {
     @switch (connectorType) {
       @case (ConnectorType.BACNET) {
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>{{ 'gateway.rpc.methodRPC' | translate }}</mat-label>
           <input matInput formControlName="method" placeholder="set_state"/>
         </mat-form-field>
-        <mat-form-field class="mat-block">
+        <mat-form-field appearance="outline" class="mat-block">
           <mat-label>{{ 'gateway.rpc.requestType' | translate }}</mat-label>
           <mat-select formControlName="requestType">
             @for (type of bACnetRequestTypes; track type) {
@@ -33,13 +33,13 @@
             }
           </mat-select>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>{{ 'gateway.rpc.requestTimeout' | translate }}</mat-label>
           <input matInput formControlName="requestTimeout" type="number"
                  min="10" step="1" placeholder="1000"/>
         </mat-form-field>
         <div class="flex flex-1 flex-row gap-2.5">
-          <mat-form-field class="flex-1">
+          <mat-form-field appearance="outline" class="flex-1">
             <mat-label>{{ 'gateway.rpc.objectType' | translate }}</mat-label>
             <mat-select formControlName="objectType">
               @for (type of bACnetObjectTypes; track type) {
@@ -49,27 +49,27 @@
               }
             </mat-select>
           </mat-form-field>
-          <mat-form-field class="flex-1">
+          <mat-form-field appearance="outline" class="flex-1">
             <mat-label>{{ 'gateway.rpc.identifier' | translate }}</mat-label>
             <input matInput formControlName="identifier" type="number"
                    min="1" step="1" placeholder="1"/>
           </mat-form-field>
         </div>
-        <mat-form-field class="mat-block">
+        <mat-form-field appearance="outline" class="mat-block">
           <mat-label>{{ 'gateway.rpc.propertyId' | translate }}</mat-label>
           <input matInput formControlName="propertyId" placeholder="presentValue"/>
         </mat-form-field>
       }
       @case (ConnectorType.BLE) {
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>{{ 'gateway.rpc.methodRPC' | translate }}</mat-label>
           <input matInput formControlName="methodRPC" placeholder="rpcMethod1"/>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>{{ 'gateway.rpc.characteristicUUID' | translate }}</mat-label>
           <input matInput formControlName="characteristicUUID" placeholder="00002A00-0000-1000-8000-00805F9B34FB"/>
         </mat-form-field>
-        <mat-form-field class="mat-block">
+        <mat-form-field appearance="outline" class="mat-block">
           <mat-label>{{ 'gateway.rpc.methodProcessing' | translate }}</mat-label>
           <mat-select formControlName="methodProcessing">
             @for (type of bLEMethods; track type) {
@@ -84,11 +84,11 @@
         </mat-slide-toggle>
       }
       @case (ConnectorType.CAN) {
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>{{ 'gateway.rpc.methodRPC' | translate }}</mat-label>
           <input matInput formControlName="method" placeholder="sendSameData"/>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>{{ 'gateway.rpc.nodeID' | translate }}</mat-label>
           <input matInput formControlName="nodeID" type="number" placeholder="4" min="0" step="1"/>
         </mat-form-field>
@@ -102,11 +102,11 @@
           {{ 'gateway.rpc.bitrateSwitch' | translate }}
         </mat-slide-toggle>
         <div class="flex flex-1 flex-row gap-2.5">
-          <mat-form-field class="flex-1">
+          <mat-form-field appearance="outline" class="flex-1">
             <mat-label>{{ 'gateway.rpc.dataLength' | translate }}</mat-label>
             <input matInput formControlName="dataLength" type="number" placeholder="2" min="1" step="1"/>
           </mat-form-field>
-          <mat-form-field class="flex-1">
+          <mat-form-field appearance="outline" class="flex-1">
             <mat-label>{{ 'gateway.rpc.dataByteorder' | translate }}</mat-label>
             <mat-select formControlName="dataByteorder">
               @for (order of cANByteOrders; track order) {
@@ -118,42 +118,42 @@
           </mat-form-field>
         </div>
         <div class="flex flex-1 flex-row gap-2.5">
-          <mat-form-field class="flex-1">
+          <mat-form-field appearance="outline" class="flex-1">
             <mat-label>{{ 'gateway.rpc.dataBefore' | translate }}</mat-label>
             <input matInput formControlName="dataBefore" placeholder="00AA"/>
           </mat-form-field>
-          <mat-form-field class="flex-1">
+          <mat-form-field appearance="outline" class="flex-1">
             <mat-label>{{ 'gateway.rpc.dataAfter' | translate }}</mat-label>
             <input matInput formControlName="dataAfter" placeholder="0102"/>
           </mat-form-field>
         </div>
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>{{ 'gateway.rpc.dataInHEX' | translate }}</mat-label>
           <input matInput formControlName="dataInHEX"
                  placeholder="aa bb cc dd ee ff   aa bb aa bb cc d ee ff"/>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>{{ 'gateway.rpc.dataExpression' | translate }}</mat-label>
           <input matInput formControlName="dataExpression"
                  placeholder="userSpeed if maxAllowedSpeed > userSpeed else maxAllowedSpeed"/>
         </mat-form-field>
       }
       @case (ConnectorType.FTP) {
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>{{ 'gateway.rpc.methodFilter' | translate }}</mat-label>
           <input matInput formControlName="methodFilter" placeholder="read"/>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>{{ 'gateway.rpc.valueExpression' | translate }}</mat-label>
           <input matInput formControlName="valueExpression" placeholder="${params}"/>
         </mat-form-field>
       }
       @case (ConnectorType.OCPP) {
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>{{ 'gateway.rpc.methodRPC' | translate }}</mat-label>
           <input matInput formControlName="methodRPC" placeholder="rpc1"/>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>{{ 'gateway.rpc.valueExpression' | translate }}</mat-label>
           <input matInput formControlName="valueExpression" placeholder="${params}"/>
         </mat-form-field>
@@ -162,11 +162,11 @@
         </mat-slide-toggle>
       }
       @case (ConnectorType.XMPP) {
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>{{ 'gateway.rpc.methodRPC' | translate }}</mat-label>
           <input matInput formControlName="methodRPC" placeholder="rpc1"/>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>{{ 'gateway.rpc.valueExpression' | translate }}</mat-label>
           <input matInput formControlName="valueExpression" placeholder="${params}"/>
         </mat-form-field>
@@ -175,11 +175,11 @@
         </mat-slide-toggle>
       }
       @case (ConnectorType.SNMP) {
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>{{ 'gateway.rpc.requestFilter' | translate }}</mat-label>
           <input matInput formControlName="requestFilter" placeholder="setData"/>
         </mat-form-field>
-        <mat-form-field class="mat-block">
+        <mat-form-field appearance="outline" class="mat-block">
           <mat-label>{{ 'gateway.rpc.method' | translate }}</mat-label>
           <mat-select formControlName="method">
             @for (method of sNMPMethods; track method) {
@@ -215,12 +215,12 @@
         </fieldset>
       }
       @case (ConnectorType.REST) {
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>{{ 'gateway.rpc.methodFilter' | translate }}</mat-label>
           <input matInput formControlName="methodFilter" placeholder="post_attributes"/>
         </mat-form-field>
         <div class="flex flex-1 flex-row gap-2.5">
-          <mat-form-field class="max-w-4/12 flex-[1_1_33%]">
+          <mat-form-field appearance="outline" class="max-w-4/12 flex-[1_1_33%]">
             <mat-label>{{ 'gateway.rpc.httpMethod' | translate }}</mat-label>
             <mat-select formControlName="httpMethod">
               @for (method of hTTPMethods; track method) {
@@ -230,30 +230,30 @@
               }
             </mat-select>
           </mat-form-field>
-          <mat-form-field class="flex-1">
+          <mat-form-field appearance="outline" class="flex-1">
             <mat-label>{{ 'gateway.rpc.requestUrlExpression' | translate }}</mat-label>
             <input matInput formControlName="requestUrlExpression"
                    placeholder="http://127.0.0.1:5000/my_devices"/>
           </mat-form-field>
         </div>
         <div class="flex flex-1 flex-row gap-2.5">
-          <mat-form-field class="flex-1">
+          <mat-form-field appearance="outline" class="flex-1">
             <mat-label>{{ 'gateway.rpc.responseTimeout' | translate }}</mat-label>
             <input matInput formControlName="responseTimeout" type="number"
                    step="1" min="10" placeholder="10"/>
           </mat-form-field>
-          <mat-form-field class="flex-1">
+          <mat-form-field appearance="outline" class="flex-1">
             <mat-label>{{ 'gateway.rpc.timeout' | translate }}</mat-label>
             <input matInput formControlName="timeout" type="number"
                    step="1" min="10" placeholder="1000"/>
           </mat-form-field>
-          <mat-form-field class="flex-1">
+          <mat-form-field appearance="outline" class="flex-1">
             <mat-label>{{ 'gateway.rpc.tries' | translate }}</mat-label>
             <input matInput formControlName="tries" type="number"
                    step="1" min="1" placeholder="3"/>
           </mat-form-field>
         </div>
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>{{ 'gateway.rpc.valueExpression' | translate }}</mat-label>
           <input matInput formControlName="valueExpression" placeholder="${params}"/>
         </mat-form-field>
@@ -296,7 +296,7 @@
       }
       @case (ConnectorType.REQUEST) {
         <div class="flex flex-row items-center justify-center gap-2.5">
-          <mat-form-field class="max-w-4/12 flex-[1_1_33%]">
+          <mat-form-field appearance="outline" class="max-w-4/12 flex-[1_1_33%]">
             <mat-label>{{ 'gateway.rpc.httpMethod' | translate }}</mat-label>
             <mat-select formControlName="httpMethod">
               @for (method of hTTPMethods; track method) {
@@ -306,35 +306,35 @@
               }
             </mat-select>
           </mat-form-field>
-          <mat-form-field class="flex-1">
+          <mat-form-field appearance="outline" class="flex-1">
             <mat-label>{{ 'gateway.rpc.requestUrlExpression' | translate }}</mat-label>
             <input matInput formControlName="requestUrlExpression" placeholder="http://127.0.0.1:5000/my_devices"/>
           </mat-form-field>
         </div>
         <div class="flex flex-row items-center justify-center gap-2.5">
-          <mat-form-field class="flex-1">
+          <mat-form-field appearance="outline" class="flex-1">
             <mat-label>{{ 'gateway.rpc.responseTimeout' | translate }}</mat-label>
             <input matInput formControlName="responseTimeout" type="number"
                    step="1" min="10" placeholder="10"/>
           </mat-form-field>
-          <mat-form-field class="flex-1">
+          <mat-form-field appearance="outline" class="flex-1">
             <mat-label>{{ 'gateway.rpc.timeout' | translate }}</mat-label>
             <input matInput formControlName="timeout" type="number"
                    step="1" min="10" placeholder="10"/>
           </mat-form-field>
-          <mat-form-field class="flex-1">
+          <mat-form-field appearance="outline" class="flex-1">
             <mat-label>{{ 'gateway.rpc.tries' | translate }}</mat-label>
             <input matInput formControlName="tries" type="number"
                    step="1" min="1" placeholder="1"/>
           </mat-form-field>
         </div>
         @if (commandForm.get('httpMethod').value !== HTTPMethods.GET && commandForm.get('httpMethod').value !== HTTPMethods.HEAD) {
-          <mat-form-field>
+          <mat-form-field appearance="outline">
             <mat-label>{{ 'gateway.rpc.requestValueExpression' | translate }}</mat-label>
             <input matInput formControlName="requestValueExpression" placeholder="${params}"/>
           </mat-form-field>
         }
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>{{ 'gateway.rpc.responseValueExpression' | translate }}</mat-label>
           <input matInput formControlName="responseValueExpression" placeholder="${temp}"/>
         </mat-form-field>
@@ -375,11 +375,11 @@
         </fieldset>
       }
       @default {
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>{{ 'gateway.statistics.command' | translate }}</mat-label>
           <input matInput formControlName="command"/>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>{{ 'widget-config.datasource-parameters' | translate }}</mat-label>
           <input matInput formControlName="params" type="JSON" tb-json-to-string/>
           <mat-icon class="material-icons-outlined" aria-hidden="false" aria-label="help-icon"
