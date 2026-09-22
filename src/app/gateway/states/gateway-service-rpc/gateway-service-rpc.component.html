@@ -14,7 +14,7 @@
   limitations under the License.
 -->
 <div class="flex flex-1 flex-col" [class]="{'border': isConnector}">
-  <div class="command-form flex flex-row gap-2.5 lt-sm:flex-col" [formGroup]="commandForm">
+  <div class="command-form lt-sm:flex-col flex flex-row gap-2.5" [class]="{'py-1': !isConnector}" [formGroup]="commandForm">
     @if (!isConnector) {
       <mat-form-field appearance="outline">
         <mat-label>{{ 'gateway.statistics.command' | translate }}</mat-label>
