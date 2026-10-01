@@ -41,6 +41,10 @@
     flex-wrap: nowrap;
     padding: 0 5px 5px;
 
+    &.gateway-command-form {
+      padding-top: 4px;
+    }
+
     & > button {
       margin-top: 10px;
     }
