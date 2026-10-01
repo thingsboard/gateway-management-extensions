@@ -1,0 +1,93 @@
+name: Publish build to dist
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+# One publisher per dist target, and a started publication is never cancelled.
+# GitHub keeps at most one pending run per group, so this is not a FIFO queue of all runs.
+concurrency:
+  group: publish-dist-${{ vars.DIST_REPO || 'thingsboard/gateway-management-extensions-dist' }}-auto/update-build
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pull-requests: read
+
+env:
+  SOURCE_BRANCH: master
+  # Set the DIST_REPO repository variable to publish elsewhere, e.g. to a fork for testing.
+  DIST_REPO: ${{ vars.DIST_REPO || 'thingsboard/gateway-management-extensions-dist' }}
+  DIST_BASE: rc
+  DIST_BRANCH: auto/update-build
+  ARTIFACT: target/generated-resources/gateway-management-extension.js
+  DIST_FILE: resources/gateway-management-extension.js
+  NODE_VERSION: 20.20.0
+  YARN_VERSION: 1.22.22
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Allow publishing only from master
+        if: github.ref != 'refs/heads/master'
+        run: |
+          echo "::error::Publishing is allowed only from refs/heads/master, this run is for $GITHUB_REF"
+          exit 1
+
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: yarn
+
+      - name: Install Yarn
+        run: |
+          npm install --global "yarn@$YARN_VERSION"
+          test "$(yarn --version)" = "$YARN_VERSION"
+
+      - name: Build
+        run: |
+          yarn install --frozen-lockfile
+          yarn build
+
+      - name: Verify build artifact
+        run: |
+          if [ ! -s "$ARTIFACT" ]; then
+            echo "::error::Build artifact $ARTIFACT is missing or empty"
+            exit 1
+          fi
+
+      - name: Check dist token
+        env:
+          DIST_REPO_TOKEN: ${{ secrets.DIST_REPO_TOKEN }}
+        run: |
+          if [ -z "$DIST_REPO_TOKEN" ]; then
+            echo "::error::Secret DIST_REPO_TOKEN is not set"
+            exit 1
+          fi
+
+      - uses: actions/checkout@v7
+        with:
+          repository: ${{ env.DIST_REPO }}
+          ref: ${{ env.DIST_BASE }}
+          token: ${{ secrets.DIST_REPO_TOKEN }}
+          path: .dist-repo
+          fetch-depth: 0
+
+      - name: Publish to dist
+        env:
+          SOURCE_REPO: ${{ github.repository }}
+          SOURCE_SHA: ${{ github.sha }}
+          SOURCE_DIR: .
+          DIST_DIR: .dist-repo
+          SOURCE_GH_TOKEN: ${{ github.token }}
+          DIST_GH_TOKEN: ${{ secrets.DIST_REPO_TOKEN }}
+        run: bash .github/scripts/publish-dist.sh
