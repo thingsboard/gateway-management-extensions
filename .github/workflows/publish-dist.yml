@@ -1,0 +1,112 @@
+name: Publish build to dist
+
+# Pushes the build of each source line straight to its dist test branch.
+# Promotion to release/* branches is done by promote.yml in the dist repo.
+on:
+  push:
+    branches: [master, release/4.4]
+    paths-ignore: ['**.md']
+  workflow_dispatch:
+
+# Only the newest build matters, and the push to dist is atomic, so cancelling is safe.
+concurrency:
+  group: publish-dist-${{ github.ref_name }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  DIST_REPO: ${{ vars.DIST_REPO || 'thingsboard/gateway-management-extensions-dist' }}
+  ARTIFACT: target/generated-resources/gateway-management-extension.js
+  DIST_FILE: resources/gateway-management-extension.js
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: dist-publish
+    timeout-minutes: 30
+    steps:
+      - name: Resolve target
+        id: target
+        run: |
+          # Source branch -> dist test branch.
+          case "$GITHUB_REF_NAME" in
+            master) branch=rc-lts ;;
+            release/4.4) branch=rc ;;
+            *) echo "::error::No dist test branch is mapped to $GITHUB_REF_NAME"; exit 1 ;;
+          esac
+          {
+            echo "branch=$branch"
+            echo "dist-owner=${DIST_REPO%%/*}"
+            echo "dist-name=${DIST_REPO#*/}"
+          } >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 20.20.0
+          cache: yarn
+
+      - name: Build
+        run: |
+          yarn install --frozen-lockfile
+          yarn build
+          if [ ! -s "$ARTIFACT" ]; then
+            echo "::error::Build artifact $ARTIFACT is missing or empty"
+            exit 1
+          fi
+
+      - uses: actions/create-github-app-token@v3
+        id: app-token
+        with:
+          client-id: ${{ vars.DIST_APP_CLIENT_ID }}
+          private-key: ${{ secrets.DIST_APP_PRIVATE_KEY }}
+          owner: ${{ steps.target.outputs.dist-owner }}
+          repositories: ${{ steps.target.outputs.dist-name }}
+          permission-contents: write
+
+      - uses: actions/checkout@v7
+        with:
+          repository: ${{ env.DIST_REPO }}
+          ref: ${{ steps.target.outputs.branch }}
+          token: ${{ steps.app-token.outputs.token }}
+          path: .dist-repo
+          fetch-depth: 1
+
+      - name: Publish
+        working-directory: .dist-repo
+        env:
+          TARGET: ${{ steps.target.outputs.branch }}
+        run: |
+          set -euo pipefail
+          head=$(git ls-remote --exit-code "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git" "refs/heads/$GITHUB_REF_NAME" | cut -f1)
+          if [ "$head" != "$GITHUB_SHA" ]; then
+            echo "Superseded: $GITHUB_REF_NAME is already at $head"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3; do
+            cp "../$ARTIFACT" "$DIST_FILE"
+            git add -- "$DIST_FILE"
+            if git diff --cached --quiet; then
+              echo "No changes: $TARGET already has this build"
+              exit 0
+            fi
+            git commit -q -m "Updated build from ${GITHUB_REPOSITORY#*/}@${GITHUB_SHA::7} ($GITHUB_REF_NAME)" \
+              -m "Source-Commit: $GITHUB_SHA"
+            if git push -q origin "HEAD:$TARGET"; then
+              echo "Published $GITHUB_SHA to $DIST_REPO $TARGET"
+              exit 0
+            fi
+            echo "Push to $TARGET rejected (attempt $attempt), retrying on top of the fresh branch"
+            git fetch -q --depth=1 origin "$TARGET"
+            git reset -q --hard FETCH_HEAD
+          done
+          echo "::error::Could not push to $DIST_REPO $TARGET after 3 attempts"
+          exit 1
