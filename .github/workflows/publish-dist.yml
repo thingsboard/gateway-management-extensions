@@ -63,10 +63,11 @@ jobs:
       - uses: actions/create-github-app-token@v3
         id: app-token
         with:
-          app-id: ${{ vars.DIST_APP_ID }}
+          client-id: ${{ vars.DIST_APP_CLIENT_ID }}
           private-key: ${{ secrets.DIST_APP_PRIVATE_KEY }}
           owner: ${{ steps.target.outputs.dist-owner }}
           repositories: ${{ steps.target.outputs.dist-name }}
+          permission-contents: write
 
       - uses: actions/checkout@v7
         with:
