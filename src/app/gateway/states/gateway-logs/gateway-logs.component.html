@@ -14,7 +14,7 @@
   limitations under the License.
 -->
 <div class="flex h-full flex-col">
-  <nav mat-tab-nav-bar [tabPanel]="tabPanel">
+  <nav mat-tab-nav-bar [tabPanel]="tabPanel" [class.!hidden]="logLinks?.length < 2">
     @for (link of logLinks; track link) {
       <a mat-tab-link
         (click)="onTabChanged(link)"

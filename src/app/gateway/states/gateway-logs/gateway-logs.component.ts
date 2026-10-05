@@ -14,16 +14,18 @@
 /// limitations under the License.
 ///
 
-import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { DataKeyType, PageLink, Direction, SortOrder, SharedModule } from '@shared/public-api';
+import { DataKeyType, PageLink, Direction, SortOrder, SharedModule, widgetType } from '@shared/public-api';
+import { IWidgetSubscription } from '@core/public-api';
 import { WidgetContext } from '@home/models/widget-component.models';
 import { GatewayLogData, LogLink, GatewayStatus } from './models/public-api';
 import { CommonModule } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'tb-gateway-logs',
@@ -56,6 +58,8 @@ export class GatewayLogsComponent implements OnInit, AfterViewInit {
 
   activeLink: LogLink;
 
+  private logsSubscription: IWidgetSubscription;
+
   gatewayLogLinks: Array<LogLink> = [
     {
       name: this.translate.instant('gateway.logs.columns.general'),
@@ -79,6 +83,7 @@ export class GatewayLogsComponent implements OnInit, AfterViewInit {
 
   constructor(
     private translate: TranslateService,
+    private destroyRef: DestroyRef,
   ) {
     const sortOrder: SortOrder = {property: 'ts', direction: Direction.DESC};
     this.pageLink = new PageLink(10, 0, null, sortOrder);
@@ -92,14 +97,13 @@ export class GatewayLogsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.ctx.defaultSubscription.onTimewindowChangeFunction = timewindow => {
-      this.ctx.defaultSubscription.options.timeWindowConfig = timewindow;
-      this.ctx.defaultSubscription.updateDataSubscriptions();
-      return timewindow;
-    };
     if (this.ctx.settings.isConnectorLog && this.ctx.settings.connectorLogState) {
       const connector = this.ctx.stateController.getStateParams()[this.ctx.settings.connectorLogState];
-      this.logLinks = [{
+      this.logLinks = this.ctx.settings.isRpcLog ? [{
+        key: `${connector.key}_LOGS`,
+        name: this.translate.instant('gateway.connector'),
+        filterFn: (attrData) => /(?<!g)rpc/i.test(attrData.message)
+      }] : [{
         key: `${connector.key}_LOGS`,
         name: this.translate.instant('gateway.connector'),
         filterFn: (attrData) => !attrData.message.includes(`_converter.py`)
@@ -127,9 +131,9 @@ export class GatewayLogsComponent implements OnInit, AfterViewInit {
   }
 
 
-  private updateData() {
-    if (this.ctx.defaultSubscription.data.length && this.ctx.defaultSubscription.data[0]) {
-      let attrData = this.ctx.defaultSubscription.data[0].data.map(data => {
+  private updateData(subscription: IWidgetSubscription) {
+    if (subscription.data.length && subscription.data[0]) {
+      let attrData = subscription.data[0].data.map(data => {
         const result = {
           ts: data[0],
           key: this.activeLink.key,
@@ -188,17 +192,39 @@ export class GatewayLogsComponent implements OnInit, AfterViewInit {
   }
 
   private changeSubscription() {
-    if (this.ctx.datasources && this.ctx.datasources[0].entity && this.ctx.defaultSubscription.options.datasources) {
-      this.ctx.defaultSubscription.options.datasources[0].dataKeys = [{
-        name: this.activeLink.key,
+    if (!this.ctx.datasources?.[0]?.entity || !this.ctx.defaultSubscription.options.datasources) {
+      return;
+    }
+    const timeWindowConfig = (this.logsSubscription ?? this.ctx.defaultSubscription).timeWindowConfig;
+    this.ctx.defaultSubscription.unsubscribe();
+    if (this.logsSubscription) {
+      this.ctx.subscriptionApi.removeSubscription(this.logsSubscription.id);
+      this.logsSubscription = null;
+    }
+    this.dataSource.data = [];
+    const link = this.activeLink;
+    const datasource = {
+      ...this.ctx.defaultSubscription.options.datasources[0],
+      dataKeys: [{
+        name: link.key,
         type: DataKeyType.timeseries,
         settings: {}
-      }];
-      this.ctx.defaultSubscription.unsubscribe();
-      this.ctx.defaultSubscription.updateDataSubscriptions();
-      this.ctx.defaultSubscription.callbacks.onDataUpdated = () => {
-        this.updateData();
-      };
-    }
+      }]
+    };
+    this.ctx.subscriptionApi.createSubscription({
+      type: widgetType.timeseries,
+      datasources: [datasource],
+      useDashboardTimewindow: false,
+      timeWindowConfig,
+      callbacks: {
+        onDataUpdated: subscription => this.ctx.ngZone.run(() => this.updateData(subscription))
+      }
+    }, true).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(subscription => {
+      if (link !== this.activeLink) {
+        this.ctx.subscriptionApi.removeSubscription(subscription.id);
+        return;
+      }
+      this.logsSubscription = subscription;
+    });
   }
 }
