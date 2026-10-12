@@ -99,7 +99,10 @@ export class GatewayLogsComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
     if (this.ctx.settings.isConnectorLog && this.ctx.settings.connectorLogState) {
       const connector = this.ctx.stateController.getStateParams()[this.ctx.settings.connectorLogState];
-      this.logLinks = this.ctx.settings.isRpcLog ? [{
+      const isRpcLog = this.ctx.settings.isRpcLog
+        || this.ctx.settings.connectorLogState === 'connector_rpc'
+        || this.ctx.stateController.getStateId() === 'connector_rpc';
+      this.logLinks = isRpcLog ? [{
         key: `${connector.key}_LOGS`,
         name: this.translate.instant('gateway.connector'),
         filterFn: (attrData) => /(?<!g)rpc/i.test(attrData.message)
