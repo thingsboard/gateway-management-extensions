@@ -317,6 +317,8 @@
       "remote-logs": "Remote logs",
       "local": "Local logging",
       "level": "Log level",
+      "log-filter": "Log filter",
+      "filter": "Filter",
       "file-path": "File path",
       "file-path-required": "File path required",
       "saving-period": "Log saving period",

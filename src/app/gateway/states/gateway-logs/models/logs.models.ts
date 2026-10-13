@@ -38,3 +38,7 @@ export const GatewayStatus = {
 };
 
 export type GatewayStatus = DeviceGatewayStatus | GatewayLogLevel;
+
+export const GatewayLogsFilterLevels = ['ALL', 'NONE', 'CRITICAL', 'WARNING', 'INFO', 'DEBUG', 'TRACE'] as const;
+
+export type GatewayLogsFilterLevel = typeof GatewayLogsFilterLevels[number];
