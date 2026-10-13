@@ -59,4 +59,39 @@
      showFirstLastButtons
   />
 </div>
-
+<ng-template #logFilterPanel>
+  <form class="mat-content mat-padding flex flex-col" (ngSubmit)="updateLogFilter()">
+    <div class="tb-form-panel no-padding no-border">
+      <div class="tb-form-row space-between column-xs">
+        <div class="fixed-title-width" translate>gateway.logs.level</div>
+        <mat-form-field class="flex-1" appearance="outline" subscriptSizing="dynamic">
+          <mat-select [formControl]="logLevelControl">
+            @for (level of logLevels; track level) {
+              <mat-option [value]="level">{{ level }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="tb-panel-actions flex flex-row items-center justify-end">
+      <button type="button"
+              mat-button
+              color="primary"
+              (click)="resetLogFilter()">
+        {{ 'action.reset' | translate }}
+      </button>
+      <span class="flex-1"></span>
+      <button type="button"
+              mat-button
+              (click)="cancelLogFilter()">
+        {{ 'action.cancel' | translate }}
+      </button>
+      <button type="submit"
+              mat-raised-button
+              color="primary"
+              [disabled]="!logLevelControl.dirty">
+        {{ 'action.update' | translate }}
+      </button>
+    </div>
+  </form>
+</ng-template>
