@@ -7,7 +7,7 @@ There are two active branches:
 | Branch | Angular | ThingsBoard types pin | What it is for |
 |---|---|---|---|
 | `master` | 18 | `release/4.2.0` | The maintained line for the currently supported platform releases — 4.2.x and 4.3.x. |
-| `release/4.4` | 20 | `release/4.3.1` | The upcoming 4.4 release, built on Angular 20. Pin moves to the 4.4 types branch once it is published. |
+| `release/4.4` | 20 | `release/4.4.0` | The 4.4 release, built on Angular 20. |
 
 Do not create `release/4.2` or `release/4.3` branches. `master` covers both, and
 every extra branch adds another merge to keep in sync.
@@ -37,6 +37,7 @@ releases:
 |---|---|
 | `release/4.0`, `release/4.1.0`, `release/4.2.0`, `release/4.3.0` | 18.2.13 |
 | `release/4.2.2`, `release/4.3.1` | 20.3.18 |
+| `release/4.4.0` | 20.3.28 |
 
 So `release/4.3.0` is an Angular 18 branch while `release/4.2.2` is already an
 Angular 20 one. Always check `@angular/core` in the types' `package.json` before
@@ -114,3 +115,31 @@ yarn lint
 malformed header, fix it with `yarn license-add` — do not remove the check.
 It was once dropped from `release/4.4`, and six files silently lost or corrupted
 their license headers before anyone noticed.
+
+## Publishing a build
+
+Built files are published in
+[gateway-management-extensions-dist](https://github.com/thingsboard/gateway-management-extensions-dist).
+Each source branch has its own working branch there:
+
+| Source branch | Dist branch | Released to (dist) |
+|---|---|---|
+| `master` | `rc-lts` | `release/4.2`, `release/4.2.0`, `release/4.3.0` |
+| `release/4.4` | `rc` | `release/4.4.0` |
+
+After a pull request is merged here (and merged forward into `release/4.4`),
+build each affected branch and open a pull request with the result against the
+matching dist branch:
+
+```bash
+yarn install && yarn build
+# copy target/generated-resources/gateway-management-extension.js
+# to resources/gateway-management-extension.js in the dist repository
+```
+
+The two builds are not interchangeable. Never publish a `release/4.4` build to
+`rc-lts`, or a `master` build to `rc`.
+
+The dist repository's `CONTRIBUTING.md` describes the rest: how to check a
+build, the dashboard differences between the two lines, and how changes move
+from `rc-lts` to `rc` and on to the release branches.
