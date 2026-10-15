@@ -14,15 +14,43 @@
 /// limitations under the License.
 ///
 
-import { AfterViewInit, Component, DestroyRef, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  DestroyRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
+import { TemplatePortal } from '@angular/cdk/portal';
+import { fromEvent, Subscription } from 'rxjs';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { DataKeyType, PageLink, Direction, SortOrder, SharedModule, widgetType } from '@shared/public-api';
+import {
+  DataKeyType,
+  PageLink,
+  Direction,
+  SortOrder,
+  SharedModule,
+  DEFAULT_OVERLAY_POSITIONS,
+  widgetType
+} from '@shared/public-api';
 import { IWidgetSubscription } from '@core/public-api';
-import { WidgetContext } from '@home/models/widget-component.models';
-import { GatewayLogData, LogLink, GatewayStatus } from './models/public-api';
+import { WidgetAction, WidgetContext } from '@home/models/widget-component.models';
+import {
+  GatewayLogData,
+  LogLink,
+  GatewayStatus,
+  GatewayLogsFilterLevel,
+  GatewayLogsFilterLevels
+} from './models/public-api';
 import { CommonModule } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -37,7 +65,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     SharedModule,
     ]
 })
-export class GatewayLogsComponent implements OnInit, AfterViewInit {
+export class GatewayLogsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   pageLink: PageLink;
 
@@ -53,12 +81,32 @@ export class GatewayLogsComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('logFilterPanel') logFilterPanel: TemplateRef<any>;
 
   logLinks: Array<LogLink>;
 
   activeLink: LogLink;
 
+  readonly logLevels = GatewayLogsFilterLevels;
+
+  selectedLogLevel: GatewayLogsFilterLevel = 'ALL';
+
+  logLevelControl = new FormControl<GatewayLogsFilterLevel>('ALL');
+
+  private allLogs: Array<GatewayLogData> = [];
+
   private logsSubscription: IWidgetSubscription;
+
+  private logFilterOverlayRef: OverlayRef;
+
+  private resizeWindowSubscription: Subscription;
+
+  private logFilterAction: WidgetAction = {
+    name: 'gateway.logs.log-filter',
+    show: true,
+    icon: 'filter_list',
+    onAction: ($event) => this.toggleLogFilterPanel($event)
+  };
 
   gatewayLogLinks: Array<LogLink> = [
     {
@@ -83,6 +131,8 @@ export class GatewayLogsComponent implements OnInit, AfterViewInit {
 
   constructor(
     private translate: TranslateService,
+    private overlay: Overlay,
+    private viewContainerRef: ViewContainerRef,
     private destroyRef: DestroyRef,
   ) {
     const sortOrder: SortOrder = {property: 'ts', direction: Direction.DESC};
@@ -92,6 +142,10 @@ export class GatewayLogsComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.updateWidgetTitle();
+    if (!this.ctx.settings.isConnectorLog) {
+      this.ctx.widgetActions = [this.logFilterAction];
+      this.ctx.updateWidgetParams();
+    }
   }
 
   ngAfterViewInit(): void {
@@ -120,6 +174,10 @@ export class GatewayLogsComponent implements OnInit, AfterViewInit {
     }
     this.activeLink = this.logLinks[0];
     this.changeSubscription();
+  }
+
+  ngOnDestroy(): void {
+    this.closeLogFilterPanel();
   }
 
   private updateWidgetTitle(): void {
@@ -161,7 +219,76 @@ export class GatewayLogsComponent implements OnInit, AfterViewInit {
       if (this.activeLink.filterFn) {
         attrData = attrData.filter(data => this.activeLink.filterFn(data));
       }
-      this.dataSource.data = attrData;
+      this.allLogs = attrData;
+      this.applyLogLevelFilter();
+    }
+  }
+
+  private get logFilterDisplayValue(): string {
+    return this.selectedLogLevel === 'ALL'
+      ? this.translate.instant('gateway.logs.log-filter')
+      : `${this.translate.instant('gateway.logs.filter')}: ${this.selectedLogLevel}`;
+  }
+
+  private toggleLogFilterPanel($event: Event): void {
+    $event?.stopPropagation();
+    const target = ($event.currentTarget || $event.target) as HTMLElement;
+    this.logLevelControl.reset(this.selectedLogLevel);
+    const config = new OverlayConfig({
+      panelClass: 'tb-filter-panel',
+      backdropClass: 'cdk-overlay-transparent-backdrop',
+      hasBackdrop: true,
+      maxHeight: '80vh',
+      height: 'min-content',
+      minWidth: ''
+    });
+    config.positionStrategy = this.overlay.position()
+      .flexibleConnectedTo(target)
+      .withPositions(DEFAULT_OVERLAY_POSITIONS);
+
+    this.logFilterOverlayRef = this.overlay.create(config);
+    this.logFilterOverlayRef.backdropClick().subscribe(() => this.closeLogFilterPanel());
+    this.logFilterOverlayRef.attach(new TemplatePortal(this.logFilterPanel, this.viewContainerRef));
+    this.resizeWindowSubscription = fromEvent(window, 'resize')
+      .subscribe(() => this.logFilterOverlayRef.updatePosition());
+  }
+
+  resetLogFilter(): void {
+    if (this.logLevelControl.value !== 'ALL') {
+      this.logLevelControl.setValue('ALL');
+      this.logLevelControl.markAsDirty();
+    }
+  }
+
+  cancelLogFilter(): void {
+    this.closeLogFilterPanel();
+  }
+
+  updateLogFilter(): void {
+    this.selectedLogLevel = this.logLevelControl.value;
+    this.logFilterAction.name = this.logFilterDisplayValue;
+    this.applyLogLevelFilter();
+    this.closeLogFilterPanel();
+  }
+
+  private closeLogFilterPanel(): void {
+    this.resizeWindowSubscription?.unsubscribe();
+    this.logFilterOverlayRef?.dispose();
+    this.logFilterOverlayRef = null;
+  }
+
+  private applyLogLevelFilter(): void {
+    this.dataSource.data = this.allLogs.filter(log => this.matchesLogLevel(log.status));
+  }
+
+  private matchesLogLevel(status: GatewayStatus): boolean {
+    switch (this.selectedLogLevel) {
+      case 'ALL':
+        return true;
+      case 'NONE':
+        return false;
+      default:
+        return status === this.selectedLogLevel;
     }
   }
 
