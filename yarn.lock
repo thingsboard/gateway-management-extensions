@@ -5785,12 +5785,12 @@ dunder-proto@^1.0.0, dunder-proto@^1.0.1:
     es-errors "^1.3.0"
     gopd "^1.2.0"
 
-"echarts@https://github.com/thingsboard/echarts/archive/5.5.2-TB.tar.gz":
-  version "5.5.2-TB"
-  resolved "https://github.com/thingsboard/echarts/archive/5.5.2-TB.tar.gz#779494c24fb5448ecaf79315bf609bb52b431df9"
+"echarts@https://github.com/thingsboard/echarts/archive/5.5.4-TB.tar.gz":
+  version "5.5.4-TB"
+  resolved "https://github.com/thingsboard/echarts/archive/5.5.4-TB.tar.gz#05955421715b5a4ceb9b9b1b503d8e2504d0501d"
   dependencies:
     tslib "2.3.0"
-    zrender "https://github.com/thingsboard/zrender/archive/5.5.0-TB.tar.gz"
+    zrender "https://github.com/thingsboard/zrender/archive/5.5.1-TB.tar.gz"
 
 ee-first@1.1.1:
   version "1.1.1"
@@ -11303,8 +11303,8 @@ zone.js@~0.15.1:
   resolved "https://registry.yarnpkg.com/zone.js/-/zone.js-0.15.1.tgz#1e109adb75f80e9e004ee8e0d4a0a52e0a336481"
   integrity sha512-XE96n56IQpJM7NAoXswY3XRLcWFW83xe0BiAOeMD7K5k5xecOeul3Qcpx6GqEeeHNkW5DWL5zOyTbEfB4eti8w==
 
-"zrender@https://github.com/thingsboard/zrender/archive/5.5.0-TB.tar.gz":
-  version "5.5.0-TB"
-  resolved "https://github.com/thingsboard/zrender/archive/5.5.0-TB.tar.gz#9605f08284436a9be86085e27f1c01b29a9923bf"
+"zrender@https://github.com/thingsboard/zrender/archive/5.5.1-TB.tar.gz":
+  version "5.5.1-TB"
+  resolved "https://github.com/thingsboard/zrender/archive/5.5.1-TB.tar.gz#30d441616d8125f78ce4de9a45033207b87d5fd9"
   dependencies:
     tslib "2.3.0"
