@@ -16,6 +16,7 @@
 
 const fse = require('fs-extra');
 const path = require('path');
+const { bundle, published } = require('./paths');
 
 let _projectRoot = null;
 
@@ -33,9 +34,9 @@ function projectRoot() {
 }
 
 function sourcePackage() {
-  return path.join(projectRoot(), 'dist', 'gateway-extension', 'system', 'gateway-management-extension.js');
+  return path.join(projectRoot(), ...bundle);
 }
 
 function targetPackage() {
-  return path.join(projectRoot(), 'target', 'generated-resources', 'gateway-management-extension.js');
+  return path.join(projectRoot(), ...published);
 }

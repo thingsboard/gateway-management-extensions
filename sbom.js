@@ -19,22 +19,29 @@ const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
 
-const BUNDLE_DIR = path.join(__dirname, 'dist', 'gateway-extension', 'system');
-const BUNDLE = path.join(BUNDLE_DIR, 'gateway-management-extension.js');
-const OUTPUT = path.join(__dirname, 'target', 'generated-resources', 'gateway-management-extension.cdx.json');
+const paths = require('./paths');
+
+const BUNDLE = path.join(__dirname, ...paths.bundle);
+const BUNDLE_DIR = path.dirname(BUNDLE);
+const OUTPUT = path.join(__dirname, ...paths.published).replace(/\.js$/, '.cdx.json');
 const SUPPLIER = { name: 'ThingsBoard, Inc.', url: ['https://thingsboard.io'] };
 
 const bom = JSON.parse(fs.readFileSync(path.join(__dirname, 'target', 'sbom', 'npm.cdx.json'), 'utf8'));
 const packagePath = component => component.properties?.find(property => property.name === 'cdx:npm:package:path')?.value;
 const bundledDirs = new Set(bundledPackageDirs());
-const components = bom.components.filter(component => bundledDirs.has(packagePath(component)));
+const components = bom.components
+  .filter(component => bundledDirs.has(packagePath(component)))
+  .map(({ scope, ...component }) => ({
+    ...component,
+    properties: component.properties?.filter(property => property.name !== 'cdx:npm:package:development')
+  }));
 const missing = [...bundledDirs].filter(dir => !components.some(component => packagePath(component) === dir));
 if (missing.length > 0) {
   throw new Error(`The bundle contains packages that cyclonedx-npm did not report: ${missing.join(', ')}`);
 }
 
-const commit = git('rev-parse', 'HEAD');
-const version = git('status', '--porcelain', '--untracked-files=no') ? `${commit}-dirty` : commit;
+const commit = sourceCommit();
+const version = git('status', '--porcelain') ? `${commit}-dirty` : commit;
 const npmRoot = bom.metadata.component;
 const npmRootRef = npmRoot['bom-ref'];
 const rootRef = `pkg:github/thingsboard/gateway-management-extensions@${version}`;
@@ -82,6 +89,19 @@ function* bundledPackageDirs() {
       yield path.relative(__dirname, path.resolve(BUNDLE_DIR, dir)).split(path.sep).join('/');
     }
   }
+}
+
+function sourceCommit() {
+  let toplevel;
+  try {
+    toplevel = fs.realpathSync(git('rev-parse', '--show-toplevel'));
+  } catch {
+    toplevel = null;
+  }
+  if (toplevel !== fs.realpathSync(__dirname)) {
+    throw new Error(`${__dirname} is not a git checkout of gateway-management-extensions. The SBOM records the source commit, so build from a clone of the repository.`);
+  }
+  return git('rev-parse', 'HEAD');
 }
 
 function git(...args) {
