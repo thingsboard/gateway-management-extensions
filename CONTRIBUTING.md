@@ -135,7 +135,15 @@ matching dist branch:
 yarn install && yarn build
 # copy target/generated-resources/gateway-management-extension.js
 # to resources/gateway-management-extension.js in the dist repository
+# copy target/generated-resources/gateway-management-extension.cdx.json
+# to sbom/gateway-management-extension.cdx.json in the dist repository
 ```
+
+The `.cdx.json` file is the SBOM of the build. It records the source commit
+and the hash of the `.js`, so always copy the two files together, from a build
+of a clean checkout. With uncommitted changes, its version ends in `-dirty`.
+Never put the SBOM in `resources/`: ThingsBoard syncs the dist repository at
+runtime and loads every file in `resources/` as a JS module.
 
 The two builds are not interchangeable. Never publish a `release/4.4` build to
 `rc-lts`, or a `master` build to `rc`.
