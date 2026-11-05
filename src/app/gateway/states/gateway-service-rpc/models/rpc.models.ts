@@ -100,6 +100,22 @@ export const SNMPMethodsTranslations = new Map<SNMPMethods, string>([
   [SNMPMethods.WALKS, 'gateway.rpc.walk']
 ]);
 
+export enum SNMPMappingValueTypes {
+  INTEGER = 'INTEGER',
+  COUNTER32 = 'COUNTER32',
+  COUNTER64 = 'COUNTER64',
+  GAUGE32 = 'GAUGE32',
+  TIMETICKS = 'TIMETICKS',
+  OCTETSTRING = 'OCTETSTRING',
+  IPADDRESS = 'IPADDRESS'
+}
+
+export interface SNMPMultisetMapping {
+  oid: string;
+  type: SNMPMappingValueTypes;
+  value: string;
+}
+
 export enum SocketEncodings {
   UTF_8 = 'utf-8'
 }
@@ -136,7 +152,6 @@ export interface RPCTemplateConfigSocket {
   methodRPC: string;
   methodProcessing: SocketMethodProcessings;
   encoding: SocketEncodings;
-  withResponse: boolean;
 }
 
 export interface RPCTemplateConfigOPC {

@@ -97,7 +97,6 @@ export class DeviceDataKeysPanelComponent extends PageComponent implements OnIni
       dataKeyFormGroup = this.fb.group({
         methodRPC: ['', [Validators.required]],
         encoding: [SocketEncoding.UTF16, [Validators.required]],
-        withResponse: [true]
       });
     } else if (this.keysType === SocketValueKey.ATTRIBUTES_UPDATES) {
       dataKeyFormGroup = this.fb.group({
@@ -152,7 +151,6 @@ export class DeviceDataKeysPanelComponent extends PageComponent implements OnIni
         dataKeyFormGroup = this.fb.group({
           methodRPC: [rpcKeyData.methodRPC, [Validators.required]],
           encoding: [rpcKeyData.encoding, [Validators.required]],
-          withResponse: [rpcKeyData.withResponse]
         });
       } else if (this.keysType === SocketValueKey.ATTRIBUTES_REQUESTS) {
         const attributeRequestsKeyData = keyData as DeviceAttributesRequests;

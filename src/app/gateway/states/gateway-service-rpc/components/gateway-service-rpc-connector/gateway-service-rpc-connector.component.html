@@ -36,7 +36,7 @@
         <mat-form-field appearance="outline">
           <mat-label>{{ 'gateway.rpc.requestTimeout' | translate }}</mat-label>
           <input matInput formControlName="requestTimeout" type="number"
-                 min="10" step="1" placeholder="1000"/>
+                 min="1" step="1" placeholder="10"/>
         </mat-form-field>
         <div class="flex flex-1 flex-row gap-2.5">
           <mat-form-field appearance="outline" class="flex-1">
@@ -79,9 +79,6 @@
             }
           </mat-select>
         </mat-form-field>
-        <mat-slide-toggle class="mat-slide" formControlName="withResponse">
-          {{ 'gateway.rpc.withResponse' | translate }}
-        </mat-slide-toggle>
       }
       @case (ConnectorType.CAN) {
         <mat-form-field appearance="outline">
@@ -157,9 +154,6 @@
           <mat-label>{{ 'gateway.rpc.valueExpression' | translate }}</mat-label>
           <input matInput formControlName="valueExpression" placeholder="${params}"/>
         </mat-form-field>
-        <mat-slide-toggle class="mat-slide margin" formControlName="withResponse">
-          {{ 'gateway.rpc.withResponse' | translate }}
-        </mat-slide-toggle>
       }
       @case (ConnectorType.XMPP) {
         <mat-form-field appearance="outline">
@@ -170,9 +164,6 @@
           <mat-label>{{ 'gateway.rpc.valueExpression' | translate }}</mat-label>
           <input matInput formControlName="valueExpression" placeholder="${params}"/>
         </mat-form-field>
-        <mat-slide-toggle class="mat-slide margin" formControlName="withResponse">
-          {{ 'gateway.rpc.withResponse' | translate }}
-        </mat-slide-toggle>
       }
       @case (ConnectorType.SNMP) {
         <mat-form-field appearance="outline">
@@ -189,9 +180,50 @@
             }
           </mat-select>
         </mat-form-field>
-        <mat-slide-toggle class="mat-slide margin" formControlName="withResponse">
-          {{ 'gateway.rpc.withResponse' | translate }}
-        </mat-slide-toggle>
+        @if (commandForm.get('method').value === SNMPMethods.MULTISET) {
+          <fieldset class="fields flex flex-col gap-2.5 border" formArrayName="mappings">
+            <span class="fields-label">{{ 'gateway.rpc.mappings' | translate }}*</span>
+            @if (getFormArrayControls('mappings').length) {
+              <div class="flex flex-col gap-2.5 border">
+                <div class="flex flex-row items-center justify-center gap-2.5">
+                  <span class="title flex-1">{{ 'gateway.rpc.oid' | translate }}</span>
+                  <span class="title flex-1">{{ 'gateway.rpc.type' | translate }}</span>
+                  <span class="title flex-1">{{ 'gateway.rpc.value' | translate }}</span>
+                  <span style="width: 30px"></span>
+                </div>
+                <mat-divider></mat-divider>
+                @for (control of getFormArrayControls('mappings'); track control; let i = $index) {
+                  <div class="flex flex-row items-center justify-center gap-2.5">
+                    <ng-container [formGroupName]="i">
+                      <mat-form-field appearance="outline" class="flex-1" subscriptSizing="dynamic">
+                        <input matInput formControlName="oid" placeholder="1.3.6.1.2.1.1.4.0"/>
+                      </mat-form-field>
+                      <mat-form-field appearance="outline" class="flex-1" subscriptSizing="dynamic">
+                        <mat-select formControlName="type">
+                          @for (type of sNMPMappingValueTypes; track type) {
+                            <mat-option [value]="type">{{ type }}</mat-option>
+                          }
+                        </mat-select>
+                      </mat-form-field>
+                      <mat-form-field appearance="outline" class="flex-1" subscriptSizing="dynamic">
+                        <input matInput formControlName="value" placeholder="${params.contact}"/>
+                      </mat-form-field>
+                      <mat-icon style="cursor:pointer; width: 30px"
+                        (click)="removeSNMPMapping(i)"
+                        matTooltip="{{ 'gateway.rpc.remove' | translate }}">delete
+                      </mat-icon>
+                    </ng-container>
+                  </div>
+                }
+              </div>
+            }
+            <button mat-raised-button
+                    class="self-start"
+                    (click)="addSNMPMapping()">
+              {{ 'gateway.rpc.add-mapping' | translate }}
+            </button>
+          </fieldset>
+        } @else {
         <fieldset class="fields flex flex-col gap-2.5 border" formArrayName="oid">
           <span class="fields-label">{{ 'gateway.rpc.oids' | translate }}*</span>
           @for (control of getFormArrayControls('oid'); track control; let i = $index) {
@@ -213,6 +245,7 @@
             {{ 'gateway.rpc.add-oid' | translate }}
           </button>
         </fieldset>
+        }
       }
       @case (ConnectorType.REST) {
         <mat-form-field appearance="outline">
