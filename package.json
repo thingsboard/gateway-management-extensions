@@ -66,6 +66,7 @@
     "eslint-plugin-tailwindcss": "^3.17.5",
     "ng-packagr": "18.2.1",
     "ngrx-store-freeze": "^0.2.4",
+    "normalize-package-data": "8.0.0",
     "packageurl-js": "2.0.1",
     "patch-package": "^8.0.0",
     "postcss": "^8.4.47",

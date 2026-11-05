@@ -18,22 +18,22 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
-const { Builders, Factories, Utils } = require('@cyclonedx/cyclonedx-library').Contrib.FromNodePackageJson;
-const { License } = require('@cyclonedx/cyclonedx-library').Contrib;
-const { Enums, Models, Serialize, Spec } = require('@cyclonedx/cyclonedx-library');
+const { Contrib, Enums, Models, Serialize, Spec } = require('@cyclonedx/cyclonedx-library');
 const { PackageURL, PurlQualifierNames } = require('packageurl-js');
 const spdxExpressionParse = require('spdx-expression-parse');
 const lockfile = require('@yarnpkg/lockfile');
+const normalizePackageData = require('normalize-package-data');
 
 const paths = require('./paths');
 
 const BUNDLE = path.join(__dirname, ...paths.bundle);
-const BUNDLE_DIR = path.dirname(BUNDLE);
 const OUTPUT = path.join(__dirname, ...paths.published).replace(/\.js$/, '.cdx.json');
 const REPO = 'thingsboard/gateway-management-extensions';
+const DEFAULT_REGISTRY = /^https?:\/\/registry\.(?:npmjs\.org|yarnpkg\.com)(?:\/|$)/;
 
+const { Builders, Factories, Utils } = Contrib.FromNodePackageJson;
 const componentBuilder = new Builders.ComponentBuilder(
-  new Factories.ExternalReferenceFactory(), new License.Factories.LicenseFactory(spdxExpressionParse));
+  new Factories.ExternalReferenceFactory(), new Contrib.License.Factories.LicenseFactory(spdxExpressionParse));
 const locked = lockedPackages();
 
 const commit = sourceCommit();
@@ -45,12 +45,13 @@ bom.metadata.supplier = supplier;
 bom.metadata.tools.components.add(componentBuilder.makeComponent(require('@cyclonedx/cyclonedx-library/package.json')));
 bom.metadata.properties.add(new Models.Property('cdx:reproducible', 'true'));
 
+const rootManifest = readManifest(__dirname);
 const rootPurl = `pkg:github/${REPO}@${version}`;
-const root = new Models.Component(Enums.ComponentType.Library, readManifest(__dirname).name, {
+const root = new Models.Component(Enums.ComponentType.Library, rootManifest.name, {
   bomRef: rootPurl,
   version,
   supplier,
-  description: readManifest(__dirname).description,
+  description: rootManifest.description,
   purl: rootPurl,
   licenses: new Models.LicenseRepository([new Models.SpdxLicense('Apache-2.0')]),
   externalReferences: new Models.ExternalReferenceRepository([
@@ -58,17 +59,18 @@ const root = new Models.Component(Enums.ComponentType.Library, readManifest(__di
   ])
 });
 const bundle = fs.readFileSync(BUNDLE);
-root.hashes.set(Enums.HashAlgorithm['SHA-256'], crypto.createHash('sha256').update(bundle).digest('hex'));
-root.hashes.set(Enums.HashAlgorithm['SHA-512'], crypto.createHash('sha512').update(bundle).digest('hex'));
+for (const alg of ['SHA-256', 'SHA-512']) {
+  root.hashes.set(alg, crypto.createHash(alg.replace('-', '')).update(bundle).digest('hex'));
+}
 bom.metadata.component = root;
 
-// One component per package directory that Rollup actually put into the bundle.
 const components = new Map();
 for (const dir of new Set(bundledPackageDirs())) {
-  components.set(dir, makeComponent(dir));
+  const component = makeComponent(dir);
+  components.set(dir, component);
+  bom.components.add(component);
 }
 for (const [dir, component] of components) {
-  bom.components.add(component);
   for (const name of Object.keys(readManifest(dir).dependencies || {})) {
     const target = components.get(resolvePackageDir(dir, name));
     if (target) {
@@ -76,21 +78,16 @@ for (const [dir, component] of components) {
     }
   }
 }
-const rootManifest = readManifest(__dirname);
+const byRef = new Map([...components.values()].map(component => [component.bomRef, component]));
 const rootDeps = Object.keys({ ...rootManifest.dependencies, ...rootManifest.devDependencies })
-  .map(name => components.get(resolvePackageDir(__dirname, name)))
+  .map(name => components.get(path.join(__dirname, 'node_modules', name)))
   .filter(Boolean);
-const reachable = new Set();
-const walk = component => {
-  if (!reachable.has(component)) {
-    reachable.add(component);
-    component.dependencies.forEach(ref => walk([...components.values()].find(c => c.bomRef === ref)));
-  }
-};
-rootDeps.forEach(walk);
-// Bundled packages that no direct dependency leads to still hang off the root, so nothing is orphaned.
-[...rootDeps, ...[...components.values()].filter(c => !reachable.has(c))]
-  .forEach(component => root.dependencies.add(component.bomRef));
+const reachable = new Set(rootDeps);
+for (const component of reachable) {
+  component.dependencies.forEach(ref => reachable.add(byRef.get(ref)));
+}
+const orphans = [...components.values()].filter(component => !reachable.has(component));
+[...rootDeps, ...orphans].forEach(component => root.dependencies.add(component.bomRef));
 
 const serializer = new Serialize.JsonSerializer(new Serialize.JSON.Normalize.Factory(Spec.Spec1dot6));
 fs.mkdirSync(path.dirname(OUTPUT), { recursive: true });
@@ -98,22 +95,26 @@ fs.writeFileSync(OUTPUT, `${serializer.serialize(bom, { sortLists: true, space: 
 console.log(`Wrote ${OUTPUT} for ${version}: ${[...components.values()].map(c => c.purl).join(', ')}`);
 
 function makeComponent(dir) {
+  const packagePath = path.relative(__dirname, dir).split(path.sep).join('/');
   const manifest = readManifest(dir);
+  const declaredVersion = manifest.version;
+  normalizePackageData(manifest);
+  manifest.version = declaredVersion;
   const component = componentBuilder.makeComponent(manifest);
   if (!component) {
-    throw new Error(`Cannot build an SBOM component from ${path.relative(__dirname, dir)}/package.json`);
+    throw new Error(`Cannot build an SBOM component from ${packagePath}/package.json`);
   }
+  component.licenses.forEach(license => {
+    license.acknowledgement = Enums.LicenseAcknowledgement.Declared;
+  });
+  component.properties.add(new Models.Property('cdx:npm:package:path', packagePath));
   const lock = locked.get(`${manifest.name}@${manifest.version}`);
   if (!lock) {
     throw new Error(`The bundle contains ${manifest.name}@${manifest.version}, which yarn.lock does not list`);
   }
-  const [namespace, name] = manifest.name.startsWith('@') ? manifest.name.split('/') : [undefined, manifest.name];
-  const qualifiers = {};
   const resolved = lock.resolved.replace(/#.*$/, '');
-  if (!Utils.defaultRegistryMatcher.test(resolved) && !/^https:\/\/registry\.yarnpkg\.com\//.test(resolved)) {
-    qualifiers[PurlQualifierNames.DownloadUrl] = resolved;
-  }
-  component.purl = new PackageURL('npm', namespace, name, manifest.version, qualifiers, undefined).toString();
+  const qualifiers = DEFAULT_REGISTRY.test(resolved) ? {} : { [PurlQualifierNames.DownloadUrl]: resolved };
+  component.purl = new PackageURL('npm', component.group, component.name, manifest.version, qualifiers, undefined).toString();
   component.bomRef.value = component.purl;
   const dist = new Models.ExternalReference(resolved, Enums.ExternalReferenceType.Distribution,
     { comment: 'as detected from yarn.lock property "resolved"' });
@@ -142,12 +143,11 @@ function* bundledPackageDirs() {
   for (const source of map.sources) {
     const dir = /^(.*node_modules\/(?:@[^/]+\/)?[^/]+)\//.exec(source)?.[1];
     if (dir) {
-      yield path.resolve(BUNDLE_DIR, dir);
+      yield path.resolve(path.dirname(BUNDLE), dir);
     }
   }
 }
 
-// Node's lookup: the nearest node_modules/<name> from `from` upwards.
 function resolvePackageDir(from, name) {
   for (let dir = from; ; dir = path.dirname(dir)) {
     const candidate = path.join(dir, 'node_modules', name);
