@@ -92,13 +92,13 @@ function* bundledPackageDirs() {
 }
 
 function sourceCommit() {
-  let toplevel;
+  let cdup;
   try {
-    toplevel = fs.realpathSync(git('rev-parse', '--show-toplevel'));
+    cdup = git('rev-parse', '--show-cdup');
   } catch {
-    toplevel = null;
+    cdup = null;
   }
-  if (toplevel !== fs.realpathSync(__dirname)) {
+  if (cdup !== '') {
     throw new Error(`${__dirname} is not a git checkout of gateway-management-extensions. The SBOM records the source commit, so build from a clone of the repository.`);
   }
   return git('rev-parse', 'HEAD');
