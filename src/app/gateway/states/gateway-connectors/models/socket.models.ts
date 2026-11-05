@@ -50,7 +50,6 @@ export interface DeviceDataKey {
 
 export interface DeviceRpcMethod {
   methodRPC: string;
-  withResponse: boolean;
   encoding: SocketEncoding;
 }
 

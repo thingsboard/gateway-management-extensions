@@ -36,6 +36,8 @@ import {
   RPCTemplateConfig,
   SNMPMethods,
   SNMPMethodsTranslations,
+  SNMPMappingValueTypes,
+  SNMPMultisetMapping,
 } from '../../models/public-api';
 import {
   ConnectorType,
@@ -89,6 +91,8 @@ export class GatewayServiceRPCConnectorComponent implements OnInit, OnDestroy, C
   bLEMethods = Object.values(BLEMethods) as BLEMethods[];
   cANByteOrders = Object.values(CANByteOrders) as CANByteOrders[];
   sNMPMethods = Object.values(SNMPMethods) as SNMPMethods[];
+  sNMPMappingValueTypes = Object.values(SNMPMappingValueTypes) as SNMPMappingValueTypes[];
+  SNMPMethods = SNMPMethods;
   hTTPMethods = Object.values(HTTPMethods) as HTTPMethods[];
   HTTPMethods = HTTPMethods;
 
@@ -112,6 +116,9 @@ export class GatewayServiceRPCConnectorComponent implements OnInit, OnDestroy, C
 
   ngOnInit() {
     this.commandForm = this.connectorParamsFormGroupByType(this.connectorType);
+    if (this.connectorType === ConnectorType.SNMP) {
+      this.observeSNMPMethodChanges();
+    }
     this.observeFormChanges();
   }
 
@@ -128,7 +135,7 @@ export class GatewayServiceRPCConnectorComponent implements OnInit, OnDestroy, C
         formGroup = this.fb.group({
           method: [null, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
           requestType: [null, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-          requestTimeout: [null, [Validators.required, Validators.min(10), Validators.pattern(this.numbersOnlyPattern)]],
+          requestTimeout: [null, [Validators.required, Validators.min(1), Validators.pattern(this.numbersOnlyPattern)]],
           objectType: [null, []],
           identifier: [null, [Validators.required, Validators.min(1), Validators.pattern(this.numbersOnlyPattern)]],
           propertyId: [null, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]]
@@ -139,7 +146,6 @@ export class GatewayServiceRPCConnectorComponent implements OnInit, OnDestroy, C
           methodRPC: [null, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
           characteristicUUID: ["00002A00-0000-1000-8000-00805F9B34FB", [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
           methodProcessing: [null, [Validators.required]],
-          withResponse: [false, []]
         })
         break;
       case ConnectorType.CAN:
@@ -167,22 +173,20 @@ export class GatewayServiceRPCConnectorComponent implements OnInit, OnDestroy, C
         formGroup = this.fb.group({
           methodRPC: [null, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
           valueExpression: [null, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-          withResponse: [false, []]
         })
         break;
       case ConnectorType.XMPP:
         formGroup = this.fb.group({
           methodRPC: [null, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
           valueExpression: [null, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-          withResponse: [false, []]
         })
         break;
       case ConnectorType.SNMP:
         formGroup = this.fb.group({
           requestFilter: [null, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
           method: [null, [Validators.required]],
-          withResponse: [false, []],
-          oid: this.fb.array([], [Validators.required])
+          oid: this.fb.array([], [Validators.required]),
+          mappings: this.fb.array([], [Validators.required])
         })
         break;
       case ConnectorType.REST:
@@ -230,6 +234,22 @@ export class GatewayServiceRPCConnectorComponent implements OnInit, OnDestroy, C
   removeSNMPoid(index: number) {
     const oidsFA = this.commandForm.get('oid') as FormArray;
     oidsFA.removeAt(index);
+  }
+
+  addSNMPMapping(value: SNMPMultisetMapping = {oid: null, type: SNMPMappingValueTypes.OCTETSTRING, value: null}) {
+    const mappingsFA = this.commandForm.get('mappings') as FormArray;
+    if (mappingsFA) {
+      mappingsFA.push(this.fb.group({
+        oid: [value.oid, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
+        type: [value.type ?? SNMPMappingValueTypes.OCTETSTRING, [Validators.required]],
+        value: [value.value, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]]
+      }), {emitEvent: false});
+    }
+  }
+
+  removeSNMPMapping(index: number) {
+    const mappingsFA = this.commandForm.get('mappings') as FormArray;
+    mappingsFA.removeAt(index);
   }
 
   addHTTPHeader(value: { headerName: string, value: string } = {headerName: null, value: null}) {
@@ -296,10 +316,15 @@ export class GatewayServiceRPCConnectorComponent implements OnInit, OnDestroy, C
       switch (this.connectorType) {
         case ConnectorType.SNMP:
           this.clearFromArrayByName("oid");
-          value.oid.forEach(value => {
+          this.clearFromArrayByName("mappings");
+          value.oid?.forEach(value => {
             this.addSNMPoid(value)
           })
+          value.mappings?.forEach(mapping => {
+            this.addSNMPMapping(mapping)
+          })
           delete value.oid;
+          delete value.mappings;
           break;
         case ConnectorType.REQUEST:
           this.clearFromArrayByName("httpHeaders");
@@ -317,6 +342,26 @@ export class GatewayServiceRPCConnectorComponent implements OnInit, OnDestroy, C
           break;
       }
       this.commandForm.patchValue(value, {onlySelf: false});
+    }
+  }
+
+  private observeSNMPMethodChanges(): void {
+    this.toggleSNMPMethodFields(this.commandForm.get('method').value);
+    this.commandForm.get('method').valueChanges.pipe(takeUntil(this.destroy$)).subscribe(method => {
+      this.toggleSNMPMethodFields(method);
+    });
+  }
+
+  private toggleSNMPMethodFields(method: SNMPMethods): void {
+    const isMultiset = method === SNMPMethods.MULTISET;
+    const oidControl = this.commandForm.get('oid');
+    const mappingsControl = this.commandForm.get('mappings');
+    if (isMultiset) {
+      oidControl.disable({emitEvent: false});
+      mappingsControl.enable({emitEvent: false});
+    } else {
+      mappingsControl.disable({emitEvent: false});
+      oidControl.enable({emitEvent: false});
     }
   }
 

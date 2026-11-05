@@ -171,14 +171,6 @@
                             </mat-form-field>
                           </div>
                         </div>
-                        <div class="tb-form-row">
-                          <mat-slide-toggle class="mat-slide" (click)="$event.stopPropagation()"
-                            formControlName="withResponse">
-                            <mat-label tb-hint-tooltip-icon="{{ 'gateway.hints.socket.with-response' | translate }}">
-                              {{ 'gateway.rpc.withResponse' | translate }}
-                            </mat-label>
-                          </mat-slide-toggle>
-                        </div>
                       </div>
                     }
                     @if (keysType === SocketValueKey.ATTRIBUTES_REQUESTS) {
