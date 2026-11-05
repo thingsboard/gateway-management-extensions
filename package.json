@@ -6,7 +6,8 @@
   "scripts": {
     "ng": "ng",
     "start": "yarn run build:scss && node ./node_modules/@angular/cli/bin/ng serve",
-    "build": "yarn license-check && yarn run build:scss && node ./node_modules/@angular/cli/bin/ng build && node install.js",
+    "build": "yarn license-check && yarn run build:scss && node ./node_modules/@angular/cli/bin/ng build && yarn run sbom && node install.js",
+    "sbom": "node sbom.js",
     "build:scss": "npx postcss ./src/app/scss/style.scss -o ./src/app/scss/style.comp.scss",
     "prepare": "patch-package",
     "lint": "ng lint",
@@ -15,7 +16,7 @@
     "license-remove": "license-check-and-add remove -f .license-check.json"
   },
   "engines": {
-    "node": ">=18.19.1",
+    "node": "^20.18.0 || >=22.9.0",
     "yarn": ">=1.22.22 <2",
     "npm": "Please use yarn instead of NPM to install dependencies"
   },
@@ -45,6 +46,7 @@
     "@angular/platform-browser": "18.2.6",
     "@angular/platform-browser-dynamic": "18.2.6",
     "@angular/router": "18.2.6",
+    "@cyclonedx/cyclonedx-library": "10.3.0",
     "@ngrx/store": "^18.0.2",
     "@ngx-translate/core": "^15.0.0",
     "@rollup/plugin-commonjs": "^28.0.0",
@@ -54,6 +56,7 @@
     "@typescript-eslint/eslint-plugin": "^8.11.0",
     "@typescript-eslint/parser": "^8.7.0",
     "@typescript-eslint/utils": "^8.7.0",
+    "@yarnpkg/lockfile": "1.1.0",
     "autoprefixer": "^10.4.20",
     "eslint": "~8.57.1",
     "eslint-plugin-import": "latest",
@@ -63,6 +66,8 @@
     "eslint-plugin-tailwindcss": "^3.17.5",
     "ng-packagr": "18.2.1",
     "ngrx-store-freeze": "^0.2.4",
+    "normalize-package-data": "8.0.0",
+    "packageurl-js": "2.0.1",
     "patch-package": "^8.0.0",
     "postcss": "^8.4.47",
     "postcss-cli": "^11.0.0",
@@ -71,6 +76,7 @@
     "postinstall-prepare": "^2.0.0",
     "prettier": "^2.8.3",
     "rxjs": "~7.8.1",
+    "spdx-expression-parse": "4.0.0",
     "tailwindcss": "^3.4.14",
     "thingsboard": "https://github.com/thingsboard/thingsboard-ui-types.git#release/4.2.0",
     "ts-node": "^10.9.2",

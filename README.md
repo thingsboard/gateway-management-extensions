@@ -62,3 +62,8 @@ You can find the compiled file at the following path:
 ```
 ${TB_GATEWAY_EXTENSION_DIR}/target/generated-resources/gateway-management-extension.js
 ```
+
+Its CycloneDX SBOM is written next to it:
+```
+${TB_GATEWAY_EXTENSION_DIR}/target/generated-resources/gateway-management-extension.cdx.json
+```
