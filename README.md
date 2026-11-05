@@ -68,3 +68,5 @@ yarn build
 ```
 
 The compiled file will be generated at: `target/generated-resources/gateway-management-extension.js`
+
+Its CycloneDX SBOM is generated next to it: `target/generated-resources/gateway-management-extension.cdx.json`
