@@ -20,6 +20,8 @@ env:
   DIST_REPO: ${{ vars.DIST_REPO || 'thingsboard/gateway-management-extensions-dist' }}
   ARTIFACT: target/generated-resources/gateway-management-extension.js
   DIST_FILE: resources/gateway-management-extension.js
+  SBOM: target/generated-resources/gateway-management-extension.cdx.json
+  DIST_SBOM: sbom/gateway-management-extension.cdx.json
 
 jobs:
   publish:
@@ -30,37 +32,51 @@ jobs:
       - name: Resolve target
         id: target
         run: |
-          # Source branch -> dist test branch.
+          set -euo pipefail
           case "$GITHUB_REF_NAME" in
             master) branch=rc-lts ;;
             release/4.4) branch=rc ;;
             *) echo "::error::No dist test branch is mapped to $GITHUB_REF_NAME"; exit 1 ;;
           esac
+          head=$(git ls-remote --exit-code "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git" "refs/heads/$GITHUB_REF_NAME" | cut -f1)
+          if [ "$head" != "$GITHUB_SHA" ]; then
+            echo "Superseded: $GITHUB_REF_NAME is already at $head"
+            superseded=true
+          else
+            superseded=false
+          fi
           {
             echo "branch=$branch"
+            echo "superseded=$superseded"
             echo "dist-owner=${DIST_REPO%%/*}"
             echo "dist-name=${DIST_REPO#*/}"
           } >> "$GITHUB_OUTPUT"
 
-      - uses: actions/checkout@v7
+      - if: steps.target.outputs.superseded == 'false'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
-      - uses: actions/setup-node@v7
+      - if: steps.target.outputs.superseded == 'false'
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 20.20.0
           cache: yarn
 
       - name: Build
+        if: steps.target.outputs.superseded == 'false'
         run: |
           yarn install --frozen-lockfile
           yarn build
-          if [ ! -s "$ARTIFACT" ]; then
-            echo "::error::Build artifact $ARTIFACT is missing or empty"
-            exit 1
-          fi
+          for file in "$ARTIFACT" "$SBOM"; do
+            if [ ! -s "$file" ]; then
+              echo "::error::Build output $file is missing or empty"
+              exit 1
+            fi
+          done
 
-      - uses: actions/create-github-app-token@v3
+      - if: steps.target.outputs.superseded == 'false'
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         id: app-token
         with:
           client-id: ${{ vars.DIST_APP_CLIENT_ID }}
@@ -69,7 +85,8 @@ jobs:
           repositories: ${{ steps.target.outputs.dist-name }}
           permission-contents: write
 
-      - uses: actions/checkout@v7
+      - if: steps.target.outputs.superseded == 'false'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: ${{ env.DIST_REPO }}
           ref: ${{ steps.target.outputs.branch }}
@@ -78,22 +95,19 @@ jobs:
           fetch-depth: 1
 
       - name: Publish
+        if: steps.target.outputs.superseded == 'false'
         working-directory: .dist-repo
         env:
           TARGET: ${{ steps.target.outputs.branch }}
         run: |
           set -euo pipefail
-          head=$(git ls-remote --exit-code "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git" "refs/heads/$GITHUB_REF_NAME" | cut -f1)
-          if [ "$head" != "$GITHUB_SHA" ]; then
-            echo "Superseded: $GITHUB_REF_NAME is already at $head"
-            exit 0
-          fi
-
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           for attempt in 1 2 3; do
+            mkdir -p "$(dirname "$DIST_SBOM")"
             cp "../$ARTIFACT" "$DIST_FILE"
-            git add -- "$DIST_FILE"
+            cp "../$SBOM" "$DIST_SBOM"
+            git add -- "$DIST_FILE" "$DIST_SBOM"
             if git diff --cached --quiet; then
               echo "No changes: $TARGET already has this build"
               exit 0

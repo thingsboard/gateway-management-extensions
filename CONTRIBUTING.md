@@ -127,26 +127,27 @@ Each source branch has its own working branch there:
 | `master` | `rc-lts` | `release/4.2`, `release/4.2.0`, `release/4.3.0` |
 | `release/4.4` | `rc` | `release/4.4.0` |
 
-After a pull request is merged here (and merged forward into `release/4.4`),
-build each affected branch and open a pull request with the result against the
-matching dist branch:
+Publishing to the dist branch is automatic. On every push to `master` or
+`release/4.4`, the [Publish build to dist](.github/workflows/publish-dist.yml)
+workflow builds that commit and pushes it straight to the matching dist branch:
 
-```bash
-yarn install && yarn build
-# copy target/generated-resources/gateway-management-extension.js
-# to resources/gateway-management-extension.js in the dist repository
-# copy target/generated-resources/gateway-management-extension.cdx.json
-# to sbom/gateway-management-extension.cdx.json in the dist repository
-```
+- `target/generated-resources/gateway-management-extension.js` to
+  `resources/gateway-management-extension.js`
+- `target/generated-resources/gateway-management-extension.cdx.json` to
+  `sbom/gateway-management-extension.cdx.json`
+
+Do not build by hand or open pull requests against `rc-lts` or `rc`: they would
+race the workflow's push to the same branch. Only promotion from `rc-lts` / `rc`
+to the `release/*` branches is manual, and it is done in the dist repository.
 
 The `.cdx.json` file is the SBOM of the build. It records the source commit
-and the hash of the `.js`, so always copy the two files together, from a build
-of a clean checkout. With uncommitted changes, its version ends in `-dirty`.
-Never put the SBOM in `resources/`: ThingsBoard syncs the dist repository at
-runtime and loads every file in `resources/` as a JS module.
+and the hash of the `.js`, so the two files are always published together, from
+a build of a clean checkout. Never put the SBOM in `resources/`: ThingsBoard
+syncs the dist repository at runtime and loads every file in `resources/` as a
+JS module.
 
-The two builds are not interchangeable. Never publish a `release/4.4` build to
-`rc-lts`, or a `master` build to `rc`.
+The two builds are not interchangeable. A `release/4.4` build never goes to
+`rc-lts`, and a `master` build never goes to `rc`.
 
 The dist repository's `CONTRIBUTING.md` describes the rest: how to check a
 build, the dashboard differences between the two lines, and how changes move
