@@ -28,7 +28,8 @@ import {
   noLeadTrailSpacesRegex,
   getDefaultConfig,
   ReportStrategyVersionPipe,
-  ConnectorsTypesByVersion
+  ConnectorsTypesByVersion,
+  GatewayConnector,
 } from '../../../../shared/public-api';
 import {
   AddConnectorConfigData,
@@ -39,7 +40,12 @@ import { Subject } from 'rxjs';
 import { AppState } from '@core/public-api';
 import { takeUntil, tap } from 'rxjs/operators';
 import { LatestVersionConfigPipe } from '../../pipes/public-api';
-import { GatewayConnectorVersionMappingUtil } from '../../utils/public-api';
+import {
+  findConnectorsOnPort,
+  GatewayConnectorVersionMappingUtil,
+  getServerPort,
+  withServerPort,
+} from '../../utils/public-api';
 
 @Component({
   selector: 'tb-add-connector-dialog',
@@ -65,12 +71,14 @@ export class AddConnectorDialogComponent
 
   submitted = false;
 
+  readonly isCopy: boolean;
+
   private destroy$ = new Subject<void>();
 
   constructor(protected store: Store<AppState>,
               protected router: Router,
               @Inject(MAT_DIALOG_DATA) public data: AddConnectorConfigData,
-              public dialogRef: MatDialogRef<AddConnectorDialogComponent, CreatedConnectorConfigData>,
+              public dialogRef: MatDialogRef<AddConnectorDialogComponent, CreatedConnectorConfigData | GatewayConnector>,
               private fb: FormBuilder,
               private isLatestVersionConfig: LatestVersionConfigPipe
   ) {
@@ -85,6 +93,18 @@ export class AddConnectorDialogComponent
       class: ['', []],
       key: ['auto', []],
     });
+    this.isCopy = !!data.connectorToCopy;
+    if (this.isCopy) {
+      this.prefillFromCopy(data.connectorToCopy);
+    }
+  }
+
+  get connectorsOnSamePort(): string[] {
+    const portControl = this.connectorForm.get('port');
+    if (!portControl) {
+      return [];
+    }
+    return findConnectorsOnPort(portControl.value, this.data.dataSourceData.map(({ value }) => value));
   }
 
   ngOnInit(): void {
@@ -107,6 +127,12 @@ export class AddConnectorDialogComponent
 
   add(): void {
     this.submitted = true;
+    if (this.isCopy) {
+      if (this.connectorForm.valid) {
+        this.dialogRef.close(this.buildCopy());
+      }
+      return;
+    }
     const value = this.connectorForm.getRawValue();
     if (value.useDefaults) {
       const defaultConfig = getDefaultConfig(value.type);
@@ -124,6 +150,28 @@ export class AddConnectorDialogComponent
     } else if (this.connectorForm.valid) {
       this.dialogRef.close(value);
     }
+  }
+
+  private prefillFromCopy(copy: GatewayConnector): void {
+    this.connectorForm.patchValue({
+      type: copy.type,
+      logLevel: copy.logLevel,
+      useDefaults: false,
+      sendDataOnlyOnChange: copy.sendDataOnlyOnChange ?? false,
+      class: copy.class ?? '',
+      key: copy.key ?? 'auto',
+    });
+    this.connectorForm.get('type').disable();
+    const port = getServerPort(copy);
+    if (port !== undefined) {
+      this.connectorForm.addControl('port', this.fb.control(port, [Validators.required]));
+    }
+  }
+
+  private buildCopy(): GatewayConnector {
+    const { useDefaults, port, ...formValue } = this.connectorForm.getRawValue();
+    const copy = { ...this.data.connectorToCopy, ...formValue };
+    return port === undefined ? copy : withServerPort(copy, port);
   }
 
   private uniqNameRequired(): ValidatorFn {

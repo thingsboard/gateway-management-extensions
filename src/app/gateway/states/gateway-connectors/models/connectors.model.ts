@@ -21,7 +21,8 @@ import {
   ReportStrategyConfig,
   ValueType,
   MappingValueType,
-  SocketEncoding
+  SocketEncoding,
+  GatewayConnector
 } from '../../../shared/models/public-api';
 import {
   ConverterConnectorMapping,
@@ -65,6 +66,7 @@ export interface GatewayAttributeData extends AttributeData {
 export interface AddConnectorConfigData {
   dataSourceData: Array<any>;
   gatewayVersion: string;
+  connectorToCopy?: GatewayConnector;
 }
 
 export interface CreatedConnectorConfigData {

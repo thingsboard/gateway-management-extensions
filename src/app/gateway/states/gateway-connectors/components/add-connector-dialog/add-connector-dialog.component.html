@@ -55,6 +55,24 @@
           }
         </mat-form-field>
       </div>
+      @if (connectorForm.get('port')) {
+        <div class="tb-form-row column-xs">
+          <div class="fixed-title-width tb-required" translate>gateway.port</div>
+          <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+            <input matInput type="number" autocomplete="off" name="port" formControlName="port" placeholder="{{ 'gateway.set' | translate }}"/>
+            @let connectorsOnPort = connectorsOnSamePort;
+            @if (connectorsOnPort.length) {
+              <mat-icon matSuffix
+                        matTooltipPosition="above"
+                        matTooltipClass="tb-warning-tooltip"
+                        [matTooltip]="'gateway.connector-copy-port-in-use' | translate: { port: connectorForm.get('port').value, connectors: connectorsOnPort.join(', ') }"
+                        class="tb-warning">
+                warning
+              </mat-icon>
+            }
+          </mat-form-field>
+        </div>
+      }
       @if (connectorForm.get('type').value === connectorType.CUSTOM) {
         <div class="tb-form-row column-xs">
           <div class="fixed-title-width" translate>gateway.connectors-table-class</div>
@@ -81,7 +99,7 @@
           </mat-select>
         </mat-form-field>
       </div>
-      @if (connectorForm.get('type').value !== connectorType.GRPC && connectorForm.get('type').value !== connectorType.CUSTOM) {
+      @if (!isCopy && connectorForm.get('type').value !== connectorType.GRPC && connectorForm.get('type').value !== connectorType.CUSTOM) {
         <div
           class="tb-form-row column-xs">
           <mat-slide-toggle class="mat-slide" formControlName="useDefaults">
