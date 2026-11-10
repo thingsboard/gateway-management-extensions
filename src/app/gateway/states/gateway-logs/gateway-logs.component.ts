@@ -28,7 +28,6 @@ import {
 import { FormControl } from '@angular/forms';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { fromEvent, Subscription } from 'rxjs';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -99,10 +98,8 @@ export class GatewayLogsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private logFilterOverlayRef: OverlayRef;
 
-  private resizeWindowSubscription: Subscription;
-
   private logFilterAction: WidgetAction = {
-    name: 'gateway.logs.log-filter',
+    name: this.translate.instant('gateway.logs.log-filter'),
     show: true,
     icon: 'filter_list',
     onAction: ($event) => this.toggleLogFilterPanel($event)
@@ -142,10 +139,8 @@ export class GatewayLogsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.updateWidgetTitle();
-    if (!this.ctx.settings.isConnectorLog) {
-      this.ctx.widgetActions = [this.logFilterAction];
-      this.ctx.updateWidgetParams();
-    }
+    this.ctx.widgetActions = [this.logFilterAction];
+    this.ctx.updateWidgetParams();
   }
 
   ngAfterViewInit(): void {
@@ -232,6 +227,10 @@ export class GatewayLogsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private toggleLogFilterPanel($event: Event): void {
     $event?.stopPropagation();
+    if (this.logFilterOverlayRef) {
+      this.closeLogFilterPanel();
+      return;
+    }
     const target = ($event.currentTarget || $event.target) as HTMLElement;
     this.logLevelControl.reset(this.selectedLogLevel);
     const config = new OverlayConfig({
@@ -249,8 +248,6 @@ export class GatewayLogsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.logFilterOverlayRef = this.overlay.create(config);
     this.logFilterOverlayRef.backdropClick().subscribe(() => this.closeLogFilterPanel());
     this.logFilterOverlayRef.attach(new TemplatePortal(this.logFilterPanel, this.viewContainerRef));
-    this.resizeWindowSubscription = fromEvent(window, 'resize')
-      .subscribe(() => this.logFilterOverlayRef.updatePosition());
   }
 
   resetLogFilter(): void {
@@ -260,19 +257,15 @@ export class GatewayLogsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  cancelLogFilter(): void {
-    this.closeLogFilterPanel();
-  }
-
   updateLogFilter(): void {
     this.selectedLogLevel = this.logLevelControl.value;
     this.logFilterAction.name = this.logFilterDisplayValue;
+    this.ctx.updateWidgetParams();
     this.applyLogLevelFilter();
     this.closeLogFilterPanel();
   }
 
-  private closeLogFilterPanel(): void {
-    this.resizeWindowSubscription?.unsubscribe();
+  closeLogFilterPanel(): void {
     this.logFilterOverlayRef?.dispose();
     this.logFilterOverlayRef = null;
   }
@@ -282,14 +275,7 @@ export class GatewayLogsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private matchesLogLevel(status: GatewayStatus): boolean {
-    switch (this.selectedLogLevel) {
-      case 'ALL':
-        return true;
-      case 'NONE':
-        return false;
-      default:
-        return status === this.selectedLogLevel;
-    }
+    return this.selectedLogLevel === 'ALL' || status === this.selectedLogLevel;
   }
 
   onTabChanged(link: LogLink) {
@@ -332,6 +318,7 @@ export class GatewayLogsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.logsSubscription = null;
     }
     this.dataSource.data = [];
+    this.allLogs = [];
     const link = this.activeLink;
     const datasource = {
       ...this.ctx.defaultSubscription.options.datasources[0],
