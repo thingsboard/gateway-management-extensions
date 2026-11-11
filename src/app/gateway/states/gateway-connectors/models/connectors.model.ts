@@ -148,6 +148,7 @@ export interface MappingInfo {
   value: {[key: string]: any};
   buttonTitle: string;
   withReportStrategy: boolean;
+  withRpcResponse?: boolean;
 }
 
 export type ConnectorMapping = DeviceConnectorMapping | RequestMappingValue | ConverterConnectorMapping;
@@ -344,6 +345,7 @@ export interface DeviceConfigInfo {
   value: DevicesConfigMapping;
   buttonTitle: string;
   withReportStrategy?: boolean;
+  withRpcResponse?: boolean;
 }
 
 export enum SecurityMode {

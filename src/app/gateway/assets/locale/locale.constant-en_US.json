@@ -936,6 +936,8 @@
       "socket": {
         "attribute-on-platform-required": "Attribute on platform is required",
         "attribute-requests-type": "The type of requested attribute can be “shared” or “client.“",
+        "with-response": "Boolean flag that specifies whether to send a response back to platform.",
+        "method-processing": "“write” to send data to the device and “read” to read data from the device.",
         "key-telemetry": "Name for telemetry on platform.",
         "key-attribute": "Name for attribute on platform."
       },

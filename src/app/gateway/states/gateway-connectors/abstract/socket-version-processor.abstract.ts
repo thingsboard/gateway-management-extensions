@@ -20,8 +20,8 @@ import {
   SocketLegacyBasicConfig,
 } from '../models/public-api';
 import { GatewayConnectorVersionProcessor } from './gateway-connector-version-processor.abstract';
-import { SocketVersionMappingUtil } from '../utils/public-api';
-import { GatewayConnector } from '../../../shared/models/public-api';
+import { GatewayConnectorVersionMappingUtil, SocketVersionMappingUtil } from '../utils/public-api';
+import { GatewayConnector, GatewayVersion } from '../../../shared/models/public-api';
 
 export class SocketVersionProcessor extends GatewayConnectorVersionProcessor<SocketBasicConfig> {
 
@@ -30,6 +30,17 @@ export class SocketVersionProcessor extends GatewayConnectorVersionProcessor<Soc
     protected connector: GatewayConnector<any>
   ) {
     super(gatewayVersionIn, connector);
+  }
+
+  getProcessedByVersion(): GatewayConnector<SocketBasicConfig> {
+    const connector = super.getProcessedByVersion();
+    if (!this.gatewayVersion || this.gatewayVersion >= GatewayConnectorVersionMappingUtil.parseVersion(GatewayVersion.v3_8_6)) {
+      return connector;
+    }
+    return {
+      ...connector,
+      configurationJson: SocketVersionMappingUtil.mapRpcMethodsToPre386Version(connector.configurationJson),
+    } as GatewayConnector<SocketBasicConfig>;
   }
 
   getUpgradedVersion(): GatewayConnector<SocketBasicConfig_v3_6> {

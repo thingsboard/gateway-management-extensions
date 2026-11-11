@@ -18,8 +18,10 @@ import {
   DevicesConfigMapping,
   ExpressionType,
   LegacyDevicesConfigMapping,
+  SocketBasicConfig,
   SocketBasicConfig_v3_6,
   SocketConfig,
+  SocketMethodProcessing,
   SocketLegacyBasicConfig,
 } from '../models/public-api';
 import { GatewayConnectorVersionMappingUtil } from './gateway-connector-version-mapping.util';
@@ -55,6 +57,23 @@ export class SocketVersionMappingUtil {
       ...device,
       attributeRequests: device.attributeRequests?.map(({requestExpressionSource, attributeNameExpressionSource, ...request}) => request) ?? []
     })) as DevicesConfigMapping[];
+  }
+
+  static mapRpcMethodsToPre386Version<Config extends SocketBasicConfig>(config: Config): Config {
+    if (!config?.devices) {
+      return config;
+    }
+    return {
+      ...config,
+      devices: (config.devices as DevicesConfigMapping[]).map(device => ({
+        ...device,
+        serverSideRpc: device.serverSideRpc?.map(rpc => ({
+          ...rpc,
+          methodProcessing: rpc.methodProcessing ?? SocketMethodProcessing.WRITE,
+          withResponse: rpc.withResponse ?? true,
+        })),
+      })),
+    };
   }
 
   static getExpressionSource(expression: string): ExpressionType {

@@ -18,13 +18,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   forwardRef,
+  Input,
 } from '@angular/core';
 import {
   FormGroup,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
 } from '@angular/forms';
-import { SharedModule } from '@shared/public-api';
+import { coerceBoolean, SharedModule } from '@shared/public-api';
 import { CommonModule } from '@angular/common';
 import { SocketConfigComponent } from '../socket-config/socket-config.component';
 import { DevicesConfigTableComponent } from '../devices-config-table/devices-config-table.component';
@@ -61,6 +62,8 @@ import { SocketBasicConfig_v3_6, SocketLegacyBasicConfig } from '../../../models
 })
 
 export class SocketLegacyBasicConfigComponent extends GatewayConnectorBasicConfigDirective<SocketBasicConfig_v3_6, SocketLegacyBasicConfig> {
+
+  @Input() @coerceBoolean() withRpcResponse = false;
 
   isLegacy = true;
 

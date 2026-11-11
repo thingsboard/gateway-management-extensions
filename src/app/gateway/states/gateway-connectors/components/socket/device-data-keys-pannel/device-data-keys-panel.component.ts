@@ -39,6 +39,8 @@ import {
   RequestsType,
   SocketAttributeUpdates,
   SocketDeviceKeys,
+  SocketMethodProcessing,
+  SocketMethodProcessingTranslationsMap,
   SocketValueKey,
 } from '../../../models/public-api';
 import { CommonModule } from '@angular/common';
@@ -65,11 +67,14 @@ export class DeviceDataKeysPanelComponent extends PageComponent implements OnIni
   @Input() keys: Array<SocketDeviceKeys>;
   @Input() keysType: SocketValueKey;
   @Input() @coerceBoolean() withReportStrategy = true;
+  @Input() @coerceBoolean() withRpcResponse = false;
 
   @Output() keysDataApplied = new EventEmitter<Array<SocketDeviceKeys>>();
 
   readonly SocketValueKey = SocketValueKey;
   readonly socketEncoding = Object.values(SocketEncoding);
+  readonly socketMethodProcessing = Object.values(SocketMethodProcessing);
+  readonly SocketMethodProcessingTranslationsMap = SocketMethodProcessingTranslationsMap;
   readonly requestsType = Object.values(RequestsType);
   readonly expressionType = Object.values(ExpressionType);
   readonly ExpressionType = ExpressionType;
@@ -97,6 +102,7 @@ export class DeviceDataKeysPanelComponent extends PageComponent implements OnIni
       dataKeyFormGroup = this.fb.group({
         methodRPC: ['', [Validators.required]],
         encoding: [SocketEncoding.UTF16, [Validators.required]],
+        ...this.getRpcResponseControls()
       });
     } else if (this.keysType === SocketValueKey.ATTRIBUTES_UPDATES) {
       dataKeyFormGroup = this.fb.group({
@@ -151,6 +157,7 @@ export class DeviceDataKeysPanelComponent extends PageComponent implements OnIni
         dataKeyFormGroup = this.fb.group({
           methodRPC: [rpcKeyData.methodRPC, [Validators.required]],
           encoding: [rpcKeyData.encoding, [Validators.required]],
+          ...this.getRpcResponseControls(rpcKeyData)
         });
       } else if (this.keysType === SocketValueKey.ATTRIBUTES_REQUESTS) {
         const attributeRequestsKeyData = keyData as DeviceAttributesRequests;
@@ -182,5 +189,15 @@ export class DeviceDataKeysPanelComponent extends PageComponent implements OnIni
 
   private isReportStrategyDisabled(): boolean {
     return !(this.withReportStrategy && (this.keysType === SocketValueKey.ATTRIBUTES || this.keysType === SocketValueKey.TIMESERIES));
+  }
+
+  private getRpcResponseControls(rpcKeyData?: DeviceRpcMethod): {[key: string]: unknown[]} {
+    if (!this.withRpcResponse) {
+      return {};
+    }
+    return {
+      methodProcessing: [rpcKeyData?.methodProcessing ?? SocketMethodProcessing.WRITE, [Validators.required]],
+      withResponse: [rpcKeyData?.withResponse ?? true]
+    };
   }
 }

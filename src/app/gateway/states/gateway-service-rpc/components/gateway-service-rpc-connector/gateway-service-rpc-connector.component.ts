@@ -145,7 +145,7 @@ export class GatewayServiceRPCConnectorComponent implements OnInit, OnDestroy, C
         formGroup = this.fb.group({
           methodRPC: [null, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
           characteristicUUID: ["00002A00-0000-1000-8000-00805F9B34FB", [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-          methodProcessing: [null, [Validators.required]],
+          methodProcessing: [null, [Validators.required]]
         })
         break;
       case ConnectorType.CAN:
@@ -172,13 +172,13 @@ export class GatewayServiceRPCConnectorComponent implements OnInit, OnDestroy, C
       case ConnectorType.OCPP:
         formGroup = this.fb.group({
           methodRPC: [null, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-          valueExpression: [null, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
+          valueExpression: [null, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]]
         })
         break;
       case ConnectorType.XMPP:
         formGroup = this.fb.group({
           methodRPC: [null, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-          valueExpression: [null, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
+          valueExpression: [null, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]]
         })
         break;
       case ConnectorType.SNMP:
@@ -314,18 +314,22 @@ export class GatewayServiceRPCConnectorComponent implements OnInit, OnDestroy, C
     if (typeof value == "object") {
       value = deepClone(value);
       switch (this.connectorType) {
-        case ConnectorType.SNMP:
+        case ConnectorType.SNMP: {
           this.clearFromArrayByName("oid");
           this.clearFromArrayByName("mappings");
           value.oid?.forEach(value => {
             this.addSNMPoid(value)
           })
-          value.mappings?.forEach(mapping => {
+          const mappings = value.mappings ?? (value.method === SNMPMethods.MULTISET
+            ? value.oid?.map(oid => ({oid, type: SNMPMappingValueTypes.OCTETSTRING, value: null}))
+            : null);
+          mappings?.forEach(mapping => {
             this.addSNMPMapping(mapping)
           })
           delete value.oid;
           delete value.mappings;
           break;
+        }
         case ConnectorType.REQUEST:
           this.clearFromArrayByName("httpHeaders");
           value.httpHeaders && Object.entries(value.httpHeaders).forEach(httpHeader => {

@@ -44,6 +44,7 @@ import {
   GatewayConnectorDefaultTypesTranslatesMap,
   GatewayConnectorHelpLinksMap,
   GatewayLogLevel,
+  GatewayVersion,
   noLeadTrailSpacesRegex,
   ReportStrategyDefaultValue,
 } from '../../shared/models/public-api';
@@ -147,6 +148,7 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
   activeConnectors: Array<string>;
   initialConnector: GatewayConnector;
   basicConfigInitSubject = new Subject<void>();
+  socketRpcWithResponse = true;
 
   private gatewayVersion: string;
   private isGatewayActive: boolean;
@@ -665,6 +667,8 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
       this.activeConnectors = this.parseConnectors(attributes[0]);
       this.inactiveConnectors = this.parseConnectors(attributes[1]);
       this.gatewayVersion = attributes[2][0]?.value;
+      this.socketRpcWithResponse = !this.gatewayVersion || GatewayConnectorVersionMappingUtil.parseVersion(this.gatewayVersion)
+        < GatewayConnectorVersionMappingUtil.parseVersion(GatewayVersion.v3_8_6);
 
       this.updateData(true);
     });

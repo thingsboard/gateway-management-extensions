@@ -51,7 +51,19 @@ export interface DeviceDataKey {
 export interface DeviceRpcMethod {
   methodRPC: string;
   encoding: SocketEncoding;
+  methodProcessing?: SocketMethodProcessing;
+  withResponse?: boolean;
 }
+
+export enum SocketMethodProcessing {
+  WRITE = 'write',
+  READ = 'read',
+}
+
+export const SocketMethodProcessingTranslationsMap = new Map<SocketMethodProcessing, string>([
+  [SocketMethodProcessing.WRITE, 'gateway.rpc.write'],
+  [SocketMethodProcessing.READ, 'gateway.rpc.read'],
+]);
 
 export const SocketKeysPanelTitleTranslationsMap = new Map<SocketValueKey, string>(
   [
