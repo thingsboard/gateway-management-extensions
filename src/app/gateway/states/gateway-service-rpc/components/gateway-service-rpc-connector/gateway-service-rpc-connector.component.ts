@@ -90,7 +90,6 @@ export class GatewayServiceRPCConnectorComponent implements OnInit, OnDestroy, C
   cANByteOrders = Object.values(CANByteOrders) as CANByteOrders[];
   sNMPMethods = Object.values(SNMPMethods) as SNMPMethods[];
   hTTPMethods = Object.values(HTTPMethods) as HTTPMethods[];
-  HTTPMethods = HTTPMethods;
 
   bACnetRequestTypesTranslates = BACnetRequestTypesTranslates;
   bACnetObjectTypesTranslates = BACnetObjectTypesTranslates;
@@ -200,7 +199,6 @@ export class GatewayServiceRPCConnectorComponent implements OnInit, OnDestroy, C
         break;
       case ConnectorType.REQUEST:
         formGroup = this.fb.group({
-          methodFilter: [null, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
           httpMethod: [null, [Validators.required]],
           requestUrlExpression: [null, [Validators.required, Validators.pattern(this.urlPattern)]],
           responseTimeout: [null, [Validators.required, Validators.min(10), Validators.pattern(this.numbersOnlyPattern)]],
@@ -209,7 +207,15 @@ export class GatewayServiceRPCConnectorComponent implements OnInit, OnDestroy, C
           requestValueExpression: [null, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
           responseValueExpression: [null, [Validators.pattern(noLeadTrailSpacesRegex)]],
           httpHeaders: this.fb.array([]),
-        })
+        });
+        formGroup.get('httpMethod').valueChanges.pipe(takeUntil(this.destroy$)).subscribe((method: HTTPMethods) => {
+          const requestValueExpression = formGroup.get('requestValueExpression');
+          if (method === HTTPMethods.GET || method === HTTPMethods.HEAD) {
+            requestValueExpression.disable({emitEvent: false});
+          } else {
+            requestValueExpression.enable({emitEvent: false});
+          }
+        });
         break;
       default:
         formGroup = this.fb.group({
