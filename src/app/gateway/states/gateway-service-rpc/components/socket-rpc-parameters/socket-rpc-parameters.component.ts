@@ -30,8 +30,6 @@ import { noLeadTrailSpacesRegex, SocketEncoding } from '../../../../shared/model
 import {
   RPCTemplateConfigSocket,
   SocketEncodings,
-  SocketMethodProcessings,
-  SocketMethodProcessingsTranslates
 } from '../../models/public-api';
 import { ControlValueAccessorBaseAbstract } from '../../../../shared/abstract/public-api';
 
@@ -58,14 +56,11 @@ import { ControlValueAccessorBaseAbstract } from '../../../../shared/abstract/pu
 })
 export class SocketRpcParametersComponent extends ControlValueAccessorBaseAbstract<RPCTemplateConfigSocket> {
 
-  readonly SocketMethodProcessingsTranslates = SocketMethodProcessingsTranslates;
-  readonly socketMethodProcessings = Object.values(SocketMethodProcessings) as SocketMethodProcessings[];
   readonly socketEncoding = Object.values(SocketEncoding) as SocketEncoding[];
 
   protected initFormGroup(): FormGroup {
     return this.fb.group({
       methodRPC: [null, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-      methodProcessing: [SocketMethodProcessings.WRITE, [Validators.required]],
       encoding: [SocketEncodings.UTF_8, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
       withResponse: [false, []]
     });

@@ -38,3 +38,11 @@ export const GatewayStatus = {
 };
 
 export type GatewayStatus = DeviceGatewayStatus | GatewayLogLevel;
+
+export type GatewayLogsFilterLevel = 'ALL' | Exclude<GatewayLogLevel, GatewayLogLevel.NONE>;
+
+export const GatewayLogsFilterLevels: ReadonlyArray<GatewayLogsFilterLevel> = [
+  'ALL',
+  ...Object.values(GatewayLogLevel).filter((level): level is Exclude<GatewayLogLevel, GatewayLogLevel.NONE> =>
+    level !== GatewayLogLevel.NONE)
+];

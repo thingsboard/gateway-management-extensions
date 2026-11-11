@@ -66,16 +66,6 @@ export enum CANByteOrders {
   BIG = 'BIG'
 }
 
-export enum SocketMethodProcessings {
-  WRITE = 'write',
-  READ = 'read'
-}
-
-export const SocketMethodProcessingsTranslates = new Map<SocketMethodProcessings, string>([
-  [SocketMethodProcessings.WRITE, 'gateway.rpc.write'],
-  [SocketMethodProcessings.READ, 'gateway.rpc.read']
-]);
-
 export enum SNMPMethods {
   SET = 'set',
   MULTISET = 'multiset',
@@ -134,7 +124,6 @@ export interface RPCTemplateConfigModbus {
 
 export interface RPCTemplateConfigSocket {
   methodRPC: string;
-  methodProcessing: SocketMethodProcessings;
   encoding: SocketEncodings;
   withResponse: boolean;
 }
