@@ -328,7 +328,7 @@
                    step="1" min="1" placeholder="1"/>
           </mat-form-field>
         </div>
-        @if (commandForm.get('httpMethod').value !== HTTPMethods.GET && commandForm.get('httpMethod').value !== HTTPMethods.HEAD) {
+        @if (commandForm.get('requestValueExpression').enabled) {
           <mat-form-field appearance="outline">
             <mat-label>{{ 'gateway.rpc.requestValueExpression' | translate }}</mat-label>
             <input matInput formControlName="requestValueExpression" placeholder="${params}"/>

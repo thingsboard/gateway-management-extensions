@@ -173,10 +173,12 @@ export class GatewayServiceRPCComponent implements OnInit {
     switch (this.connectorType) {
       case ConnectorType.MQTT:
       case ConnectorType.FTP:
-      case ConnectorType.SNMP:
       case ConnectorType.REST:
-      case ConnectorType.REQUEST:
         return params.methodFilter;
+      case ConnectorType.SNMP:
+        return params.requestFilter;
+      case ConnectorType.REQUEST:
+        return params.httpMethod?.toLowerCase();
       case ConnectorType.MODBUS:
         return this.modbusReadFunctionCodes.includes(params.functionCode) ? 'get' : 'set';
       case ConnectorType.BACNET:
