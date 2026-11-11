@@ -113,6 +113,8 @@
     "configuration": "Configuration",
     "add-connector": "Add connector",
     "delete-connector": "Delete connector",
+    "copy-connector": "Copy connector",
+    "connector-copy-port-in-use": "Port {{port}} is already used by: {{connectors}}. The connectors may conflict at runtime unless they bind to different hosts.",
     "connector-add": "Add new connector",
     "connector-enabled": "Enable connector",
     "connector-name": "Connector name",

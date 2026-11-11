@@ -90,10 +90,10 @@
         <ng-container matColumnDef="actions" stickyEnd>
           <mat-header-cell *matHeaderCellDef>
             <div class="gt-md:!hidden" style="width: 48px; min-width: 48px; max-width: 48px;"></div>
-            <div class="lt-lg:!hidden" [style]="{ minWidth: '144px', maxWidth: '144px', textAlign: 'center'}">{{ 'gateway.connectors-table-actions' | translate }}</div>
+            <div class="lt-lg:!hidden" [style]="{ minWidth: '192px', maxWidth: '192px', textAlign: 'center'}">{{ 'gateway.connectors-table-actions' | translate }}</div>
           </mat-header-cell>
           <mat-cell *matCellDef="let attribute">
-            <div class="lt-md:!hidden flex-row justify-end" [style]="{ minWidth: '144px', maxWidth: '144px', width: '144px', textAlign: 'center'}">
+            <div class="lt-md:!hidden flex-row justify-end" [style]="{ minWidth: '192px', maxWidth: '192px', width: '192px', textAlign: 'center'}">
               <button mat-icon-button
                       [matTooltip]="'gateway.rpc.rpc' | translate"
                       matTooltipPosition="above"
@@ -106,6 +106,12 @@
                       matTooltipPosition="above"
                       (click)="connectorLogs(attribute, $event)">
                 <mat-icon>list</mat-icon>
+              </button>
+              <button mat-icon-button
+                      [matTooltip]="'gateway.copy-connector' | translate"
+                      matTooltipPosition="above"
+                      (click)="onCopyConnector(attribute, $event)">
+                <mat-icon>content_copy</mat-icon>
               </button>
               <button mat-icon-button
                       [matTooltip]="'gateway.delete-connector' | translate"
@@ -133,6 +139,12 @@
                         matTooltipPosition="above"
                         (click)="connectorLogs(attribute, $event)">
                   <mat-icon>list</mat-icon>
+                </button>
+                <button mat-icon-button
+                        [matTooltip]="'gateway.copy-connector' | translate"
+                        matTooltipPosition="above"
+                        (click)="onCopyConnector(attribute, $event)">
+                  <mat-icon>content_copy</mat-icon>
                 </button>
                 <button mat-icon-button
                         [matTooltip]="'gateway.delete-connector' | translate"

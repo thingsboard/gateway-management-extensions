@@ -37,6 +37,14 @@
 .see-example{
   display: flex;
 }
+
+.mat-mdc-tooltip.gw-warning-tooltip {
+  .mdc-tooltip__surface {
+    background-color: #fff4e0;
+    box-shadow: -2px 2px 4px 0px rgba(0, 0, 0, 0.2);
+    color: #c76a00;
+  }
+}
 /***************
  * TAILWIND CSS
  ***************/

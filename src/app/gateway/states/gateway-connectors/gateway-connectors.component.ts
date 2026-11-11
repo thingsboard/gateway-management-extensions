@@ -77,7 +77,7 @@ import {
   widgetType
 } from '@shared/public-api';
 import { AttributeDatasource, } from '../../shared/datasources/public-api';
-import { GatewayConnectorVersionMappingUtil } from './utils/public-api';
+import { GatewayConnectorVersionMappingUtil, toConnectorCopy } from './utils/public-api';
 import { ReportStrategyVersionPipe } from '../../shared/pipes/public-api';
 import { AddConnectorConfigData, ConnectorBaseInfo, GatewayAttributeData } from './models/public-api';
 import { CommonModule } from '@angular/common';
@@ -529,12 +529,24 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
 
   onAddConnector(event?: Event): void {
     event?.stopPropagation();
+    this.addConnectorViaDialog();
+  }
 
+  onCopyConnector(attribute: GatewayAttributeData, event?: Event): void {
+    event?.stopPropagation();
+    const source = GatewayConnectorVersionMappingUtil.getConfig({
+      configurationJson: {} as ConnectorBaseConfig,
+      ...structuredClone(attribute.value),
+    }, this.gatewayVersion);
+    this.addConnectorViaDialog(toConnectorCopy(source));
+  }
+
+  private addConnectorViaDialog(connectorToCopy?: GatewayConnector): void {
     this.confirmConnectorChange()
       .pipe(
         take(1),
         filter(Boolean),
-        switchMap(() => this.openAddConnectorDialog()),
+        switchMap(() => this.openAddConnectorDialog(connectorToCopy)),
         filter(Boolean),
       )
       .subscribe(connector => this.addConnector(connector));
@@ -576,7 +588,7 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
     this.connectorForm.patchValue(initialConnector, {emitEvent: false});
   }
 
-  private openAddConnectorDialog(): Observable<GatewayConnector> {
+  private openAddConnectorDialog(connectorToCopy?: GatewayConnector): Observable<GatewayConnector> {
     return this.ctx.ngZone.run(() =>
       this.dialog.open<AddConnectorDialogComponent, AddConnectorConfigData>(AddConnectorDialogComponent, {
         disableClose: true,
@@ -584,6 +596,7 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
         data: {
           dataSourceData: this.dataSource.data,
           gatewayVersion: this.gatewayVersion,
+          connectorToCopy,
         }
       }).afterClosed()
     );

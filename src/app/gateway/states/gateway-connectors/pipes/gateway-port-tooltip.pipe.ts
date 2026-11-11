@@ -16,7 +16,7 @@
 
 import { Pipe, PipeTransform } from '@angular/core';
 import { PortLimits } from '../models/public-api';
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 
 @Pipe({
@@ -27,7 +27,7 @@ export class GatewayPortTooltipPipe implements PipeTransform {
 
   constructor(private translate: TranslateService) {}
 
-  transform(portControl: AbstractControl): string {
+  transform(portControl: AbstractControl, errors?: ValidationErrors | null): string {
     if (portControl.hasError('required')) {
       return this.translate.instant('gateway.port-required');
     }
