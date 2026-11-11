@@ -27,6 +27,9 @@ import {
   ConnectorBaseConfig,
   ConnectorType,
   GatewayConnector,
+  GatewayVersion,
+  GatewayVersionedDefaultConfig,
+  getDefaultConfig,
 } from '../../../shared/models/public-api';
 import {
   MqttVersionProcessor,
@@ -57,6 +60,15 @@ export abstract class GatewayConnectorVersionMappingUtil {
       default:
         return connector;
     }
+  }
+
+  static getDefaultConfigByVersion(type: ConnectorType, gatewayVersion: string): GatewayVersionedDefaultConfig | GatewayConnector {
+    const defaultConfig = getDefaultConfig(type);
+    const parsedGatewayVersion = this.parseVersion(gatewayVersion);
+    const matchingVersion = Object.keys(defaultConfig)
+      .filter(key => /^\d+(\.\d+)*$/.test(key) && this.parseVersion(key) <= parsedGatewayVersion)
+      .sort((a, b) => this.parseVersion(b) - this.parseVersion(a))[0];
+    return defaultConfig[matchingVersion ?? GatewayVersion.Legacy] ?? defaultConfig;
   }
 
   static parseVersion(version: string | number): number {

@@ -48,7 +48,7 @@
           {
             "method": "set_state",
             "requestType": "writeProperty",
-            "requestTimeout": 10000,
+            "requestTimeout": 10,
             "objectType": "binaryOutput",
             "objectId": 1,
             "propertyId": "presentValue"
@@ -56,7 +56,7 @@
           {
             "method": "get_state",
             "requestType": "readProperty",
-            "requestTimeout": 10000,
+            "requestTimeout": 10,
             "objectType": "binaryOutput",
             "objectId": 1,
             "propertyId": "presentValue"
@@ -108,14 +108,14 @@
           {
             "method": "set_state",
             "requestType": "writeProperty",
-            "requestTimeout": 10000,
+            "requestTimeout": 10,
             "objectId": "binaryOutput:1",
             "propertyId": "presentValue"
           },
           {
             "method": "get_state",
             "requestType": "readProperty",
-            "requestTimeout": 10000,
+            "requestTimeout": 10,
             "objectId": "binaryOutput:1",
             "propertyId": "presentValue"
           }

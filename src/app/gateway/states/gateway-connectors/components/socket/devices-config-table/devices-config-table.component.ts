@@ -73,6 +73,7 @@ import { DeviceConfigInfo, DevicesConfigMapping } from '../../../models/public-a
 export class DevicesConfigTableComponent implements ControlValueAccessor, Validator, AfterViewInit, OnInit, OnDestroy {
 
   @Input() @coerceBoolean() withReportStrategy = true;
+  @Input() @coerceBoolean() withRpcResponse = false;
 
   @ViewChild('searchInput') searchInputField: ElementRef;
 
@@ -186,6 +187,7 @@ export class DevicesConfigTableComponent implements ControlValueAccessor, Valida
         value,
         buttonTitle,
         withReportStrategy: this.withReportStrategy,
+        withRpcResponse: this.withRpcResponse,
       }
     });
   }

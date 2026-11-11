@@ -430,7 +430,7 @@
       "address": "Address",
       "method": "Method",
       "requestType": "Request Type",
-      "requestTimeout": "Request Timeout",
+      "requestTimeout": "Request timeout (s)",
       "deviceName": "Device name",
       "loading-devices": "Loading devices...",
       "devices-load-error": "Failed to load devices",
@@ -509,6 +509,8 @@
       "read": "Read",
       "scan": "Scan",
       "oids": "OIDS",
+      "mappings": "Mappings",
+      "add-mapping": "Add mapping",
       "set": "Set",
       "multiset": "Multiset",
       "get": "Get",
@@ -536,7 +538,7 @@
       "rpc-connection": "RPC command"
     },
     "request-type": "Request type",
-    "request-timeout": "Request timeout (ms)",
+    "request-timeout": "Request timeout (s)",
     "requests-mapping": "Requests mapping",
     "requests-mapping-hint": "MQTT Connector requests allows you to connect, disconnect, process attribute requests from the device, handle attribute updates on the server and RPC processing configuration.",
     "request-topic-expression": "Request topic expression",
@@ -935,6 +937,7 @@
         "attribute-on-platform-required": "Attribute on platform is required",
         "attribute-requests-type": "The type of requested attribute can be “shared” or “client.“",
         "with-response": "Boolean flag that specifies whether to send a response back to platform.",
+        "method-processing": "“write” to send data to the device and “read” to read data from the device.",
         "key-telemetry": "Name for telemetry on platform.",
         "key-attribute": "Name for attribute on platform."
       },
@@ -977,7 +980,7 @@
         "key-object-id": "Object id in the BACnet device.",
         "property-id": "Property id in the BACnet device.",
         "request-type": "“writeProperty” to write data and “readProperty” to read data.",
-        "request-timeout": "Timeout to wait the response from the BACnet device, milliseconds.",
+        "request-timeout": "Timeout to wait the response from the BACnet device, seconds.",
         "device-timeout": "Period of time when the connector will try to discover BACnet devices.",
         "network-number": "Identifier of the network segment."
       }

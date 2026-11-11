@@ -66,8 +66,7 @@ export class SocketRpcParametersComponent extends ControlValueAccessorBaseAbstra
     return this.fb.group({
       methodRPC: [null, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
       methodProcessing: [SocketMethodProcessings.WRITE, [Validators.required]],
-      encoding: [SocketEncodings.UTF_8, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]],
-      withResponse: [false, []]
+      encoding: [SocketEncodings.UTF_8, [Validators.required, Validators.pattern(noLeadTrailSpacesRegex)]]
     });
   }
 }

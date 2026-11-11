@@ -171,14 +171,31 @@
                             </mat-form-field>
                           </div>
                         </div>
-                        <div class="tb-form-row">
-                          <mat-slide-toggle class="mat-slide" (click)="$event.stopPropagation()"
-                            formControlName="withResponse">
-                            <mat-label tb-hint-tooltip-icon="{{ 'gateway.hints.socket.with-response' | translate }}">
-                              {{ 'gateway.rpc.withResponse' | translate }}
-                            </mat-label>
-                          </mat-slide-toggle>
-                        </div>
+                        @if (withRpcResponse) {
+                          <div class="tb-form-row column-xs">
+                            <div class="fixed-title-width" tb-hint-tooltip-icon="{{ 'gateway.hints.socket.method-processing' | translate }}"
+                              translate>
+                              gateway.rpc.methodProcessing
+                            </div>
+                            <div class="tb-flex no-gap">
+                              <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
+                                <mat-select formControlName="methodProcessing">
+                                  @for (method of socketMethodProcessing; track method) {
+                                    <mat-option [value]="method">{{ SocketMethodProcessingTranslationsMap.get(method) | translate }}</mat-option>
+                                  }
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                          <div class="tb-form-row">
+                            <mat-slide-toggle class="mat-slide" (click)="$event.stopPropagation()"
+                              formControlName="withResponse">
+                              <mat-label tb-hint-tooltip-icon="{{ 'gateway.hints.socket.with-response' | translate }}">
+                                {{ 'gateway.rpc.withResponse' | translate }}
+                              </mat-label>
+                            </mat-slide-toggle>
+                          </div>
+                        }
                       </div>
                     }
                     @if (keysType === SocketValueKey.ATTRIBUTES_REQUESTS) {

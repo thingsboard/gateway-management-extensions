@@ -26,26 +26,22 @@ import {
   GatewayLogLevel,
   GatewayVersion,
   noLeadTrailSpacesRegex,
-  getDefaultConfig,
   ReportStrategyVersionPipe,
   ConnectorsTypesByVersion
 } from '../../../../shared/public-api';
 import {
   AddConnectorConfigData,
   CreatedConnectorConfigData,
-  GatewayConnectorConfigVersionMap,
 } from '../../models/public-api';
 import { Subject } from 'rxjs';
 import { AppState } from '@core/public-api';
 import { takeUntil, tap } from 'rxjs/operators';
-import { LatestVersionConfigPipe } from '../../pipes/public-api';
 import { GatewayConnectorVersionMappingUtil } from '../../utils/public-api';
 
 @Component({
   selector: 'tb-add-connector-dialog',
   templateUrl: './add-connector-dialog.component.html',
   styleUrls: ['./add-connector-dialog.component.scss'],
-  providers: [LatestVersionConfigPipe],
   standalone: true,
   imports: [
     SharedModule,
@@ -71,8 +67,7 @@ export class AddConnectorDialogComponent
               protected router: Router,
               @Inject(MAT_DIALOG_DATA) public data: AddConnectorConfigData,
               public dialogRef: MatDialogRef<AddConnectorDialogComponent, CreatedConnectorConfigData>,
-              private fb: FormBuilder,
-              private isLatestVersionConfig: LatestVersionConfigPipe
+              private fb: FormBuilder
   ) {
     super(store, router, dialogRef);
     this.updateConnectorTypesByVersion();
@@ -109,15 +104,11 @@ export class AddConnectorDialogComponent
     this.submitted = true;
     const value = this.connectorForm.getRawValue();
     if (value.useDefaults) {
-      const defaultConfig = getDefaultConfig(value.type);
       const gatewayVersion = this.data.gatewayVersion;
       if (gatewayVersion) {
         value.configVersion = gatewayVersion;
       }
-      value.configurationJson = (this.isLatestVersionConfig.transform(gatewayVersion, value.type)
-          ? defaultConfig[GatewayConnectorConfigVersionMap.get(value.type)]
-          : defaultConfig[GatewayVersion.Legacy])
-        ?? defaultConfig;
+      value.configurationJson = GatewayConnectorVersionMappingUtil.getDefaultConfigByVersion(value.type, gatewayVersion);
       if (this.connectorForm.valid) {
         this.dialogRef.close(value);
       }

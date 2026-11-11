@@ -38,6 +38,7 @@ export enum GatewayLogLevel {
 }
 
 export enum GatewayVersion {
+  v3_8_6 = '3.8.6',
   v3_8_5 = '3.8.5',
   v3_7_3 = '3.7.3',
   v3_7_2 = '3.7.2',
@@ -147,6 +148,7 @@ export interface GatewayVersionedDefaultConfig {
   '3.5.2'?: GatewayConnector<ConnectorBaseConfig_v3_5_2>;
   '3.6'?: GatewayConnector<ConnectorBaseConfig_v3_6>;
   '3.6.2'?: GatewayConnector<ConnectorBaseConfig_v3_6_2>;
+  '3.8.6'?: GatewayConnector;
 }
 
 export interface Attribute {
