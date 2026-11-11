@@ -534,7 +534,11 @@ export class GatewayConnectorComponent extends PageComponent implements AfterVie
 
   onCopyConnector(attribute: GatewayAttributeData, event?: Event): void {
     event?.stopPropagation();
-    this.addConnectorViaDialog(toConnectorCopy(attribute.value));
+    const source = GatewayConnectorVersionMappingUtil.getConfig({
+      configurationJson: {} as ConnectorBaseConfig,
+      ...structuredClone(attribute.value),
+    }, this.gatewayVersion);
+    this.addConnectorViaDialog(toConnectorCopy(source));
   }
 
   private addConnectorViaDialog(connectorToCopy?: GatewayConnector): void {

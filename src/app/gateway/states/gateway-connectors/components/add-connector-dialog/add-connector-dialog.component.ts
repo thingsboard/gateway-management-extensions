@@ -29,17 +29,19 @@ import {
   getDefaultConfig,
   ReportStrategyVersionPipe,
   ConnectorsTypesByVersion,
+  ErrorTooltipIconComponent,
   GatewayConnector,
 } from '../../../../shared/public-api';
 import {
   AddConnectorConfigData,
   CreatedConnectorConfigData,
   GatewayConnectorConfigVersionMap,
+  PortLimits,
 } from '../../models/public-api';
 import { Subject } from 'rxjs';
 import { AppState } from '@core/public-api';
 import { takeUntil, tap } from 'rxjs/operators';
-import { LatestVersionConfigPipe } from '../../pipes/public-api';
+import { GatewayPortTooltipPipe, LatestVersionConfigPipe } from '../../pipes/public-api';
 import {
   findConnectorsOnPort,
   GatewayConnectorVersionMappingUtil,
@@ -55,7 +57,9 @@ import {
   standalone: true,
   imports: [
     SharedModule,
-    ReportStrategyVersionPipe
+    ReportStrategyVersionPipe,
+    GatewayPortTooltipPipe,
+    ErrorTooltipIconComponent,
   ]
 })
 export class AddConnectorDialogComponent
@@ -72,6 +76,7 @@ export class AddConnectorDialogComponent
   submitted = false;
 
   readonly isCopy: boolean;
+  readonly portLimits = PortLimits;
 
   private destroy$ = new Subject<void>();
 
@@ -164,7 +169,7 @@ export class AddConnectorDialogComponent
     this.connectorForm.get('type').disable();
     const port = getServerPort(copy);
     if (port !== undefined) {
-      this.connectorForm.addControl('port', this.fb.control(port, [Validators.required]));
+      this.connectorForm.addControl('port', this.fb.control(port, [Validators.required, Validators.min(PortLimits.MIN), Validators.max(PortLimits.MAX)]));
     }
   }
 

@@ -16,13 +16,47 @@
 
 import { ConnectorType, GatewayConnector } from '../../../shared/models/gateway.models';
 import { ConnectorBaseInfo } from '../models/connectors.model';
+import { BacnetVersionMappingUtil } from './bacnet-version-mapping.util';
 
-const ServerPortSectionByType: ReadonlyMap<ConnectorType, string> = new Map([
-  [ConnectorType.REST, 'server'],
-  [ConnectorType.SOCKET, 'socket'],
-  [ConnectorType.OCPP, 'centralSystem'],
-  [ConnectorType.BACNET, 'application'],
-  [ConnectorType.MODBUS, 'slave'],
+type ConnectorConfig = Record<string, any>;
+
+interface ServerPortAccessor {
+  get(config: ConnectorConfig): number | string | undefined;
+  set(config: ConnectorConfig, port: number): ConnectorConfig;
+}
+
+const sectionOrTopLevelPort = (section: string): ServerPortAccessor => ({
+  get: config => config[section] ? config[section].port : config.port,
+  set: (config, port) => config[section]
+    ? { ...config, [section]: { ...config[section], port } }
+    : { ...config, port },
+});
+
+const sectionPort = (section: string): ServerPortAccessor => ({
+  get: config => config[section]?.port,
+  set: (config, port) => ({ ...config, [section]: { ...config[section], port } }),
+});
+
+const bacnetPort: ServerPortAccessor = {
+  get: config => config.application
+    ? config.application.port
+    : config.general?.address && BacnetVersionMappingUtil.mapApplicationToUpgradedVersion(config.general).port,
+  set: (config, port) => {
+    if (config.application || !config.general) {
+      return sectionPort('application').set(config, port);
+    }
+    const application = { ...BacnetVersionMappingUtil.mapApplicationToUpgradedVersion(config.general), port: `${port}` };
+    const { address } = BacnetVersionMappingUtil.mapApplicationToDowngradedVersion(application);
+    return { ...config, general: { ...config.general, address } };
+  },
+};
+
+const ServerPortAccessorByType: ReadonlyMap<ConnectorType, ServerPortAccessor> = new Map([
+  [ConnectorType.REST, sectionOrTopLevelPort('server')],
+  [ConnectorType.SOCKET, sectionOrTopLevelPort('socket')],
+  [ConnectorType.OCPP, sectionPort('centralSystem')],
+  [ConnectorType.BACNET, bacnetPort],
+  [ConnectorType.MODBUS, sectionPort('slave')],
 ]);
 
 export function toConnectorCopy(connector: GatewayConnector): GatewayConnector {
@@ -32,15 +66,18 @@ export function toConnectorCopy(connector: GatewayConnector): GatewayConnector {
 }
 
 export function getServerPort(connector: GatewayConnector): number | undefined {
-  const section = ServerPortSectionByType.get(connector?.type);
-  const port = section ? connector.configurationJson?.[section]?.port : undefined;
-  return port ?? undefined;
+  const accessor = ServerPortAccessorByType.get(connector?.type);
+  const config = connector?.configurationJson as ConnectorConfig;
+  const port = accessor && config ? accessor.get(config) : undefined;
+  return port === undefined || port === null || `${port}` === '' ? undefined : Number(port);
 }
 
 export function withServerPort(connector: GatewayConnector, port: number): GatewayConnector {
-  const section = ServerPortSectionByType.get(connector.type);
-  const config = connector.configurationJson;
-  return { ...connector, configurationJson: { ...config, [section]: { ...config[section], port } } };
+  const accessor = ServerPortAccessorByType.get(connector.type);
+  if (!accessor) {
+    return connector;
+  }
+  return { ...connector, configurationJson: accessor.set(connector.configurationJson as ConnectorConfig, port) } as GatewayConnector;
 }
 
 export function findConnectorsOnPort(port: number | undefined, connectors: GatewayConnector[]): string[] {

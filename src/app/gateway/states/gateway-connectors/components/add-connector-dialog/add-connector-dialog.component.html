@@ -59,14 +59,18 @@
         <div class="tb-form-row column-xs">
           <div class="fixed-title-width tb-required" translate>gateway.port</div>
           <mat-form-field class="tb-flex no-gap" appearance="outline" subscriptSizing="dynamic">
-            <input matInput type="number" autocomplete="off" name="port" formControlName="port" placeholder="{{ 'gateway.set' | translate }}"/>
+            <input matInput type="number" min="{{portLimits.MIN}}" max="{{portLimits.MAX}}" autocomplete="off"
+                   name="port" formControlName="port" placeholder="{{ 'gateway.set' | translate }}"/>
+            @let portControl = connectorForm.get('port');
             @let connectorsOnPort = connectorsOnSamePort;
-            @if (connectorsOnPort.length) {
+            @if ((portControl.hasError('required') || portControl.hasError('min') || portControl.hasError('max')) && (portControl.touched || submitted)) {
+              <tb-error-icon matSuffix [tooltipText]="(portControl | getGatewayPortTooltip: portControl.errors) | translate"/>
+            } @else if (connectorsOnPort.length) {
               <mat-icon matSuffix
                         matTooltipPosition="above"
-                        matTooltipClass="tb-warning-tooltip"
-                        [matTooltip]="'gateway.connector-copy-port-in-use' | translate: { port: connectorForm.get('port').value, connectors: connectorsOnPort.join(', ') }"
-                        class="tb-warning">
+                        matTooltipClass="gw-warning-tooltip"
+                        [matTooltip]="'gateway.connector-copy-port-in-use' | translate: { port: portControl.value, connectors: connectorsOnPort.join(', ') }"
+                        class="gw-warning">
                 warning
               </mat-icon>
             }
